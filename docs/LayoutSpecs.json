@@ -1,0 +1,117 @@
+{
+  "elements": [
+    {
+      "text": "Display",
+      "iconName": "Category.Display.svg",
+      "elementType": "category",
+      "include": [
+        { "path": "DSCore.Color" },
+        { "path": "DSCore.ColorRange2D" }
+      ],
+      "childElements": [
+        {
+          "text": "Watch",
+          "iconName": "Watch",
+          "elementType": "none",
+          "include":[
+            { "path": "Core.View.Watch" },
+            { "path": "Core.View.Watch Image" },
+            { "path": "Core.View.Watch 3D" }
+          ]
+        }
+      ]
+    },
+    {
+      "text": "Geometry",
+      "iconName": "Category.Geometry.svg",
+      "elementType": "category",
+      "include": [],
+      "childElements": [
+        {
+          "text": "Abstract",
+          "iconName": "",
+          "elementType": "group",
+          "include": [
+            { "path": "Autodesk.DesignScript.Geometry.BoundingBox" },
+            { "path": "Autodesk.DesignScript.Geometry.CoordinateSystem" },
+            { "path": "Autodesk.DesignScript.Geometry.Vector" }
+          ],
+          "childElements": []
+        },
+        {
+          "text": "Geometry",
+          "iconName": "",
+          "elementType": "group",
+          "include": [
+            { "path": "Tessellation.ConvexHull" },
+            { "path": "Tessellation.Delaunay" },
+            { "path": "Tessellation.Voronoi" }
+          ],
+          "childElements": []
+        },
+        {
+          "text": "Points",
+          "iconName": "",
+          "elementType": "group",
+          "include": [
+            { "path": "Autodesk.DesignScript.Geometry.Point" },
+            { "path": "Autodesk.DesignScript.Geometry.UV" }
+          ],
+          "childElements": []
+        },
+        {
+          "text": "Curves",
+          "iconName": "",
+          "elementType": "group",
+          "include": [
+            { "path": "Autodesk.DesignScript.Geometry.Arc" },
+            { "path": "Autodesk.DesignScript.Geometry.Circle" },
+            { "path": "Autodesk.DesignScript.Geometry.Curve" },
+            { "path": "Autodesk.DesignScript.Geometry.Ellipse" },
+            { "path": "Autodesk.DesignScript.Geometry.EllipseArc" },
+            { "path": "Autodesk.DesignScript.Geometry.Line" }
+          ],
+          "childElements": []
+        }
+      ]
+    },
+    {
+      "text": "List",
+      "iconName": "Category.List.svg",
+      "elementType": "category",
+      "include": [],
+      "childElements": [
+        {
+          "text": "Generate",
+          "iconName": "",
+          "elementType": "group",
+          "include": [
+            { "path": "Core.List.List.Create" },
+            { "path": "Core.List.Range" },
+            { "path": "Core.List.Sequence" },
+            { "path": "DSCore.List.Permutations" },
+            { "path": "DSCore.List.Empty" },
+            { "path": "DSCore.List.OfRepeatedItem" },
+            { "path": "DSCore.List.Combinations" }
+          ]
+        },
+        {
+          "text": "Inspect",
+          "iconName": "",
+          "elementType": "group",
+          "include": [
+            { "path": "AllFalse" },
+            { "path": "AllTrue" },
+            { "path": "IsHomogeneous" },
+            { "path": "IsRectangular" },
+            { "path": "IsUniformDepth" },
+            { "path": "SetDifference" },
+            { "path": "SetIntersection" },
+            { "path": "TrueForAll" },
+            { "path": "TrueForAny" }
+          ]
+        }
+      ]
+    }
+  ]
+}
