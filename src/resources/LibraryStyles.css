@@ -1,0 +1,119 @@
+
+@font-face {
+    font-family: "Open Sans";
+    src: url('fonts/OpenSans-Regular.ttf') format('truetype');
+}
+
+body {
+    font-family: "Open Sans";
+    user-select: none;
+    cursor: default;
+}
+
+.LibraryItemContainerCategory {
+    display: flex;
+    flex-direction: column;
+    background: #353535;
+    border-bottom: solid 1px #494949;
+}
+
+.LibraryItemContainerGroup {
+    display: flex;
+    flex-direction: column;
+    background: #414141;
+}
+
+.LibraryItemContainerNone {
+    display: flex;
+    flex-direction: column;
+    background: #414141;
+    overflow-x: hidden;
+}
+
+.LibraryItemHeader {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 3;
+    color: white;
+    transition: 0.1s;
+}
+
+.LibraryItemHeader:hover {
+    color: white;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.LibraryItemBody {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.LibraryItemContainerCategory .LibraryItemIcon {
+    padding: 10px;
+    width: 20px;
+    height: 20px;
+}
+
+.LibraryItemContainerNone .LibraryItemIcon {
+    padding: 2px 8px;
+    width: 32px;
+    height: 32px;
+}
+
+.LibraryItemContainerCategory .LibraryItemText {
+    font-size: 15px;
+}
+
+.LibraryItemContainerNone .LibraryItemText {
+    font-size: 13px;
+}
+
+.LibraryItemGroupText {
+    padding: 10px;
+    font-size: 15px;
+    color: #a9a9a9;
+}
+
+.ClusterViewContainer {
+    display: flex;
+    flex-direction: row;
+}
+
+.ClusterLeftPane {
+    display: flex;
+    width: 64px;
+    min-width: 64px;
+    margin: 2px 0px;
+    border-right: 2px;
+    border-right-style: solid;
+    justify-content: flex-end;
+}
+
+.ClusterRightPane {
+    flex-grow: 2;
+    padding-left: 2px;
+}
+
+.ClusterIcon {
+    width: 26px;
+    height: 26px;
+    padding: 5px 6px;
+}
+
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+    background-color: #414141;
+}
+
+::-webkit-scrollbar-thumb {
+    width: 6px;
+    border-radius: 3px;
+    background-color: rgba(136,136,136,0.8);
+}
+
+::-webkit-scrollbar-corner {
+    background-color: inherit;
+}
