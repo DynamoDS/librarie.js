@@ -29,10 +29,6 @@ app.get("/layoutSpecs", function(req, res) {
   loadJsonFromFile("./docs/LayoutSpecs.json", req, res);
 });
 
-app.get("/tempData", function(req, res) {
-  loadJsonFromFile("./docs/TemporaryLibraryContents.json", req, res);
-});
-
 app.listen(3456, function () {
   console.log('Library hosting service listening on port 3456');
 });
