@@ -2,7 +2,7 @@
 The layout specification is a `json` document that describes the layout of the library view. It outlines the hierarchical structure (i.e. tree structure) of the library view, as well as defines items that should go under each tree node.
 
 ### The simplest form of element
-The following example illustrates the simplest form of a specification `json` document -- it is made up of a single *element*. The `elements` entry represents a list of root elements that should be displayed at the root level of the library view. For this example, the library view contains only a single root node with `Display` as its text:
+The following example illustrates the simplest form of a specification `json` document -- it is made up of a single *element* (the layout specification document is a hierarchical tree of *elements*). The `elements` entry represents a list of root elements that should be displayed at the root level of the library view. For this example, the library view contains only a single root node with `Display` as its text:
 
 ```json
 {
@@ -64,7 +64,7 @@ This results in library view that looks like the following image:
 <TODO:ADDIMAGE>
 
 ### Adding nested elements
-Adding on to the previous example, a nested element with text `Watch` is added under `Display` element. Just like the parent element, nested elements contain keys like `text`, `iconName`, etc.
+Adding on to the previous example, a nested element with text `Watch` is added under `Display` element. Just like the parent element, nested elements contain keys like `text`, `iconName`, etc. Note that however, the nested element does not have to contain `childElements` if it does not need to:
 
 ```json
 {
@@ -82,7 +82,41 @@ Adding on to the previous example, a nested element with text `Watch` is added u
           "text": "Watch",
           "iconName": "Watch",
           "elementType": "none",
-          "include":[]
+          "include": []
+        }        
+      ]
+    }]
+}
+```
+
+This results in library view that looks like the following image:
+
+<TODO:ADDIMAGE>
+
+### Adding items to a nested element
+The following example adds three new data types under `Watch` element:
+
+```json
+{
+  "elements": [
+    {
+      "text": "Display",
+      "iconName": "Category.Display.svg",
+      "elementType": "category",
+      "include": [
+        { "path": "DSCore.Color" },
+        { "path": "DSCore.ColorRange2D" }
+      ],
+      "childElements": [
+        {
+          "text": "Watch",
+          "iconName": "Watch",
+          "elementType": "none",
+          "include": [
+            { "path": "Core.View.Watch" },
+            { "path": "Core.View.Watch Image" },
+            { "path": "Core.View.Watch 3D" }            
+          ]
         }        
       ]
     }]
