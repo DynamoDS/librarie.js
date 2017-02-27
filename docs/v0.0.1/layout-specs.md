@@ -19,7 +19,7 @@ The following example illustrates the simplest form of a specification `json` do
 
 This results in library view that looks like the following image:
 
-<TODO:ADDIMAGE>
+![image](img/layout-category.png?raw=true)
 
 #### Element information
 Each element in the hierarchical structure contains the following key-value pairs:
@@ -34,11 +34,12 @@ Each element in the hierarchical structure contains the following key-value pair
 
 - `category` - Category elements represent the root library items on the library view
 - `group` - Groups comes directly under its parent category, it contains just text without icon
-- `creation` - Elements of this type result in library items that gets clubbed under the *Create* cluster
-- `action` - Elements of this type result in library items that gets clubbed under the *Action* cluster
-- `query` - Elements of this type result in library items that gets clubbed under the *Query* cluster
+- `creation` - Elements of this type result in library items that get clubbed under the *Create* cluster
+- `action` - Elements of this type result in library items that get clubbed under the *Action* cluster
+- `query` - Elements of this type result in library items that get clubbed under the *Query* cluster
+- `none` - All other expandable library items that are not categories or groups
 
-<TODO:ADDIMAGE>
+![image](img/layout-element-types.png)
 
 ### Adding items to an element
 Data types can be added to a given element by adding them as values to `include` key, as illustrated in the example below. In this case, both `DSCore.Color` and `DSCore.ColorRange2D` classes will be added under `Display` library item.
@@ -61,7 +62,7 @@ Data types can be added to a given element by adding them as values to `include`
 
 This results in library view that looks like the following image:
 
-<TODO:ADDIMAGE>
+![image](img/layout-include.png?raw=true)
 
 ### Adding nested elements
 Adding on to the previous example, a nested element with text `Watch` is added under `Display` element. Just like the parent element, nested elements contain keys like `text`, `iconName`, etc. Note that however, the nested element does not have to contain `childElements` if it does not need to:
@@ -91,7 +92,7 @@ Adding on to the previous example, a nested element with text `Watch` is added u
 
 This results in library view that looks like the following image:
 
-<TODO:ADDIMAGE>
+![image](img/layout-nested-empty.png?raw=true)
 
 ### Adding items to a nested element
 The following example adds three new data types under `Watch` element:
@@ -125,5 +126,5 @@ The following example adds three new data types under `Watch` element:
 
 This results in library view that looks like the following image:
 
-<TODO:ADDIMAGE>
+![image](img/layout-nested-items.png?raw=true)
 
