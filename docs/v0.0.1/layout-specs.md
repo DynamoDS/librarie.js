@@ -26,7 +26,7 @@ Each element in the hierarchical structure contains the following key-value pair
 
 - `text` - the content to display on the corresponding library item
 - `iconName` - file name of the icon for the corresponding library item
-- `elementType` - the type of the element. Possible values are *category*, *group*, *construction*, *action*, *query* and *none*. See the following section for detailed descriptions of each element types
+- `elementType` - the type of the element. Possible values are *category*, *group*, *creation*, *action*, *query* and *none*. See the following section for detailed descriptions of each element types
 - `include` - data types that should be included under this given library item (more details on this later)
 - `childElements` - nested elements under this element (its usage will become clearer below)
 
@@ -34,8 +34,8 @@ Each element in the hierarchical structure contains the following key-value pair
 
 - `category` - Category elements represent the root library items on the library view
 - `group` - Groups comes directly under its parent category, it contains just text without icon
-- `construction` - Elements of this type result in library items that gets clubbed under the *Constructor* cluster
-- `action` - Elements of this type result in library items that gets clubbed under the *Actions* cluster
+- `creation` - Elements of this type result in library items that gets clubbed under the *Create* cluster
+- `action` - Elements of this type result in library items that gets clubbed under the *Action* cluster
 - `query` - Elements of this type result in library items that gets clubbed under the *Query* cluster
 
 <TODO:ADDIMAGE>
