@@ -25,7 +25,7 @@ The following simple HTML code illustrates the way to embed library view into an
 
 - `htmlElementId` - The id of a placeholder HTML element to be replaced by library view.
 
-- `loadedTypesUrl` - This represents a relative or absolute URL from where Loaded Data Types JSON data is to be downloaded.
+- `loadedTypesUrl` - This represents a relative or absolute URL from where [Loaded Data Types](./docs/v0.0.1/loaded-data-types.md) JSON data is to be downloaded.
 
 - `layoutSpecsUrl` - This represents a relative or absolute URL from where [Layout Specification](./docs/v0.0.1/layout-specs.md) JSON data is to be downloaded.
 
@@ -65,6 +65,9 @@ The following simple HTML code illustrates the way to embed library view into an
             };
 
             let libView = new LibraryEntryPoint.LibraryView(configuration);
+
+            // TODO: The callback when a library item is clicked on has not been 
+            // provided yet, it is scheduled to be done in the near future.
         </script>
 
     </body>
