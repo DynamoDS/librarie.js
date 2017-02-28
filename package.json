@@ -4,7 +4,10 @@
   "description": "Project that contains all hosted contents of Dynamo Windows client",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "webpack",
+    "build": "uglifyjs dist/librarie.js --compress --mangle --output dist/librarie.min.js --source-map dist/librarie.min.js.map",
+    "prebuild": "npm run dev"
   },
   "keywords": [
     "Dynamo",
@@ -21,9 +24,9 @@
     "@types/react": "^15.0.0",
     "@types/react-dom": "^0.14.20",
     "@types/node": "^7.0.5",
-    "@types/whatwg-fetch": "0.0.33",
     "awesome-typescript-loader": "^3.0.0-beta.18",
     "source-map-loader": "^0.1.5",
-    "typescript": "^2.1.4"
+    "typescript": "^2.1.4",
+    "uglify-js": "github:mishoo/UglifyJS2#harmony"
   }
 }
