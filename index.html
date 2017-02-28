@@ -27,9 +27,13 @@
         <script src="./dist/bundle.js"></script>
 
         <script>
-            let libView = new LibraryEntryPoint.LibraryView("libraryContainerPlaceholder");
-            libView.setLoadedTypesJson("dummy");
-            libView.setLayoutSpecsJson("dummy");
+            let configuration = {
+                htmlElementId: "libraryContainerPlaceholder",
+                loadedTypesUrl: "loadedTypes", // A url where loaded types are to be downloaded.
+                layoutSpecsUrl: "layoutSpecs"  // A url where layout specs are to be downloaded.
+            };
+
+            let libView = new LibraryEntryPoint.LibraryView(configuration);
         </script>
 
     </body>
