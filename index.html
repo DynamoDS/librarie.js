@@ -24,6 +24,13 @@
         <script src="./node_modules/react-dom/dist/react-dom.js"></script>
 
         <!-- Main -->
-        <script src="./dist/librarie.js"></script>
+        <script src="./dist/librarie.min.js"></script>
+
+        <script>
+            let libView = new LibraryEntryPoint.LibraryView("libraryContainerPlaceholder");
+            libView.setLoadedTypesJson("dummy");
+            libView.setLayoutSpecsJson("dummy");
+        </script>
+
     </body>
 </html>

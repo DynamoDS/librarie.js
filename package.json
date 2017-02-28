@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "webpack",
-    "build": "uglifyjs dist/librarie.js --compress --mangle --output dist/librarie.min.js --source-map dist/librarie.min.js.map",
+    "build": "uglifyjs dist/librarie.js --output dist/librarie.min.js --source-map dist/librarie.min.js.map -c -m -r 'LibraryView'",
     "prebuild": "npm run dev"
   },
   "keywords": [

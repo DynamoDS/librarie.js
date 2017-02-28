@@ -1,12 +1,14 @@
 module.exports = {
     entry: [
-        "./src/index.tsx",
-        "./src/LibraryUtilities.ts"
+        "./src/LibraryUtilities.ts",
+        "./src/LibraryView.tsx"
     ],
     target: "node",
     output: {
         filename: "librarie.js",
-        path: __dirname + "/dist"
+        path: __dirname + "/dist",
+        libraryTarget: "var",
+        library: "LibraryEntryPoint"
     },
 
     // Enable sourcemaps for debugging webpack's output.
