@@ -25,7 +25,7 @@ The following simple HTML code illustrates the way to embed library view into an
 
 - `htmlElementId` - The id of a placeholder HTML element to be replaced by library view.
 
-- `loadedTypesUrl` - This represents a relative or absolute URL from where [Loaded Data Types](http://wwww.google.com) JSON data is to be downloaded.
+- `loadedTypesUrl` - This represents a relative or absolute URL from where [Loaded Data Types](http://www.google.com) JSON data is to be downloaded.
 
 - `layoutSpecsUrl` - This represents a relative or absolute URL from where [Layout Specification](./docs/v0.0.1/layout-specs.md) JSON data is to be downloaded.
 
