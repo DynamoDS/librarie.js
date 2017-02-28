@@ -68,6 +68,8 @@ export class LibraryView {
         }
 
         let htmlElement = document.getElementById(this.htmlElementId);
-        ReactDOM.render(<LibraryContainer />, htmlElement);
+        ReactDOM.render(<LibraryContainer
+            loadedTypesJson={ this.loadedTypesJson } 
+            layoutSpecsJson={ this.layoutSpecsJson } />, htmlElement);
     }
 }
