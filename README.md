@@ -40,7 +40,6 @@ The following simple HTML code illustrates the way to embed library view into an
                 background-color: #353535;
             }
         </style>
-</style>
     </head>
     <body>
         <!-- Style sheets for library view  -->
