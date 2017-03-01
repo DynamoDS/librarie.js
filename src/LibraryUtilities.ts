@@ -1,9 +1,8 @@
-
 type MemberType = "none" | "creation" | "action" | "query";
 type ElementType = "none" | "category" | "group";
 type ItemType = "none" | "category" | "group" | "creation" | "action" | "query";
 
-class TypeListNode {
+export class TypeListNode {
 
     fullyQualifiedName: string = "";
     iconName: string = "";
@@ -18,12 +17,12 @@ class TypeListNode {
     }
 }
 
-interface IncludeInfo {
+export interface IncludeInfo {
     path: string;
     inclusive?: boolean;
 }
 
-class LayoutElement {
+export class LayoutElement {
 
     text: string = "";
     iconName: string = "";
@@ -47,7 +46,7 @@ class LayoutElement {
     }
 }
 
-class LibraryItem {
+export class LibraryItem {
 
     iconName: string = "";
     creationName: string = "";
@@ -68,7 +67,7 @@ class LibraryItem {
     }
 }
 
-function constructNestedLibraryItems(
+export function constructNestedLibraryItems(
     includeParts: string[],
     typeListNode: TypeListNode,
     inclusive: boolean,
@@ -152,7 +151,7 @@ function constructNestedLibraryItems(
  * @param {LibraryItem} libraryItem
  * The library item under which a type node (and its sub nodes) is to be merged.
  */
-function constructLibraryItem(
+export function constructLibraryItem(
     typeListNodes: TypeListNode[],
     layoutElement: LayoutElement): LibraryItem
 {
