@@ -6,15 +6,27 @@ Installing Webpack and TypeScript globally
 
     $ npm install -g webpack
     $ npm install -g typescript
+    $ npm install
 
 ### Easy development build
 - Build source scripts
 
-    `$ webpack`
+    `$ npm run dev`
 
 - Serve up the new library view
 
-    `$ node .\index.js`
+    `$ node ./index.js`
+
+- Navigate to `localhost:3456` in Google Chrome browser
+
+### Easy production build
+- Build source scripts
+
+    `$ npm run build`
+
+- Serve up the new library view
+
+    `$ node ./index.js`
 
 - Navigate to `localhost:3456` in Google Chrome browser
 
@@ -53,8 +65,11 @@ The following simple HTML code illustrates the way to embed library view into an
         <script src="./node_modules/react/dist/react.js"></script>
         <script src="./node_modules/react-dom/dist/react-dom.js"></script>
 
-        <!-- The main library view component -->
-        <script src="./dist/bundle.js"></script>
+        <!-- The main library view compoment will be injected depending on build environment-->
+        <!-- start:librarie inject -->
+        <script src = './dist/librarie.min.js'></script>
+        <!-- end:librarie inject -->
+
 
         <!-- Initialize the library view component -->
         <script>
