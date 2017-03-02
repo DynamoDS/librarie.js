@@ -1,40 +1,44 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Librarie.js sample page</title>
-        <style>
-            body {
-                padding: 0;
-                margin: 0;
-                background-color: #353535;
-            }
-        </style>
-</style>
-    </head>
-    <body>
-        <!-- Style sheets for library view  -->
-        <link rel="stylesheet" href="/src/resources/LibraryStyles.css" />
 
-        <div id="libraryContainerPlaceholder"></div>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Librarie.js sample page</title>
+    <style>
+        body {
+            padding: 0;
+            margin: 0;
+            background-color: #353535;
+        }
+    </style>
+    </style>
+</head>
 
-        <!-- Dependencies -->
-        <script src="./node_modules/react/dist/react.js"></script>
-        <script src="./node_modules/react-dom/dist/react-dom.js"></script>
+<body>
+    <!-- Style sheets for library view  -->
+    <link rel="stylesheet" href="/src/resources/LibraryStyles.css" />
 
-        <!-- Main -->
-        <script src="./dist/librarie.min.js"></script>
+    <div id="libraryContainerPlaceholder"></div>
 
-        <script>
-            let configuration = {
-                htmlElementId: "libraryContainerPlaceholder",
-                loadedTypesUrl: "loadedTypes", // A url where loaded types are to be downloaded.
-                layoutSpecsUrl: "layoutSpecs"  // A url where layout specs are to be downloaded.
-            };
+    <!-- Dependencies -->
+    <script src="./node_modules/react/dist/react.js"></script>
+    <script src="./node_modules/react-dom/dist/react-dom.js"></script>
 
-            let libView = new LibraryEntryPoint.LibraryView(configuration);
-        </script>
+    <!-- start:librarie inject -->
+    <script src = './dist/librarie.min.js'></script>
+    <!-- end:librarie inject -->
 
-    </body>
+    <script>
+        let configuration = {
+            htmlElementId: "libraryContainerPlaceholder",
+            loadedTypesUrl: "loadedTypes", // A url where loaded types are to be downloaded.
+            layoutSpecsUrl: "layoutSpecs"  // A url where layout specs are to be downloaded.
+        };
+
+        let libView = new LibraryEntryPoint.LibraryView(configuration);
+    </script>
+
+</body>
+
 </html>

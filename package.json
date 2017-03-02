@@ -5,9 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "webpack",
-    "build": "uglifyjs dist/librarie.js --output dist/librarie.min.js --source-map dist/librarie.min.js.map -c -m -r 'LibraryView'",
-    "prebuild": "npm run dev"
+    "dev": "set NODE_ENV=0 && webpack --progress --colors",
+    "build": "set NODE_ENV=1 && webpack"
   },
   "keywords": [
     "Dynamo",
@@ -21,12 +20,17 @@
     "react-dom": "^15.4.2"
   },
   "devDependencies": {
+    "@types/node": "^7.0.5",
     "@types/react": "^15.0.0",
     "@types/react-dom": "^0.14.20",
-    "@types/node": "^7.0.5",
     "awesome-typescript-loader": "^3.0.0-beta.18",
+    "babel-core": "^6.23.1",
+    "babel-loader": "^6.3.2",
+    "babel-preset-es2015": "^6.22.0",
+    "babel-preset-react": "^6.23.0",
+    "inject-html-webpack-plugin": "0.0.25",
     "source-map-loader": "^0.1.5",
     "typescript": "^2.1.4",
-    "uglify-js": "github:mishoo/UglifyJS2#harmony"
+    "webpack": "^2.2.1"
   }
 }

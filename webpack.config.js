@@ -1,3 +1,31 @@
+const webpack = require('webpack');
+var InjectHtmlPlugin = require('inject-html-webpack-plugin')
+var PROD = (process.env.NODE_ENV == 1);
+let plugins = [];
+
+if (PROD) {
+    plugins.push(
+        new webpack.optimize.UglifyJsPlugin({
+            minimize: true,
+            sourceMap: true,
+            mangle: {
+                except: ["LibraryView"]
+            }
+        })
+    )
+};
+
+plugins.push(
+    new InjectHtmlPlugin({
+        filename: "./index.html",
+        customInject: [{
+            start: "<!-- start:librarie inject -->",
+            end: "<!-- end:librarie inject -->",
+            content: PROD ? "<script src = './dist/librarie.min.js'></script>" : "<script src = './dist/librarie.js'></script>"
+        }]
+    })
+);
+
 module.exports = {
     entry: [
         "./src/LibraryUtilities.ts",
@@ -5,11 +33,12 @@ module.exports = {
     ],
     target: "node",
     output: {
-        filename: "librarie.js",
+        filename: PROD ? "librarie.min.js" : "librarie.js",
         path: __dirname + "/dist",
         libraryTarget: "var",
         library: "LibraryEntryPoint"
     },
+    plugins: plugins,
 
     // Enable sourcemaps for debugging webpack's output.
     devtool: "source-map",
@@ -20,14 +49,15 @@ module.exports = {
         ],
 
         // Add '.ts' and '.tsx' as resolvable extensions.
-        extensions: [ ".webpack.js", ".web.js", ".ts", ".tsx", ".js" ]
+        extensions: [".webpack.js", ".web.js", ".ts", ".tsx", ".js"]
     },
 
     module: {
         rules: [
             {
                 test: /\.tsx?$/,
-                loader: "awesome-typescript-loader" // All files with a '.ts' or '.tsx' extension will be handled by 'awesome-typescript-loader'.
+                loader: ["babel-loader", "awesome-typescript-loader"], // All files with a '.ts' or '.tsx' extension will be handled by 'awesome-typescript-loader'.
+                exclude: /node_modules/
             },
             {
                 test: /\.js$/,
@@ -45,4 +75,4 @@ module.exports = {
         "react": "React",
         "react-dom": "ReactDOM"
     },
-};
+}
