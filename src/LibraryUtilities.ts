@@ -47,12 +47,12 @@ class LayoutElement {
     }
 }
 
-class LibraryItem {
+export class ItemData {
 
     iconName: string = "";
     creationName: string = "";
     itemType: ItemType = "none";
-    childItems: LibraryItem[] = [];
+    childItems: ItemData[] = [];
 
     constructor(public text: string) {
     }
@@ -63,7 +63,7 @@ class LibraryItem {
         this.itemType = layoutElement.elementType;
     }
 
-    appendChild(childItem: LibraryItem) {
+    appendChild(childItem: ItemData) {
         this.childItems.push(childItem);
     }
 }
@@ -72,7 +72,7 @@ function constructNestedLibraryItems(
     includeParts: string[],
     typeListNode: TypeListNode,
     inclusive: boolean,
-    parentItem: LibraryItem): LibraryItem
+    parentItem: ItemData): ItemData
 {
     // 'includeParts' is always lesser or equal to 'fullNameParts' in length.
     // 
@@ -101,9 +101,9 @@ function constructNestedLibraryItems(
         startIndex = startIndex + 1;
     }
 
-    let rootLibraryItem: LibraryItem = parentItem;
+    let rootLibraryItem: ItemData = parentItem;
     for (let i = startIndex; i < fullNameParts.length; i++) {
-        let libraryItem = new LibraryItem(fullNameParts[i]);
+        let libraryItem = new ItemData(fullNameParts[i]);
         libraryItem.itemType = "none";
 
         // If 'i' is now '2' (i.e. it points to 'C'), then we will construct 
@@ -154,9 +154,9 @@ function constructNestedLibraryItems(
  */
 function constructLibraryItem(
     typeListNodes: TypeListNode[],
-    layoutElement: LayoutElement): LibraryItem
+    layoutElement: LayoutElement): ItemData
 {
-    let result = new LibraryItem(layoutElement.text);
+    let result = new ItemData(layoutElement.text);
     result.constructFromLayoutElement(layoutElement);
 
     // Traverse through the strings in 'include'
@@ -224,9 +224,9 @@ function constructLibraryItem(
  */
 export function convertToLibraryTree(
     typeListNodes: TypeListNode[],
-    layoutElements: LayoutElement[]): LibraryItem[]
+    layoutElements: LayoutElement[]): ItemData[]
 {
-    let results: LibraryItem[] = []; // Resulting tree of library items.
+    let results: ItemData[] = []; // Resulting tree of library items.
 
     // Generate the resulting library item tree before merging data types.
     for (let i = 0; i < layoutElements.length; i++) {
@@ -238,7 +238,7 @@ export function convertToLibraryTree(
     return results;
 }
 
-export default function convertNow(loadedTypes: any, layoutSpecs: any): LibraryItem[]
+export function convertNow(loadedTypes: any, layoutSpecs: any): ItemData[]
 {
     let typeListNodes: TypeListNode[] = [];
     let layoutElements: LayoutElement[] = [];
