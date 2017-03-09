@@ -19,7 +19,7 @@ export class LibraryView {
     layoutSpecsJson: any = null;
 
     constructor(config: LibraryViewConfig) {
-        
+
         this.setLoadedTypesJson = this.setLoadedTypesJson.bind(this);
         this.setLayoutSpecsJson = this.setLayoutSpecsJson.bind(this);
         this.prefetchContents = this.prefetchContents.bind(this);
@@ -45,20 +45,20 @@ export class LibraryView {
 
         // Download the locally hosted data type json file.
         fetch(loadedTypesUrl)
-        .then(function(response: Response) {
-            return response.text();
-        }).then(function(jsonString) {
-            thisObject.loadedTypesJson = JSON.parse(jsonString);
-            thisObject.updateContentsInternal();
-        });
+            .then(function (response: Response) {
+                return response.text();
+            }).then(function (jsonString) {
+                thisObject.loadedTypesJson = JSON.parse(jsonString);
+                thisObject.updateContentsInternal();
+            });
 
         fetch(layoutSpecsUrl)
-        .then(function(response: Response) {
-            return response.text();
-        }).then(function(jsonString) {
-            thisObject.layoutSpecsJson = JSON.parse(jsonString);
-            thisObject.updateContentsInternal();
-        });
+            .then(function (response: Response) {
+                return response.text();
+            }).then(function (jsonString) {
+                thisObject.layoutSpecsJson = JSON.parse(jsonString);
+                thisObject.updateContentsInternal();
+            });
     }
 
     updateContentsInternal(): void {
@@ -69,7 +69,7 @@ export class LibraryView {
 
         let htmlElement = document.getElementById(this.htmlElementId);
         ReactDOM.render(<LibraryContainer
-            loadedTypesJson={ this.loadedTypesJson } 
-            layoutSpecsJson={ this.layoutSpecsJson } />, htmlElement);
+            loadedTypesJson={this.loadedTypesJson}
+            layoutSpecsJson={this.layoutSpecsJson} />, htmlElement);
     }
 }

@@ -38,7 +38,7 @@ class LayoutElement {
         this.include = data.include;
         if (data.childElements) {
             for (let i = 0; i < data.childElements.length; i++) {
-                this.childElements.push(new LayoutElement(data.childElements[i])); 
+                this.childElements.push(new LayoutElement(data.childElements[i]));
             }
         }
     }
@@ -72,8 +72,7 @@ function constructNestedLibraryItems(
     includeParts: string[],
     typeListNode: TypeListNode,
     inclusive: boolean,
-    parentItem: ItemData): ItemData
-{
+    parentItem: ItemData): ItemData {
     // 'includeParts' is always lesser or equal to 'fullNameParts' in length.
     // 
     // Take an example:
@@ -154,8 +153,7 @@ function constructNestedLibraryItems(
  */
 function constructLibraryItem(
     typeListNodes: TypeListNode[],
-    layoutElement: LayoutElement): ItemData
-{
+    layoutElement: LayoutElement): ItemData {
     let result = new ItemData(layoutElement.text);
     result.constructFromLayoutElement(layoutElement);
 
@@ -224,8 +222,7 @@ function constructLibraryItem(
  */
 export function convertToLibraryTree(
     typeListNodes: TypeListNode[],
-    layoutElements: LayoutElement[]): ItemData[]
-{
+    layoutElements: LayoutElement[]): ItemData[] {
     let results: ItemData[] = []; // Resulting tree of library items.
 
     // Generate the resulting library item tree before merging data types.
@@ -238,8 +235,7 @@ export function convertToLibraryTree(
     return results;
 }
 
-export function buildLibraryItemsFromLayoutSpecs(loadedTypes: any, layoutSpecs: any): ItemData[]
-{
+export function buildLibraryItemsFromLayoutSpecs(loadedTypes: any, layoutSpecs: any): ItemData[] {
     let typeListNodes: TypeListNode[] = [];
     let layoutElements: LayoutElement[] = [];
 
