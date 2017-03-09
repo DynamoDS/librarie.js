@@ -2,27 +2,16 @@
 Reusable lightweight library component based on React.js
 
 ### Set up
-Installing Webpack and TypeScript globally
+Installing all dependencies
 
-    $ npm install -g webpack
-    $ npm install -g typescript
     $ npm install
 
-### Easy development build
-- Build source scripts
-
-    `$ npm run dev`
-
-- Serve up the new library view
-
-    `$ node ./index.js`
-
-- Navigate to `localhost:3456` in Google Chrome browser
-
-### Easy production build
+### Build and run librarie.js
 - Build source scripts
 
     `$ npm run build`
+    
+    Two source scripts will be output to `./dist/v0.0.1/` folder. One is `librarie.js` for development build, another one is `librarie.min.js` for production build. By default `librarie.min.js` will be used in `index.html`.
 
 - Serve up the new library view
 
@@ -65,10 +54,8 @@ The following simple HTML code illustrates the way to embed library view into an
         <script src="./node_modules/react/dist/react.js"></script>
         <script src="./node_modules/react-dom/dist/react-dom.js"></script>
 
-        <!-- The main library view compoment will be injected depending on build environment-->
-        <!-- start:librarie inject -->
-        <script src = './dist/librarie.min.js'></script>
-        <!-- end:librarie inject -->
+        <!-- The main library view compoment -->
+        <script src = './dist/v0.0.1/librarie.min.js'></script>
 
 
         <!-- Initialize the library view component -->

@@ -1,9 +1,9 @@
 const webpack = require('webpack');
-var InjectHtmlPlugin = require('inject-html-webpack-plugin')
-var PROD = (process.env.NODE_ENV == 1);
+var productionBuild = (process.env.production_build == 1);
+let version = "v0.0.1";
 let plugins = [];
 
-if (PROD) {
+if (productionBuild) {
     plugins.push(
         new webpack.optimize.UglifyJsPlugin({
             minimize: true,
@@ -15,17 +15,6 @@ if (PROD) {
     )
 };
 
-plugins.push(
-    new InjectHtmlPlugin({
-        filename: "./index.html",
-        customInject: [{
-            start: "<!-- start:librarie inject -->",
-            end: "<!-- end:librarie inject -->",
-            content: PROD ? "<script src = './dist/librarie.min.js'></script>" : "<script src = './dist/librarie.js'></script>"
-        }]
-    })
-);
-
 module.exports = {
     entry: [
         "./src/LibraryUtilities.ts",
@@ -33,8 +22,8 @@ module.exports = {
     ],
     target: "node",
     output: {
-        filename: PROD ? "librarie.min.js" : "librarie.js",
-        path: __dirname + "/dist",
+        filename: productionBuild ? "librarie.min.js" : "librarie.js",
+        path: __dirname + "/dist/" + version + "/",
         libraryTarget: "var",
         library: "LibraryEntryPoint"
     },
@@ -56,8 +45,7 @@ module.exports = {
         rules: [
             {
                 test: /\.tsx?$/,
-                loader: ["babel-loader", "awesome-typescript-loader"], // All files with a '.ts' or '.tsx' extension will be handled by 'awesome-typescript-loader'.
-                exclude: /node_modules/
+                loader: ["awesome-typescript-loader"] // All files with a '.ts' or '.tsx' extension will be handled by 'awesome-typescript-loader'.
             },
             {
                 test: /\.js$/,
