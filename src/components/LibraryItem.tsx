@@ -18,14 +18,7 @@
 
 import * as React from "react";
 import { ClusterView } from "./ClusterView";
-
-export class ItemData {
-    text: string;
-    iconName: string;
-    expanded: boolean;
-    itemType: string;
-    childItems: ItemData[];
-}
+import { ItemData } from "../LibraryUtilities";
 
 export interface LibraryItemProps { data: ItemData }
 export interface LibraryItemState { expanded: boolean }

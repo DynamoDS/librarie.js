@@ -18,7 +18,8 @@
 */
 
 import * as React from "react";
-import { LibraryItem, ItemData } from "./LibraryItem";
+import { LibraryItem } from "./LibraryItem";
+import { ItemData } from "../LibraryUtilities";
 
 export interface ClusterViewProps { iconPath: string, borderColor: string, childItems: ItemData[] }
 
