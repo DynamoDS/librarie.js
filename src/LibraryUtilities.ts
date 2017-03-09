@@ -38,7 +38,7 @@ class LayoutElement {
         this.include = data.include;
         if (data.childElements) {
             for (let i = 0; i < data.childElements.length; i++) {
-                this.childElements.push(new LayoutElement(data.childElements[i])); 
+                this.childElements.push(new LayoutElement(data.childElements[i]));
             }
         }
     }
@@ -53,12 +53,18 @@ export class ItemData {
     creationName: string = "";
     itemType: ItemType = "none";
     childItems: ItemData[] = [];
+    searchStrings: string[] = [];
+    visible: boolean = true;
+    expanded: boolean = false;
 
     constructor(public text: string) {
+        this.searchStrings.push(text.toLowerCase());
     }
 
     constructFromLayoutElement(layoutElement: LayoutElement) {
         this.text = layoutElement.text;
+        this.searchStrings.pop();
+        this.searchStrings.push(this.text.toLowerCase());
         this.iconName = layoutElement.iconName;
         this.itemType = layoutElement.elementType;
     }
@@ -72,8 +78,7 @@ function constructNestedLibraryItems(
     includeParts: string[],
     typeListNode: TypeListNode,
     inclusive: boolean,
-    parentItem: ItemData): ItemData
-{
+    parentItem: ItemData): ItemData {
     // 'includeParts' is always lesser or equal to 'fullNameParts' in length.
     // 
     // Take an example:
@@ -154,8 +159,7 @@ function constructNestedLibraryItems(
  */
 function constructLibraryItem(
     typeListNodes: TypeListNode[],
-    layoutElement: LayoutElement): ItemData
-{
+    layoutElement: LayoutElement): ItemData {
     let result = new ItemData(layoutElement.text);
     result.constructFromLayoutElement(layoutElement);
 
@@ -224,8 +228,7 @@ function constructLibraryItem(
  */
 export function convertToLibraryTree(
     typeListNodes: TypeListNode[],
-    layoutElements: LayoutElement[]): ItemData[]
-{
+    layoutElements: LayoutElement[]): ItemData[] {
     let results: ItemData[] = []; // Resulting tree of library items.
 
     // Generate the resulting library item tree before merging data types.
@@ -238,8 +241,7 @@ export function convertToLibraryTree(
     return results;
 }
 
-export function buildLibraryItemsFromLayoutSpecs(loadedTypes: any, layoutSpecs: any): ItemData[]
-{
+export function buildLibraryItemsFromLayoutSpecs(loadedTypes: any, layoutSpecs: any): ItemData[] {
     let typeListNodes: TypeListNode[] = [];
     let layoutElements: LayoutElement[] = [];
 
@@ -252,4 +254,33 @@ export function buildLibraryItemsFromLayoutSpecs(loadedTypes: any, layoutSpecs: 
         layoutElements.push(new LayoutElement(layoutSpecs.elements[i]));
     }
     return convertToLibraryTree(typeListNodes, layoutElements);
+}
+
+function setItemVisible(item: ItemData) {
+    item.visible = true;
+    item.childItems.forEach((childItem) => setItemVisible(childItem));
+}
+
+export function search(text: string, item: ItemData) {
+    let index = item.text.toLowerCase().indexOf(text);
+
+    for (let searchString of item.searchStrings) {
+        index = searchString.indexOf(text);
+        if (index >= 0) {
+            break;
+        }
+    }
+
+    if (index >= 0 && item.itemType !== "group") {
+        setItemVisible(item); // show all child items if text is found in parent item
+    } else {
+        item.visible = false;
+        item.childItems.forEach(childItem => {
+            if (search(text, childItem)) {
+                item.visible = true; // show this item if text is found in any child items
+            }
+        });
+    }
+
+    return item.visible;
 }
