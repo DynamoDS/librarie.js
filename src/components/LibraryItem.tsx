@@ -34,19 +34,19 @@ class GroupedItems {
 
         for (let i = 0; i < items.length; i++) {
 
-            switch(items[i].itemType) {
-                case "creation":    this.creations.push(items[i]);  break;
-                case "action":      this.actions.push(items[i]);    break;
-                case "query":       this.queries.push(items[i]);    break;
-                default:            this.others.push(items[i]);     break;
+            switch (items[i].itemType) {
+                case "creation": this.creations.push(items[i]); break;
+                case "action": this.actions.push(items[i]); break;
+                case "query": this.queries.push(items[i]); break;
+                default: this.others.push(items[i]); break;
             }
         }
     }
 
     getCreationItems(): ItemData[] { return this.creations; }
-    getActionItems():   ItemData[] { return this.actions;   }
-    getQueryItems():    ItemData[] { return this.queries;   }
-    getOtherItems():    ItemData[] { return this.others;    }
+    getActionItems(): ItemData[] { return this.actions; }
+    getQueryItems(): ItemData[] { return this.queries; }
+    getOtherItems(): ItemData[] { return this.others; }
 }
 
 export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemState> {
@@ -66,7 +66,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
 
         if (this.props.data.itemType != "group") { // Group displays only text without icon.
             libraryItemTextStyle = "LibraryItemText";
-            iconElement = (<img className={ "LibraryItemIcon" } src={ iconPath } />);
+            iconElement = (<img className={"LibraryItemIcon"} src={iconPath} />);
         }
 
         let nestedElements = null;
@@ -88,20 +88,20 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         }
 
         return (
-            <div className={ this.getLibraryItemContainerStyle() }>
-                <div className={ "LibraryItemHeader" } onClick={ this.onLibraryItemClicked.bind(this) } >
-                    { iconElement }
-                    <div className={ libraryItemTextStyle }>{ this.props.data.text }</div>
+            <div className={this.getLibraryItemContainerStyle()}>
+                <div className={"LibraryItemHeader"} onClick={this.onLibraryItemClicked.bind(this)} >
+                    {iconElement}
+                    <div className={libraryItemTextStyle}>{this.props.data.text}</div>
                 </div>
-                { clusteredElements }
-                { nestedElements }
+                {clusteredElements}
+                {nestedElements}
             </div>
         );
     }
 
     getLibraryItemContainerStyle(): string {
 
-        switch(this.props.data.itemType) {
+        switch (this.props.data.itemType) {
             case "category":
                 return "LibraryItemContainerCategory";
 
@@ -127,31 +127,31 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
 
         let index = 0;
         return (
-            <div className={ "LibraryItemBody" }>
-            {
-                // 'getNestedElements' method is meant to render all other 
-                // types of items except ones of type creation/action/query.
-                // 
-                regularItems.map((item: ItemData) => {
-                    return (<LibraryItem key={ index++ } data={ item } />);
-                })
-            }
+            <div className={"LibraryItemBody"}>
+                {
+                    // 'getNestedElements' method is meant to render all other 
+                    // types of items except ones of type creation/action/query.
+                    // 
+                    regularItems.map((item: ItemData) => {
+                        return (<LibraryItem key={index++} data={item} />);
+                    })
+                }
             </div>
         );
     }
 
     getClusteredElements(groupedItems: GroupedItems): any {
-        
+
         let creationMethods = groupedItems.getCreationItems();
-        let actionMethods   = groupedItems.getActionItems();
-        let queryMethods    = groupedItems.getQueryItems();
+        let actionMethods = groupedItems.getActionItems();
+        let queryMethods = groupedItems.getQueryItems();
 
         let creationCluster = null;
         if (creationMethods.length > 0) {
             creationCluster = (<ClusterView
                 iconPath="src/resources/icons/library-creation.svg"
                 borderColor="#62895b" /* green */
-                childItems={ creationMethods } />);
+                childItems={creationMethods} />);
         }
 
         let actionCluster = null;
@@ -159,7 +159,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
             actionCluster = (<ClusterView
                 iconPath="src/resources/icons/library-action.svg"
                 borderColor="#ad5446" /* red */
-                childItems={ actionMethods } />);
+                childItems={actionMethods} />);
         }
 
         let queryCluster = null;
@@ -167,7 +167,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
             queryCluster = (<ClusterView
                 iconPath="src/resources/icons/library-query.svg"
                 borderColor="#4b9dbf" /* blue */
-                childItems={ queryMethods } />);
+                childItems={queryMethods} />);
         }
 
         if ((!creationCluster) && (!actionCluster) && (!queryCluster)) {
@@ -175,10 +175,10 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         }
 
         return (
-            <div className={ "LibraryItemBody" }>
-                { creationCluster }
-                { actionCluster }
-                { queryCluster }
+            <div className={"LibraryItemBody"}>
+                {creationCluster}
+                {actionCluster}
+                {queryCluster}
             </div>
         );
     }
