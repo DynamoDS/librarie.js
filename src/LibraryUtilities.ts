@@ -238,7 +238,7 @@ export function convertToLibraryTree(
     return results;
 }
 
-export function convertNow(loadedTypes: any, layoutSpecs: any): ItemData[]
+export function buildLibraryItemsFromLayoutSpecs(loadedTypes: any, layoutSpecs: any): ItemData[]
 {
     let typeListNodes: TypeListNode[] = [];
     let layoutElements: LayoutElement[] = [];

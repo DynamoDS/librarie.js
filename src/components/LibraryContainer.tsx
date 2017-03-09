@@ -3,7 +3,7 @@
 
 import * as React from "react";
 import { LibraryItem } from "./LibraryItem";
-import { convertNow, ItemData } from "../LibraryUtilities";
+import { buildLibraryItemsFromLayoutSpecs, ItemData } from "../LibraryUtilities";
 
 declare var boundContainer: any; // Object set from C# side.
 
@@ -21,7 +21,7 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
     constructor(props: LibraryContainerProps) {
 
         super(props);
-        this.generatedLibraryItems = convertNow(
+        this.generatedLibraryItems = buildLibraryItemsFromLayoutSpecs(
             this.props.loadedTypesJson, this.props.layoutSpecsJson);
     }
 
