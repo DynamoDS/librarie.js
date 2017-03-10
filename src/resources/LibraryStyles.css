@@ -6,7 +6,7 @@
 
 body {
     font-family: "Open Sans";
-    user-select: none;
+    -webkit-user-select: none;
     cursor: default;
 }
 
@@ -36,8 +36,7 @@ body {
     align-items: center;
     padding: 3;
     color: white;
-    transition: 0.1s;
-    overflow-y: hidden;
+    transition: 0.15s;
 }
 
 .LibraryItemHeader:hover {
