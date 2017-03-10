@@ -32,7 +32,7 @@
     },
     {
       "fullyQualifiedName": "Core.List.List.Create",
-      "iconName": "CoreNodeModels.CreateList",
+      "iconName": "Core.List.List.Create",
       "creationName": "List.Create",
       "itemType": "creation"
     },
@@ -44,13 +44,13 @@
     },
     {
       "fullyQualifiedName": "Core.List.Range",
-      "iconName": "CoreNodeModels.Range",
+      "iconName": "Core.List.Range",
       "creationName": "Range",
       "itemType": "creation"
     },
     {
       "fullyQualifiedName": "Core.List.Sequence",
-      "iconName": "CoreNodeModels.Sequence",
+      "iconName": "Core.List.Sequence",
       "creationName": "Sequence",
       "itemType": "creation"
     },
