@@ -19,6 +19,7 @@
 import * as React from "react";
 import { ClusterView } from "./ClusterView";
 import { ItemData } from "../LibraryUtilities";
+import * as LibraryEntryPoint from "./LibraryEntryPoint";
 
 export interface LibraryItemProps { data: ItemData }
 export interface LibraryItemState { expanded: boolean }
@@ -184,9 +185,6 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
     }
 
     onLibraryItemClicked() {
-
-        // Toggle expansion state.
-        let currentlyExpanded = this.state.expanded;
-        this.setState({ expanded: !currentlyExpanded });
+        LibraryEntryPoint.dispatchEvent("libraryItemClick", this);
     }
 }
