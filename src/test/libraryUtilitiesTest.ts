@@ -9,7 +9,7 @@ describe('listNode Class', function () {
   var testData: any;
 
   beforeEach(function () {
-    testData = new testClasses.typeListNodeData();
+    testData = new testClasses.TypeListNodeData();
   });
 
   it('should create an empty TypeListNode', function () {
@@ -43,7 +43,7 @@ describe("LayoutElement class", function () {
   var testData: any;
 
   beforeEach(function () {
-    testData = new testClasses.layoutElementData();
+    testData = new testClasses.LayoutElementData();
   });
 
   it('should create an empty LayoutElement', function () {
@@ -67,7 +67,7 @@ describe("LayoutElement class", function () {
   });
 
   it('should create LayoutElement from data with child elements', function () {
-    let testDataWithChildElements = new testClasses.layoutElementData();
+    let testDataWithChildElements = new testClasses.LayoutElementData();
     testDataWithChildElements.childElements.push(testData);
     testDataWithChildElements.childElements.push(testData);
 
@@ -83,7 +83,7 @@ describe('LibraryItem class', function () {
   var emptyString = '';
 
   beforeEach(function () {
-    testData = new LibraryUtilities.LayoutElement(new testClasses.layoutElementData());
+    testData = new LibraryUtilities.LayoutElement(new testClasses.LayoutElementData());
   });
 
   it('should create an LibraryItem from string', function () {
@@ -133,7 +133,7 @@ describe('constructNestedLibraryItems function', function () {
 
   it('should construct an empty LibraryItem', function () {
     includedParts = [];
-    typeListNode = new LibraryUtilities.TypeListNode(new testClasses.typeListNodeData());
+    typeListNode = new LibraryUtilities.TypeListNode(new testClasses.TypeListNodeData());
     inclusive = true;
     typeListNode.fullyQualifiedName = '';
     parentItem = new LibraryUtilities.LibraryItem('');
@@ -145,7 +145,7 @@ describe('constructNestedLibraryItems function', function () {
 
   it('should throw error if includedParts is larger than fullNameParts', function () {
     includedParts = ['a', 'b', 'c'];
-    typeListNode = new LibraryUtilities.TypeListNode(new testClasses.typeListNodeData());
+    typeListNode = new LibraryUtilities.TypeListNode(new testClasses.TypeListNodeData());
     inclusive = true;
     parentItem = new LibraryUtilities.LibraryItem('');
     typeListNode.fullyQualifiedName = '';
@@ -156,7 +156,7 @@ describe('constructNestedLibraryItems function', function () {
 
   it('should work if incluedParts is less than fullNameParts, and parentItem is null', function () {
     includedParts = ['a'];
-    typeListNode = new LibraryUtilities.TypeListNode(new testClasses.typeListNodeData());
+    typeListNode = new LibraryUtilities.TypeListNode(new testClasses.TypeListNodeData());
     typeListNode.fullyQualifiedName = 'a.b';
     inclusive = true;
     parentItem = null;
@@ -176,7 +176,7 @@ describe('constructNestedLibraryItems function', function () {
 
   it('should work if incluedParts is less than fullNameParts, and parentItem is null', function () {
     includedParts = ['a'];
-    typeListNode = new LibraryUtilities.TypeListNode(new testClasses.typeListNodeData());
+    typeListNode = new LibraryUtilities.TypeListNode(new testClasses.TypeListNodeData());
     typeListNode.fullyQualifiedName = 'a.b.c';
     inclusive = true;
     parentItem = null;
@@ -202,7 +202,7 @@ describe('constructNestedLibraryItems function', function () {
 
   it('should work if incluedParts is less than fullNameParts, and parentItem is not null', function () {
     includedParts = ['a'];
-    typeListNode = new LibraryUtilities.TypeListNode(new testClasses.typeListNodeData());
+    typeListNode = new LibraryUtilities.TypeListNode(new testClasses.TypeListNodeData());
     typeListNode.fullyQualifiedName = 'a.b';
     inclusive = true;
     parentItem = new LibraryUtilities.LibraryItem('');
@@ -223,7 +223,7 @@ describe('constructNestedLibraryItems function', function () {
 
   it('should work if incluedParts is less than fullNameParts, and parentItem is not null', function () {
     includedParts = ['a'];
-    typeListNode = new LibraryUtilities.TypeListNode(new testClasses.typeListNodeData());
+    typeListNode = new LibraryUtilities.TypeListNode(new testClasses.TypeListNodeData());
     typeListNode.fullyQualifiedName = 'a.b.c';
     inclusive = true;
     parentItem = new LibraryUtilities.LibraryItem('');
@@ -263,9 +263,9 @@ describe('constructLibraryItem function', function () {
   });
 
   it('should construct an empty LibraryItem', function () {
-    let layoutElement = new LibraryUtilities.LayoutElement(new testClasses.layoutElementData());
+    let layoutElement = new LibraryUtilities.LayoutElement(new testClasses.LayoutElementData());
     layoutElement.include = [];
-    let typeListNode = new LibraryUtilities.TypeListNode(new testClasses.typeListNodeData());
+    let typeListNode = new LibraryUtilities.TypeListNode(new testClasses.TypeListNodeData());
 
     result = LibraryUtilities.constructLibraryItem(typeListNodes, layoutElement);
 
@@ -277,12 +277,12 @@ describe('constructLibraryItem function', function () {
   });
 
   it('should constrcut the correct LibraryItem when there is only one TypeListNode', function () {
-    let layoutElement = new LibraryUtilities.LayoutElement(new testClasses.layoutElementData());
+    let layoutElement = new LibraryUtilities.LayoutElement(new testClasses.LayoutElementData());
     layoutElement.include = [];
     includeInfo1 = { path: 'a' };
     layoutElement.include.push(includeInfo1);
 
-    let typeListNode = new LibraryUtilities.TypeListNode(new testClasses.typeListNodeData());
+    let typeListNode = new LibraryUtilities.TypeListNode(new testClasses.TypeListNodeData());
     typeListNode.fullyQualifiedName = 'b';
     typeListNodes.push(typeListNode);
 
@@ -295,12 +295,12 @@ describe('constructLibraryItem function', function () {
   });
 
   it('should constrcut the correct LibraryItem when there is only one TypeListNode', function () {
-    let layoutElement = new LibraryUtilities.LayoutElement(new testClasses.layoutElementData());
+    let layoutElement = new LibraryUtilities.LayoutElement(new testClasses.LayoutElementData());
     layoutElement.include = [];
     includeInfo1 = { path: 'a' };
     layoutElement.include.push(includeInfo1);
 
-    let typeListNode = new LibraryUtilities.TypeListNode(new testClasses.typeListNodeData());
+    let typeListNode = new LibraryUtilities.TypeListNode(new testClasses.TypeListNodeData());
     typeListNode.fullyQualifiedName = 'a';
     typeListNodes.push(typeListNode);
 
