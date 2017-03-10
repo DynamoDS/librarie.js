@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Hello React!</title>
+        <title>Librarie.js sample page</title>
         <style>
             body {
                 padding: 0;
@@ -25,5 +25,16 @@
 
         <!-- Main -->
         <script src="./dist/bundle.js"></script>
+
+        <script>
+            let configuration = {
+                htmlElementId: "libraryContainerPlaceholder",
+                loadedTypesUrl: "loadedTypes", // A url where loaded types are to be downloaded.
+                layoutSpecsUrl: "layoutSpecs"  // A url where layout specs are to be downloaded.
+            };
+
+            let libView = new LibraryEntryPoint.LibraryView(configuration);
+        </script>
+
     </body>
 </html>

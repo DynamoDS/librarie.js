@@ -87,7 +87,7 @@ describe('LibraryItem class', function () {
   });
 
   it('should create an LibraryItem from string', function () {
-    let testLibraryItem = new LibraryUtilities.LibraryItem(emptyString);
+    let testLibraryItem = new LibraryUtilities.ItemData(emptyString);
 
     expect(testLibraryItem.iconName).to.equal(emptyString);
     expect(testLibraryItem.creationName).to.equal(emptyString);
@@ -97,7 +97,7 @@ describe('LibraryItem class', function () {
   });
 
   it('should create an LibraryItem from layoutElement', function () {
-    let testLibraryItem = new LibraryUtilities.LibraryItem(emptyString);
+    let testLibraryItem = new LibraryUtilities.ItemData(emptyString);
     testLibraryItem.constructFromLayoutElement(testData);
 
     expect(testLibraryItem.iconName).to.equal(undefined);
@@ -108,11 +108,11 @@ describe('LibraryItem class', function () {
   });
 
   it('should appedn some children', function () {
-    let parentLibraryItem = new LibraryUtilities.LibraryItem(emptyString);
+    let parentLibraryItem = new LibraryUtilities.ItemData(emptyString);
     parentLibraryItem.constructFromLayoutElement(testData);
 
-    let childLibraryItem1 = new LibraryUtilities.LibraryItem(emptyString);
-    let childLibraryItem2 = new LibraryUtilities.LibraryItem(emptyString);
+    let childLibraryItem1 = new LibraryUtilities.ItemData(emptyString);
+    let childLibraryItem2 = new LibraryUtilities.ItemData(emptyString);
     childLibraryItem2.constructFromLayoutElement(testData);
 
     parentLibraryItem.appendChild(childLibraryItem1);
@@ -136,10 +136,10 @@ describe('constructNestedLibraryItems function', function () {
     typeListNode = new LibraryUtilities.TypeListNode(new testClasses.TypeListNodeData());
     inclusive = true;
     typeListNode.fullyQualifiedName = '';
-    parentItem = new LibraryUtilities.LibraryItem('');
+    parentItem = new LibraryUtilities.ItemData('');
 
     result = LibraryUtilities.constructNestedLibraryItems(includedParts, typeListNode, inclusive, parentItem);
-    expect(result).to.be.an.instanceOf(LibraryUtilities.LibraryItem);
+    expect(result).to.be.an.instanceOf(LibraryUtilities.ItemData);
     expect(result).to.equal(parentItem);
   });
 
@@ -147,7 +147,7 @@ describe('constructNestedLibraryItems function', function () {
     includedParts = ['a', 'b', 'c'];
     typeListNode = new LibraryUtilities.TypeListNode(new testClasses.TypeListNodeData());
     inclusive = true;
-    parentItem = new LibraryUtilities.LibraryItem('');
+    parentItem = new LibraryUtilities.ItemData('');
     typeListNode.fullyQualifiedName = '';
 
     expect(LibraryUtilities.constructNestedLibraryItems.bind(
@@ -205,7 +205,7 @@ describe('constructNestedLibraryItems function', function () {
     typeListNode = new LibraryUtilities.TypeListNode(new testClasses.TypeListNodeData());
     typeListNode.fullyQualifiedName = 'a.b';
     inclusive = true;
-    parentItem = new LibraryUtilities.LibraryItem('');
+    parentItem = new LibraryUtilities.ItemData('');
 
     result = LibraryUtilities.constructNestedLibraryItems(includedParts, typeListNode, inclusive, parentItem);
 
@@ -226,7 +226,7 @@ describe('constructNestedLibraryItems function', function () {
     typeListNode = new LibraryUtilities.TypeListNode(new testClasses.TypeListNodeData());
     typeListNode.fullyQualifiedName = 'a.b.c';
     inclusive = true;
-    parentItem = new LibraryUtilities.LibraryItem('');
+    parentItem = new LibraryUtilities.ItemData('');
 
     result = LibraryUtilities.constructNestedLibraryItems(includedParts, typeListNode, inclusive, parentItem);
 
@@ -269,7 +269,7 @@ describe('constructLibraryItem function', function () {
 
     result = LibraryUtilities.constructLibraryItem(typeListNodes, layoutElement);
 
-    expect(result).to.be.an.instanceOf(LibraryUtilities.LibraryItem);
+    expect(result).to.be.an.instanceOf(LibraryUtilities.ItemData);
     expect(result.text).to.equal(layoutElement.text);
     expect(result.iconName).to.equal(layoutElement.iconName);
     expect(result.itemType).to.equal(layoutElement.elementType);
