@@ -1,5 +1,5 @@
 const webpack = require('webpack');
-var productionBuild = (process.env.production_build == 1);
+let productionBuild = (process.env.production_build == 1);
 let version = "v0.0.1";
 let plugins = [];
 

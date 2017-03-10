@@ -11,7 +11,7 @@ Installing all dependencies
 
     `$ npm run build`
     
-    Two source scripts will be output to `./dist/v0.0.1/` folder. One is `librarie.js` for development build, another one is `librarie.min.js` for production build. By default `librarie.min.js` will be used in `index.html`.
+    Both `librarie.js` (development script) and `librarie.min.js` (production script) will be output in `./dist/v0.0.1/` folder. By default `librarie.min.js` will be referenced in index.html.
 
 - Serve up the new library view
 
