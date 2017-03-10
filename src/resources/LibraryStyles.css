@@ -37,6 +37,7 @@ body {
     padding: 3;
     color: white;
     transition: 0.1s;
+    overflow-y: hidden;
 }
 
 .LibraryItemHeader:hover {
