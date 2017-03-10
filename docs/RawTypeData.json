@@ -32,7 +32,7 @@
     },
     {
       "fullyQualifiedName": "Core.List.List.Create",
-      "iconName": "Core.List.List.Create",
+      "iconName": "CoreNodeModels.CreateList",
       "creationName": "List.Create",
       "itemType": "creation"
     },
@@ -44,13 +44,13 @@
     },
     {
       "fullyQualifiedName": "Core.List.Range",
-      "iconName": "Core.List.Range",
+      "iconName": "CoreNodeModels.Range",
       "creationName": "Range",
       "itemType": "creation"
     },
     {
       "fullyQualifiedName": "Core.List.Sequence",
-      "iconName": "Core.List.Sequence",
+      "iconName": "CoreNodeModels.Sequence",
       "creationName": "Sequence",
       "itemType": "creation"
     },
@@ -415,15 +415,15 @@
       "itemType": "action"
     },
     {
-      "fullyQualifiedName": "Map",
-      "iconName": "Map",
-      "creationName": "Map@double,double,double",
+      "fullyQualifiedName": "DSCore.Math.Map",
+      "iconName": "DSCore.Math.Map",
+      "creationName": "DSCore.Math.Map@double,double,double",
       "itemType": "action"
     },
     {
-      "fullyQualifiedName": "MapTo",
-      "iconName": "MapTo",
-      "creationName": "MapTo@double,double,double,double,double",
+      "fullyQualifiedName": "DSCore.Math.MapTo",
+      "iconName": "DSCore.Math.MapTo",
+      "creationName": "DSCore.Math.MapTo@double,double,double,double,double",
       "itemType": "action"
     },
     {
@@ -4405,21 +4405,9 @@
       "itemType": "creation"
     },
     {
-      "fullyQualifiedName": "Core.List.FilterListByIndex",
-      "iconName": "ec5dbbd8-016c-4ff1-96ac-313fd42cebde",
-      "creationName": "FilterListByIndex",
-      "itemType": "action"
-    },
-    {
-      "fullyQualifiedName": "Analyze.test",
-      "iconName": "02960254-e571-4b0f-be9c-39b69930c1a6",
-      "creationName": "test",
-      "itemType": "action"
-    },
-    {
-      "fullyQualifiedName": "Analyze.TriangleSurfaceFromPoints",
-      "iconName": "ca78b1f6-f315-4f4e-9cc8-e226e70aea71",
-      "creationName": "TriangleSurfaceFromPoints",
+      "fullyQualifiedName": "Dynamo.Trial",
+      "iconName": "d4761072-948d-4a3b-b55b-d6c2aef2e60f",
+      "creationName": "Trial",
       "itemType": "action"
     }
   ]
