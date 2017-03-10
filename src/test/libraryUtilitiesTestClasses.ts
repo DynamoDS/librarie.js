@@ -1,4 +1,4 @@
-export class typeListNodeData {
+export class TypeListNodeData {
     fullyQualifiedName: any;
     iconName: any;
     creationName: any;
@@ -6,10 +6,10 @@ export class typeListNodeData {
 }
 
 
-export class layoutElementData {
+export class LayoutElementData {
     text: any;
     iconName: any;
     elementType: any;
     include: any;
-    childElements: layoutElementData[] = [];
+    childElements: LayoutElementData[] = [];
 }
