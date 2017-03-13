@@ -1,3 +1,20 @@
+const webpack = require('webpack');
+let productionBuild = (process.env.production_build == 1);
+let version = "v0.0.1";
+let plugins = [];
+
+if (productionBuild) {
+    plugins.push(
+        new webpack.optimize.UglifyJsPlugin({
+            minimize: true,
+            sourceMap: true,
+            mangle: {
+                except: ["LibraryView"]
+            }
+        })
+    )
+};
+
 module.exports = {
     entry: [
         "./src/LibraryUtilities.ts",
@@ -5,11 +22,12 @@ module.exports = {
     ],
     target: "node",
     output: {
-        filename: "bundle.js",
-        path: __dirname + "/dist",
+        filename: productionBuild ? "librarie.min.js" : "librarie.js",
+        path: __dirname + "/dist/" + version + "/",
         libraryTarget: "var",
         library: "LibraryEntryPoint"
     },
+    plugins: plugins,
 
     // Enable sourcemaps for debugging webpack's output.
     devtool: "source-map",
@@ -20,14 +38,14 @@ module.exports = {
         ],
 
         // Add '.ts' and '.tsx' as resolvable extensions.
-        extensions: [ ".webpack.js", ".web.js", ".ts", ".tsx", ".js" ]
+        extensions: [".webpack.js", ".web.js", ".ts", ".tsx", ".js"]
     },
 
     module: {
         rules: [
             {
                 test: /\.tsx?$/,
-                loader: "awesome-typescript-loader" // All files with a '.ts' or '.tsx' extension will be handled by 'awesome-typescript-loader'.
+                loader: ["awesome-typescript-loader"] // All files with a '.ts' or '.tsx' extension will be handled by 'awesome-typescript-loader'.
             },
             {
                 test: /\.js$/,
@@ -45,4 +63,4 @@ module.exports = {
         "react": "React",
         "react-dom": "ReactDOM"
     },
-};
+}

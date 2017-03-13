@@ -1,13 +1,14 @@
 /// <reference path="../../node_modules/@types/node/index.d.ts" />
-/// <reference path="../../node_modules/@types/whatwg-fetch/index.d.ts" />
 
 import * as React from "react";
+import { LibraryView } from "../LibraryView";
 import { LibraryItem } from "./LibraryItem";
 import { buildLibraryItemsFromLayoutSpecs, ItemData } from "../LibraryUtilities";
 
 declare var boundContainer: any; // Object set from C# side.
 
 export interface LibraryContainerProps {
+    libraryView: LibraryView,
     loadedTypesJson: any,
     layoutSpecsJson: any
 }
@@ -30,7 +31,7 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
         try {
             let index = 0;
             const childItems = this.generatedLibraryItems;
-            const listItems = childItems.map((item: ItemData) => (<LibraryItem key={index++} data={item} />));
+            const listItems = childItems.map((item: ItemData) => (<LibraryItem key={index++} libraryView={this.props.libraryView} data={item} />));
 
             return (<div>{listItems}</div>);
         }

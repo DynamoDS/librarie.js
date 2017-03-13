@@ -1,5 +1,4 @@
 /// <reference path="../node_modules/@types/node/index.d.ts" />
-/// <reference path="../node_modules/@types/whatwg-fetch/index.d.ts" />
 
 import * as React from "react";
 import * as ReactDOM from "react-dom";
@@ -73,6 +72,7 @@ export class LibraryView {
 
         let htmlElement = document.getElementById(this.htmlElementId);
         ReactDOM.render(<LibraryContainer
+            libraryView={this}
             loadedTypesJson={this.loadedTypesJson}
             layoutSpecsJson={this.layoutSpecsJson} />, htmlElement);
     }
