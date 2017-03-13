@@ -1,4 +1,4 @@
-import * as LibraryUtilities from '../LibraryUtilities'
+import * as LibraryUtilities from '../src/LibraryUtilities'
 import * as testClasses from './libraryUtilitiesTestClasses'
 
 import { expect } from 'chai';
