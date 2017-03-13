@@ -1,5 +1,4 @@
 /// <reference path="../../node_modules/@types/node/index.d.ts" />
-/// <reference path="../../node_modules/@types/whatwg-fetch/index.d.ts" />
 
 import * as React from "react";
 import { LibraryItem } from "./LibraryItem";
