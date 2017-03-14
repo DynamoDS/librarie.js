@@ -20,7 +20,6 @@ import * as React from "react";
 import { ClusterView } from "./ClusterView";
 import { LibraryView } from "../LibraryView";
 import { ItemData } from "../LibraryUtilities";
-import * as LibraryEntryPoint from "./LibraryEntryPoint";
 
 export interface LibraryItemProps { libraryView: LibraryView, data: ItemData }
 export interface LibraryItemState { expanded: boolean }
@@ -189,6 +188,10 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
     }
 
     onLibraryItemClicked() {
-        LibraryEntryPoint.dispatchEvent("libraryItemClick", this);
+        let currentlyExpanded = this.state.expanded;
+        this.setState({ expanded: !currentlyExpanded });
+
+        let libraryView = this.props.libraryView;
+        libraryView.raiseEvent("libraryItemClicked", this);
     }
 }
