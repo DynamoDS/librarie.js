@@ -1,5 +1,6 @@
 
 import * as React from "react";
+import * as _ from "underscore";
 import { LibraryItem } from "./components/LibraryItem";
 
 /**
@@ -43,15 +44,13 @@ export class Reactor {
     }
 
     getEvent(eventName: string): number {
-        for (let i = 0; i < this.events.length; i++) {
-          if (this.events[i].name == eventName) return i;
-        }
-        return null;
+        let index = _.findIndex(this.events, {name: eventName});
+        return index;
     }
 
     registerEvent(eventName: string, callback: Function) {
         let index = this.getEvent(eventName);
-        if (index == null) {
+        if (index == -1) {
             let event = new Event(eventName);
             event.registerCallback(callback);
             this.events.push(event);
@@ -63,7 +62,7 @@ export class Reactor {
 
     raiseEvent(name: string, params?: any | any[]) {
         let index = this.getEvent(name);
-        if (index != null) {
+        if (index != -1) {
             this.events[index].executeCallback(params);
         }
     }

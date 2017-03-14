@@ -37,7 +37,7 @@
 
         let libView = new LibraryEntryPoint.LibraryView(configuration);
 
-        libView.on("libraryItemClicked", function(item) {
+        libView.on("itemClicked", function(item) {
             console.log(item.props.data.text);
         })
     </script>
