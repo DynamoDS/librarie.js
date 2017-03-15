@@ -43,27 +43,26 @@ export class Reactor {
         this.events = [];
     }
 
-    getEvent(eventName: string): number {
-        let index = _.findIndex(this.events, {name: eventName});
-        return index;
+    getEvent(eventName: string): Event {
+        return _.find(this.events, function (event) { return event.name == eventName });
     }
 
     registerEvent(eventName: string, callback: Function) {
-        let index = this.getEvent(eventName);
-        if (index == -1) {
-            let event = new Event(eventName);
+        let event = this.getEvent(eventName);
+        if (event == null) {
+            event = new Event(eventName);
             event.registerCallback(callback);
             this.events.push(event);
         }
         else {
-            this.events[index].registerCallback(callback);
+            event.registerCallback(callback);
         }
     }
 
     raiseEvent(name: string, params?: any | any[]) {
-        let index = this.getEvent(name);
-        if (index != -1) {
-            this.events[index].executeCallback(params);
+        let event = this.getEvent(name);
+        if (event != null) {
+            event.executeCallback(params);
         }
     }
 }

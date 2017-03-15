@@ -67,40 +67,18 @@ The following simple HTML code illustrates the way to embed library view into an
             };
 
             let libView = new LibraryEntryPoint.LibraryView(configuration);
-
-            // Register callback functions here.
         </script>
 
     </body>
 </html>
 ```
 
-### Registering and Dispatching Callback Functions
-The callback mechanism of the library component involves the use of:
-1. A  `Reactor` object that stores a number of `Event`s.
-2. `Event` objects that store one or more callback functions.
+### Registering Callback Function
 
 To register an event to the library view component, add a new callback function and specify a name for the event:
 ```
-libView.on("eventName", function() {
-            // do something
+libView.on("itemClicked", function(data) {
+        console.log(data);
         })
-```
-An `event` can contain multiple callback functions. To register more functions to an existing event, simply call `libView.on()` again by specifying the same event name and passing in a new function.
-
-Then, use the `raiseEvent()` function to dispatch the event, which will execute all the callback functions registered to the event:
-```
-libView.raiseEvent("eventName");
-```
-
-To register a callback function that takes in a parameter, initialize the function and specify the parameter. While dispatching the event, pass in the input as the second parameter of `raiseEvent()`.
-```
-libView.on("eventWithParam", function(paramName: string) {
-    console.log(paramName);
-})
-```
-```
-libView.raiseEvent("eventWithParam", "string parameter");
-// (result:) string parameter
 ```
 Note: The callback functions are limited to taking in 0 or 1 parameters only.
