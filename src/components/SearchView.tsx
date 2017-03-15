@@ -1,9 +1,11 @@
 import * as React from "react";
 import { LibraryItem } from "./LibraryItem";
+import { LibraryView } from "../LibraryView";
 import { search, ItemData } from "../LibraryUtilities";
 
 interface SearchViewProps {
     onSearchChanged: any;
+    libraryView: LibraryView;
     items: ItemData[];
 }
 
@@ -28,7 +30,7 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
     generateStructuredItems() {
         let structuredItems: JSX.Element[] = [];
         let index = 0;
-        structuredItems = this.props.items.map((item: ItemData) => <LibraryItem key={index++} data={item} />);
+        structuredItems = this.props.items.map((item: ItemData) => <LibraryItem key={index++} libraryView={this.props.libraryView} data={item} />);
         return structuredItems;
     }
 
