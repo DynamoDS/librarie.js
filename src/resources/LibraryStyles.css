@@ -6,7 +6,7 @@
 
 body {
     font-family: "Open Sans";
-    user-select: none;
+    -webkit-user-select: none;
     cursor: default;
 }
 
@@ -36,7 +36,7 @@ body {
     align-items: center;
     padding: 3;
     color: white;
-    transition: 0.1s;
+    transition: 0.15s;
 }
 
 .LibraryItemHeader:hover {
@@ -54,12 +54,14 @@ body {
     padding: 10px;
     width: 20px;
     height: 20px;
+    -webkit-user-drag: none;
 }
 
 .LibraryItemContainerNone .LibraryItemIcon {
     padding: 2px 8px;
     width: 32px;
     height: 32px;
+    -webkit-user-drag: none;
 }
 
 .LibraryItemContainerCategory .LibraryItemText {
@@ -100,6 +102,7 @@ body {
     width: 26px;
     height: 26px;
     padding: 5px 6px;
+    -webkit-user-drag: none;
 }
 
 .searchView {

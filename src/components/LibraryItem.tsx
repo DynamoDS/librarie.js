@@ -18,9 +18,10 @@
 
 import * as React from "react";
 import { ClusterView } from "./ClusterView";
+import { LibraryView } from "../LibraryView";
 import { ItemData } from "../LibraryUtilities";
 
-export interface LibraryItemProps { data: ItemData }
+export interface LibraryItemProps { libraryView: LibraryView, data: ItemData }
 export interface LibraryItemState {
     expanded: boolean,
     visible: boolean
@@ -152,7 +153,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
                     // types of items except ones of type creation/action/query.
                     // 
                     regularItems.map((item: ItemData) => {
-                        return (<LibraryItem key={index++} data={item} />);
+                        return (<LibraryItem key={index++} libraryView={this.props.libraryView} data={item} />);
                     })
                 }
             </div>
@@ -168,6 +169,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         let creationCluster = null;
         if (creationMethods.length > 0  && creationMethods.some(item => item.visible)) {
             creationCluster = (<ClusterView
+                libraryView={this.props.libraryView}
                 iconPath="src/resources/icons/library-creation.svg"
                 borderColor="#62895b" /* green */
                 childItems={creationMethods} />);
@@ -176,6 +178,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         let actionCluster = null;
         if (actionMethods.length > 0 && actionMethods.some(item => item.visible)) {
             actionCluster = (<ClusterView
+                libraryView={this.props.libraryView}
                 iconPath="src/resources/icons/library-action.svg"
                 borderColor="#ad5446" /* red */
                 childItems={actionMethods} />);
@@ -184,6 +187,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         let queryCluster = null;
         if (queryMethods.length > 0 && queryMethods.some(item => item.visible)) {
             queryCluster = (<ClusterView
+                libraryView={this.props.libraryView}
                 iconPath="src/resources/icons/library-query.svg"
                 borderColor="#4b9dbf" /* blue */
                 childItems={queryMethods} />);
