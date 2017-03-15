@@ -255,31 +255,38 @@ export function buildLibraryItemsFromLayoutSpecs(loadedTypes: any, layoutSpecs: 
     return convertToLibraryTree(typeListNodes, layoutElements);
 }
 
-function setItemVisible(item: ItemData) {
+function showItemRecursive(item: ItemData) {
     item.visible = true;
-    item.childItems.forEach((childItem) => setItemVisible(childItem));
+    item.childItems.forEach((childItem) => showItemRecursive(childItem));
 }
 
 export function search(text: string, item: ItemData) {
-    let index = item.text.toLowerCase().indexOf(text);
+    if (item.itemType !== "group") {
+        let index: number;
 
-    for (let searchString of item.searchStrings) {
-        index = searchString.indexOf(text);
+        for (let searchString of item.searchStrings) {
+            index = searchString.indexOf(text);
+            if (index >= 0) {
+                break;
+            }
+        }
+
+        // Show all items recursively if a given text is found in the current 
+        // (parent) item. Note that this does not apply to items of "group" type
         if (index >= 0) {
-            break;
+            showItemRecursive(item);
+            return true;
         }
     }
 
-    if (index >= 0 && item.itemType !== "group") {
-        setItemVisible(item); // show all child items if text is found in parent item
-    } else {
-        item.visible = false;
-        item.childItems.forEach(childItem => {
-            if (search(text, childItem)) {
-                item.visible = true; // show this item if text is found in any child items
-            }
-        });
-    }
+    // Recusively search in child items if the item is of "group" type, 
+    // or text is not found in the current(parent) item
+    item.visible = false;
+    item.childItems.forEach(childItem => {
+        if (search(text, childItem)) {
+            item.visible = true;
+        }
+    });
 
     return item.visible;
 }
