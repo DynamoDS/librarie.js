@@ -67,6 +67,10 @@ The following simple HTML code illustrates the way to embed library view into an
             };
 
             let libView = new LibraryEntryPoint.LibraryView(configuration);
+            
+            libView.on("itemClicked", function(item) {
+                console.log(item);
+            })
         </script>
 
     </body>

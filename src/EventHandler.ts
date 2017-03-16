@@ -49,14 +49,11 @@ export class Reactor {
 
     registerEvent(eventName: string, callback: Function) {
         let event = this.getEvent(eventName);
-        if (event == null) {
+        if (!event) {
             event = new Event(eventName);
-            event.registerCallback(callback);
             this.events.push(event);
         }
-        else {
-            event.registerCallback(callback);
-        }
+        event.registerCallback(callback);
     }
 
     raiseEvent(name: string, params?: any | any[]) {

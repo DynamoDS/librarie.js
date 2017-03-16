@@ -16,7 +16,6 @@
   "author": "Dynamo Team",
   "license": "MIT",
   "dependencies": {
-    "@types/underscore": "^1.8.0",
     "express": "^4.14.0",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
@@ -28,6 +27,7 @@
     "@types/node": "^7.0.5",
     "@types/react": "^15.0.0",
     "@types/react-dom": "^0.14.20",
+    "@types/underscore": "^1.8.0",
     "awesome-typescript-loader": "^3.0.0-beta.18",
     "chai": "^3.5.0",
     "mocha": "^3.2.0",
