@@ -2,7 +2,7 @@
   "elements": [
     {
       "text": "List",
-      "iconName": "Category.List.svg",
+      "iconName": "/src/resources/icons/Category.List.svg",
       "elementType": "category",
       "include": [],
       "childElements": [
@@ -217,7 +217,7 @@
           "childElements": [
             {
               "text": "Keys",
-              "iconName": "Category.Keys.svg",
+              "iconName": "/src/resources/icons/Category.Keys.svg",
               "elementType": "category",
               "include": [
                 {
@@ -311,7 +311,7 @@
     },
     {
       "text": "Input",
-      "iconName": "Category.Input.svg",
+      "iconName": "/src/resources/icons/Category.Input.svg",
       "elementType": "category",
       "include": [],
       "childElements": [
@@ -375,7 +375,8 @@
               "path": "DSCore.DateTime.TimeOfDay"
             },
             {
-              "path": "DSCore.DayOfWeek"
+              "path": "DSCore.DayOfWeek",
+              "pathIcon": "/src/resources/icons/DSCore.DayOfWeek.png"
             }
           ],
           "childElements": []
@@ -520,7 +521,7 @@
     },
     {
       "text": "Math",
-      "iconName": "Category.Math.svg",
+      "iconName": "/src/resources/icons/Category.Math.svg",
       "elementType": "category",
       "include": [],
       "childElements": [
@@ -695,7 +696,7 @@
         },
         {
           "text": "Operators",
-          "iconName": "Category.Operators.svg",
+          "iconName": "/src/resources/icons/Category.Operators.svg",
           "elementType": "group",
           "include": [
             {
@@ -764,7 +765,7 @@
     },
     {
       "text": "Script",
-      "iconName": "Category.Script.svg",
+      "iconName": "/src/resources/icons/Category.Script.svg",
       "elementType": "category",
       "include": [],
       "childElements": [
@@ -820,7 +821,7 @@
     },
     {
       "text": "Display",
-      "iconName": "Category.Display.svg",
+      "iconName": "/src/resources/icons/Category.Display.svg",
       "elementType": "category",
       "include": [],
       "childElements": [
@@ -906,7 +907,7 @@
     },
     {
       "text": "ImportExport",
-      "iconName": "Category.ImportExport.svg",
+      "iconName": "/src/resources/icons/Category.ImportExport.svg",
       "elementType": "category",
       "include": [],
       "childElements": [
@@ -1042,7 +1043,7 @@
     },
     {
       "text": "String",
-      "iconName": "Category.String.svg",
+      "iconName": "/src/resources/icons/Category.String.svg",
       "elementType": "category",
       "include": [],
       "childElements": [
@@ -1155,7 +1156,7 @@
     },
     {
       "text": "Geometry",
-      "iconName": "Category.Geometry.svg",
+      "iconName": "/src/resources/icons/Category.Geometry.svg",
       "elementType": "category",
       "include": [],
       "childElements": [
@@ -1165,28 +1166,36 @@
           "elementType": "group",
           "include": [
             {
-              "path": "Autodesk.DesignScript.Geometry.BoundingBox"
+              "path": "Autodesk.DesignScript.Geometry.BoundingBox",
+              "pathIcon": "/src/resources/icons/Autodesk.DesignScript.Geometry.BoundingBox.png"
             },
             {
-              "path": "Autodesk.DesignScript.Geometry.CoordinateSystem"
+              "path": "Autodesk.DesignScript.Geometry.CoordinateSystem",
+              "pathIcon": "/src/resources/icons/Autodesk.DesignScript.Geometry.CoordinateSystem.png"
             },
             {
-              "path": "Autodesk.DesignScript.Geometry.Vector"
+              "path": "Autodesk.DesignScript.Geometry.Vector",
+              "pathIcon": "/src/resources/icons/Autodesk.DesignScript.Geometry.Vector.png"
             },
             {
-              "path": "Autodesk.DesignScript.Geometry.Edge"
+              "path": "Autodesk.DesignScript.Geometry.Edge",
+              "pathIcon": "/src/resources/icons/Autodesk.DesignScript.Geometry.Edge.png"
             },
             {
-              "path": "Autodesk.DesignScript.Geometry.Face"
+              "path": "Autodesk.DesignScript.Geometry.Face",
+              "pathIcon": "/src/resources/icons/Autodesk.DesignScript.Geometry.Face.png"
             },
             {
-              "path": "Autodesk.DesignScript.Geometry.Plane"
+              "path": "Autodesk.DesignScript.Geometry.Plane",
+              "pathIcon": "/src/resources/icons/Autodesk.DesignScript.Geometry.Plane.png"
             },
             {
-              "path": "Autodesk.DesignScript.Geometry.Vertex"
+              "path": "Autodesk.DesignScript.Geometry.Vertex",
+              "pathIcon": "/src/resources/icons/Autodesk.DesignScript.Geometry.Vertex.png"
             },
             {
-              "path": "Autodesk.DesignScript.Geometry.Topology"
+              "path": "Autodesk.DesignScript.Geometry.Topology",
+              "pathIcon": "/src/resources/icons/Autodesk.DesignScript.Geometry.Topology.png"
             }
           ],
           "childElements": []
@@ -1197,10 +1206,12 @@
           "elementType": "group",
           "include": [
             {
-              "path": "Autodesk.DesignScript.Geometry.Point"
+              "path": "Autodesk.DesignScript.Geometry.Point",
+              "pathIcon": "/src/resources/icons/Autodesk.DesignScript.Geometry.Point.png"
             },
             {
-              "path": "Autodesk.DesignScript.Geometry.UV"
+              "path": "Autodesk.DesignScript.Geometry.UV",
+              "pathIcon": "/src/resources/icons/Autodesk.DesignScript.Geometry.UV.png"
             }
           ],
           "childElements": []
@@ -1211,37 +1222,48 @@
           "elementType": "group",
           "include": [
             {
-              "path": "Autodesk.DesignScript.Geometry.Arc"
+              "path": "Autodesk.DesignScript.Geometry.Arc",
+              "pathIcon": "/src/resources/icons/Autodesk.DesignScript.Geometry.Arc.png"
             },
             {
-              "path": "Autodesk.DesignScript.Geometry.Circle"
+              "path": "Autodesk.DesignScript.Geometry.Circle",
+              "pathIcon": "/src/resources/icons/Autodesk.DesignScript.Geometry.Circle.png"
             },
             {
-              "path": "Autodesk.DesignScript.Geometry.Curve"
+              "path": "Autodesk.DesignScript.Geometry.Curve",
+              "pathIcon": "/src/resources/icons/Autodesk.DesignScript.Geometry.Curve.png"
             },
             {
-              "path": "Autodesk.DesignScript.Geometry.Ellipse"
+              "path": "Autodesk.DesignScript.Geometry.Ellipse",
+              "pathIcon": "/src/resources/icons/Autodesk.DesignScript.Geometry.Ellipserc.png"
             },
             {
-              "path": "Autodesk.DesignScript.Geometry.EllipseArc"
+              "path": "Autodesk.DesignScript.Geometry.EllipseArc",
+              "pathIcon": "/src/resources/icons/Autodesk.DesignScript.Geometry.EllipseArc.png"
             },
             {
-              "path": "Autodesk.DesignScript.Geometry.Helix"
+              "path": "Autodesk.DesignScript.Geometry.Helix",
+              "pathIcon": "/src/resources/icons/Autodesk.DesignScript.Geometry.Helix.png"
             },
             {
-              "path": "Autodesk.DesignScript.Geometry.Line"
+              "path": "Autodesk.DesignScript.Geometry.Line",
+              "pathIcon": "/src/resources/icons/Autodesk.DesignScript.Geometry.Line.png"
             },
             {
-              "path": "Autodesk.DesignScript.Geometry.NurbsCurve"
+              "path": "Autodesk.DesignScript.Geometry.NurbsCurve",
+              "pathIcon": "/src/resources/icons/Autodesk.DesignScript.Geometry.NurbsCurve.png"
             },
             {
-              "path": "Autodesk.DesignScript.Geometry.PolyCurve"
+              "path": "Autodesk.DesignScript.Geometry.PolyCurve",
+              "pathIcon": "/src/resources/icons/Autodesk.DesignScript.Geometry.PolyCurve.png"
             },
             {
-              "path": "Autodesk.DesignScript.Geometry.Polygon"
+              "path": "Autodesk.DesignScript.Geometry.Polygon",
+              "pathIcon": "/src/resources/icons/Autodesk.DesignScript.Geometry.Polygon.png"
             },
             {
-              "path": "Autodesk.DesignScript.Geometry.Rectangle"
+              "path": "Autodesk.DesignScript.Geometry.Rectangle",
+              "pathIcon": "/src/resources/icons/Autodesk.DesignScript.Geometry.Rectangle.png"
             }
           ],
           "childElements": []
@@ -1252,13 +1274,16 @@
           "elementType": "group",
           "include": [
             {
-              "path": "Autodesk.DesignScript.Geometry.NurbsSurface"
+              "path": "Autodesk.DesignScript.Geometry.NurbsSurface",
+              "pathIcon": "/src/resources/icons/Autodesk.DesignScript.Geometry.NurbsSurface.png"
             },
             {
-              "path": "Autodesk.DesignScript.Geometry.PolySurface"
+              "path": "Autodesk.DesignScript.Geometry.PolySurface",
+              "pathIcon": "/src/resources/icons/Autodesk.DesignScript.Geometry.PolySurface.png"
             },
             {
-              "path": "Autodesk.DesignScript.Geometry.Surface"
+              "path": "Autodesk.DesignScript.Geometry.Surface",
+              "pathIcon": "/src/resources/icons/Autodesk.DesignScript.Geometry.Surface.png"
             }
           ],
           "childElements": []
@@ -1269,19 +1294,24 @@
           "elementType": "group",
           "include": [
             {
-              "path": "Autodesk.DesignScript.Geometry.Cone"
+              "path": "Autodesk.DesignScript.Geometry.Cone",
+              "pathIcon": "/src/resources/icons/Autodesk.DesignScript.Geometry.Cone.png"
             },
             {
-              "path": "Autodesk.DesignScript.Geometry.Cuboid"
+              "path": "Autodesk.DesignScript.Geometry.Cuboid",
+              "pathIcon": "/src/resources/icons/Autodesk.DesignScript.Geometry.Cuboid.png"
             },
             {
-              "path": "Autodesk.DesignScript.Geometry.Cylinder"
+              "path": "Autodesk.DesignScript.Geometry.Cylinder",
+              "pathIcon": "/src/resources/icons/Autodesk.DesignScript.Geometry.Cylinder.png"
             },
             {
-              "path": "Autodesk.DesignScript.Geometry.Solid"
+              "path": "Autodesk.DesignScript.Geometry.Solid",
+              "pathIcon": "/src/resources/icons/Autodesk.DesignScript.Geometry.Solid.png"
             },
             {
-              "path": "Autodesk.DesignScript.Geometry.Sphere"
+              "path": "Autodesk.DesignScript.Geometry.Sphere",
+              "pathIcon": "/src/resources/icons/Autodesk.DesignScript.Geometry.Sphere.png"
             }
           ],
           "childElements": []
@@ -1292,10 +1322,12 @@
           "elementType": "group",
           "include": [
             {
-              "path": "Autodesk.DesignScript.Geometry.IndexGroup"
+              "path": "Autodesk.DesignScript.Geometry.IndexGroup",
+              "pathIcon": "/src/resources/icons/Autodesk.DesignScript.Geometry.IndexGroup.png"
             },
             {
-              "path": "Autodesk.DesignScript.Geometry.Mesh"
+              "path": "Autodesk.DesignScript.Geometry.Mesh",
+              "pathIcon": "/src/resources/icons/Autodesk.DesignScript.Geometry.Mesh.png"
             }
           ],
           "childElements": []
@@ -1306,10 +1338,12 @@
           "elementType": "group",
           "include": [
             {
-              "path": "Geometry.Geometry"
+              "path": "Geometry.Geometry",
+              "pathIcon": "/src/resources/icons/Geometry.Geometry.png"
             },
             {
-              "path": "Autodesk.DesignScript.Geometry.Geometry"
+              "path": "Autodesk.DesignScript.Geometry.Geometry",
+              "pathIcon": "/src/resources/icons/Autodesk.DesignScript.Geometry.Geometry.png"
             }
           ],
           "childElements": [
@@ -1338,13 +1372,16 @@
           "elementType": "group",
           "include": [
             {
-              "path": "Tessellation.ConvexHull"
+              "path": "Tessellation.ConvexHull",
+              "pathIcon": "/src/resources/icons/Tessellation.ConvexHull.png"
             },
             {
-              "path": "Tessellation.Delaunay"
+              "path": "Tessellation.Delaunay",
+              "pathIcon": "/src/resources/icons/Tessellation.Delaunay.png"
             },
             {
-              "path": "Tessellation.Voronoi"
+              "path": "Tessellation.Voronoi",
+              "pathIcon": "/src/resources/icons/Tessellation.Voronoi.png"
             }
           ],
           "childElements": []

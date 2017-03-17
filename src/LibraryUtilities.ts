@@ -12,13 +12,14 @@ export class TypeListNode {
     constructor(data: any) {
         this.fullyQualifiedName = data.fullyQualifiedName;
         this.iconName = data.iconName;
-        this.creationName = data.creationName;
+        this.creationName = data.contextData;
         this.memberType = data.itemType;
     }
 }
 
 export interface IncludeInfo {
     path: string;
+    pathIcon?: string;
     inclusive?: boolean;
 }
 
@@ -57,7 +58,7 @@ export class ItemData {
     }
 
     constructFromLayoutElement(layoutElement: LayoutElement) {
-        this.text = layoutElement.text;
+        this.creationName = layoutElement.text;
         this.iconName = layoutElement.iconName;
         this.itemType = layoutElement.elementType;
     }
@@ -71,7 +72,8 @@ export function constructNestedLibraryItems(
     includeParts: string[],
     typeListNode: TypeListNode,
     inclusive: boolean,
-    parentItem: ItemData): ItemData {
+    parentItem: ItemData,
+    pathIcon?: string): ItemData {
     // 'includeParts' is always lesser or equal to 'fullNameParts' in length.
     // 
     // Take an example:
@@ -109,6 +111,7 @@ export function constructNestedLibraryItems(
         // is exclusive, we add '1' to it otherwise 'C' won't be included.
         //  
         libraryItem.iconName = fullNameParts.slice(0, i + 1).join(".");
+        if (pathIcon) libraryItem.iconName = pathIcon; // If there is a pathIcon specified, assign to iconName
 
         // If this is the leaf most level, copy all item information over.
         if (i == fullNameParts.length - 1) {
@@ -181,7 +184,7 @@ export function constructLibraryItem(
             }
 
             parentNode = constructNestedLibraryItems(includeParts,
-                typeListNodes[j], inclusive, parentNode);
+                typeListNodes[j], inclusive, parentNode, layoutElement.include[i].pathIcon);
         }
 
         if (parentNode && (parentNode != result)) {

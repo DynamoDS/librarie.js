@@ -59,15 +59,12 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
 
     render() {
 
-        let iconPath = "/src/resources/icons/" + this.props.data.iconName;
-        if (!iconPath.endsWith(".svg")) { iconPath = iconPath + ".png"; }
-
         let iconElement = null;
         let libraryItemTextStyle = "LibraryItemGroupText";
 
         if (this.props.data.itemType != "group") { // Group displays only text without icon.
             libraryItemTextStyle = "LibraryItemText";
-            iconElement = (<img className={"LibraryItemIcon"} src={iconPath} />);
+            iconElement = (<img className={"LibraryItemIcon"} src={this.props.data.iconName} />);
         }
 
         let nestedElements = null;
