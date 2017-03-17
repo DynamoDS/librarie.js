@@ -31,7 +31,7 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
         try {
             let index = 0;
             const childItems = this.generatedLibraryItems;
-            const listItems = childItems.map((item: ItemData) => (<LibraryItem key={index++} libraryView={this.props.libraryView} data={item} />));
+            const listItems = childItems.map((item: ItemData) => (<LibraryItem key={index++} libraryView={this.props.libraryView} data={item} level={0}/>));
 
             return (<div>{listItems}</div>);
         }

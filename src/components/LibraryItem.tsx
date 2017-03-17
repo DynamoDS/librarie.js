@@ -21,7 +21,7 @@ import { ClusterView } from "./ClusterView";
 import { LibraryView } from "../LibraryView";
 import { ItemData } from "../LibraryUtilities";
 
-export interface LibraryItemProps { libraryView: LibraryView, data: ItemData }
+export interface LibraryItemProps { libraryView: LibraryView, data: ItemData, level: number }
 export interface LibraryItemState { expanded: boolean }
 
 class GroupedItems {
@@ -63,7 +63,30 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         if (!iconPath.endsWith(".svg")) { iconPath = iconPath + ".png"; }
 
         let iconElement = null;
+        let indentation = null;
+        let indentationRoot = "/src/resources/ui/";
         let libraryItemTextStyle = "LibraryItemGroupText";
+
+        // if (this.props.data.itemType === "group" || this.props.data.itemType === "none" && this.props.data.childItems.length > 0) {
+        //     // indentationPath = this.state.expanded ? indentationPath +  "indentation2.svg" : indentationPath +  "indentation3.svg";
+        //     indentationPath = indentationPath + "indentation1.svg";
+        //     indentation = (<img className={"Indentation"} src={indentationPath} />);
+        // }
+
+        if (this.props.level > 0) {
+            let indents = [];
+            let indentationPath = '';
+            for (let i = 1; i <= this.props.level; i++) {
+                if (i == this.props.level) {
+                    // indentationPath = this.state.expanded ? indentationRoot + "indentation2.svg" : indentationRoot + "indentation3.svg";
+                    indentationPath = indentationRoot + "indentation3.svg";
+                } else {
+                    indentationPath = indentationRoot + "indentation1.svg";
+                }
+                indents.push(<img key={i} className={"Indentation"} src={indentationPath} />);
+            }
+            indentation = (<div className={"Indents"}>{indents}</div>);
+        }
 
         if (this.props.data.itemType != "group") { // Group displays only text without icon.
             libraryItemTextStyle = "LibraryItemText";
@@ -91,6 +114,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         return (
             <div className={this.getLibraryItemContainerStyle()}>
                 <div className={"LibraryItemHeader"} onClick={this.onLibraryItemClicked.bind(this)} >
+                    {indentation}
                     {iconElement}
                     <div className={libraryItemTextStyle}>{this.props.data.text}</div>
                 </div>
@@ -134,7 +158,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
                     // types of items except ones of type creation/action/query.
                     // 
                     regularItems.map((item: ItemData) => {
-                        return (<LibraryItem key={index++} libraryView={this.props.libraryView} data={item} />);
+                        return (<LibraryItem key={index++} libraryView={this.props.libraryView} data={item} level={this.props.level + 1} />);
                     })
                 }
             </div>
