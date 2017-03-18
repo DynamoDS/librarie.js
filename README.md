@@ -77,12 +77,25 @@ The following simple HTML code illustrates the way to embed library view into an
 </html>
 ```
 
-### Registering Callback Function
+### Registering event handlers
 
-To register an event to the library view component, add a new callback function and specify a name for the event:
+`LibraryView` object supports several events. So subscribe to an event of interest, do the following:
+
+```js
+// 'libView' is an instance of 'LibraryView' previously constructed. 
+libView.on("someEventName", function(data) {
+    // Handle 'someEventName' here, the argument 'data` is event dependent.
+});
 ```
-libView.on("itemClicked", function(data) {
-        console.log(data);
-        })
+
+#### Event 'itemClicked'
+
+This event is raised when a library item is clicked. The registered event handler will be called with the following argument:
+
+- `contextData`: This is the value of `contextData` passed through [Loaded Data Types](./docs/v0.0.1/loaded-data-types.md) JSON data for the corresponding item.
+
+```js
+libView.on("itemClicked", function(contextData) {
+    console.log(contextData);
+})
 ```
-Note: The callback functions are limited to taking in 0 or 1 parameters only.
