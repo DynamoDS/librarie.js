@@ -67,12 +67,22 @@ The following simple HTML code illustrates the way to embed library view into an
             };
 
             let libView = new LibraryEntryPoint.LibraryView(configuration);
-
-            // TODO: The callback when a library item is clicked on has not been 
-            // provided yet, it is scheduled to be done in the near future.
+            
+            libView.on("itemClicked", function(item) {
+                console.log(item);
+            })
         </script>
 
     </body>
 </html>
-
 ```
+
+### Registering Callback Function
+
+To register an event to the library view component, add a new callback function and specify a name for the event:
+```
+libView.on("itemClicked", function(data) {
+        console.log(data);
+        })
+```
+Note: The callback functions are limited to taking in 0 or 1 parameters only.

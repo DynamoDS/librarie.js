@@ -57,7 +57,7 @@ export class ItemData {
     }
 
     constructFromLayoutElement(layoutElement: LayoutElement) {
-        this.text = layoutElement.text;
+        this.creationName = layoutElement.text;
         this.iconName = layoutElement.iconName;
         this.itemType = layoutElement.elementType;
     }

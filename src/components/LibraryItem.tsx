@@ -192,5 +192,8 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         // Toggle expansion state.
         let currentlyExpanded = this.state.expanded;
         this.setState({ expanded: !currentlyExpanded });
+
+        let libraryView = this.props.libraryView;
+        libraryView.raiseEvent("itemClicked", this.props.data.creationName);
     }
 }
