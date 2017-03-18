@@ -68,8 +68,8 @@ The following simple HTML code illustrates the way to embed library view into an
 
             let libView = new LibraryEntryPoint.LibraryView(configuration);
             
-            libView.on("itemClicked", function(item) {
-                console.log(item);
+            libView.on("itemClicked", function(creationName) {
+                console.log(creationName);
             })
         </script>
 
@@ -92,10 +92,10 @@ libView.on("someEventName", function(data) {
 
 This event is raised when a library item is clicked. The registered event handler will be called with the following argument:
 
-- `contextData`: This is the value of `contextData` passed through [Loaded Data Types](./docs/v0.0.1/loaded-data-types.md) JSON data for the corresponding item.
+- `creationName`: This is the value of `creationName` passed through [Loaded Data Types](./docs/v0.0.1/loaded-data-types.md) JSON data for the corresponding item.
 
 ```js
-libView.on("itemClicked", function(contextData) {
-    console.log(contextData);
+libView.on("itemClicked", function(creationName) {
+    console.log(creationName);
 })
 ```
