@@ -67,12 +67,35 @@ The following simple HTML code illustrates the way to embed library view into an
             };
 
             let libView = new LibraryEntryPoint.LibraryView(configuration);
-
-            // TODO: The callback when a library item is clicked on has not been 
-            // provided yet, it is scheduled to be done in the near future.
+            
+            libView.on("itemClicked", function(creationName) {
+                console.log(creationName);
+            })
         </script>
 
     </body>
 </html>
+```
 
+### Registering event handlers
+
+`LibraryView` object supports several events. So subscribe to an event of interest, do the following:
+
+```js
+// 'libView' is an instance of 'LibraryView' previously constructed. 
+libView.on("someEventName", function(data) {
+    // Handle 'someEventName' here, the argument 'data` is event dependent.
+});
+```
+
+#### Event 'itemClicked'
+
+This event is raised when a library item is clicked. The registered event handler will be called with the following argument:
+
+- `creationName`: This is the value of `creationName` passed through [Loaded Data Types](./docs/v0.0.1/loaded-data-types.md) JSON data for the corresponding item.
+
+```js
+libView.on("itemClicked", function(creationName) {
+    console.log(creationName);
+})
 ```

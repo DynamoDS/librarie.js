@@ -9,7 +9,7 @@ if (productionBuild) {
             minimize: true,
             sourceMap: true,
             mangle: {
-                except: ["LibraryView"]
+                except: ["LibraryView", "on"]
             }
         })
     )
