@@ -64,7 +64,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
 
         if (this.props.data.itemType != "group") { // Group displays only text without icon.
             libraryItemTextStyle = "LibraryItemText";
-            iconElement = (<img className={"LibraryItemIcon"} src={this.props.data.iconName} />);
+            iconElement = (<img className={"LibraryItemIcon"} src={this.props.data.iconUrl} />);
         }
 
         let nestedElements = null;
@@ -191,6 +191,6 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         this.setState({ expanded: !currentlyExpanded });
 
         let libraryView = this.props.libraryView;
-        libraryView.raiseEvent("itemClicked", this.props.data.creationName);
+        libraryView.raiseEvent("itemClicked", this.props.data.contextData);
     }
 }

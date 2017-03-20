@@ -9,7 +9,7 @@ The following example illustrates the simplest form of a specification `json` do
   "elements": [
     {
       "text": "Display",
-      "iconName": "Category.Display.svg",
+      "iconUrl": "Category.Display.svg",
       "elementType": "category",
       "include": [],
       "childElements": []
@@ -25,7 +25,7 @@ This results in library view that looks like the following image:
 Each element in the hierarchical structure contains the following key-value pairs:
 
 - `text` - the content to display on the corresponding library item
-- `iconName` - file name of the icon for the corresponding library item
+- `iconUrl` - absolute URL of the icon for the corresponding library item
 - `elementType` - the type of the element. Possible values are *category*, *group*, *creation*, *action*, *query* and *none*. See the following section for detailed descriptions of each element types
 - `include` - data types that should be included under this given library item (more details on this later)
 - `childElements` - nested elements under this element (its usage will become clearer below)
@@ -49,7 +49,7 @@ Data types can be added to a given element by adding them as values to `include`
   "elements": [
     {
       "text": "Display",
-      "iconName": "Category.Display.svg",
+      "iconUrl": "Category.Display.svg",
       "elementType": "category",
       "include": [
         { "path": "DSCore.Color" },
@@ -65,14 +65,14 @@ This results in library view that looks like the following image:
 ![image](img/layout-include.png?raw=true)
 
 ### Adding nested elements
-Adding on to the previous example, a nested element with text `Watch` is added under `Display` element. Just like the parent element, nested elements contain keys like `text`, `iconName`, etc. Note that however, the nested element does not have to contain `childElements` if it does not need to:
+Adding on to the previous example, a nested element with text `Watch` is added under `Display` element. Just like the parent element, nested elements contain keys like `text`, `iconUrl`, etc. Note that however, the nested element does not have to contain `childElements` if it does not need to:
 
 ```json
 {
   "elements": [
     {
       "text": "Display",
-      "iconName": "Category.Display.svg",
+      "iconUrl": "Category.Display.svg",
       "elementType": "category",
       "include": [
         { "path": "DSCore.Color" },
@@ -81,7 +81,7 @@ Adding on to the previous example, a nested element with text `Watch` is added u
       "childElements": [
         {
           "text": "Watch",
-          "iconName": "Watch",
+          "iconUrl": "Watch",
           "elementType": "none",
           "include": []
         }        
@@ -102,7 +102,7 @@ The following example adds three new data types under `Watch` element:
   "elements": [
     {
       "text": "Display",
-      "iconName": "Category.Display.svg",
+      "iconUrl": "Category.Display.svg",
       "elementType": "category",
       "include": [
         { "path": "DSCore.Color" },
@@ -111,7 +111,7 @@ The following example adds three new data types under `Watch` element:
       "childElements": [
         {
           "text": "Watch",
-          "iconName": "Watch",
+          "iconUrl": "Watch",
           "elementType": "none",
           "include": [
             { "path": "Core.View.Watch" },
