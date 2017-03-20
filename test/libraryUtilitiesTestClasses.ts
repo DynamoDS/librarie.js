@@ -1,14 +1,14 @@
 export class TypeListNodeData {
     fullyQualifiedName: any;
-    iconName: any;
-    creationName: any;
+    iconUrl: any;
+    contextData: any;
     itemType: any;
 }
 
 
 export class LayoutElementData {
     text: any;
-    iconName: any;
+    iconUrl: any;
     elementType: any;
     include: any;
     childElements: LayoutElementData[] = [];

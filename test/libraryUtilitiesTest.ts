@@ -16,9 +16,9 @@ describe('listNode Class', function () {
     let emptyTypeListNode = new LibraryUtilities.TypeListNode(testData);
 
     expect(emptyTypeListNode.fullyQualifiedName).to.equal(undefined);
-    expect(emptyTypeListNode.iconName).to.equal(undefined);
+    expect(emptyTypeListNode.iconUrl).to.equal(undefined);
     expect(emptyTypeListNode.memberType).to.equal(undefined);
-    expect(emptyTypeListNode.creationName).to.equal(undefined);
+    expect(emptyTypeListNode.contextData).to.equal(undefined);
   });
 
   it('should create a TypeListNode with correct attributes', function () {
@@ -26,14 +26,14 @@ describe('listNode Class', function () {
     let none = 'none';
 
     testData.fullyQualifiedName = test;
-    testData.iconName = test;
-    testData.creationName = test;
+    testData.iconUrl = test;
+    testData.contextData = test;
     testData.itemType = none;
 
     let testTypeListNode = new LibraryUtilities.TypeListNode(testData);
     expect(testTypeListNode.fullyQualifiedName).to.equal(test);
-    expect(testTypeListNode.iconName).to.equal(test);
-    expect(testTypeListNode.creationName).to.equal(test);
+    expect(testTypeListNode.iconUrl).to.equal(test);
+    expect(testTypeListNode.contextData).to.equal(test);
     expect(testTypeListNode.memberType).to.equal(none);
   });
 });
@@ -50,7 +50,7 @@ describe("LayoutElement class", function () {
     let emptyLayoutElement = new LibraryUtilities.LayoutElement(testData);
 
     expect(emptyLayoutElement.text).to.equal(undefined);
-    expect(emptyLayoutElement.iconName).to.equal(undefined);
+    expect(emptyLayoutElement.iconUrl).to.equal(undefined);
     expect(emptyLayoutElement.elementType).to.equal(undefined);
     expect(emptyLayoutElement.include).to.equal(undefined);
     expect(emptyLayoutElement.childElements.length).to.equal(0);
@@ -89,8 +89,8 @@ describe('LibraryItem class', function () {
   it('should create an LibraryItem from string', function () {
     let testLibraryItem = new LibraryUtilities.ItemData(emptyString);
 
-    expect(testLibraryItem.iconName).to.equal(emptyString);
-    expect(testLibraryItem.creationName).to.equal(emptyString);
+    expect(testLibraryItem.iconUrl).to.equal(emptyString);
+    expect(testLibraryItem.contextData).to.equal(emptyString);
     expect(testLibraryItem.text).to.equal(emptyString);
     expect(testLibraryItem.itemType).to.equal('none');
     expect(testLibraryItem.childItems.length).to.equal(0);
@@ -100,8 +100,8 @@ describe('LibraryItem class', function () {
     let testLibraryItem = new LibraryUtilities.ItemData(emptyString);
     testLibraryItem.constructFromLayoutElement(testData);
 
-    expect(testLibraryItem.iconName).to.equal(undefined);
-    expect(testLibraryItem.creationName).to.equal(emptyString);
+    expect(testLibraryItem.iconUrl).to.equal(undefined);
+    expect(testLibraryItem.contextData).to.equal(emptyString);
     expect(testLibraryItem.text).to.equal(undefined);
     expect(testLibraryItem.itemType).to.equal(undefined);
     expect(testLibraryItem.childItems.length).to.equal(0);
@@ -164,13 +164,13 @@ describe('constructNestedLibraryItems function', function () {
     result = LibraryUtilities.constructNestedLibraryItems(includedParts, typeListNode, inclusive, parentItem);
 
     expect(result.text).to.equal('a');
-    expect(result.iconName).to.equal('a');
+    expect(result.iconUrl).to.equal('a');
     expect(result.itemType).to.equal('none');
     expect(result.childItems.length).to.equal(1);
 
     expect(result.childItems[0].text).to.equal('b');
-    expect(result.childItems[0].iconName).to.equal(typeListNode.iconName);
-    expect(result.childItems[0].creationName).to.equal(typeListNode.creationName);
+    expect(result.childItems[0].iconUrl).to.equal(typeListNode.iconUrl);
+    expect(result.childItems[0].contextData).to.equal(typeListNode.contextData);
     expect(result.childItems[0].itemType).to.equal(typeListNode.memberType);
   });
 
@@ -184,18 +184,18 @@ describe('constructNestedLibraryItems function', function () {
     result = LibraryUtilities.constructNestedLibraryItems(includedParts, typeListNode, inclusive, parentItem);
 
     expect(result.text).to.equal('a');
-    expect(result.iconName).to.equal('a');
+    expect(result.iconUrl).to.equal('a');
     expect(result.itemType).to.equal('none');
     expect(result.childItems.length).to.equal(1);
 
     expect(result.childItems[0].text).to.equal('b');
-    expect(result.childItems[0].iconName).to.equal('a.b');
+    expect(result.childItems[0].iconUrl).to.equal('a.b');
     expect(result.childItems[0].itemType).to.equal('none');
     expect(result.childItems[0].childItems.length).to.equal(1);
 
     expect(result.childItems[0].childItems[0].text).to.equal('c');
-    expect(result.childItems[0].childItems[0].iconName).to.equal(typeListNode.iconName);
-    expect(result.childItems[0].childItems[0].creationName).to.equal(typeListNode.creationName);
+    expect(result.childItems[0].childItems[0].iconUrl).to.equal(typeListNode.iconUrl);
+    expect(result.childItems[0].childItems[0].contextData).to.equal(typeListNode.contextData);
     expect(result.childItems[0].childItems[0].itemType).to.equal(typeListNode.memberType);
     expect(result.childItems[0].childItems[0].childItems.length).to.equal(0);
   });
@@ -210,14 +210,14 @@ describe('constructNestedLibraryItems function', function () {
     result = LibraryUtilities.constructNestedLibraryItems(includedParts, typeListNode, inclusive, parentItem);
 
     expect(result.text).to.equal(parentItem.text);
-    expect(result.iconName).to.equal(parentItem.iconName);
-    expect(result.creationName).to.equal(parentItem.creationName);
+    expect(result.iconUrl).to.equal(parentItem.iconUrl);
+    expect(result.contextData).to.equal(parentItem.contextData);
     expect(result.itemType).to.equal(parentItem.itemType);
     expect(result.childItems.length).to.equal(1);
 
     expect(result.childItems[0].text).to.equal('b');
-    expect(result.childItems[0].iconName).to.equal(typeListNode.iconName);
-    expect(result.childItems[0].creationName).to.equal(typeListNode.creationName);
+    expect(result.childItems[0].iconUrl).to.equal(typeListNode.iconUrl);
+    expect(result.childItems[0].contextData).to.equal(typeListNode.contextData);
     expect(result.childItems[0].itemType).to.equal(typeListNode.memberType);
   });
 
@@ -231,19 +231,19 @@ describe('constructNestedLibraryItems function', function () {
     result = LibraryUtilities.constructNestedLibraryItems(includedParts, typeListNode, inclusive, parentItem);
 
     expect(result.text).to.equal(parentItem.text);
-    expect(result.iconName).to.equal(parentItem.iconName);
-    expect(result.creationName).to.equal(parentItem.creationName);
+    expect(result.iconUrl).to.equal(parentItem.iconUrl);
+    expect(result.contextData).to.equal(parentItem.contextData);
     expect(result.itemType).to.equal(parentItem.itemType);
     expect(result.childItems.length).to.equal(1);
 
     expect(result.childItems[0].text).to.equal('b');
-    expect(result.childItems[0].iconName).to.equal('a.b');
+    expect(result.childItems[0].iconUrl).to.equal('a.b');
     expect(result.childItems[0].itemType).to.equal('none');
     expect(result.childItems[0].childItems.length).to.equal(1);
 
     expect(result.childItems[0].childItems[0].text).to.equal('c');
-    expect(result.childItems[0].childItems[0].iconName).to.equal(typeListNode.iconName);
-    expect(result.childItems[0].childItems[0].creationName).to.equal(typeListNode.creationName);
+    expect(result.childItems[0].childItems[0].iconUrl).to.equal(typeListNode.iconUrl);
+    expect(result.childItems[0].childItems[0].contextData).to.equal(typeListNode.contextData);
     expect(result.childItems[0].childItems[0].itemType).to.equal(typeListNode.memberType);
     expect(result.childItems[0].childItems[0].childItems.length).to.equal(0);
   });
@@ -271,7 +271,7 @@ describe('constructLibraryItem function', function () {
 
     expect(result).to.be.an.instanceOf(LibraryUtilities.ItemData);
     expect(result.text).to.equal(layoutElement.text);
-    expect(result.iconName).to.equal(layoutElement.iconName);
+    expect(result.iconUrl).to.equal(layoutElement.iconUrl);
     expect(result.itemType).to.equal(layoutElement.elementType);
     expect(result.childItems.length).to.equal(0);
   });
@@ -289,7 +289,7 @@ describe('constructLibraryItem function', function () {
     result = LibraryUtilities.constructLibraryItem(typeListNodes, layoutElement);
 
     expect(result.text).to.equal(layoutElement.text);
-    expect(result.iconName).to.equal(layoutElement.iconName);
+    expect(result.iconUrl).to.equal(layoutElement.iconUrl);
     expect(result.itemType).to.equal(layoutElement.elementType);
     expect(result.childItems.length).to.equal(0);
   });
@@ -307,13 +307,13 @@ describe('constructLibraryItem function', function () {
     result = LibraryUtilities.constructLibraryItem(typeListNodes, layoutElement);
 
     expect(result.text).to.equal(layoutElement.text);
-    expect(result.iconName).to.equal(layoutElement.iconName);
+    expect(result.iconUrl).to.equal(layoutElement.iconUrl);
     expect(result.itemType).to.equal(layoutElement.elementType);
     expect(result.childItems.length).to.equal(1);
 
     expect(result.childItems[0].text).to.equal(typeListNode.fullyQualifiedName);
-    expect(result.childItems[0].iconName).to.equal(typeListNode.iconName);
-    expect(result.childItems[0].creationName).to.equal(typeListNode.creationName);
+    expect(result.childItems[0].iconUrl).to.equal(typeListNode.iconUrl);
+    expect(result.childItems[0].contextData).to.equal(typeListNode.contextData);
     expect(result.childItems[0].itemType).to.equal(typeListNode.memberType);
     expect(result.childItems[0].childItems.length).to.equal(0);
   });
