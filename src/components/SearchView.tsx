@@ -1,10 +1,14 @@
 import * as React from "react";
 import { LibraryItem } from "./LibraryItem";
 import { LibraryView } from "../LibraryView";
-import { search, ItemData } from "../LibraryUtilities";
+import { searchItemResursive, resetItemData, ItemData } from "../LibraryUtilities";
+
+interface SearchModeChangedFunc {
+    (inSearchMode: boolean): void;
+}
 
 interface SearchViewProps {
-    onSearchChanged: any;
+    onSearchModeChanged: SearchModeChangedFunc;
     libraryView: LibraryView;
     items: ItemData[];
 }
@@ -23,50 +27,31 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
         };
     }
 
-    performSearch(text: string) {
-        this.props.items.forEach(item => search(text, item));
-    }
-
     generateStructuredItems() {
         let structuredItems: JSX.Element[] = [];
         let index = 0;
-        structuredItems = this.props.items.map((item: ItemData) => <LibraryItem key={index++} libraryView={this.props.libraryView} data={item} />);
-        return structuredItems;
-    }
-
-    setItemVisibility(visibility: boolean, items: ItemData[] = this.props.items) {
-        items.forEach(item => {
-            item.visible = visibility;
-            this.setItemVisibility(visibility, item.childItems);
-        });
-    }
-
-    setItemExpandability(expandability: boolean, items: ItemData[] = this.props.items) {
-        items.forEach(item => {
-            item.expanded = expandability;
-            this.setItemExpandability(expandability, item.childItems);
-        });
+        return this.props.items.map((item: ItemData) =>
+            <LibraryItem key={index++} libraryView={this.props.libraryView} data={item} />);
     }
 
     onTextChange(event: any) {
         let text = event.target.value.trim().toLowerCase();
+        let hasText = text.length > 0;
 
-        this.setState({
-            searchText: text
-        });
+        this.setState({ searchText: text });
 
-        this.performSearch(text);
-        this.props.onSearchChanged(text.length > 0);
+        // Update LibraryContainer of the search
+        this.props.onSearchModeChanged(hasText);
     }
 
     render() {
         let listItems: JSX.Element[] = [];
         if (this.state.searchText.length > 0) {
-            this.setItemExpandability(true);
+            searchItemResursive(this.props.items, this.state.searchText);
             listItems = this.generateStructuredItems();
         } else {
-            this.setItemExpandability(false);
-            this.setItemVisibility(true);
+            // Reset ItemData when search text is cleared
+            resetItemData(this.props.items);
         }
 
         return (

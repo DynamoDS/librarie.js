@@ -21,10 +21,13 @@ import { ClusterView } from "./ClusterView";
 import { LibraryView } from "../LibraryView";
 import { ItemData } from "../LibraryUtilities";
 
-export interface LibraryItemProps { libraryView: LibraryView, data: ItemData }
+export interface LibraryItemProps {
+    libraryView: LibraryView,
+    data: ItemData
+}
+
 export interface LibraryItemState {
-    expanded: boolean,
-    visible: boolean
+    expanded: boolean
 }
 
 class GroupedItems {
@@ -60,22 +63,22 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
 
         // Assign initial state
         this.state = {
-            expanded: this.props.data.expanded,
-            visible: this.props.data.visible
+            expanded: this.props.data.expanded
         };
     }
 
     componentWillReceiveProps(nextProps: LibraryItemProps) {
-        if (nextProps.data.visible !== this.state.visible) {
-            this.setState({ visible: nextProps.data.visible });
-        }
         if (nextProps.data.expanded !== this.state.expanded) {
             this.setState({ expanded: nextProps.data.expanded });
         }
     }
 
     render() {
+        if (!this.props.data.visible) {
+            return null;
+        }
 
+        // Only render items that are visible
         let iconPath = "/src/resources/icons/" + this.props.data.iconName;
         if (!iconPath.endsWith(".svg")) { iconPath = iconPath + ".png"; }
 
@@ -91,7 +94,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         let clusteredElements = null;
 
         // visible only nested elements when expanded.
-        if (this.state.expanded && this.state.visible && this.props.data.childItems.length > 0) {
+        if (this.state.expanded && this.props.data.childItems.length > 0) {
 
             // Break item list down into sub-lists based on the type of each item.
             let groupedItems = new GroupedItems(this.props.data.childItems);
@@ -103,20 +106,16 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
             nestedElements = this.getNestedElements(groupedItems);
         }
 
-        if (this.state.visible) {
-            return (
-                <div className={this.getLibraryItemContainerStyle()}>
-                    <div className={"LibraryItemHeader"} onClick={this.onLibraryItemClicked.bind(this)} >
-                        {iconElement}
-                        <div className={libraryItemTextStyle}>{this.props.data.text}</div>
-                    </div>
-                    {clusteredElements}
-                    {nestedElements}
+        return (
+            <div className={this.getLibraryItemContainerStyle()}>
+                <div className={"LibraryItemHeader"} onClick={this.onLibraryItemClicked.bind(this)} >
+                    {iconElement}
+                    <div className={libraryItemTextStyle}>{this.props.data.text}</div>
                 </div>
-            );
-        } else {
-            return null;
-        }
+                {clusteredElements}
+                {nestedElements}
+            </div>
+        );
     }
 
     getLibraryItemContainerStyle(): string {
@@ -167,7 +166,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         let queryMethods = groupedItems.getQueryItems();
 
         let creationCluster = null;
-        if (creationMethods.length > 0  && creationMethods.some(item => item.visible)) {
+        if (creationMethods.length > 0 && creationMethods.some(item => item.visible)) {
             creationCluster = (<ClusterView
                 libraryView={this.props.libraryView}
                 iconPath="src/resources/icons/library-creation.svg"

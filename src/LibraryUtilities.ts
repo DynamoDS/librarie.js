@@ -256,14 +256,24 @@ export function buildLibraryItemsFromLayoutSpecs(loadedTypes: any, layoutSpecs: 
     return convertToLibraryTree(typeListNodes, layoutElements);
 }
 
+// Recursively set visible and expanded of ItemData back to default 
+export function resetItemData(items: ItemData[]) {
+    items.forEach(item => {
+        item.visible = true;
+        item.expanded = false;
+        this.resetItemData(item.childItems);
+    });
+}
+
 function showItemRecursive(item: ItemData) {
     item.visible = true;
+    item.expanded = true;
     item.childItems.forEach((childItem) => showItemRecursive(childItem));
 }
 
-export function search(text: string, item: ItemData) {
+function search(text: string, item: ItemData) {
     if (item.itemType !== "group") {
-        let index: number;
+        let index = -1;
 
         for (let searchString of item.searchStrings) {
             index = searchString.indexOf(text);
@@ -286,8 +296,14 @@ export function search(text: string, item: ItemData) {
     item.childItems.forEach(childItem => {
         if (search(text, childItem)) {
             item.visible = true;
+            item.expanded = true;
+            return true;
         }
     });
 
     return item.visible;
+}
+
+export function searchItemResursive(items: ItemData[], text: string) {
+    items.forEach(item => search(text, item));
 }
