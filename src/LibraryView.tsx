@@ -4,6 +4,7 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 
 import { LibraryContainer } from "./components/LibraryContainer";
+import { Reactor, Event } from "./EventHandler";
 
 export interface LibraryViewConfig {
     htmlElementId: string,
@@ -16,6 +17,7 @@ export class LibraryView {
     htmlElementId: string = "";
     loadedTypesJson: any = null;
     layoutSpecsJson: any = null;
+    reactor: Reactor = null;
 
     constructor(config: LibraryViewConfig) {
 
@@ -23,6 +25,7 @@ export class LibraryView {
         this.setLayoutSpecsJson = this.setLayoutSpecsJson.bind(this);
         this.prefetchContents = this.prefetchContents.bind(this);
         this.updateContentsInternal = this.updateContentsInternal.bind(this);
+        this.reactor = new Reactor();
 
         this.htmlElementId = config.htmlElementId;
         this.prefetchContents(config.loadedTypesUrl, config.layoutSpecsUrl);
@@ -71,5 +74,13 @@ export class LibraryView {
             libraryView={this}
             loadedTypesJson={this.loadedTypesJson}
             layoutSpecsJson={this.layoutSpecsJson} />, htmlElement);
+    }
+
+    on(eventName: string, callback: Function) {
+        this.reactor.registerEvent(eventName, callback);
+    }
+
+    raiseEvent(name: string, params?: any | any[]) {
+        this.reactor.raiseEvent(name, params);
     }
 }

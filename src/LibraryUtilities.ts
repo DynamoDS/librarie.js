@@ -64,6 +64,7 @@ export class ItemData {
         this.text = layoutElement.text;
         this.searchStrings.pop();
         this.searchStrings.push(this.text.toLowerCase());
+        this.creationName = layoutElement.text;
         this.iconName = layoutElement.iconName;
         this.itemType = layoutElement.elementType;
     }
