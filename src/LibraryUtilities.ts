@@ -57,13 +57,13 @@ export class ItemData {
     expanded: boolean = false;
 
     constructor(public text: string) {
-        this.searchStrings.push(text.toLowerCase());
+        this.searchStrings.push(text ? text.toLowerCase() : text);
     }
 
     constructFromLayoutElement(layoutElement: LayoutElement) {
         this.text = layoutElement.text;
         this.searchStrings.pop();
-        this.searchStrings.push(this.text.toLowerCase());
+        this.searchStrings.push(this.text ? this.text.toLowerCase() : this.text);
         this.creationName = layoutElement.text;
         this.iconName = layoutElement.iconName;
         this.itemType = layoutElement.elementType;
@@ -265,41 +265,36 @@ export function resetItemData(items: ItemData[]) {
     });
 }
 
-function showItemRecursive(item: ItemData) {
+export function showItemRecursive(item: ItemData) {
     item.visible = true;
     item.expanded = true;
     item.childItems.forEach((childItem) => showItemRecursive(childItem));
 }
 
-function search(text: string, item: ItemData) {
+export function search(text: string, item: ItemData) {
     if (item.itemType !== "group") {
         let index = -1;
 
         for (let searchString of item.searchStrings) {
             index = searchString.indexOf(text);
             if (index >= 0) {
-                break;
+                // Show all items recursively if a given text is found in the current 
+                // (parent) item. Note that this does not apply to items of "group" type
+                showItemRecursive(item);
+                return true;
             }
-        }
-
-        // Show all items recursively if a given text is found in the current 
-        // (parent) item. Note that this does not apply to items of "group" type
-        if (index >= 0) {
-            showItemRecursive(item);
-            return true;
         }
     }
 
     // Recusively search in child items if the item is of "group" type, 
     // or text is not found in the current(parent) item
     item.visible = false;
-    item.childItems.forEach(childItem => {
+    for (let childItem of item.childItems) {
         if (search(text, childItem)) {
             item.visible = true;
             item.expanded = true;
-            return true;
         }
-    });
+    }
 
     return item.visible;
 }
