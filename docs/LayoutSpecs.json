@@ -1235,7 +1235,7 @@
             },
             {
               "path": "Autodesk.DesignScript.Geometry.Ellipse",
-              "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Ellipserc.png"
+              "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Ellipse.png"
             },
             {
               "path": "Autodesk.DesignScript.Geometry.EllipseArc",

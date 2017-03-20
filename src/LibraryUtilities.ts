@@ -105,13 +105,7 @@ export function constructNestedLibraryItems(
     for (let i = startIndex; i < fullNameParts.length; i++) {
         let libraryItem = new ItemData(fullNameParts[i]);
         libraryItem.itemType = "none";
-
-        // If 'i' is now '2' (i.e. it points to 'C'), then we will construct 
-        // the iconUrl as 'A.B.C'. And since the second parameter of 'slice' 
-        // is exclusive, we add '1' to it otherwise 'C' won't be included.
-        //  
-        libraryItem.iconUrl = fullNameParts.slice(0, i + 1).join(".");
-        if (iconUrl) libraryItem.iconUrl = iconUrl; // If there is a iconUrl specified, assign to iconUrl
+        libraryItem.iconUrl = iconUrl; 
 
         // If this is the leaf most level, copy all item information over.
         if (i == fullNameParts.length - 1) {
