@@ -61,20 +61,22 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
 
         let iconElement = null;
         let indentation = null;
-        let indentationRoot = "/src/resources/ui/";
         let libraryItemTextStyle = "LibraryItemGroupText";
 
         if (this.props.level > 0) {
             let indents = [];
-            let indentationPath = '';
+            let indentationIconRootPath = "/src/resources/ui/";
+
             for (let i = 1; i <= this.props.level; i++) {
+                let indentationPath = indentationIconRootPath;
                 if (i == this.props.level) {
-                    indentationPath = this.state.expanded ? indentationRoot + "indentation2.svg" : indentationRoot + "indentation3.svg";
+                    indentationPath += this.state.expanded ? "indentation2.svg" : "indentation3.svg";
                     indents.push(<img key={i} className={"Indentation"} src={indentationPath} />);
                 } else {
-                    indents.push(<div key={i} className={"Indentation"}/>);
+                    indents.push(<div key={i} className={"Indentation"} />);
                 }
             }
+            
             indentation = (<div className={"Indents"}>{indents}</div>);
         }
 
@@ -88,8 +90,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         let clusteredElements = null;
 
         // Show only nested elements when expanded.
-        if (this.state.expanded)
-        {
+        if (this.state.expanded) {
             if (this.props.data.childItems && (this.props.data.childItems.length > 0)) {
 
                 // Break item list down into sub-lists based on the type of each item.
