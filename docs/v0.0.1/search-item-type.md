@@ -1,7 +1,7 @@
-#Search Item Type
+# Search Item Type
 Search view consumes a flat list of search item type (in `json` format) for its contents.
 
-##Search item type JSON format
+## Search item type JSON format
 This flat list of search item type takes the following form: it must contain exactly one `searchItemTypes` root item that represents a list of search item types. Each of the search item types is made up of the following fields: 
 
 - `text` - The name of a given search item.
