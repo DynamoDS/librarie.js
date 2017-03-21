@@ -6,9 +6,9 @@ This flat list of loaded data types takes the following form: it must contain ex
 
 - `fullyQualifiedName` - Fully qualified name of a given type (e.g. a method or property in a class). An example of this would be `Autodesk.DesignScript.Geometry.Curve.Offset` property. The fully qualified name is used for inclusion/exclusion under a given branch of the library after transformation (transformation is done through a [Layout Specification](./layout-specs.md) document).
 
-- `iconName` - Icon name of a given type. This can optionally include `*.svg` extension; if it does not contain `*.svg` extension, then a `.png` is appended to the icon name by default. **Note**: absolute URL of icon is not currently supported yet.
+- `iconUrl` - Absolute URL of icon of a given type.
 
-- `creationName` - The string value that will be passed to the event handler when a given library item is clicked.
+- `contextData` - The string value that will be passed to the event handler when a given library item is clicked.
 
 - `itemType` - This value can either be `creation`, `action` or `query`. For more details of these values, please refer to [Layout Specification](./layout-specs.md) document.
 
@@ -19,14 +19,14 @@ This flat list of loaded data types takes the following form: it must contain ex
   "loadedTypes": [
     {
       "fullyQualifiedName": "Core.Input.Code Block",
-      "iconName": "Dynamo.Graph.Nodes.CodeBlockNodeModel",
-      "creationName": "Code Block",
+      "iconUrl": "Dynamo.Graph.Nodes.CodeBlockNodeModel",
+      "contextData": "Code Block",
       "itemType": "action"
     },
     {
       "fullyQualifiedName": "Core.Input.Input",
-      "iconName": "Dynamo.Graph.Nodes.CustomNodes.Symbol",
-      "creationName": "Input",
+      "iconUrl": "Dynamo.Graph.Nodes.CustomNodes.Symbol",
+      "contextData": "Input",
       "itemType": "action"
     },
 

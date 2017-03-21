@@ -5,34 +5,35 @@ type ItemType = "none" | "category" | "group" | "creation" | "action" | "query";
 export class TypeListNode {
 
     fullyQualifiedName: string = "";
-    iconName: string = "";
-    creationName: string = "";
+    iconUrl: string = "";
+    contextData: string = "";
     memberType: MemberType = "none";
 
     constructor(data: any) {
         this.fullyQualifiedName = data.fullyQualifiedName;
-        this.iconName = data.iconName;
-        this.creationName = data.creationName;
+        this.iconUrl = data.iconUrl;
+        this.contextData = data.contextData;
         this.memberType = data.itemType;
     }
 }
 
 export interface IncludeInfo {
     path: string;
+    iconUrl?: string;
     inclusive?: boolean;
 }
 
 export class LayoutElement {
 
     text: string = "";
-    iconName: string = "";
+    iconUrl: string = "";
     elementType: ElementType = "none";
     include: IncludeInfo[] = [];
     childElements: LayoutElement[] = [];
 
     constructor(data: any) {
         this.text = data.text;
-        this.iconName = data.iconName;
+        this.iconUrl = data.iconUrl;
         this.elementType = data.elementType;
         this.include = data.include;
         if (data.childElements) {
@@ -48,24 +49,23 @@ export class LayoutElement {
 
 export class ItemData {
 
-    iconName: string = "";
-    creationName: string = "";
+    iconUrl: string = "";
+    contextData: string = "";
     itemType: ItemType = "none";
-    childItems: ItemData[] = [];
-    searchStrings: string[] = [];
     visible: boolean = true;
     expanded: boolean = false;
+    searchStrings: string[] = [];
+    childItems: ItemData[] = [];
 
     constructor(public text: string) {
         this.searchStrings.push(text ? text.toLowerCase() : text);
     }
 
     constructFromLayoutElement(layoutElement: LayoutElement) {
-        this.text = layoutElement.text;
         this.searchStrings.pop();
         this.searchStrings.push(this.text ? this.text.toLowerCase() : this.text);
-        this.creationName = layoutElement.text;
-        this.iconName = layoutElement.iconName;
+        this.contextData = layoutElement.text;
+        this.iconUrl = layoutElement.iconUrl;
         this.itemType = layoutElement.elementType;
     }
 
@@ -78,7 +78,8 @@ export function constructNestedLibraryItems(
     includeParts: string[],
     typeListNode: TypeListNode,
     inclusive: boolean,
-    parentItem: ItemData): ItemData {
+    parentItem: ItemData,
+    iconUrl?: string): ItemData {
     // 'includeParts' is always lesser or equal to 'fullNameParts' in length.
     // 
     // Take an example:
@@ -110,17 +111,12 @@ export function constructNestedLibraryItems(
     for (let i = startIndex; i < fullNameParts.length; i++) {
         let libraryItem = new ItemData(fullNameParts[i]);
         libraryItem.itemType = "none";
-
-        // If 'i' is now '2' (i.e. it points to 'C'), then we will construct 
-        // the iconName as 'A.B.C'. And since the second parameter of 'slice' 
-        // is exclusive, we add '1' to it otherwise 'C' won't be included.
-        //  
-        libraryItem.iconName = fullNameParts.slice(0, i + 1).join(".");
+        libraryItem.iconUrl = iconUrl; 
 
         // If this is the leaf most level, copy all item information over.
         if (i == fullNameParts.length - 1) {
-            libraryItem.creationName = typeListNode.creationName;
-            libraryItem.iconName = typeListNode.iconName;
+            libraryItem.contextData = typeListNode.contextData;
+            libraryItem.iconUrl = typeListNode.iconUrl;
             libraryItem.itemType = typeListNode.memberType;
         }
 
@@ -188,7 +184,7 @@ export function constructLibraryItem(
             }
 
             parentNode = constructNestedLibraryItems(includeParts,
-                typeListNodes[j], inclusive, parentNode);
+                typeListNodes[j], inclusive, parentNode, layoutElement.include[i].iconUrl);
         }
 
         if (parentNode && (parentNode != result)) {
