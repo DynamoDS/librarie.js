@@ -59,9 +59,6 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
 
     render() {
 
-        let iconPath = "/src/resources/icons/" + this.props.data.iconName;
-        if (!iconPath.endsWith(".svg")) { iconPath = iconPath + ".png"; }
-
         let iconElement = null;
         let indentation = null;
         let indentationRoot = "/src/resources/ui/";
@@ -90,7 +87,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
 
         if (this.props.data.itemType != "group") { // Group displays only text without icon.
             libraryItemTextStyle = "LibraryItemText";
-            iconElement = (<img className={"LibraryItemIcon"} src={iconPath} />);
+            iconElement = (<img className={"LibraryItemIcon"} src={this.props.data.iconUrl} />);
         }
 
         let nestedElements = null;
@@ -216,5 +213,8 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         // Toggle expansion state.
         let currentlyExpanded = this.state.expanded;
         this.setState({ expanded: !currentlyExpanded });
+
+        let libraryView = this.props.libraryView;
+        libraryView.raiseEvent("itemClicked", this.props.data.contextData);
     }
 }

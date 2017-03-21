@@ -2,13 +2,13 @@
   "elements": [
     {
       "text": "List",
-      "iconName": "Category.List.svg",
+      "iconUrl": "/src/resources/icons/Category.List.svg",
       "elementType": "category",
       "include": [],
       "childElements": [
         {
           "text": "Inspect",
-          "iconName": "",
+          "iconUrl": "",
           "elementType": "group",
           "include": [
             {
@@ -103,7 +103,7 @@
         },
         {
           "text": "Modify",
-          "iconName": "",
+          "iconUrl": "",
           "elementType": "group",
           "include": [
             {
@@ -198,7 +198,7 @@
         },
         {
           "text": "Organize",
-          "iconName": "",
+          "iconUrl": "",
           "elementType": "group",
           "include": [
             {
@@ -217,7 +217,7 @@
           "childElements": [
             {
               "text": "Keys",
-              "iconName": "Category.Keys.svg",
+              "iconUrl": "/src/resources/icons/Category.Keys.svg",
               "elementType": "category",
               "include": [
                 {
@@ -251,7 +251,7 @@
         },
         {
           "text": "Generate",
-          "iconName": "",
+          "iconUrl": "",
           "elementType": "group",
           "include": [
             {
@@ -286,7 +286,7 @@
         },
         {
           "text": "Match",
-          "iconName": "",
+          "iconUrl": "",
           "elementType": "group",
           "include": [
             {
@@ -311,13 +311,13 @@
     },
     {
       "text": "Input",
-      "iconName": "Category.Input.svg",
+      "iconUrl": "/src/resources/icons/Category.Input.svg",
       "elementType": "category",
       "include": [],
       "childElements": [
         {
           "text": "DateTime",
-          "iconName": "",
+          "iconUrl": "",
           "elementType": "group",
           "include": [
             {
@@ -375,14 +375,15 @@
               "path": "DSCore.DateTime.TimeOfDay"
             },
             {
-              "path": "DSCore.DayOfWeek"
+              "path": "DSCore.DayOfWeek",
+              "iconUrl": "/src/resources/icons/DSCore.DayOfWeek.png"
             }
           ],
           "childElements": []
         },
         {
           "text": "Location",
-          "iconName": "",
+          "iconUrl": "",
           "elementType": "group",
           "include": [
             {
@@ -402,7 +403,7 @@
         },
         {
           "text": "Basic",
-          "iconName": "",
+          "iconUrl": "",
           "elementType": "group",
           "include": [
             {
@@ -425,7 +426,7 @@
         },
         {
           "text": "TimeSpan",
-          "iconName": "",
+          "iconUrl": "",
           "elementType": "group",
           "include": [
             {
@@ -481,7 +482,7 @@
         },
         {
           "text": "Input",
-          "iconName": "",
+          "iconUrl": "",
           "elementType": "group",
           "include": [
             {
@@ -501,7 +502,7 @@
         },
         {
           "text": "Object",
-          "iconName": "",
+          "iconUrl": "",
           "elementType": "group",
           "include": [
             {
@@ -520,13 +521,13 @@
     },
     {
       "text": "Math",
-      "iconName": "Category.Math.svg",
+      "iconUrl": "/src/resources/icons/Category.Math.svg",
       "elementType": "category",
       "include": [],
       "childElements": [
         {
           "text": "Functions",
-          "iconName": "",
+          "iconUrl": "",
           "elementType": "group",
           "include": [
             {
@@ -672,7 +673,7 @@
         },
         {
           "text": "Units",
-          "iconName": "",
+          "iconUrl": "",
           "elementType": "group",
           "include": [
             {
@@ -695,7 +696,7 @@
         },
         {
           "text": "Operators",
-          "iconName": "Category.Operators.svg",
+          "iconUrl": "/src/resources/icons/Category.Operators.svg",
           "elementType": "group",
           "include": [
             {
@@ -745,7 +746,7 @@
         },
         {
           "text": "Logic",
-          "iconName": "",
+          "iconUrl": "",
           "elementType": "group",
           "include": [
             {
@@ -764,13 +765,13 @@
     },
     {
       "text": "Script",
-      "iconName": "Category.Script.svg",
+      "iconUrl": "/src/resources/icons/Category.Script.svg",
       "elementType": "category",
       "include": [],
       "childElements": [
         {
           "text": "Evaluate",
-          "iconName": "",
+          "iconUrl": "",
           "elementType": "group",
           "include": [
             {
@@ -784,7 +785,7 @@
         },
         {
           "text": "Control Flow",
-          "iconName": "",
+          "iconUrl": "",
           "elementType": "group",
           "include": [
             {
@@ -801,7 +802,7 @@
         },
         {
           "text": "Editor",
-          "iconName": "",
+          "iconUrl": "",
           "elementType": "group",
           "include": [
             {
@@ -820,13 +821,13 @@
     },
     {
       "text": "Display",
-      "iconName": "Category.Display.svg",
+      "iconUrl": "/src/resources/icons/Category.Display.svg",
       "elementType": "category",
       "include": [],
       "childElements": [
         {
           "text": "Color",
-          "iconName": "",
+          "iconUrl": "",
           "elementType": "group",
           "include": [
             {
@@ -870,7 +871,7 @@
         },
         {
           "text": "Color Range",
-          "iconName": "",
+          "iconUrl": "",
           "elementType": "group",
           "include": [
             {
@@ -887,7 +888,7 @@
         },
         {
           "text": "Watch",
-          "iconName": "",
+          "iconUrl": "",
           "elementType": "group",
           "include": [
             {
@@ -906,13 +907,13 @@
     },
     {
       "text": "ImportExport",
-      "iconName": "Category.ImportExport.svg",
+      "iconUrl": "/src/resources/icons/Category.ImportExport.svg",
       "elementType": "category",
       "include": [],
       "childElements": [
         {
           "text": "File",
-          "iconName": "",
+          "iconUrl": "",
           "elementType": "group",
           "include": [
             {
@@ -983,7 +984,7 @@
         },
         {
           "text": "Image",
-          "iconName": "",
+          "iconUrl": "",
           "elementType": "group",
           "include": [
             {
@@ -1009,7 +1010,7 @@
         },
         {
           "text": "Data",
-          "iconName": "",
+          "iconUrl": "",
           "elementType": "group",
           "include": [
             {
@@ -1029,7 +1030,7 @@
         },
         {
           "text": "Web",
-          "iconName": "",
+          "iconUrl": "",
           "elementType": "group",
           "include": [
             {
@@ -1042,13 +1043,13 @@
     },
     {
       "text": "String",
-      "iconName": "Category.String.svg",
+      "iconUrl": "/src/resources/icons/Category.String.svg",
       "elementType": "category",
       "include": [],
       "childElements": [
         {
           "text": "Inspect",
-          "iconName": "",
+          "iconUrl": "",
           "elementType": "group",
           "include": [
             {
@@ -1080,7 +1081,7 @@
         },
         {
           "text": "Modify",
-          "iconName": "",
+          "iconUrl": "",
           "elementType": "group",
           "include": [
             {
@@ -1133,7 +1134,7 @@
         },
         {
           "text": "Generate",
-          "iconName": "",
+          "iconUrl": "",
           "elementType": "group",
           "include": [
             {
@@ -1155,167 +1156,200 @@
     },
     {
       "text": "Geometry",
-      "iconName": "Category.Geometry.svg",
+      "iconUrl": "/src/resources/icons/Category.Geometry.svg",
       "elementType": "category",
       "include": [],
       "childElements": [
         {
           "text": "Abstract",
-          "iconName": "",
+          "iconUrl": "",
           "elementType": "group",
           "include": [
             {
-              "path": "Autodesk.DesignScript.Geometry.BoundingBox"
+              "path": "Autodesk.DesignScript.Geometry.BoundingBox",
+              "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.BoundingBox.png"
             },
             {
-              "path": "Autodesk.DesignScript.Geometry.CoordinateSystem"
+              "path": "Autodesk.DesignScript.Geometry.CoordinateSystem",
+              "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.CoordinateSystem.png"
             },
             {
-              "path": "Autodesk.DesignScript.Geometry.Vector"
+              "path": "Autodesk.DesignScript.Geometry.Vector",
+              "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Vector.png"
             },
             {
-              "path": "Autodesk.DesignScript.Geometry.Edge"
+              "path": "Autodesk.DesignScript.Geometry.Edge",
+              "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Edge.png"
             },
             {
-              "path": "Autodesk.DesignScript.Geometry.Face"
+              "path": "Autodesk.DesignScript.Geometry.Face",
+              "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Face.png"
             },
             {
-              "path": "Autodesk.DesignScript.Geometry.Plane"
+              "path": "Autodesk.DesignScript.Geometry.Plane",
+              "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Plane.png"
             },
             {
-              "path": "Autodesk.DesignScript.Geometry.Vertex"
+              "path": "Autodesk.DesignScript.Geometry.Vertex",
+              "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Vertex.png"
             },
             {
-              "path": "Autodesk.DesignScript.Geometry.Topology"
+              "path": "Autodesk.DesignScript.Geometry.Topology",
+              "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Topology.png"
             }
           ],
           "childElements": []
         },
         {
           "text": "Points",
-          "iconName": "",
+          "iconUrl": "",
           "elementType": "group",
           "include": [
             {
-              "path": "Autodesk.DesignScript.Geometry.Point"
+              "path": "Autodesk.DesignScript.Geometry.Point",
+              "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Point.png"
             },
             {
-              "path": "Autodesk.DesignScript.Geometry.UV"
+              "path": "Autodesk.DesignScript.Geometry.UV",
+              "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.UV.png"
             }
           ],
           "childElements": []
         },
         {
           "text": "Curves",
-          "iconName": "",
+          "iconUrl": "",
           "elementType": "group",
           "include": [
             {
-              "path": "Autodesk.DesignScript.Geometry.Arc"
+              "path": "Autodesk.DesignScript.Geometry.Arc",
+              "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Arc.png"
             },
             {
-              "path": "Autodesk.DesignScript.Geometry.Circle"
+              "path": "Autodesk.DesignScript.Geometry.Circle",
+              "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Circle.png"
             },
             {
-              "path": "Autodesk.DesignScript.Geometry.Curve"
+              "path": "Autodesk.DesignScript.Geometry.Curve",
+              "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Curve.png"
             },
             {
-              "path": "Autodesk.DesignScript.Geometry.Ellipse"
+              "path": "Autodesk.DesignScript.Geometry.Ellipse",
+              "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Ellipse.png"
             },
             {
-              "path": "Autodesk.DesignScript.Geometry.EllipseArc"
+              "path": "Autodesk.DesignScript.Geometry.EllipseArc",
+              "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.EllipseArc.png"
             },
             {
-              "path": "Autodesk.DesignScript.Geometry.Helix"
+              "path": "Autodesk.DesignScript.Geometry.Helix",
+              "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Helix.png"
             },
             {
-              "path": "Autodesk.DesignScript.Geometry.Line"
+              "path": "Autodesk.DesignScript.Geometry.Line",
+              "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Line.png"
             },
             {
-              "path": "Autodesk.DesignScript.Geometry.NurbsCurve"
+              "path": "Autodesk.DesignScript.Geometry.NurbsCurve",
+              "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.NurbsCurve.png"
             },
             {
-              "path": "Autodesk.DesignScript.Geometry.PolyCurve"
+              "path": "Autodesk.DesignScript.Geometry.PolyCurve",
+              "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.PolyCurve.png"
             },
             {
-              "path": "Autodesk.DesignScript.Geometry.Polygon"
+              "path": "Autodesk.DesignScript.Geometry.Polygon",
+              "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Polygon.png"
             },
             {
-              "path": "Autodesk.DesignScript.Geometry.Rectangle"
+              "path": "Autodesk.DesignScript.Geometry.Rectangle",
+              "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Rectangle.png"
             }
           ],
           "childElements": []
         },
         {
           "text": "Surfaces",
-          "iconName": "",
+          "iconUrl": "",
           "elementType": "group",
           "include": [
             {
-              "path": "Autodesk.DesignScript.Geometry.NurbsSurface"
+              "path": "Autodesk.DesignScript.Geometry.NurbsSurface",
+              "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.NurbsSurface.png"
             },
             {
-              "path": "Autodesk.DesignScript.Geometry.PolySurface"
+              "path": "Autodesk.DesignScript.Geometry.PolySurface",
+              "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.PolySurface.png"
             },
             {
-              "path": "Autodesk.DesignScript.Geometry.Surface"
+              "path": "Autodesk.DesignScript.Geometry.Surface",
+              "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Surface.png"
             }
           ],
           "childElements": []
         },
         {
           "text": "Solids",
-          "iconName": "",
+          "iconUrl": "",
           "elementType": "group",
           "include": [
             {
-              "path": "Autodesk.DesignScript.Geometry.Cone"
+              "path": "Autodesk.DesignScript.Geometry.Cone",
+              "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Cone.png"
             },
             {
-              "path": "Autodesk.DesignScript.Geometry.Cuboid"
+              "path": "Autodesk.DesignScript.Geometry.Cuboid",
+              "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Cuboid.png"
             },
             {
-              "path": "Autodesk.DesignScript.Geometry.Cylinder"
+              "path": "Autodesk.DesignScript.Geometry.Cylinder",
+              "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Cylinder.png"
             },
             {
-              "path": "Autodesk.DesignScript.Geometry.Solid"
+              "path": "Autodesk.DesignScript.Geometry.Solid",
+              "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Solid.png"
             },
             {
-              "path": "Autodesk.DesignScript.Geometry.Sphere"
+              "path": "Autodesk.DesignScript.Geometry.Sphere",
+              "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Sphere.png"
             }
           ],
           "childElements": []
         },
         {
           "text": "Meshes",
-          "iconName": "",
+          "iconUrl": "",
           "elementType": "group",
           "include": [
             {
-              "path": "Autodesk.DesignScript.Geometry.IndexGroup"
+              "path": "Autodesk.DesignScript.Geometry.IndexGroup",
+              "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.IndexGroup.png"
             },
             {
-              "path": "Autodesk.DesignScript.Geometry.Mesh"
+              "path": "Autodesk.DesignScript.Geometry.Mesh",
+              "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Mesh.png"
             }
           ],
           "childElements": []
         },
         {
           "text": "Modifiers",
-          "iconName": "",
+          "iconUrl": "",
           "elementType": "group",
           "include": [
             {
-              "path": "Geometry.Geometry"
+              "path": "Geometry.Geometry",
+              "iconUrl": "/src/resources/icons/Geometry.Geometry.png"
             },
             {
-              "path": "Autodesk.DesignScript.Geometry.Geometry"
+              "path": "Autodesk.DesignScript.Geometry.Geometry",
+              "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Geometry.png"
             }
           ],
           "childElements": [
             {
               "text": "Display",
-              "iconName": "",
+              "iconUrl": "",
               "elementType": "group",
               "include": [
                 {
@@ -1334,17 +1368,20 @@
         },
         {
           "text": "Tessellation",
-          "iconName": "",
+          "iconUrl": "",
           "elementType": "group",
           "include": [
             {
-              "path": "Tessellation.ConvexHull"
+              "path": "Tessellation.ConvexHull",
+              "iconUrl": "/src/resources/icons/Tessellation.ConvexHull.png"
             },
             {
-              "path": "Tessellation.Delaunay"
+              "path": "Tessellation.Delaunay",
+              "iconUrl": "/src/resources/icons/Tessellation.Delaunay.png"
             },
             {
-              "path": "Tessellation.Voronoi"
+              "path": "Tessellation.Voronoi",
+              "iconUrl": "/src/resources/icons/Tessellation.Voronoi.png"
             }
           ],
           "childElements": []
