@@ -64,28 +64,22 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         let indentationRoot = "/src/resources/ui/";
         let libraryItemTextStyle = "LibraryItemGroupText";
 
-        // if (this.props.data.itemType === "group" || this.props.data.itemType === "none" && this.props.data.childItems.length > 0) {
-        //     // indentationPath = this.state.expanded ? indentationPath +  "indentation2.svg" : indentationPath +  "indentation3.svg";
-        //     indentationPath = indentationPath + "indentation1.svg";
-        //     indentation = (<img className={"Indentation"} src={indentationPath} />);
-        // }
-
         if (this.props.level > 0) {
             let indents = [];
             let indentationPath = '';
             for (let i = 1; i <= this.props.level; i++) {
                 if (i == this.props.level) {
-                    // indentationPath = this.state.expanded ? indentationRoot + "indentation2.svg" : indentationRoot + "indentation3.svg";
-                    indentationPath = indentationRoot + "indentation3.svg";
+                    indentationPath = this.state.expanded ? indentationRoot + "indentation2.svg" : indentationRoot + "indentation3.svg";
+                    indents.push(<img key={i} className={"Indentation"} src={indentationPath} />);
                 } else {
-                    indentationPath = indentationRoot + "indentation1.svg";
+                    indents.push(<div key={i} className={"Indentation"}/>);
                 }
-                indents.push(<img key={i} className={"Indentation"} src={indentationPath} />);
             }
             indentation = (<div className={"Indents"}>{indents}</div>);
         }
 
-        if (this.props.data.itemType != "group") { // Group displays only text without icon.
+        // Group displays only text without icon.
+        if (this.props.data.itemType != "group") {
             libraryItemTextStyle = "LibraryItemText";
             iconElement = (<img className={"LibraryItemIcon"} src={this.props.data.iconUrl} />);
         }
@@ -93,7 +87,8 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         let nestedElements = null;
         let clusteredElements = null;
 
-        if (this.state.expanded) // Show only nested elements when expanded.
+        // Show only nested elements when expanded.
+        if (this.state.expanded)
         {
             if (this.props.data.childItems && (this.props.data.childItems.length > 0)) {
 
