@@ -21,7 +21,7 @@ import { ClusterView } from "./ClusterView";
 import { LibraryView } from "../LibraryView";
 import { ItemData } from "../LibraryUtilities";
 
-export interface LibraryItemProps { libraryView: LibraryView, data: ItemData, level: number }
+export interface LibraryItemProps { libraryView: LibraryView, data: ItemData, indentLevel: number }
 export interface LibraryItemState { expanded: boolean }
 
 class GroupedItems {
@@ -63,14 +63,14 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         let indentation = null;
         let libraryItemTextStyle = "LibraryItemGroupText";
 
-        if (this.props.level > 0) {
+        if (this.props.indentLevel > 0) {
             let indents = [];
             let indentationIconRootPath = "/src/resources/ui/";
 
-            for (let i = 1; i <= this.props.level; i++) {
+            for (let i = 1; i <= this.props.indentLevel; i++) {
                 let indentationPath = indentationIconRootPath;
-                if (i == this.props.level) {
-                    indentationPath += this.state.expanded ? "indentation2.svg" : "indentation3.svg";
+                if (i == this.props.indentLevel) {
+                    indentationPath += this.state.expanded ? "indent-line-l.svg" : "indent-line-t.svg";
                     indents.push(<img key={i} className={"Indentation"} src={indentationPath} />);
                 } else {
                     indents.push(<div key={i} className={"Indentation"} />);
@@ -151,7 +151,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
                     // types of items except ones of type creation/action/query.
                     // 
                     regularItems.map((item: ItemData) => {
-                        return (<LibraryItem key={index++} libraryView={this.props.libraryView} data={item} level={this.props.level + 1} />);
+                        return (<LibraryItem key={index++} libraryView={this.props.libraryView} data={item} indentLevel={this.props.indentLevel + 1} />);
                     })
                 }
             </div>
