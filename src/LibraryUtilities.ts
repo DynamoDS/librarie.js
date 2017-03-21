@@ -258,17 +258,19 @@ export function buildLibraryItemsFromLayoutSpecs(loadedTypes: any, layoutSpecs: 
 
 // Recursively set visible and expanded of ItemData back to default 
 export function resetItemData(items: ItemData[]) {
-    items.forEach(item => {
+    for(let item of items) {
         item.visible = true;
         item.expanded = false;
-        this.resetItemData(item.childItems);
-    });
+        resetItemData(item.childItems);
+    }
 }
 
 export function showItemRecursive(item: ItemData) {
     item.visible = true;
     item.expanded = true;
-    item.childItems.forEach((childItem) => showItemRecursive(childItem));
+    for(let childItem of item.childItems) {
+        showItemRecursive(childItem);
+    }
 }
 
 export function search(text: string, item: ItemData) {
@@ -300,5 +302,7 @@ export function search(text: string, item: ItemData) {
 }
 
 export function searchItemResursive(items: ItemData[], text: string) {
-    items.forEach(item => search(text, item));
+    for(let item of items) {
+        search(text, item);
+    }
 }
