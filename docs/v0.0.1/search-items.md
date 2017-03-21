@@ -1,13 +1,13 @@
-# Search Item Type
-Search view consumes a flat list of search item type (in `json` format) for its contents.
+# Search Items
+Search view consumes a flat list of search items (in `json` format) for its contents.
 
-## Search item type JSON format
-This flat list of search item type takes the following form: it must contain exactly one `searchItemTypes` root item that represents a list of search item types. Each of the search item types is made up of the following fields: 
+## Search item JSON format
+This flat list of search items takes the following form: it must contain exactly one `searchItems` root item that represents a list of search items. Each of the search items is made up of the following fields: 
 
 - `text` - The name of a given search item.
 - `iconUrl`- The absolute URL of icon of a given search item.
 - `contextData` - The string value that will be passed to the event handler when a given search item is clicked.
-- `itemType` - This value can either be creation, action or query. For more details of these values, please refer to [Layout Specification](./layout-specs.md) document.
+- `itemType` - This value can either be `creation`, `action` or `query`. For more details of these values, please refer to [Layout Specification](./layout-specs.md) document.
 - `group` - The name of the group that a given search item belongs to.
 - `category` - The name of the category that a given search item belongs to.
 - `description` - The description text of the given search item.
@@ -15,7 +15,7 @@ This flat list of search item type takes the following form: it must contain exa
 
 ```json
 {
-  "searchItemTypes": [
+  "searchItems": [
     {
       "text": "ByCoordinates",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Point.ByCoordinates.double-double.png",
