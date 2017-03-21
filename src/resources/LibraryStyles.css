@@ -95,10 +95,15 @@ body {
 }
 
 .ClusterLeftPane {
+    display: flex;
+    width: 64px;
+    min-width: 64px;
     padding-right: 5px;
-    margin: 3px 0px 0px 40px;
+    padding-left: 25px;
+    margin: 2px 0px;
     border-right: 2px;
     border-right-style: solid;
+    justify-content: flex-end;
 }
 
 .ClusterRightPane {
