@@ -70,13 +70,13 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
             for (let i = 1; i <= this.props.indentLevel; i++) {
                 let indentationPath = indentationIconRootPath;
                 if (i == this.props.indentLevel) {
-                    indentationPath += this.state.expanded ? "indent-line-l.svg" : "indent-line-t.svg";
-                    indents.push(<img key={i} className={"Indentation"} src={indentationPath} />);
+                    indentationPath += "indent-line-t.svg";
                 } else {
-                    indents.push(<div key={i} className={"Indentation"} />);
+                    indentationPath += "indent-line-i.svg";
                 }
+                indents.push(<img key={i} className={"Indentation"} src={indentationPath} />);
             }
-            
+
             indentation = (<div className={"Indents"}>{indents}</div>);
         }
 
