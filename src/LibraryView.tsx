@@ -9,8 +9,7 @@ import { Reactor, Event } from "./EventHandler";
 export interface LibraryViewConfig {
     htmlElementId: string,
     loadedTypesUrl: string,
-    layoutSpecsUrl: string,
-    queryString: string
+    layoutSpecsUrl: string
 }
 
 export class LibraryView {
@@ -18,7 +17,6 @@ export class LibraryView {
     htmlElementId: string = "";
     loadedTypesJson: any = null;
     layoutSpecsJson: any = null;
-    searchItemsJson: any = null;
     reactor: Reactor = null;
 
     constructor(config: LibraryViewConfig) {
@@ -30,7 +28,7 @@ export class LibraryView {
         this.reactor = new Reactor();
 
         this.htmlElementId = config.htmlElementId;
-        this.prefetchContents(config.loadedTypesUrl, config.layoutSpecsUrl, config.queryString);
+        this.prefetchContents(config.loadedTypesUrl, config.layoutSpecsUrl);
     }
 
     setLoadedTypesJson(loadedTypesJson: any): void {
@@ -43,7 +41,7 @@ export class LibraryView {
         this.updateContentsInternal();
     }
 
-    prefetchContents(loadedTypesUrl: string, layoutSpecsUrl: string, queryString: string): void {
+    prefetchContents(loadedTypesUrl: string, layoutSpecsUrl: string): void {
 
         let thisObject = this;
 
@@ -63,17 +61,6 @@ export class LibraryView {
                 thisObject.layoutSpecsJson = JSON.parse(jsonString);
                 thisObject.updateContentsInternal();
             });
-
-        // fetch search items (in json format) if queryString exists and is not empty
-        if (queryString && queryString.length > 0) {
-            fetch(queryString)
-                .then(function (response: Response) {
-                    return response.text();
-                }).then(function (jsonString) {
-                    thisObject.searchItemsJson = JSON.parse(jsonString);
-                    thisObject.updateContentsInternal();
-                });
-        }
     }
 
     updateContentsInternal(): void {
@@ -84,14 +71,10 @@ export class LibraryView {
 
         let htmlElement = document.getElementById(this.htmlElementId);
 
-        if (!this.searchItemsJson) {
-            ReactDOM.render(<LibraryContainer
-                libraryView={this}
-                loadedTypesJson={this.loadedTypesJson}
-                layoutSpecsJson={this.layoutSpecsJson} />, htmlElement);
-        } else {
-            // Render search view if search items are available
-        }
+        ReactDOM.render(<LibraryContainer
+            libraryView={this}
+            loadedTypesJson={this.loadedTypesJson}
+            layoutSpecsJson={this.layoutSpecsJson} />, htmlElement);
 
 
     }

@@ -1,16 +1,16 @@
-# Search Items
-Search view consumes a flat list of search items (in `json` format) for its contents.
+# Search Result Items
+Search view consumes a flat list of search result items (in `json` format) for its contents.
 
 ## Search item JSON format
-This flat list of search items takes the following form: it must contain exactly one `searchItems` root item that represents a list of search items. Each of the search items is made up of the following fields: 
+This flat list of search result items takes the following form: it must contain exactly one `searchItems` root item that represents a list of search result items. Each of the search result items is made up of the following fields: 
 
-- `text` - The name of a given search item.
-- `iconUrl`- The absolute URL of icon of a given search item.
-- `contextData` - The string value that will be passed to the event handler when a given search item is clicked.
+- `text` - The name of a given search result item.
+- `iconUrl`- The absolute URL of icon of a given search result item.
+- `contextData` - The string value that will be passed to the event handler when a given search result item is clicked.
 - `itemType` - This value can either be `creation`, `action` or `query`. For more details of these values, please refer to [Layout Specification](./layout-specs.md) document.
-- `group` - The name of the group that a given search item belongs to.
-- `category` - The name of the category that a given search item belongs to.
-- `description` - The description text of the given search item.
+- `group` - The name of the group that a given search result item belongs to.
+- `category` - The name of the category that a given search result item belongs to.
+- `description` - The description text of a given search result item.
 - More fields will be added soon.
 
 ```json
@@ -32,7 +32,7 @@ This flat list of search items takes the following form: it must contain exactly
       "itemType": "query",
       "group": "Curve",
       "category": "Geometry",
-      "description": "The total arc length of the curve"
+      "description": "The total arc length of the curve."
     },
 
     // ...
