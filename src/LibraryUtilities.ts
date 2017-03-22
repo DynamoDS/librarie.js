@@ -2,12 +2,15 @@ type MemberType = "none" | "creation" | "action" | "query";
 type ElementType = "none" | "category" | "group";
 type ItemType = "none" | "category" | "group" | "creation" | "action" | "query";
 
+import * as _ from 'underscore';
+
 export class TypeListNode {
 
     fullyQualifiedName: string = "";
     iconUrl: string = "";
     contextData: string = "";
     memberType: MemberType = "none";
+    processed: boolean = false;
 
     constructor(data: any) {
         this.fullyQualifiedName = data.fullyQualifiedName;
@@ -105,13 +108,25 @@ export function constructNestedLibraryItems(
     for (let i = startIndex; i < fullNameParts.length; i++) {
         let libraryItem = new ItemData(fullNameParts[i]);
         libraryItem.itemType = "none";
-        libraryItem.iconUrl = iconUrl; 
+
+        if (iconUrl) {
+            libraryItem.iconUrl = iconUrl;
+        } else {
+            // If 'i' is now '2' (i.e. it points to 'C'), then we will construct 
+            // the iconName as 'A.B.C'. And since the second parameter of 'slice' 
+            // is exclusive, we add '1' to it otherwise 'C' won't be included.
+            //  
+            libraryItem.iconUrl = fullNameParts.slice(0, i + 1).join(".");
+        }
 
         // If this is the leaf most level, copy all item information over.
         if (i == fullNameParts.length - 1) {
             libraryItem.contextData = typeListNode.contextData;
             libraryItem.iconUrl = typeListNode.iconUrl;
             libraryItem.itemType = typeListNode.memberType;
+
+            // Mark the typeListNode as processed.
+            typeListNode.processed = true;
         }
 
         if (parentItem) {
@@ -169,22 +184,52 @@ export function constructLibraryItem(
         // current 'result' as the parent node for child nodes to be appended.
         // 
         let parentNode = inclusive ? null : result;
+        let nodeFound: boolean = false;
+        let isLeafNode: boolean = true;
 
         for (let j = 0; j < typeListNodes.length; j++) {
-
             let fullyQualifiedName = typeListNodes[j].fullyQualifiedName;
-            if (!fullyQualifiedName.startsWith(includePath)) {
-                continue; // Not matching, skip to the next type node.
-            }
+            let fullyQualifiedNameParts = fullyQualifiedName.split('.');
+            let lastIncludedPart = includeParts[includeParts.length - 1];
 
-            parentNode = constructNestedLibraryItems(includeParts,
-                typeListNodes[j], inclusive, parentNode, layoutElement.include[i].iconUrl);
+            // Check if a matching node is found, and if the fullyQualifiedName contains
+            // the (whole) last word in includePath. 
+            // E.g. This ensures EllipseArc nodes to be excluded in the Ellipse category.
+            if (fullyQualifiedName.startsWith(includePath) && _.contains(fullyQualifiedNameParts, lastIncludedPart)) {
+
+                // Check if the includePath represents a leaf node.
+                if (includePath.length < fullyQualifiedName.length)
+                    isLeafNode = false;
+
+                parentNode = constructNestedLibraryItems(includeParts,
+                    typeListNodes[j], inclusive, parentNode, layoutElement.include[i].iconUrl);
+
+                if (isLeafNode && parentNode && (parentNode != result)) {
+                    // If the new node created is a leaf node, append it as a child of 
+                    // the current existing node. This step is necessary for nodes that
+                    // have overloads with the same name but different parameters.
+                    result.appendChild(parentNode);
+                    nodeFound = true;
+
+                    // Reset the value of parentNode, to check through the rest of typeListNodes.
+                    parentNode = inclusive ? null : result;
+                }
+            }
         }
 
-        if (parentNode && (parentNode != result)) {
-            // If a new parent node was created, append it as a child of 
-            // the current resulting node.
-            result.appendChild(parentNode);
+        // If a node that matches the includePath cannot be found
+        if (!nodeFound) { 
+
+            // isLeafNode is set to true if there are no nodes that can match the includePath,
+            // or if the node is a leaf node.
+            if (isLeafNode) {
+                console.warn("Warning: The type '" + includePath + "' is not found in " +
+                    "'RawTypeData.json'. No node of this type is rendered in the library view.");
+            }
+            if (parentNode && (parentNode != result)) {
+                // Otherwise, if there is a parentNode created
+                result.appendChild(parentNode);
+            }
         }
     }
 
@@ -243,5 +288,16 @@ export function buildLibraryItemsFromLayoutSpecs(loadedTypes: any, layoutSpecs: 
     for (let i = 0; i < layoutSpecs.elements.length; i++) {
         layoutElements.push(new LayoutElement(layoutSpecs.elements[i]));
     }
-    return convertToLibraryTree(typeListNodes, layoutElements);
+
+    let libraryTreeItems: ItemData[] = convertToLibraryTree(typeListNodes, layoutElements);
+
+    // Search for the nodes that are not removed from typeListNodes.
+    _.each(typeListNodes, function (node) {
+        if (!node.processed) {
+            console.warn("Warning: '" + node.contextData + "' is not specified in " +
+                "'LayoutSpecs.json'. The node is not rendered in the library view.");
+        }
+    });
+
+    return libraryTreeItems;
 }
