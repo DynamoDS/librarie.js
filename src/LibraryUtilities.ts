@@ -291,7 +291,7 @@ export function buildLibraryItemsFromLayoutSpecs(loadedTypes: any, layoutSpecs: 
 
     let libraryTreeItems: ItemData[] = convertToLibraryTree(typeListNodes, layoutElements);
 
-    // Search for the nodes that are not removed from typeListNodes.
+    // Search for the nodes that are not displayed in library view.
     _.each(typeListNodes, function (node) {
         if (!node.processed) {
             console.warn("Warning: '" + node.contextData + "' is not specified in " +
