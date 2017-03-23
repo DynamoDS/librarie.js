@@ -31,6 +31,7 @@ module.exports = {
     output: {
         filename: productionBuild ? "librarie.min.js" : "librarie.js",
         path: __dirname + "/dist/" + version + "/",
+        publicPath: "./dist/" + version,
         libraryTarget: "var",
         library: "LibraryEntryPoint"
     },
@@ -64,11 +65,10 @@ module.exports = {
                 loader: ["style-loader", "css-loader"]
             },
             {
-                test: /\.(png|woff|woff2|eot|ttf|svg)$/,
+                test: /\.ttf$/,
                 loader: "file-loader",
                 options: {
-                    name: '/resources/[name].[ext]',
-                    publicPath: './dist/' + version,
+                    name: '/resources/[name].[ext]'
                 }
             }
         ]
