@@ -1,5 +1,7 @@
 /// <reference path="../../node_modules/@types/node/index.d.ts" />
 
+require("../resources/LibraryStyles.css");
+
 import * as React from "react";
 import { LibraryView } from "../LibraryView";
 import { LibraryItem } from "./LibraryItem";
