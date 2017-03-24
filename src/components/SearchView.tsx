@@ -18,6 +18,7 @@ interface SearchViewStates {
 }
 
 export class SearchView extends React.Component<SearchViewProps, SearchViewStates> {
+    timeout: any;
 
     constructor(props: SearchViewProps) {
         super(props);
@@ -35,12 +36,22 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
     }
 
     onTextChange(event: any) {
+        clearTimeout(this.timeout);
+
         let text = event.target.value.trim().toLowerCase();
+
+        // start searching only after user stops typing for some time
+        this.timeout = setTimeout(function () {
+            this.updateSearchState(text);
+        }.bind(this), 250);
+    }
+
+    updateSearchState(text: string) {
         let hasText = text.length > 0;
 
         this.setState({ searchText: text });
 
-        // Update LibraryContainer of the search
+        // Update LibraryContainer of current search
         this.props.onSearchModeChanged(hasText);
     }
 
