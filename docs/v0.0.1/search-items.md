@@ -8,8 +8,6 @@ This flat list of search result items takes the following form: it must contain 
 - `iconUrl`- The absolute URL of icon of a given search result item.
 - `contextData` - The string value that will be passed to the event handler when a given search result item is clicked.
 - `itemType` - This value can either be `creation`, `action` or `query`. For more details of these values, please refer to [Layout Specification](./layout-specs.md) document.
-- `group` - The name of the group that a given search result item belongs to.
-- `category` - The name of the category that a given search result item belongs to.
 - `description` - The description text of a given search result item.
 - More fields will be added soon.
 
@@ -21,8 +19,6 @@ This flat list of search result items takes the following form: it must contain 
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Point.ByCoordinates.double-double.png",
       "contextData": "Autodesk.DesignScript.Geometry.Point.ByCoordinates@double,double",
       "itemType": "creation",
-      "group": "Point",
-      "category": "Geometry",
       "description": "Form a Point in the XY plane given two cartesian coordinates. The Z component is 0."
     },
     {
@@ -30,8 +26,6 @@ This flat list of search result items takes the following form: it must contain 
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Curve.Length.png",
       "contextData": "Autodesk.DesignScript.Geometry.Curve.Length",
       "itemType": "query",
-      "group": "Curve",
-      "category": "Geometry",
       "description": "The total arc length of the curve."
     },
 
