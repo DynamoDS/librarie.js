@@ -70,10 +70,13 @@ export class LibraryView {
         }
 
         let htmlElement = document.getElementById(this.htmlElementId);
+
         ReactDOM.render(<LibraryContainer
             libraryView={this}
             loadedTypesJson={this.loadedTypesJson}
             layoutSpecsJson={this.layoutSpecsJson} />, htmlElement);
+
+
     }
 
     on(eventName: string, callback: Function) {
