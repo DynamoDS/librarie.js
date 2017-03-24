@@ -21,8 +21,14 @@ import { ClusterView } from "./ClusterView";
 import { LibraryView } from "../LibraryView";
 import { ItemData } from "../LibraryUtilities";
 
-export interface LibraryItemProps { libraryView: LibraryView, data: ItemData }
-export interface LibraryItemState { expanded: boolean }
+export interface LibraryItemProps {
+    libraryView: LibraryView,
+    data: ItemData
+}
+
+export interface LibraryItemState {
+    expanded: boolean
+}
 
 class GroupedItems {
 
@@ -54,10 +60,27 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
 
     constructor(props: LibraryItemProps) {
         super(props);
-        this.state = { expanded: false }; // Assign initial state
+
+        // Assign initial state
+        this.state = {
+            expanded: this.props.data.expanded
+        };
+    }
+
+    // By default all items in search view will be expanded. In search view, 
+    // user is still able to expand/unexpand the item, which will toggle the 
+    // expansion state. This will make sure that the expansion state of an item
+    // in search view will not be affected by the previous user click.
+    componentWillReceiveProps(nextProps: LibraryItemProps) {
+        if (nextProps.data.expanded !== this.state.expanded) {
+            this.setState({ expanded: nextProps.data.expanded });
+        }
     }
 
     render() {
+        if (!this.props.data.visible) {
+            return null;
+        }
 
         let iconElement = null;
         let libraryItemTextStyle = "LibraryItemGroupText";
@@ -70,19 +93,17 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         let nestedElements = null;
         let clusteredElements = null;
 
-        if (this.state.expanded) // Show only nested elements when expanded.
-        {
-            if (this.props.data.childItems && (this.props.data.childItems.length > 0)) {
+        // visible only nested elements when expanded.
+        if (this.state.expanded && this.props.data.childItems.length > 0) {
 
-                // Break item list down into sub-lists based on the type of each item.
-                let groupedItems = new GroupedItems(this.props.data.childItems);
+            // Break item list down into sub-lists based on the type of each item.
+            let groupedItems = new GroupedItems(this.props.data.childItems);
 
-                // There are some leaf nodes (e.g. methods).
-                clusteredElements = this.getClusteredElements(groupedItems);
+            // There are some leaf nodes (e.g. methods).
+            clusteredElements = this.getClusteredElements(groupedItems);
 
-                // There are intermediate child items.
-                nestedElements = this.getNestedElements(groupedItems);
-            }
+            // There are intermediate child items.
+            nestedElements = this.getNestedElements(groupedItems);
         }
 
         return (
@@ -145,7 +166,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         let queryMethods = groupedItems.getQueryItems();
 
         let creationCluster = null;
-        if (creationMethods.length > 0) {
+        if (creationMethods.length > 0 && creationMethods.some(item => item.visible)) {
             creationCluster = (<ClusterView
                 libraryView={this.props.libraryView}
                 iconPath="src/resources/icons/library-creation.svg"
@@ -154,7 +175,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         }
 
         let actionCluster = null;
-        if (actionMethods.length > 0) {
+        if (actionMethods.length > 0 && actionMethods.some(item => item.visible)) {
             actionCluster = (<ClusterView
                 libraryView={this.props.libraryView}
                 iconPath="src/resources/icons/library-action.svg"
@@ -163,7 +184,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         }
 
         let queryCluster = null;
-        if (queryMethods.length > 0) {
+        if (queryMethods.length > 0 && queryMethods.some(item => item.visible)) {
             queryCluster = (<ClusterView
                 libraryView={this.props.libraryView}
                 iconPath="src/resources/icons/library-query.svg"
