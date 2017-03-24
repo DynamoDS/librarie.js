@@ -87,23 +87,6 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         let indentation = null;
         let libraryItemTextStyle = "LibraryItemGroupText";
 
-        if (this.props.indentLevel > 0) {
-            let indents = [];
-            let indentationIconRootPath = "/src/resources/ui/";
-
-            for (let i = 1; i <= this.props.indentLevel; i++) {
-                let indentationPath = indentationIconRootPath;
-                if (i == this.props.indentLevel) {
-                    indentationPath += "indent-line-t.svg";
-                } else {
-                    indentationPath += "indent-line-i.svg";
-                }
-                indents.push(<img key={i} className={"Indentation"} src={indentationPath} />);
-            }
-
-            indentation = (<div className={"Indents"}>{indents}</div>);
-        }
-
         // Group displays only text without icon.
         if (this.props.data.itemType != "group") {
             libraryItemTextStyle = "LibraryItemText";
@@ -124,6 +107,23 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
 
             // There are intermediate child items.
             nestedElements = this.getNestedElements(groupedItems);
+        }
+
+        if (this.props.indentLevel > 0) {
+            let indents = [];
+            let indentationIconRootPath = "/src/resources/ui/";
+
+            for (let i = 1; i <= this.props.indentLevel; i++) {
+                let indentationPath = indentationIconRootPath;
+                if (i == this.props.indentLevel) {
+                    indentationPath += clusteredElements ? "indent-line-l.svg" : "indent-line-t.svg";
+                } else {
+                    indentationPath += "indent-line-i.svg";
+                }
+                indents.push(<img key={i} className={"Indentation"} src={indentationPath} />);
+            }
+
+            indentation = (<div className={"Indents"}>{indents}</div>);
         }
 
         return (
