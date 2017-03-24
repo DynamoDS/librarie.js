@@ -111,7 +111,7 @@ export function constructNestedLibraryItems(
     for (let i = startIndex; i < fullNameParts.length; i++) {
         let libraryItem = new ItemData(fullNameParts[i]);
         libraryItem.itemType = "none";
-        libraryItem.iconUrl = iconUrl; 
+        libraryItem.iconUrl = iconUrl;
 
         // If this is the leaf most level, copy all item information over.
         if (i == fullNameParts.length - 1) {
@@ -252,20 +252,13 @@ export function buildLibraryItemsFromLayoutSpecs(loadedTypes: any, layoutSpecs: 
     return convertToLibraryTree(typeListNodes, layoutElements);
 }
 
-// Recursively set visible and expanded of ItemData back to default 
-export function resetItemData(items: ItemData[]) {
+// Recursively set visible and expanded states of ItemData
+export function setItemStateRecursive(items: ItemData | ItemData[], visible: boolean, expanded: boolean) {
+    items = (items instanceof Array) ? items : [items];
     for(let item of items) {
-        item.visible = true;
-        item.expanded = false;
-        resetItemData(item.childItems);
-    }
-}
-
-export function showItemRecursive(item: ItemData) {
-    item.visible = true;
-    item.expanded = true;
-    for(let childItem of item.childItems) {
-        showItemRecursive(childItem);
+        item.visible = visible;
+        item.expanded = expanded;
+        setItemStateRecursive(item.childItems, visible, expanded);
     }
 }
 
@@ -278,7 +271,7 @@ export function search(text: string, item: ItemData) {
             if (index >= 0) {
                 // Show all items recursively if a given text is found in the current 
                 // (parent) item. Note that this does not apply to items of "group" type
-                showItemRecursive(item);
+                setItemStateRecursive(item, true, true);
                 return true;
             }
         }
@@ -298,7 +291,7 @@ export function search(text: string, item: ItemData) {
 }
 
 export function searchItemResursive(items: ItemData[], text: string) {
-    for(let item of items) {
+    for (let item of items) {
         search(text, item);
     }
 }

@@ -1,7 +1,7 @@
 import * as React from "react";
 import { LibraryItem } from "./LibraryItem";
 import { LibraryView } from "../LibraryView";
-import { searchItemResursive, resetItemData, ItemData } from "../LibraryUtilities";
+import { searchItemResursive, setItemStateRecursive, ItemData } from "../LibraryUtilities";
 
 interface SearchModeChangedFunc {
     (inSearchMode: boolean): void;
@@ -51,7 +51,7 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
             listItems = this.generateStructuredItems();
         } else {
             // Reset ItemData when search text is cleared
-            resetItemData(this.props.items);
+            setItemStateRecursive(this.props.items, true, false);
         }
 
         return (

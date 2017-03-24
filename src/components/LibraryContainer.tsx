@@ -37,7 +37,6 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
     render() {
 
         try {
-            let index = 0;
             const childItems = this.generatedLibraryItems;
             const searchView = <SearchView onSearchModeChanged={this.onSearchModeChanged.bind(this)} libraryView={this.props.libraryView} items={childItems} />;
 
@@ -48,6 +47,7 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
                     </div>
                 );
             } else {
+                let index = 0;
                 const listItems = childItems.map((item: ItemData) => (<LibraryItem key={index++} libraryView={this.props.libraryView} data={item} />));
                 return (
                     <div>
