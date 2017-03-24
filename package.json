@@ -6,8 +6,8 @@
   "scripts": {
     "test": "mocha -r ts-node/register test/libraryUtilitiesTest.ts",
     "build": "npm run dev & npm run prod",
-    "dev": "cross-env production_build=0 webpack",
-    "prod": "cross-env production_build=1 webpack"
+    "dev": "cross-env NODE_ENV=development webpack",
+    "prod": "cross-env NODE_ENV=production webpack"
   },
   "keywords": [
     "Dynamo",

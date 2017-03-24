@@ -1,11 +1,11 @@
 const webpack = require('webpack');
-let productionBuild = (process.env.production_build == 1);
+let productionBuild = (process.env.NODE_ENV == "production");
 let version = "v0.0.1";
 let plugins = [];
 
 plugins.push(
     new webpack.DefinePlugin({
-        'process.env.NODE_ENV': productionBuild ? JSON.stringify('production') : JSON.stringify('development'),
+        'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
         'global': {}
     })
 );
@@ -14,7 +14,7 @@ if (productionBuild) {
     plugins.push(
         new webpack.optimize.UglifyJsPlugin({
             minimize: true,
-            sourceMap: true,
+            sourceMap: true, 
             mangle: {
                 except: ["LibraryView", "on"]
             }
