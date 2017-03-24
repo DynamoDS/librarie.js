@@ -84,7 +84,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         }
 
         let iconElement = null;
-        let indentation = null;
+        let indentElements = this.getIndentElements();
         let libraryItemTextStyle = "LibraryItemGroupText";
 
         // Group displays only text without icon.
@@ -109,27 +109,10 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
             nestedElements = this.getNestedElements(groupedItems);
         }
 
-        if (this.props.indentLevel > 0) {
-            let indents = [];
-            let indentationIconRootPath = "/src/resources/ui/";
-
-            for (let i = 1; i <= this.props.indentLevel; i++) {
-                let indentationPath = indentationIconRootPath;
-                if (i == this.props.indentLevel) {
-                    indentationPath += clusteredElements ? "indent-line-l.svg" : "indent-line-t.svg";
-                } else {
-                    indentationPath += "indent-line-i.svg";
-                }
-                indents.push(<img key={i} className={"Indentation"} src={indentationPath} />);
-            }
-
-            indentation = (<div className={"Indents"}>{indents}</div>);
-        }
-
         return (
             <div className={this.getLibraryItemContainerStyle()}>
                 <div className={"LibraryItemHeader"} onClick={this.onLibraryItemClicked.bind(this)} >
-                    {indentation}
+                    {indentElements}
                     {iconElement}
                     <div className={libraryItemTextStyle}>{this.props.data.text}</div>
                 </div>
@@ -137,6 +120,29 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
                 {nestedElements}
             </div>
         );
+    }
+
+    getIndentElements() {
+        let indentElements = null;
+
+        if (this.props.indentLevel > 0) {
+            let indents = [];
+            let indentationIconRootPath = "/src/resources/ui/";
+
+            for (let i = 1; i <= this.props.indentLevel; i++) {
+                let indentationPath = indentationIconRootPath;
+                if (i == this.props.indentLevel) {
+                    indentationPath += "indent-line-t.svg";
+                } else {
+                    indentationPath += "indent-line-i.svg";
+                }
+                indents.push(<img key={i} className={"Indentation"} src={indentationPath} />);
+            }
+
+            indentElements = (<div className={"Indents"}>{indents}</div>);
+        }
+
+        return indentElements;
     }
 
     getLibraryItemContainerStyle(): string {
