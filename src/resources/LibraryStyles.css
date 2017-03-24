@@ -119,6 +119,34 @@ body {
     -webkit-user-drag: none;
 }
 
+.searchView {
+    background: #5b5a5a;
+}
+
+.searchView .searchBar {
+    width: 100%;
+    height: 40px;
+}
+
+.searchView .searchBar input {
+    width: 100%;
+    padding: 13px 10px 5px 15px;
+    font-size: 15px;
+    background: none;
+    color: #fff;
+    outline: none;
+    border: none;
+}
+
+#searchInput::-webkit-search-cancel-button {
+    -webkit-appearance: none;
+}
+
+::-webkit-input-placeholder {
+  color: #dddddd;
+  font-style: italic;
+}
+
 ::-webkit-scrollbar {
     width: 6px;
     height: 6px;
