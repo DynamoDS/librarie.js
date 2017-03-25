@@ -141,10 +141,10 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
     }
 
     getIndentElements(): JSX.Element {
-        let indentElements = null;
-
-        if (this.props.indentLevel > 0) {
-            let indents = [];
+        if (this.props.indentLevel <= 0) {
+            return null;
+        } else {
+            let indents: JSX.Element[] = [];
             let indentationIconRootPath = "/src/resources/ui/";
 
             for (let i = 1; i <= this.props.indentLevel; i++) {
@@ -157,10 +157,8 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
                 indents.push(<img key={i} className={"Indentation"} src={indentationPath} />);
             }
 
-            indentElements = (<div className={"Indents"}>{indents}</div>);
+            return (<div className={"Indents"}>{indents}</div>);
         }
-
-        return indentElements;
     }
 
     getNestedElements(groupedItems: GroupedItems): JSX.Element {
