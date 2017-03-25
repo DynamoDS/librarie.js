@@ -1,29 +1,37 @@
 const webpack = require('webpack');
-let productionBuild = (process.env.production_build == 1);
+let productionBuild = (process.env.NODE_ENV == "production");
 let version = "v0.0.1";
 let plugins = [];
+
+plugins.push(
+    new webpack.DefinePlugin({
+        'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+        'global': {}
+    })
+);
 
 if (productionBuild) {
     plugins.push(
         new webpack.optimize.UglifyJsPlugin({
             minimize: true,
-            sourceMap: true,
+            sourceMap: true, 
             mangle: {
-                except: ["LibraryView", "on"]
+                except: ["on"]
             }
         })
-    )
-};
+    );
+}
 
 module.exports = {
     entry: [
         "./src/LibraryUtilities.ts",
-        "./src/LibraryView.tsx"
+        "./src/entry-point.tsx"
     ],
     target: "node",
     output: {
         filename: productionBuild ? "librarie.min.js" : "librarie.js",
         path: __dirname + "/dist/" + version + "/",
+        publicPath: "./dist/" + version,
         libraryTarget: "var",
         library: "LibraryEntryPoint"
     },
@@ -51,16 +59,18 @@ module.exports = {
                 test: /\.js$/,
                 enforce: "pre",
                 loader: "source-map-loader" // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
+            },
+            {
+                test: /\.css$/,
+                loader: ["style-loader", "css-loader"]
+            },
+            {
+                test: /\.ttf|.svg$/,
+                loader: "file-loader",
+                options: {
+                    name: '/resources/[name].[ext]'
+                }
             }
         ]
-    },
-
-    // When importing a module whose path matches one of the following, just
-    // assume a corresponding global variable exists and use that instead.
-    // This is important because it allows us to avoid bundling all of our
-    // dependencies, which allows browsers to cache those libraries between builds.
-    externals: {
-        "react": "React",
-        "react-dom": "ReactDOM"
-    },
+    }
 }

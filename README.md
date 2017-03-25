@@ -20,15 +20,26 @@ Installing all dependencies
 - Navigate to `localhost:3456` in Google Chrome browser
 
 ### Usage
-The following simple HTML code illustrates the way to embed library view into an existing web page. Note that this is a work-in-progress, `LibraryView` API set will be further simplified in the near future.
+The following simple HTML code illustrates the way to embed library view into an existing web page. Note that this is a work-in-progress, `LibraryContainer` API set will be further simplified in the near future.
 
-`LibraryEntryPoint.LibraryView` constructor takes the following values as its configurations:
+`LibraryEntryPoint.CreateLibraryController` function is used to create a new `LibraryController`. This object is required as an entry point to the rest of the `librarie.js` system:
 
-- `htmlElementId` - The id of a placeholder HTML element to be replaced by library view.
+```html
+    <script>
+        let libController = LibraryEntryPoint.CreateLibraryController();
+        let libContainer = libController.createLibraryByElementId(...);
+    </script>
 
-- `loadedTypesUrl` - This represents a relative or absolute URL from where [Loaded Data Types](./docs/v0.0.1/loaded-data-types.md) JSON data is to be downloaded.
+```
 
-- `layoutSpecsUrl` - This represents a relative or absolute URL from where [Layout Specification](./docs/v0.0.1/layout-specs.md) JSON data is to be downloaded.
+
+`LibraryController.createLibraryByElementId` function takes the following values as its arguments:
+
+- `htmlElementId` - The ID of an HTML whose content is to be replaced with `LibraryContainer`.
+
+- `loadedTypesJsonObject` - The JSON object to be used by library view as Loaded Data Types. This argument is mandatory.
+
+- `layoutSpecsJsonObject` - The JSON object to be used by library view as Layout Specification. This argument is mandatory.
 
 ```html
 <!DOCTYPE html>
@@ -43,34 +54,29 @@ The following simple HTML code illustrates the way to embed library view into an
         </style>
     </head>
     <body>
-        <!-- Style sheets for library view  -->
-        <!-- TODO: Find a way to embed style sheet in bundle.js -->
-        <link rel="stylesheet" href="/src/resources/LibraryStyles.css" />
-
         <!-- This is where the library view should appear -->
         <div id="libraryContainerPlaceholder"></div>
-
-        <!-- React.js dependencies through CDN -->
-        <script src="./node_modules/react/dist/react.js"></script>
-        <script src="./node_modules/react-dom/dist/react-dom.js"></script>
 
         <!-- The main library view compoment -->
         <script src = './dist/v0.0.1/librarie.min.js'></script>
 
-
         <!-- Initialize the library view component -->
         <script>
-            let configuration = {
-                htmlElementId: "libraryContainerPlaceholder",
-                loadedTypesUrl: "loadedTypes", // A relative or absolute URL.
-                layoutSpecsUrl: "layoutSpecs"  // A relative or absolute URL.
-            };
+            // Through client specific logic download json objects
+            let loadedTypesJsonObject = getLoadedTypesJsonObject();
+            let layoutSpecsJsonObject = getLayoutSpecsJsonObject();
 
-            let libView = new LibraryEntryPoint.LibraryView(configuration);
-            
-            libView.on("itemClicked", function(contextData) {
-                console.log(contextData);
+            let libController = LibraryEntryPoint.CreateLibraryController();
+
+            libController.on("itemClicked", function (item) {
+                console.log(item); // Subscribed to click event
             })
+
+            let libContainer = libController.createLibraryByElementId(
+                "libraryContainerPlaceholder", // htmlElementId
+                loadedTypesJsonObject,
+                layoutSpecsJsonObject);
+
         </script>
 
     </body>
@@ -79,11 +85,11 @@ The following simple HTML code illustrates the way to embed library view into an
 
 ### Registering event handlers
 
-`LibraryView` object supports several events. So subscribe to an event of interest, do the following:
+`LibraryController` object supports several events. So subscribe to an event of interest, do the following:
 
 ```js
-// 'libView' is an instance of 'LibraryView' previously constructed. 
-libView.on("someEventName", function(data) {
+// 'libController' is an instance of 'LibraryController' previously constructed. 
+libController.on("someEventName", function(data) {
     // Handle 'someEventName' here, the argument 'data` is event dependent.
 });
 ```
@@ -95,7 +101,20 @@ This event is raised when a library item is clicked. The registered event handle
 - `contextData`: This is the value of `contextData` passed through [Loaded Data Types](./docs/v0.0.1/loaded-data-types.md) JSON data for the corresponding item.
 
 ```js
-libView.on("itemClicked", function(contextData) {
+libController.on("itemClicked", function(contextData) {
     console.log(contextData);
 })
+```
+
+#### Event 'searchTextUpdated'
+
+This event is raised when user starts typing on the search bar, and the display mode of SearchView is `list`. In this event, it should call a search algorithm from some other components, and return a list of [Search Result Items](./docs/v0.0.1/search-items.md) in JSON format to the caller.
+
+- `searchText`: This is the value of state `searchText` in `SearchView` component, which is a string value that user has entered in the search bar.
+
+ ```js
+libView.on("searchTextUpdated", function (searchText) {
+    console.log(searchText);
+    return null;
+});
 ```
