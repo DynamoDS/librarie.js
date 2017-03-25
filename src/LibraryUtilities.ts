@@ -55,12 +55,18 @@ export class ItemData {
     iconUrl: string = "";
     contextData: string = "";
     itemType: ItemType = "none";
+    visible: boolean = true;
+    expanded: boolean = false;
+    searchStrings: string[] = [];
     childItems: ItemData[] = [];
 
     constructor(public text: string) {
+        this.searchStrings.push(text ? text.toLowerCase() : text);
     }
 
     constructFromLayoutElement(layoutElement: LayoutElement) {
+        this.searchStrings.pop();
+        this.searchStrings.push(this.text ? this.text.toLowerCase() : this.text);
         this.contextData = layoutElement.text;
         this.iconUrl = layoutElement.iconUrl;
         this.itemType = layoutElement.elementType;
@@ -300,4 +306,48 @@ export function buildLibraryItemsFromLayoutSpecs(loadedTypes: any, layoutSpecs: 
     });
 
     return libraryTreeItems;
+}
+
+// Recursively set visible and expanded states of ItemData
+export function setItemStateRecursive(items: ItemData | ItemData[], visible: boolean, expanded: boolean) {
+    items = (items instanceof Array) ? items : [items];
+    for(let item of items) {
+        item.visible = visible;
+        item.expanded = expanded;
+        setItemStateRecursive(item.childItems, visible, expanded);
+    }
+}
+
+export function search(text: string, item: ItemData) {
+    if (item.itemType !== "group") {
+        let index = -1;
+
+        for (let searchString of item.searchStrings) {
+            index = searchString.indexOf(text);
+            if (index >= 0) {
+                // Show all items recursively if a given text is found in the current 
+                // (parent) item. Note that this does not apply to items of "group" type
+                setItemStateRecursive(item, true, true);
+                return true;
+            }
+        }
+    }
+
+    // Recusively search in child items if the item is of "group" type, 
+    // or text is not found in the current(parent) item
+    item.visible = false;
+    for (let childItem of item.childItems) {
+        if (search(text, childItem)) {
+            item.visible = true;
+            item.expanded = true;
+        }
+    }
+
+    return item.visible;
+}
+
+export function searchItemResursive(items: ItemData[], text: string) {
+    for (let item of items) {
+        search(text, item);
+    }
 }
