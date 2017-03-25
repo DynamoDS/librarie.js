@@ -73,9 +73,24 @@ body {
 }
 
 .LibraryItemGroupText {
-    padding: 10px;
     font-size: 15px;
     color: #a9a9a9;
+}
+
+.Indents {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding-left: 20px;
+}
+
+.Indents + .LibraryItemIcon {
+    padding: 0px 10px 0px 0px;
+}
+
+.Indentation {
+    height: 40px;
+    width: 20px;
 }
 
 .ClusterViewContainer {
@@ -85,8 +100,7 @@ body {
 
 .ClusterLeftPane {
     display: flex;
-    width: 64px;
-    min-width: 64px;
+    padding-left: 35px;
     margin: 2px 0px;
     border-right: 2px;
     border-right-style: solid;
@@ -95,7 +109,7 @@ body {
 
 .ClusterRightPane {
     flex-grow: 2;
-    padding-left: 2px;
+    padding-left: 5px;
 }
 
 .ClusterIcon {

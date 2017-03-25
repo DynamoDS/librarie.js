@@ -53,7 +53,7 @@ export class ClusterView extends React.Component<ClusterViewProps, undefined> {
 
         let index = 0;
         return this.props.childItems.map((item: ItemData) => {
-            return (<LibraryItem key={index++} libraryView={this.props.libraryView} data={item} />);
+            return (<LibraryItem key={index++} libraryView={this.props.libraryView} data={item} indentLevel={0} />);
         });
     }
 

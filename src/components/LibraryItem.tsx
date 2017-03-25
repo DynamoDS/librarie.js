@@ -23,7 +23,8 @@ import { ItemData } from "../LibraryUtilities";
 
 export interface LibraryItemProps {
     libraryView: LibraryView,
-    data: ItemData
+    data: ItemData,
+    indentLevel: number
 }
 
 export interface LibraryItemState {
@@ -85,13 +86,15 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         let iconElement = null;
         let libraryItemTextStyle = "LibraryItemGroupText";
 
-        if (this.props.data.itemType != "group") { // Group displays only text without icon.
+        // Group displays only text without icon.
+        if (this.props.data.itemType != "group") {
             libraryItemTextStyle = "LibraryItemText";
             iconElement = (<img className={"LibraryItemIcon"} src={this.props.data.iconUrl} />);
         }
 
         let nestedElements = null;
         let clusteredElements = null;
+        let indentElements = this.getIndentElements();
 
         // visible only nested elements when expanded.
         if (this.state.expanded && this.props.data.childItems.length > 0) {
@@ -109,6 +112,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         return (
             <div className={this.getLibraryItemContainerStyle()}>
                 <div className={"LibraryItemHeader"} onClick={this.onLibraryItemClicked.bind(this)} >
+                    {indentElements}
                     {iconElement}
                     <div className={libraryItemTextStyle}>{this.props.data.text}</div>
                 </div>
@@ -119,7 +123,6 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
     }
 
     getLibraryItemContainerStyle(): string {
-
         switch (this.props.data.itemType) {
             case "category":
                 return "LibraryItemContainerCategory";
@@ -137,7 +140,28 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         return "LibraryItemContainerNone";
     }
 
-    getNestedElements(groupedItems: GroupedItems): any {
+    getIndentElements(): JSX.Element {
+        if (this.props.indentLevel <= 0) {
+            return null;
+        }
+
+        let indents: JSX.Element[] = [];
+        let indentationIconRootPath = "/src/resources/ui/";
+
+        for (let i = 1; i <= this.props.indentLevel; i++) {
+            let indentationPath = indentationIconRootPath;
+            if (i == this.props.indentLevel) {
+                indentationPath += "indent-line-t.svg";
+            } else {
+                indentationPath += "indent-line-i.svg";
+            }
+            indents.push(<img key={i} className={"Indentation"} src={indentationPath} />);
+        }
+
+        return (<div className={"Indents"}>{indents}</div>);
+    }
+
+    getNestedElements(groupedItems: GroupedItems): JSX.Element {
 
         let regularItems = groupedItems.getOtherItems();
         if (regularItems.length <= 0) {
@@ -152,14 +176,14 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
                     // types of items except ones of type creation/action/query.
                     // 
                     regularItems.map((item: ItemData) => {
-                        return (<LibraryItem key={index++} libraryView={this.props.libraryView} data={item} />);
+                        return (<LibraryItem key={index++} libraryView={this.props.libraryView} data={item} indentLevel={this.props.indentLevel + 1} />);
                     })
                 }
             </div>
         );
     }
 
-    getClusteredElements(groupedItems: GroupedItems): any {
+    getClusteredElements(groupedItems: GroupedItems): JSX.Element {
 
         let creationMethods = groupedItems.getCreationItems();
         let actionMethods = groupedItems.getActionItems();
