@@ -119,32 +119,108 @@ body {
     -webkit-user-drag: none;
 }
 
-.searchView {
+.SearchBar {
     background: #5b5a5a;
 }
 
-.searchView .searchBar {
+.SearchInput {
     width: 100%;
     height: 40px;
+    display: flex;
+    justify-content:space-around;
+    align-items:center;
 }
 
-.searchView .searchBar input {
-    width: 100%;
-    padding: 13px 10px 5px 15px;
+.SearchInputContainer {
+    margin-left:5px;
+    width:100%;
+    height:30px;
+    border-radius:5px;
+    background-color:#fff;
+    display: flex;
+    justify-content:space-around;
+    align-items:center;
+}
+
+.SearchBar img {
+    fill: #000;
+    width: 18px;
+    height: 18px;
+    margin: 11px;
+}
+
+.SearchBar #SearchInputText {
+    height:18px;
+    width:100%;
     font-size: 15px;
+    padding:10px;
     background: none;
-    color: #fff;
     outline: none;
     border: none;
 }
 
-#searchInput::-webkit-search-cancel-button {
+.SearchBar #SearchOptionsBtn {
+    height: 32px;
+    width: 32px;
+    color: #ddd;
+    border: 1px;
+    border-radius: 5px;
+    margin: 5px;
+}
+
+.SearchBar #SearchOptionsBtn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    cursor: pointer;
+}
+
+.SearchBar .ArrowBg {
+    background-color: #414141;
+    background-image: url("/src/resources/UI/arrow-upward.svg");
+    background-size: 20px 20px;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.SearchBar .ArrowReversedBg {
+    background-color: #414141;
+    background-image: url("/src/resources/UI/arrow-downward.svg");
+    background-size: 20px 20px;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.SearchBar #SearchOptionsBtn:focus {
+    outline: 0;
+}
+
+.SearchBar .SearchOptions {
+    padding-bottom:1px;
+}
+
+.SearchBar .SearchOptionsContainer {
+    font-size: 13px;
+    color:#fff;
+    margin:0px 5px 5px 5px;
+    background-color:#414141;
+    padding:5px;
+    border-radius:5px;
+}
+
+.OptionCheckbox, .OptionText {
+    vertical-align:middle;
+}
+
+.SearchBar .CategoryContainer {
+    max-height:100px;
+    overflow-y: scroll;
+}
+
+#SearchInput::-webkit-search-cancel-button {
     -webkit-appearance: none;
 }
 
 ::-webkit-input-placeholder {
-  color: #dddddd;
-  font-style: italic;
+  color: #aaaaaa;
 }
 
 ::-webkit-scrollbar {

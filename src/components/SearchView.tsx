@@ -2,6 +2,7 @@ import * as React from "react";
 import { LibraryItem } from "./LibraryItem";
 import { LibraryView } from "../LibraryView";
 import { searchItemResursive, setItemStateRecursive, ItemData } from "../LibraryUtilities";
+import { SearchBar } from "./SearchBar";
 
 interface SearchModeChangedFunc {
     (inSearchMode: boolean): void;
@@ -15,16 +16,37 @@ interface SearchViewProps {
 
 interface SearchViewStates {
     searchText: string;
+    selectedCategories: string[];
+    structured: boolean;
+    detailed: boolean;
 }
 
 export class SearchView extends React.Component<SearchViewProps, SearchViewStates> {
+    categories: string[] = [];
 
     constructor(props: SearchViewProps) {
         super(props);
 
+        this.categories = ["List", "Input", "Math", "Script", "Display", "ImportExport", "String", "Geometry"];
+
         this.state = {
-            searchText: ''
+            searchText: '',
+            selectedCategories: [],
+            structured: false,
+            detailed: false
         };
+    }
+
+    onStructuredModeChange() {
+        this.setState({ structured: !this.state.structured });
+    }
+
+    onDetailedModeChange() {
+        this.setState({ detailed: !this.state.detailed });
+    }
+
+    onCategoriesChange(categories: string[]) {
+        this.setState({ selectedCategories: categories })
     }
 
     generateStructuredItems() {
@@ -56,9 +78,7 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
 
         return (
             <div className="searchView">
-                <div className="searchBar">
-                    <input id="searchInput" type="search" placeholder="Search..." onChange={this.onTextChange.bind(this)}></input>
-                </div>
+                <SearchBar onStructuredModeChanged={this.onStructuredModeChange.bind(this)} onDetailedModeChanged={this.onDetailedModeChange.bind(this)} categories={this.categories} onCategoriesChange={this.onCategoriesChange.bind(this)} onTextChange={this.onTextChange.bind(this)}></SearchBar>
                 <div>{listItems}</div>
             </div>
         );
