@@ -42,18 +42,17 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
         else {
             categories.push(event.target.name);
         }
-        this.setState({ selectedCategories: categories})
+        this.setState({ selectedCategories: categories })
         this.props.onCategoriesChange(categories);
     }
 
     render() {
-        let options = <div></div>;
+        let options = null;
         let searchOptionsBtn = <button id="SearchOptionsBtn" className="ArrowBg" onClick={this.onOptionsButtonClick.bind(this)}></button>;
         let thisObj = this;
-        var checkboxes = [];
+        let checkboxes: JSX.Element[] = [];
         _.each(this.props.categories, function (c) {
-            let x = {c};
-            checkboxes.push(<input type="checkbox" name={c} className="OptionCheckbox" onChange={thisObj.onCategoriesChange.bind(thisObj)}/>);
+            checkboxes.push(<input type="checkbox" name={c} className="OptionCheckbox" onChange={thisObj.onCategoriesChange.bind(thisObj)} />);
             checkboxes.push(<span className="OptionText">{c}</span>);
             checkboxes.push(<br />);
         })
