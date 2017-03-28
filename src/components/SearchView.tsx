@@ -31,7 +31,7 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
         let structuredItems: JSX.Element[] = [];
         let index = 0;
         return this.props.items.map((item: ItemData) =>
-            <LibraryItem key={index++} libraryView={this.props.libraryView} data={item} indentLevel={0}/>);
+            <LibraryItem key={index++} libraryView={this.props.libraryView} data={item} />);
     }
 
     onTextChange(event: any) {
