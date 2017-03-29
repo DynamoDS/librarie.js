@@ -18,18 +18,15 @@ interface SearchViewStates {
 }
 
 export class SearchView extends React.Component<SearchViewProps, SearchViewStates> {
-    timeout: any;
+    timeout: number;
 
     constructor(props: SearchViewProps) {
         super(props);
 
-        this.state = {
-            searchText: ''
-        };
+        this.state = { searchText: '' };
     }
 
     generateStructuredItems() {
-        let structuredItems: JSX.Element[] = [];
         let index = 0;
         return this.props.items.map((item: ItemData) =>
             <LibraryItem key={index++} libraryView={this.props.libraryView} data={item} />);
@@ -39,26 +36,30 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
         clearTimeout(this.timeout);
 
         let text = event.target.value.trim().toLowerCase();
-
-        // start searching only after user stops typing for some time
-        this.timeout = setTimeout(function () {
-            this.updateSearchState(text);
-        }.bind(this), 250);
-    }
-
-    updateSearchState(text: string) {
         let hasText = text.length > 0;
 
-        this.setState({ searchText: text });
+        if (hasText) {
+            // Starting searching immediately after user typings, 
+            // but only show change on ui after 300ms
+            searchItemResursive(this.props.items, text);
 
-        // Update LibraryContainer of current search
-        this.props.onSearchModeChanged(hasText);
+            this.timeout = setTimeout(function () {
+                this.updateSearchView(text);
+            }.bind(this), 300);
+        } else {
+            // Show change on ui immediately if search text is cleared
+            this.updateSearchView(text);
+        }
+    }
+
+    updateSearchView(text: string) {
+        this.setState({ searchText: text });
+        this.props.onSearchModeChanged(text.length > 0);;
     }
 
     render() {
         let listItems: JSX.Element[] = [];
         if (this.state.searchText.length > 0) {
-            searchItemResursive(this.props.items, this.state.searchText);
             listItems = this.generateStructuredItems();
         } else {
             // Reset ItemData when search text is cleared
