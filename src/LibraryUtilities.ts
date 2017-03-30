@@ -195,13 +195,14 @@ export function constructLibraryItem(
 
         for (let j = 0; j < typeListNodes.length; j++) {
             let fullyQualifiedName = typeListNodes[j].fullyQualifiedName;
-            let fullyQualifiedNameParts = fullyQualifiedName.split('.');
-            let lastIncludedPart = includeParts[includeParts.length - 1];
+            if (!fullyQualifiedName.startsWith(includePath)) {
+                continue; // Not matching, skip to the next type node.
+            }
 
-            // Check if a matching node is found, and if the fullyQualifiedName contains
-            // the (whole) last word in includePath. 
-            // E.g. This ensures EllipseArc nodes to be excluded in the Ellipse category.
-            if (fullyQualifiedName.startsWith(includePath) && _.contains(fullyQualifiedNameParts, lastIncludedPart)) {
+            // If a matching node is found, check if the parts of includePath match those
+            // of fullyQualifiedName.
+            let fullyQualifiedNameParts = fullyQualifiedName.split('.');
+            if (matchedUpTo(fullyQualifiedNameParts, includeParts)) {
 
                 // Check if the includePath represents a leaf node.
                 if (includePath.length < fullyQualifiedName.length)
@@ -224,13 +225,12 @@ export function constructLibraryItem(
         }
 
         // If a node that matches the includePath cannot be found
-        if (!nodeFound) { 
+        if (!nodeFound) {
 
             // isLeafNode is set to true if there are no nodes that can match the includePath,
             // or if the node is a leaf node.
             if (isLeafNode) {
-                console.warn("Warning: The type '" + includePath + "' is not found in " +
-                    "'RawTypeData.json'. No node of this type is rendered in the library view.");
+                console.warn("Matching type not found: " + includePath);
             }
             if (parentNode && (parentNode != result)) {
                 // Otherwise, if there is a parentNode created
@@ -246,6 +246,23 @@ export function constructLibraryItem(
     }
 
     return result;
+}
+
+// E.g. Consider the following scenario with each variable value being:
+// "fullyQualifiedName" = "DSCore.Math.RandomList"
+// "includePath" = DSCore.Math.Random
+// "fullyQualifiedNameParts" = [ "DSCore", "Math", "RandomList" ]
+// "includeParts" = [ "DSCore", "Math", "Random" ]
+// Comparing fullyQualifiedName and includePath with only startsWith() will return true,
+// which is undesired since Random and RandomList are two different nodes.
+// Further checking is required to match the two strings using matchedUpTo().
+function matchedUpTo(fullyQualifiedNameParts: string[], includeParts: string[]): boolean {
+    _.each(includeParts, function (part, index) {
+        if (fullyQualifiedNameParts[index] != includeParts[index]) {
+            return false;
+        }
+    })
+    return true;
 }
 
 /**
@@ -300,8 +317,7 @@ export function buildLibraryItemsFromLayoutSpecs(loadedTypes: any, layoutSpecs: 
     // Search for the nodes that are not displayed in library view.
     _.each(typeListNodes, function (node) {
         if (!node.processed) {
-            console.warn("Warning: '" + node.contextData + "' is not specified in " +
-                "'LayoutSpecs.json'. The node is not rendered in the library view.");
+            console.warn("Item filtered out from library view: " + node.contextData);
         }
     });
 
@@ -311,7 +327,7 @@ export function buildLibraryItemsFromLayoutSpecs(loadedTypes: any, layoutSpecs: 
 // Recursively set visible and expanded states of ItemData
 export function setItemStateRecursive(items: ItemData | ItemData[], visible: boolean, expanded: boolean) {
     items = (items instanceof Array) ? items : [items];
-    for(let item of items) {
+    for (let item of items) {
         item.visible = visible;
         item.expanded = expanded;
         setItemStateRecursive(item.childItems, visible, expanded);
