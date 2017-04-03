@@ -8,8 +8,7 @@ interface SearchResultItemProps {
     highlightedText: string;
 }
 
-interface SearchResultItemStates {
-}
+interface SearchResultItemStates {}
 
 export class SearchResultItem extends React.Component<SearchResultItemProps, SearchResultItemStates> {
     constructor(props: SearchResultItemProps) {
@@ -18,7 +17,6 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
 
     render() {
         let iconPath = this.props.data.iconUrl;
-
         let highLightedItemText = generateHighlightedItemText(this.props.data.text, this.props.highlightedText);
         let clusterIconPath = "src/resources/icons/library-" + this.props.data.itemType + ".svg"
 
