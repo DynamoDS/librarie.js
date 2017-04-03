@@ -75,15 +75,13 @@ export class LibraryView {
             libraryView={this}
             loadedTypesJson={this.loadedTypesJson}
             layoutSpecsJson={this.layoutSpecsJson} />, htmlElement);
-
-
     }
 
     on(eventName: string, callback: Function) {
         this.reactor.registerEvent(eventName, callback);
     }
 
-    raiseEvent(name: string, params?: any | any[]) {
+    raiseEvent(name: string, ...params: any[]) {
         this.reactor.raiseEvent(name, params);
     }
 }
