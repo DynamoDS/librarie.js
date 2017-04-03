@@ -1,5 +1,6 @@
 import * as React from "react";
 import { LibraryItem } from "./LibraryItem";
+import { SearchResultItem } from "./SearchResultItem";
 import { LibraryView } from "../LibraryView";
 import { searchItemResursive, setItemStateRecursive, ItemData } from "../LibraryUtilities";
 
@@ -49,7 +50,7 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
     generateListItems(items: ItemData[] = this.props.items, leafItems: JSX.Element[] = []): JSX.Element[] {
         for (let item of items) {
             if (item.visible && item.childItems.length == 0) {
-                let listItem = <LibraryItem key={leafItems.length} data={item} libraryView={this.props.libraryView} indentLevel={0} />;
+                let listItem = <SearchResultItem key={leafItems.length} data={item} libraryView={this.props.libraryView} highlightedText={this.state.searchText} />;
                 leafItems.push(listItem);
             } else if (item.visible) {
                 this.generateListItems(item.childItems, leafItems);

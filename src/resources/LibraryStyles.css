@@ -119,13 +119,10 @@ body {
     -webkit-user-drag: none;
 }
 
-.searchView {
-    background: #5b5a5a;
-}
-
 .searchView .searchBar {
     width: 100%;
     height: 40px;
+    background: #5b5a5a;
 }
 
 .searchView .searchBar input {
@@ -140,6 +137,53 @@ body {
 
 #searchInput::-webkit-search-cancel-button {
     -webkit-appearance: none;
+}
+
+.SearchResultItemContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 3px;
+    color: white;
+    transition: 0.1s;
+    background: #353535;
+}
+
+.SearchResultItemContainer:hover {
+    color: white;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.SearchResultItemContainer .ItemInfo {
+    padding: 5px 0px 5px 0px;
+}
+
+.SearchResultItemContainer .ItemIcon {
+    padding: 2px 8px;
+    width: 40px;
+    height: 40px;
+}
+
+.SearchResultItemContainer .ItemTitle {
+    font-size: 14px;
+    margin-bottom: 2px;
+}
+
+.SearchResultItemContainer .ItemDetails {
+    display: flex;
+    align-items: center;
+    padding-top: 2px;
+}
+
+.SearchResultItemContainer .ItemTypeIcon {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+}
+
+.HighlightedText {
+    font-weight: bold;
+    color: #4ac8ef;
 }
 
 ::-webkit-input-placeholder {

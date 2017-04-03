@@ -1,3 +1,5 @@
+import * as React from "react";
+
 type MemberType = "none" | "creation" | "action" | "query";
 type ElementType = "none" | "category" | "group";
 type ItemType = "none" | "category" | "group" | "creation" | "action" | "query";
@@ -255,7 +257,7 @@ export function buildLibraryItemsFromLayoutSpecs(loadedTypes: any, layoutSpecs: 
 // Recursively set visible and expanded states of ItemData
 export function setItemStateRecursive(items: ItemData | ItemData[], visible: boolean, expanded: boolean) {
     items = (items instanceof Array) ? items : [items];
-    for(let item of items) {
+    for (let item of items) {
         item.visible = visible;
         item.expanded = expanded;
         setItemStateRecursive(item.childItems, visible, expanded);
@@ -294,4 +296,25 @@ export function searchItemResursive(items: ItemData[], text: string) {
     for (let item of items) {
         search(text, item);
     }
+}
+
+export function generateHighlightedItemText(text: string, highlightedText: string) {
+    if (highlightedText.length == 0) {
+        return text;
+    }
+
+    var regex = new RegExp('' + highlightedText + '', 'gi');
+    var segments = text.split(regex);
+    var replacements = text.match(regex);
+    var spans = [];
+    let keyIndex = 0;
+    for (let i = 0; i < segments.length; i++) {
+        spans.push(React.DOM.span({ key: keyIndex++ }, segments[i]));
+        if (i == segments.length - 1) {
+            break;
+        }
+        spans.push(React.DOM.span({ className: "HighlightedText", key: keyIndex++ }, replacements[i]));
+    }
+
+    return spans;
 }
