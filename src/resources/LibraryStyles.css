@@ -146,7 +146,6 @@ body {
     padding: 3px;
     color: white;
     transition: 0.1s;
-    background: #353535;
 }
 
 .SearchResultItemContainer:hover {

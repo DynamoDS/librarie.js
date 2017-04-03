@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ItemData, generateHighlightedItemText } from "../LibraryUtilities";
+import { ItemData, getHighlightedText } from "../LibraryUtilities";
 import { LibraryView } from "../LibraryView";
 
 interface SearchResultItemProps {
@@ -11,14 +11,15 @@ interface SearchResultItemProps {
 interface SearchResultItemStates {}
 
 export class SearchResultItem extends React.Component<SearchResultItemProps, SearchResultItemStates> {
+
     constructor(props: SearchResultItemProps) {
         super(props);
     }
 
     render() {
         let iconPath = this.props.data.iconUrl;
-        let highLightedItemText = generateHighlightedItemText(this.props.data.text, this.props.highlightedText);
-        let clusterIconPath = "src/resources/icons/library-" + this.props.data.itemType + ".svg"
+        let highLightedItemText = getHighlightedText(this.props.data.text, this.props.highlightedText);
+        let ItemTypeIconPath = "src/resources/icons/library-" + this.props.data.itemType + ".svg"
 
         return (
             <div className={"SearchResultItemContainer"} onClick={this.onItemClicked.bind(this)}>
@@ -26,7 +27,7 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
                 <div className={"ItemInfo"}>
                     <div className={"ItemTitle"}>{highLightedItemText}</div>
                     <div className={"ItemDetails"}>
-                        <img className={"ItemTypeIcon"} src={clusterIconPath} />
+                        <img className={"ItemTypeIcon"} src={ItemTypeIconPath} />
                     </div>
                 </div>
             </div>

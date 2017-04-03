@@ -298,7 +298,7 @@ export function searchItemResursive(items: ItemData[], text: string) {
     }
 }
 
-export function generateHighlightedItemText(text: string, highlightedText: string) {
+export function getHighlightedText(text: string, highlightedText: string) {
     if (highlightedText.length == 0) {
         return text;
     }
