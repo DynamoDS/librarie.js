@@ -56,7 +56,7 @@ describe("LayoutElement class", function () {
     expect(emptyLayoutElement.childElements.length).to.equal(0);
   });
 
-  it('should be able to apped a child', function () {
+  it('should be able to append a child', function () {
     let parentLayoutElement = new LibraryUtilities.LayoutElement(testData);
     let childLayoutElement = new LibraryUtilities.LayoutElement(testData);
 
@@ -107,7 +107,7 @@ describe('ItemData class', function () {
     expect(testLibraryItem.childItems.length).to.equal(0);
   });
 
-  it('should appedn some children', function () {
+  it('should append some children', function () {
     let parentLibraryItem = new LibraryUtilities.ItemData(emptyString);
     parentLibraryItem.constructFromLayoutElement(testData);
 
