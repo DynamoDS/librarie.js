@@ -81,7 +81,7 @@ export class LibraryView {
         this.reactor.registerEvent(eventName, callback);
     }
 
-    raiseEvent(name: string, ...params: any[]) {
+    raiseEvent(name: string, params?: any | any[]) {
         this.reactor.raiseEvent(name, params);
     }
 }

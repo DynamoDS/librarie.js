@@ -20,13 +20,11 @@ export class Event {
         this.callbacks.push(callback);
     }
 
-    executeCallback(params: any[]) {
+    executeCallback(params?: any | any[]) {
         this.callbacks.forEach(callback => {
             try {
                 if (callback.length == 0) callback();
-                else {
-                    callback(params.length == 1 ? params[0] : params);
-                }
+                else callback(params);
             }
             catch (e) {
                 console.log(e);
@@ -58,7 +56,7 @@ export class Reactor {
         event.registerCallback(callback);
     }
 
-    raiseEvent(name: string, params: any[]) {
+    raiseEvent(name: string, params?: any | any[]) {
         let event = this.getEvent(name);
         if (event != null) {
             event.executeCallback(params);

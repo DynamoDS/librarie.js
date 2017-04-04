@@ -35,9 +35,8 @@
             console.log(item);
         })
 
-        libView.on("searchStarted", function (searchViewUpdates) {
-            let searchText = searchViewUpdates[0];
-            let searchView = searchViewUpdates[1];
+        libView.on("searchStarted", function (searchView) {
+            let searchText = searchView.getSearchText();
             console.log(searchText);
 
             // call search function (from web component) to return json.

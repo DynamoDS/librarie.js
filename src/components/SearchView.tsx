@@ -37,6 +37,10 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
         this.searchResultListItems = null;
     }
 
+    getSearchText(): string {
+        return this.state.searchText;
+    }
+
     updateSearchResultListItems(searchResultListItems: any) {
         this.searchResultListItems = searchResultListItems;
     }
@@ -103,7 +107,7 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
         if (this.state.searchText.length > 0) {
             // Raise search event only when in list display mode
             if (this.state.displayMode === "list") {
-                this.props.libraryView.raiseEvent("searchStarted", this.state.searchText, this);
+                this.props.libraryView.raiseEvent("searchStarted", this);
             }
 
             if (this.searchResultListItems) {
