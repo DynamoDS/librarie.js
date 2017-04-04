@@ -47,16 +47,46 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
             <LibraryItem key={index++} libraryView={this.props.libraryView} data={item} indentLevel={0} />);
     }
 
-    generateListItems(items: ItemData[] = this.props.items, leafItems: JSX.Element[] = []): JSX.Element[] {
+    generateListItems(items: ItemData[] = this.props.items): JSX.Element[] {
+        let leafItems: JSX.Element[] = [];
+
         for (let item of items) {
-            if (item.visible && item.childItems.length == 0) {
-                let listItem = <SearchResultItem key={leafItems.length} data={item} libraryView={this.props.libraryView} highlightedText={this.state.searchText} />;
-                leafItems.push(listItem);
-            } else if (item.visible) {
-                this.generateListItems(item.childItems, leafItems);
+            if (!item.visible) {
+                continue;
+            }
+
+            let categoryItem = item;
+            let leafItemData: ItemData[] = [];
+            if (item.childItems.length > 0) {
+                leafItemData = this.getLeafItems(item.childItems);
+            } else {
+                leafItemData.push(item);
+            }
+
+            leafItems = leafItemData.map((item: ItemData) =>
+                <SearchResultItem data={item}
+                    libraryView={this.props.libraryView}
+                    category={categoryItem.text}
+                    highlightedText={this.state.searchText} />);
+        }
+
+        return leafItems;
+    }
+
+    getLeafItems(items: ItemData[], leafItemData: ItemData[] = []): ItemData[] {
+        for (let item of items) {
+            if (!item.visible) {
+                continue;
+            }
+
+            if (item.childItems.length == 0) {
+                leafItemData.push(item);
+            } else {
+                this.getLeafItems(item.childItems, leafItemData);
             }
         }
-        return leafItems;
+
+        return leafItemData;
     }
 
     onTextChange(event: any) {

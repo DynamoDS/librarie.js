@@ -5,10 +5,11 @@ import { LibraryView } from "../LibraryView";
 interface SearchResultItemProps {
     data: ItemData;
     libraryView: LibraryView;
+    category: string;
     highlightedText: string;
 }
 
-interface SearchResultItemStates {}
+interface SearchResultItemStates { }
 
 export class SearchResultItem extends React.Component<SearchResultItemProps, SearchResultItemStates> {
 
@@ -19,6 +20,7 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
     render() {
         let iconPath = this.props.data.iconUrl;
         let highLightedItemText = getHighlightedText(this.props.data.text, this.props.highlightedText);
+        let highLightedCategoryText = getHighlightedText(this.props.category, this.props.highlightedText);
         let ItemTypeIconPath = "src/resources/icons/library-" + this.props.data.itemType + ".svg"
 
         return (
@@ -28,6 +30,7 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
                     <div className={"ItemTitle"}>{highLightedItemText}</div>
                     <div className={"ItemDetails"}>
                         <img className={"ItemTypeIcon"} src={ItemTypeIconPath} />
+                        <div className={"ItemCategory"}>{highLightedCategoryText}</div>
                     </div>
                 </div>
             </div>
