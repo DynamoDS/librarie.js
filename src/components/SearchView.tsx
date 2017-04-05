@@ -51,46 +51,42 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
             <LibraryItem key={index++} libraryView={this.props.libraryView} data={item} indentLevel={0} />);
     }
 
-    generateListItems(items: ItemData[] = this.props.items): JSX.Element[] {
+    generateListItems(): JSX.Element[] {
         let leafItems: JSX.Element[] = [];
 
-        for (let item of items) {
+        for (let item of this.props.items) {
             if (!item.visible) {
                 continue;
             }
 
-            let categoryItem = item;
-            let leafItemData: ItemData[] = [];
             if (item.childItems.length > 0) {
-                leafItemData = this.getLeafItems(item.childItems);
+                leafItems = leafItems.concat(this.getLeafItemsInCategory(item.text, item.childItems));
             } else {
-                leafItemData.push(item);
+                leafItems = leafItems.concat(this.getLeafItemsInCategory(item.text, [item]));
             }
-
-            leafItems = leafItemData.map((item: ItemData) =>
-                <SearchResultItem data={item}
-                    libraryView={this.props.libraryView}
-                    category={categoryItem.text}
-                    highlightedText={this.state.searchText} />);
         }
 
         return leafItems;
     }
 
-    getLeafItems(items: ItemData[], leafItemData: ItemData[] = []): ItemData[] {
+    getLeafItemsInCategory(category: string, items: ItemData[], leafItemsInCategory: JSX.Element[] = []): JSX.Element[] {
         for (let item of items) {
             if (!item.visible) {
                 continue;
             }
 
             if (item.childItems.length == 0) {
-                leafItemData.push(item);
+                leafItemsInCategory.push(<SearchResultItem
+                    data={item}
+                    libraryView={this.props.libraryView}
+                    category={category}
+                    highlightedText={this.state.searchText} />);
             } else {
-                this.getLeafItems(item.childItems, leafItemData);
+                this.getLeafItemsInCategory(category, item.childItems, leafItemsInCategory);
             }
         }
 
-        return leafItemData;
+        return leafItemsInCategory;
     }
 
     onTextChange(event: any) {
