@@ -316,7 +316,7 @@ describe('constructLibraryItem function', function () {
 
 });
 
-describe('setItemStateRecursive function', function () {
+describe('ResetItemData function', function () {
   var itemArray: LibraryUtilities.ItemData[];
   let itemData1 = new LibraryUtilities.ItemData("1");
   let itemData2 = new LibraryUtilities.ItemData("2");
@@ -330,12 +330,9 @@ describe('setItemStateRecursive function', function () {
     itemArray = [];
   });
 
-  function isSetToValue(items: LibraryUtilities.ItemData[], visible: boolean, expanded: boolean): boolean {
+  function isAllDefault(items: LibraryUtilities.ItemData[]): boolean {
     for (let item of items) {
-      if(item.visible != visible) {
-        return false;
-      }
-      if(item.expanded != expanded) {
+      if (!item.visible || item.expanded) {
         return false;
       }
     }
@@ -343,11 +340,11 @@ describe('setItemStateRecursive function', function () {
   }
 
   it('should work on empty array', function () {
-    LibraryUtilities.setItemStateRecursive(itemArray, true, false);
-    expect(isSetToValue(itemArray, true, false)).to.equal(true);
+    LibraryUtilities.resetItemData(itemArray);
+    expect(isAllDefault(itemArray)).to.equal(true);
   });
 
-  it('should set the correct attributes', function () {
+  it('should reset the correct attributes', function () {
     itemData1.visible = false;
     itemData1.expanded = true;
     itemData2.visible = false;
@@ -357,13 +354,13 @@ describe('setItemStateRecursive function', function () {
     itemArray.push(itemData2);
     itemArray.push(itemData3);
 
-    LibraryUtilities.setItemStateRecursive(itemArray, true, false);
+    LibraryUtilities.resetItemData(itemArray);
 
     expect(itemArray.length).to.equal(3);
-    expect(isSetToValue(itemArray, true, false)).to.equal(true);
+    expect(isAllDefault(itemArray)).to.equal(true);
   });
 
-  it('should set the correct attributes of child items', function () {
+  it('should reset the correct attributes of child items', function () {
     itemData1.visible = false;
     itemData1.expanded = true;
     itemData2.visible = false;
@@ -382,9 +379,62 @@ describe('setItemStateRecursive function', function () {
     itemArray.push(itemData2);
     itemArray.push(itemData3);
 
-    LibraryUtilities.setItemStateRecursive(itemArray, false, true);
+    LibraryUtilities.resetItemData(itemArray);
     expect(itemArray.length).to.equal(3);
-    expect(isSetToValue(itemArray, false, true)).to.equal(true);
+    expect(isAllDefault(itemArray)).to.equal(true);
+  });
+});
+
+describe("ShowItemRecursive function", function () {
+  let itemData1: LibraryUtilities.ItemData;
+  let itemData11: LibraryUtilities.ItemData;
+  let itemData12: LibraryUtilities.ItemData;
+  let itemData111: LibraryUtilities.ItemData;
+
+  beforeEach(function () {
+    itemData1 = new LibraryUtilities.ItemData("1");
+    itemData11 = new LibraryUtilities.ItemData("11");
+    itemData12 = new LibraryUtilities.ItemData("12");
+    itemData111 = new LibraryUtilities.ItemData("111");
+  });
+
+  function isAllSetToTrue(item: LibraryUtilities.ItemData): boolean {
+    if (!(item.visible && item.expanded)) {
+      return false;
+    }
+
+    for (let childItem of item.childItems) {
+      if (!isAllSetToTrue(childItem)) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  it('should set one ItemData', function () {
+    itemData1.visible = false;
+    itemData1.expanded = false;
+    LibraryUtilities.showItemRecursive(itemData1);
+    expect(isAllSetToTrue(itemData1)).to.equal(true);
+  });
+
+  it('should set child items', function () {
+    itemData1.visible = false;
+    itemData1.expanded = true;
+    itemData11.visible = false;
+    itemData11.expanded = true;
+    itemData12.visible = false;
+    itemData111.expanded = false;
+
+    itemData11.appendChild(itemData111);
+    itemData1.appendChild(itemData11);
+    itemData1.appendChild(itemData12);
+
+    LibraryUtilities.showItemRecursive(itemData1);
+
+    expect(itemData1.childItems.length).to.equal(2);
+    expect(isAllSetToTrue(itemData1)).to.equal(true);
   });
 });
 
