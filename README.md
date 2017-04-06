@@ -30,6 +30,10 @@ The following simple HTML code illustrates the way to embed library view into an
 
 - `layoutSpecsUrl` - This represents a relative or absolute URL from where [Layout Specification](./docs/v0.0.1/layout-specs.md) JSON data is to be downloaded.
 
+- `loadedTypes` - The JSON object to be used by library view as Loaded Data Types. If this is not provided, the JSON data will be downloaded from `loadedTypesUrl`.
+
+- `layoutSpecs` - The JSON object to be used by library view as Layout Specification. If this is not provided, the JSON data will be downloaded from `layoutSpecsUrl`.
+
 ```html
 <!DOCTYPE html>
 <html>
