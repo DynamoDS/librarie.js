@@ -75,6 +75,8 @@ export class LibraryView {
             libraryView={this}
             loadedTypesJson={this.loadedTypesJson}
             layoutSpecsJson={this.layoutSpecsJson} />, htmlElement);
+
+            
     }
 
     on(eventName: string, callback: Function) {

@@ -298,22 +298,16 @@ export function searchItemResursive(items: ItemData[], text: string) {
     }
 }
 
-export function getHighlightedText(text: string, highlightedText: string) {
-    if (highlightedText.length == 0) {
-        return text;
-    }
-
-    var regex = new RegExp('' + highlightedText + '', 'gi');
-    var segments = text.split(regex);
-    var replacements = text.match(regex);
-    var spans = [];
-    let keyIndex = 0;
+export function getHighlightedText(text: string, highlightedText: string): React.DOMElement<React.HTMLAttributes<HTMLSpanElement>, HTMLSpanElement>[] {
+    let regex = new RegExp(highlightedText, 'gi');
+    let segments = text.split(regex);
+    let replacements = text.match(regex);
+    let spans: React.DOMElement<React.HTMLAttributes<HTMLSpanElement>, HTMLSpanElement>[] = [];
     for (let i = 0; i < segments.length; i++) {
-        spans.push(React.DOM.span({ key: keyIndex++ }, segments[i]));
-        if (i == segments.length - 1) {
-            break;
+        spans.push(React.DOM.span({ key: spans.length }, segments[i]));
+        if (i != segments.length - 1) {
+            spans.push(React.DOM.span({ className: "HighlightedText", key: spans.length }, replacements[i]));
         }
-        spans.push(React.DOM.span({ className: "HighlightedText", key: keyIndex++ }, replacements[i]));
     }
 
     return spans;

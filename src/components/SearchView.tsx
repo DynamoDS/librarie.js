@@ -4,7 +4,7 @@ import { SearchResultItem } from "./SearchResultItem";
 import { LibraryView } from "../LibraryView";
 import { searchItemResursive, setItemStateRecursive, ItemData } from "../LibraryUtilities";
 
-type displayMode = "strucutre" | "list";
+type displayMode = "structure" | "list";
 
 interface SearchModeChangedFunc {
     (inSearchMode: boolean): void;
@@ -39,10 +39,6 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
 
     getSearchText(): string {
         return this.state.searchText;
-    }
-
-    updateSearchResultListItems(searchResultListItems: any) {
-        this.searchResultListItems = searchResultListItems;
     }
 
     generateStructuredItems(): JSX.Element[] {
@@ -91,31 +87,26 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
 
     onTextChange(event: any) {
         let text = event.target.value.trim().toLowerCase();
+        let hasText = text.length > 0;
+
+        // Raise search event only when in list display mode
+        if (this.state.displayMode === "list" && hasText) {
+            this.props.libraryView.raiseEvent("searchTextUpdated", this.state.searchText);
+        }
 
         this.setState({ searchText: text });
 
         // Update library container of current search
-        this.props.onSearchModeChanged(text.length > 0);
+        this.props.onSearchModeChanged(hasText);
     }
 
     render() {
         let listItems: JSX.Element[] = null;
-        if (this.state.searchText.length > 0) {
-            // Raise search event only when in list display mode
-            if (this.state.displayMode === "list") {
-                this.props.libraryView.raiseEvent("searchStarted", this);
-            }
 
-            if (this.searchResultListItems) {
-                // construct listItems from json
-            } else {
-                // perform search locally
-                searchItemResursive(this.props.items, this.state.searchText);
-                listItems = (this.state.displayMode === "strucutre") ?
-                    this.generateStructuredItems() : this.generateListItems();
-            }
-        } else {
-            // Reset ItemData when search text is cleared
+        if (this.state.searchText.length > 0) {
+            searchItemResursive(this.props.items, this.state.searchText);
+            listItems = (this.state.displayMode === "structure") ? this.generateStructuredItems() : this.generateListItems();
+        } else {  // Reset ItemData when search text is cleared
             setItemStateRecursive(this.props.items, true, false);
         }
 
