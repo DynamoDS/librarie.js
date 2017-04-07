@@ -44,7 +44,7 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
     generateStructuredItems(): JSX.Element[] {
         let index = 0;
         return this.props.items.map((item: ItemData) =>
-            <LibraryItem key={index++} libraryView={this.props.libraryView} data={item} indentLevel={0} />);
+            <LibraryItem key={index++} libraryView={this.props.libraryView} data={item} />);
     }
 
     generateListItems(): JSX.Element[] {
@@ -91,7 +91,7 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
 
         // Raise search event only when in list display mode
         if (this.state.displayMode === "list" && hasText) {
-            this.props.libraryView.raiseEvent("searchTextUpdated", this.state.searchText);
+            this.props.libraryView.raiseEvent("searchTextUpdated", text);
         }
 
         this.setState({ searchText: text });

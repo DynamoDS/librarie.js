@@ -9,7 +9,9 @@ import { Reactor, Event } from "./EventHandler";
 export interface LibraryViewConfig {
     htmlElementId: string,
     loadedTypesUrl: string,
-    layoutSpecsUrl: string
+    layoutSpecsUrl: string,
+    loadedTypes: JSON,
+    layoutSpecs: JSON
 }
 
 export class LibraryView {
@@ -28,7 +30,15 @@ export class LibraryView {
         this.reactor = new Reactor();
 
         this.htmlElementId = config.htmlElementId;
-        this.prefetchContents(config.loadedTypesUrl, config.layoutSpecsUrl);
+
+        if ((config.loadedTypes) && (config.layoutSpecs)) {
+            this.loadedTypesJson = config.loadedTypes;
+            this.layoutSpecsJson = config.layoutSpecs;
+            this.updateContentsInternal();
+        }
+        else {
+            this.prefetchContents(config.loadedTypesUrl, config.layoutSpecsUrl);
+        }
     }
 
     setLoadedTypesJson(loadedTypesJson: any): void {

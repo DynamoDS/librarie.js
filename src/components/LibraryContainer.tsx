@@ -45,9 +45,9 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
 
             if (!this.state.inSearchMode) {
                 let index = 0;
-                listItems = childItems.map((item: ItemData) => (<LibraryItem key={index++} libraryView={this.props.libraryView} data={item} indentLevel={0} />));
+                listItems = childItems.map((item: ItemData) => (<LibraryItem key={index++} libraryView={this.props.libraryView} data={item} />));
             }
-            
+
             return (
                 <div>
                     <div>{searchView}</div>
