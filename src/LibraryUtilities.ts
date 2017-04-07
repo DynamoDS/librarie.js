@@ -303,6 +303,7 @@ export function getHighlightedText(text: string, highlightedText: string): React
     let segments = text.split(regex);
     let replacements = text.match(regex);
     let spans: React.DOMElement<React.HTMLAttributes<HTMLSpanElement>, HTMLSpanElement>[] = [];
+    
     for (let i = 0; i < segments.length; i++) {
         spans.push(React.DOM.span({ key: spans.length }, segments[i]));
         if (i != segments.length - 1) {
