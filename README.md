@@ -103,3 +103,16 @@ libView.on("itemClicked", function(contextData) {
     console.log(contextData);
 })
 ```
+
+#### Event 'searchTextUpdated'
+
+This event is raised when user starts typing on the search bar, and the display mode of SearchView is `list`. In this event, it should call a search algorithm from some other components, and return a list of [searchItems](./docs/v0.0.1/search-items.md) in JSON format to the caller.
+
+- `searchText`: This is the value of state `searchText` in `SearchView` component, which is a string value that user has entered in the search bar.
+
+ ```js
+libView.on("searchTextUpdated", function (searchText) {
+    console.log(searchText);
+    return null;
+});
+```

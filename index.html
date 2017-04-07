@@ -33,18 +33,12 @@
 
         libView.on("itemClicked", function (item) {
             console.log(item);
-        })
+        });
 
         libView.on("searchTextUpdated", function (searchText) {
-            
-            // call search function (from web component) to return json.
-            // If json available, pass the json to search view.
-            // Otherwise pass null to search view, and search view will 
-            // run search locally
-
             console.log(searchText);
             return null;
-        })
+        });
     </script>
 
 </body>
