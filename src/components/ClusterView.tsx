@@ -24,7 +24,7 @@ import { ItemData } from "../LibraryUtilities";
 
 export interface ClusterViewProps {
     libraryView: LibraryView,
-    iconPath: string,
+    icon: any,
     borderColor: string,
     childItems: ItemData[]
 }
@@ -40,7 +40,7 @@ export class ClusterView extends React.Component<ClusterViewProps, undefined> {
         return (
             <div className={"ClusterViewContainer"}>
                 <div className={"ClusterLeftPane"} style={localStyle}>
-                    <img className={"ClusterIcon"} src={this.props.iconPath} />
+                    <img className={"ClusterIcon"} src={this.props.icon} />
                 </div>
                 <div className={"ClusterRightPane"}>
                     {this.getNestedElements()}
