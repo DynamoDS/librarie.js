@@ -198,7 +198,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         if (creationMethods.length > 0 && creationMethods.some(item => item.visible)) {
             creationCluster = (<ClusterView
                 libraryView={this.props.libraryView}
-                iconPath="src/resources/icons/library-creation.svg"
+                icon={require("../resources/icons/library-creation.svg")}
                 borderColor="#62895b" /* green */
                 childItems={creationMethods} />);
         }
@@ -207,7 +207,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         if (actionMethods.length > 0 && actionMethods.some(item => item.visible)) {
             actionCluster = (<ClusterView
                 libraryView={this.props.libraryView}
-                iconPath="src/resources/icons/library-action.svg"
+                icon={require("../resources/icons/library-action.svg")}
                 borderColor="#ad5446" /* red */
                 childItems={actionMethods} />);
         }
@@ -216,7 +216,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         if (queryMethods.length > 0 && queryMethods.some(item => item.visible)) {
             queryCluster = (<ClusterView
                 libraryView={this.props.libraryView}
-                iconPath="src/resources/icons/library-query.svg"
+                icon={require("../resources/icons/library-query.svg")}
                 borderColor="#4b9dbf" /* blue */
                 childItems={queryMethods} />);
         }
