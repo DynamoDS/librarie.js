@@ -241,10 +241,8 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         this.setState({ expanded: !currentlyExpanded });
 
         let libraryView = this.props.libraryView;
-        let clickMessage = this.props.data.contextData;
-        if(this.props.data.childItems.length > 0) {
-            clickMessage += " " + this.props.data.itemType;
+        if(this.props.data.childItems.length == 0) {
+            libraryView.raiseEvent("itemClicked", this.props.data.contextData);
         }
-        libraryView.raiseEvent("itemClicked", clickMessage);
     }
 }
