@@ -151,8 +151,9 @@ export class JsonDownloader {
         this.getDownloadedJsonObjects = this.getDownloadedJsonObjects.bind(this);
 
         // Begin download each contents.
-        for (let jsonUrl in jsonUrls) {
-            this.fetchJsonContent(jsonUrl);
+        this.callback = callback;
+        for (let key in jsonUrls) {
+            this.fetchJsonContent(jsonUrls[key]);
         }
     }
 
