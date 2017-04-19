@@ -107,6 +107,10 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
     }
 
     updateSearchView(text: string) {
+        if (this.state.displayMode === "list") {
+            this.props.libraryContainer.raiseEvent("searchTextUpdated", text);
+        }
+
         this.setState({ searchText: text });
 
         // Update library container of current search
@@ -117,7 +121,6 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
         let listItems: JSX.Element[] = null;
 
         if (this.state.searchText.length > 0) {
-            searchItemResursive(this.props.items, this.state.searchText);
             listItems = (this.state.displayMode === "structure") ? this.generateStructuredItems() : this.generateListItems();
         } else {  // Reset ItemData when search text is cleared
             setItemStateRecursive(this.props.items, true, false);
