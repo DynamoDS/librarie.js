@@ -1,10 +1,10 @@
 import * as React from "react";
 import { ItemData, getHighlightedText } from "../LibraryUtilities";
-import { LibraryView } from "../LibraryView";
+import { LibraryContainer } from "./LibraryContainer";
 
 interface SearchResultItemProps {
     data: ItemData;
-    libraryView: LibraryView;
+    libraryContainer: LibraryContainer;
     category: string;
     highlightedText: string;
 }
@@ -42,6 +42,6 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
     }
 
     onItemClicked() {
-        this.props.libraryView.raiseEvent("itemClicked", this.props.data.contextData);
+        this.props.libraryContainer.raiseEvent("itemClicked", this.props.data.contextData);
     };
 }

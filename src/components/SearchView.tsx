@@ -1,7 +1,7 @@
 import * as React from "react";
 import { LibraryItem } from "./LibraryItem";
 import { SearchResultItem } from "./SearchResultItem";
-import { LibraryView } from "../LibraryView";
+import { LibraryContainer } from "./LibraryContainer";
 import { searchItemResursive, setItemStateRecursive, ItemData } from "../LibraryUtilities";
 
 type displayMode = "structure" | "list";
@@ -12,7 +12,7 @@ interface SearchModeChangedFunc {
 
 interface SearchViewProps {
     onSearchModeChanged: SearchModeChangedFunc;
-    libraryView: LibraryView;
+    libraryContainer: LibraryContainer;
     items: ItemData[];
 }
 
@@ -44,7 +44,7 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
     generateStructuredItems(): JSX.Element[] {
         let index = 0;
         return this.props.items.map((item: ItemData) =>
-            <LibraryItem key={index++} libraryView={this.props.libraryView} data={item} />);
+            <LibraryItem key={index++} libraryContainer={this.props.libraryContainer} data={item} />);
     }
 
     generateListItems(): JSX.Element[] {
@@ -74,7 +74,7 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
             if (item.childItems.length == 0) {
                 leafItemsInCategory.push(<SearchResultItem
                     data={item}
-                    libraryView={this.props.libraryView}
+                    libraryContainer={this.props.libraryContainer}
                     category={category}
                     highlightedText={this.state.searchText} />);
             } else {
@@ -91,7 +91,7 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
 
         // Raise search event only when in list display mode
         if (this.state.displayMode === "list" && hasText) {
-            this.props.libraryView.raiseEvent("searchTextUpdated", text);
+            this.props.libraryContainer.raiseEvent("searchTextUpdated", text);
         }
 
         this.setState({ searchText: text });

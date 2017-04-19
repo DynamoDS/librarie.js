@@ -18,11 +18,11 @@
 
 import * as React from "react";
 import { ClusterView } from "./ClusterView";
-import { LibraryView } from "../LibraryView";
+import { LibraryContainer } from "./LibraryContainer";
 import { ItemData } from "../LibraryUtilities";
 
 export interface LibraryItemProps {
-    libraryView: LibraryView,
+    libraryContainer: LibraryContainer,
     data: ItemData
 }
 
@@ -122,7 +122,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
             // Show arrow for non-leaf items
             if (this.props.data.childItems.length > 0) {
                 let arrowIcon = this.state.expanded ? require("../resources/ui/indent-arrow-down.svg") : require("../resources/ui/indent-arrow-right.svg");
-                arrow = <img className={"Arrow"} src={arrowIcon} onError={this.onImageLoadFail}/>;
+                arrow = <img className={"Arrow"} src={arrowIcon} onError={this.onImageLoadFail} />;
             }
         }
 
@@ -181,7 +181,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
                     // types of items except ones of type creation/action/query.
                     // 
                     regularItems.map((item: ItemData) => {
-                        return (<LibraryItem key={index++} libraryView={this.props.libraryView} data={item} />);
+                        return (<LibraryItem key={index++} libraryContainer={this.props.libraryContainer} data={item} />);
                     })
                 }
             </div>
@@ -197,8 +197,8 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         let creationCluster = null;
         if (creationMethods.length > 0 && creationMethods.some(item => item.visible)) {
             creationCluster = (<ClusterView
-                libraryView={this.props.libraryView}
-                iconPath="src/resources/icons/library-creation.svg"
+                libraryContainer={this.props.libraryContainer}
+                icon={require("../resources/icons/library-creation.svg")}
                 borderColor="#62895b" /* green */
                 childItems={creationMethods} />);
         }
@@ -206,8 +206,8 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         let actionCluster = null;
         if (actionMethods.length > 0 && actionMethods.some(item => item.visible)) {
             actionCluster = (<ClusterView
-                libraryView={this.props.libraryView}
-                iconPath="src/resources/icons/library-action.svg"
+                libraryContainer={this.props.libraryContainer}
+                icon={require("../resources/icons/library-action.svg")}
                 borderColor="#ad5446" /* red */
                 childItems={actionMethods} />);
         }
@@ -215,8 +215,8 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         let queryCluster = null;
         if (queryMethods.length > 0 && queryMethods.some(item => item.visible)) {
             queryCluster = (<ClusterView
-                libraryView={this.props.libraryView}
-                iconPath="src/resources/icons/library-query.svg"
+                libraryContainer={this.props.libraryContainer}
+                icon={require("../resources/icons/library-query.svg")}
                 borderColor="#4b9dbf" /* blue */
                 childItems={queryMethods} />);
         }
@@ -240,7 +240,9 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         let currentlyExpanded = this.state.expanded;
         this.setState({ expanded: !currentlyExpanded });
 
-        let libraryView = this.props.libraryView;
-        libraryView.raiseEvent("itemClicked", this.props.data.contextData);
+        let libraryContainer = this.props.libraryContainer;
+        if (this.props.data.childItems.length == 0) {
+            libraryContainer.raiseEvent("itemClicked", this.props.data.contextData);
+        }
     }
 }

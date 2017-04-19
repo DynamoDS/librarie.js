@@ -1,3 +1,5 @@
+/// <reference path="../node_modules/@types/node/index.d.ts" />
+
 import * as React from "react";
 
 type MemberType = "none" | "creation" | "action" | "query";
@@ -137,6 +139,48 @@ export function constructNestedLibraryItems(
     }
 
     return rootLibraryItem;
+}
+
+export class JsonDownloader {
+
+    callback: Function = null;
+    downloadedJson: any = {};
+
+    constructor(jsonUrls: string[], callback: Function) {
+
+        this.notifyOwner = this.notifyOwner.bind(this);
+        this.fetchJsonContent = this.fetchJsonContent.bind(this);
+        this.getDownloadedJsonObjects = this.getDownloadedJsonObjects.bind(this);
+
+        // Begin download each contents.
+        this.callback = callback;
+        for (let key in jsonUrls) {
+            this.fetchJsonContent(jsonUrls[key]);
+        }
+    }
+
+    notifyOwner(jsonUrl: string, jsonObject: any) {
+        this.callback(jsonUrl, jsonObject);
+    }
+
+    fetchJsonContent(jsonUrl: string) {
+
+        let thisObject = this;
+
+        // Download the locally hosted data type json file.
+        fetch(jsonUrl)
+            .then(function (response: Response) {
+                return response.text();
+            }).then(function (jsonString) {
+                let parsedJsonObject = JSON.parse(jsonString);
+                thisObject.downloadedJson[jsonUrl] = parsedJsonObject;
+                thisObject.notifyOwner(jsonUrl, parsedJsonObject);
+            });
+    }
+
+    getDownloadedJsonObjects() {
+        return this.downloadedJson;
+    }
 }
 
 /**
@@ -303,7 +347,7 @@ export function getHighlightedText(text: string, highlightedText: string): React
     let segments = text.split(regex);
     let replacements = text.match(regex);
     let spans: React.DOMElement<React.HTMLAttributes<HTMLSpanElement>, HTMLSpanElement>[] = [];
-    
+
     for (let i = 0; i < segments.length; i++) {
         spans.push(React.DOM.span({ key: spans.length }, segments[i]));
         if (i != segments.length - 1) {
