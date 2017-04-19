@@ -9,6 +9,10 @@ export function CreateJsonDownloader(jsonUrls: string[], callback: Function) {
     return new JsonDownloader(jsonUrls, callback);
 }
 
+export function CreateLibraryController() {
+    return new LibraryController();
+}
+
 export class LibraryController {
 
     reactor: Reactor = null;
