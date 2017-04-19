@@ -29,11 +29,24 @@
             layoutSpecsUrl: "layoutSpecs"  // A url where layout specs are to be downloaded.
         };
 
-        let libView = new LibraryEntryPoint.LibraryView(configuration);
+        let jsonUrls = ["loadedTypes", "layoutSpecs"];
+        let downloader = LibraryEntryPoint.CreateJsonDownloader(jsonUrls, function (jsonUrl, jsonObject) {
 
-        libView.on("itemClicked", function(item) {
-            console.log(item);
-        })
+            let downloaded = downloader.getDownloadedJsonObjects();
+            let loadedTypesJson = downloaded["loadedTypes"];
+            let layoutSpecsJson = downloaded["layoutSpecs"];
+
+            if (!loadedTypesJson || (!layoutSpecsJson)) {
+                return; // Not fully downloaded yet, bail.
+            }
+
+            let libContainer = LibraryEntryPoint.CreateLibraryByElementId(
+                "libraryContainerPlaceholder", layoutSpecsJson, loadedTypesJson);
+
+            libContainer.on("itemClicked", function (item) {
+                console.log(item);
+            })
+        });
     </script>
 
 </body>
