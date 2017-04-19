@@ -22,7 +22,18 @@ Installing all dependencies
 ### Usage
 The following simple HTML code illustrates the way to embed library view into an existing web page. Note that this is a work-in-progress, `LibraryContainer` API set will be further simplified in the near future.
 
-`LibraryEntryPoint.CreateLibraryByElementId` method takes the following values as its arguments:
+`LibraryEntryPoint.CreateLibraryController` function is used to create a new `LibraryController`. This object is required as an entry point to the rest of the `librarie.js` system:
+
+```html
+    <script>
+        let libController = LibraryEntryPoint.CreateLibraryController();
+        let libContainer = libController.createLibraryByElementId(...);
+    </script>
+
+```
+
+
+`LibraryController.createLibraryByElementId` function takes the following values as its arguments:
 
 - `htmlElementId` - The ID of an HTML whose content is to be replaced with `LibraryContainer`.
 
@@ -55,14 +66,17 @@ The following simple HTML code illustrates the way to embed library view into an
             let loadedTypesJsonObject = getLoadedTypesJsonObject();
             let layoutSpecsJsonObject = getLayoutSpecsJsonObject();
 
-            let libContainer = LibraryEntryPoint.CreateLibraryByElementId(
+            let libController = LibraryEntryPoint.CreateLibraryController();
+
+            libController.on("itemClicked", function (item) {
+                console.log(item); // Subscribed to click event
+            })
+
+            let libContainer = libController.createLibraryByElementId(
                 "libraryContainerPlaceholder", // htmlElementId
                 loadedTypesJsonObject,
                 layoutSpecsJsonObject);
 
-            libContainer.on("itemClicked", function (item) {
-                console.log(item); // Subscribed to click event
-            })
         </script>
 
     </body>
@@ -71,11 +85,11 @@ The following simple HTML code illustrates the way to embed library view into an
 
 ### Registering event handlers
 
-`LibraryContainer` object supports several events. So subscribe to an event of interest, do the following:
+`LibraryController` object supports several events. So subscribe to an event of interest, do the following:
 
 ```js
-// 'libContainer' is an instance of 'LibraryContainer' previously constructed. 
-libContainer.on("someEventName", function(data) {
+// 'libController' is an instance of 'LibraryController' previously constructed. 
+libController.on("someEventName", function(data) {
     // Handle 'someEventName' here, the argument 'data` is event dependent.
 });
 ```
@@ -87,7 +101,7 @@ This event is raised when a library item is clicked. The registered event handle
 - `contextData`: This is the value of `contextData` passed through [Loaded Data Types](./docs/v0.0.1/loaded-data-types.md) JSON data for the corresponding item.
 
 ```js
-libView.on("itemClicked", function(contextData) {
+libController.on("itemClicked", function(contextData) {
     console.log(contextData);
 })
 ```

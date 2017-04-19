@@ -35,17 +35,20 @@
                 return; // Not fully downloaded yet, bail.
             }
 
-            let libContainer = LibraryEntryPoint.CreateLibraryByElementId(
-                "libraryContainerPlaceholder", layoutSpecsJson, loadedTypesJson);
+            let libController = LibraryEntryPoint.CreateLibraryController();
 
-            libContainer.on("itemClicked", function (item) {
+            libController.on("itemClicked", function (item) {
                 console.log(item);
             })
 
-            libContainer.on("searchTextUpdated", function (searchText) {
+            libController.on("searchTextUpdated", function (searchText) {
                 console.log(searchText);
                 return null;
             });
+
+            let libContainer = libController.createLibraryByElementId(
+                "libraryContainerPlaceholder", layoutSpecsJson, loadedTypesJson);
+
         });
     </script>
 
