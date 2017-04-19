@@ -122,7 +122,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
             // Show arrow for non-leaf items
             if (this.props.data.childItems.length > 0) {
                 let arrowIcon = this.state.expanded ? require("../resources/ui/indent-arrow-down.svg") : require("../resources/ui/indent-arrow-right.svg");
-                arrow = <img className={"Arrow"} src={arrowIcon} />;
+                arrow = <img className={"Arrow"} src={arrowIcon} onError={this.onImageLoadFail} />;
             }
         }
 
@@ -241,7 +241,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         this.setState({ expanded: !currentlyExpanded });
 
         let libraryContainer = this.props.libraryContainer;
-        if(this.props.data.childItems.length == 0) {
+        if (this.props.data.childItems.length == 0) {
             libraryContainer.raiseEvent("itemClicked", this.props.data.contextData);
         }
     }

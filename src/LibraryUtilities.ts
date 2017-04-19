@@ -1,5 +1,7 @@
 /// <reference path="../node_modules/@types/node/index.d.ts" />
 
+import * as React from "react";
+
 type MemberType = "none" | "creation" | "action" | "query";
 type ElementType = "none" | "category" | "group";
 type ItemType = "none" | "category" | "group" | "creation" | "action" | "query";
@@ -338,4 +340,20 @@ export function searchItemResursive(items: ItemData[], text: string) {
     for (let item of items) {
         search(text, item);
     }
+}
+
+export function getHighlightedText(text: string, highlightedText: string): React.DOMElement<React.HTMLAttributes<HTMLSpanElement>, HTMLSpanElement>[] {
+    let regex = new RegExp(highlightedText, 'gi');
+    let segments = text.split(regex);
+    let replacements = text.match(regex);
+    let spans: React.DOMElement<React.HTMLAttributes<HTMLSpanElement>, HTMLSpanElement>[] = [];
+
+    for (let i = 0; i < segments.length; i++) {
+        spans.push(React.DOM.span({ key: spans.length }, segments[i]));
+        if (i != segments.length - 1) {
+            spans.push(React.DOM.span({ className: "HighlightedText", key: spans.length }, replacements[i]));
+        }
+    }
+
+    return spans;
 }
