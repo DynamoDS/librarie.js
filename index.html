@@ -23,17 +23,33 @@
     <script src='./dist/v0.0.1/librarie.min.js'></script>
 
     <script>
-        let configuration = {
-            htmlElementId: "libraryContainerPlaceholder",
-            loadedTypesUrl: "loadedTypes", // A url where loaded types are to be downloaded.
-            layoutSpecsUrl: "layoutSpecs"  // A url where layout specs are to be downloaded.
-        };
+        let jsonUrls = ["loadedTypes", "layoutSpecs"];
+        let downloader = LibraryEntryPoint.CreateJsonDownloader(jsonUrls, function (jsonUrl, jsonObject) {
 
-        let libView = new LibraryEntryPoint.LibraryView(configuration);
+            let downloaded = downloader.getDownloadedJsonObjects();
+            let loadedTypesJson = downloaded["loadedTypes"];
+            let layoutSpecsJson = downloaded["layoutSpecs"];
 
-        libView.on("itemClicked", function(item) {
-            console.log(item);
-        })
+
+            if (!loadedTypesJson || (!layoutSpecsJson)) {
+                return; // Not fully downloaded yet, bail.
+            }
+
+            let libController = LibraryEntryPoint.CreateLibraryController();
+
+            libController.on("itemClicked", function (item) {
+                console.log(item);
+            })
+
+            libController.on("searchTextUpdated", function (searchText) {
+                console.log(searchText);
+                return null;
+            });
+
+            let libContainer = libController.createLibraryByElementId(
+                "libraryContainerPlaceholder", layoutSpecsJson, loadedTypesJson);
+
+        });
     </script>
 
 </body>

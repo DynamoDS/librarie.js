@@ -1,7 +1,10 @@
 import * as React from "react";
 import { LibraryItem } from "./LibraryItem";
-import { LibraryView } from "../LibraryView";
+import { SearchResultItem } from "./SearchResultItem";
+import { LibraryContainer } from "./LibraryContainer";
 import { searchItemResursive, setItemStateRecursive, ItemData } from "../LibraryUtilities";
+
+type displayMode = "structure" | "list";
 
 interface SearchModeChangedFunc {
     (inSearchMode: boolean): void;
@@ -9,27 +12,78 @@ interface SearchModeChangedFunc {
 
 interface SearchViewProps {
     onSearchModeChanged: SearchModeChangedFunc;
-    libraryView: LibraryView;
+    libraryContainer: LibraryContainer;
     items: ItemData[];
 }
 
 interface SearchViewStates {
     searchText: string;
+    displayMode: displayMode;
 }
 
 export class SearchView extends React.Component<SearchViewProps, SearchViewStates> {
     timeout: number;
 
+    searchResultListItems: any;
+
     constructor(props: SearchViewProps) {
         super(props);
 
-        this.state = { searchText: '' };
+        // set default state
+        this.state = ({
+            searchText: "",
+            displayMode: "list"
+        })
+
+        this.searchResultListItems = null;
     }
 
-    generateStructuredItems() {
+    getSearchText(): string {
+        return this.state.searchText;
+    }
+
+    generateStructuredItems(): JSX.Element[] {
         let index = 0;
         return this.props.items.map((item: ItemData) =>
-            <LibraryItem key={index++} libraryView={this.props.libraryView} data={item} />);
+            <LibraryItem key={index++} libraryContainer={this.props.libraryContainer} data={item} />);
+    }
+
+    generateListItems(): JSX.Element[] {
+        let leafItems: JSX.Element[] = [];
+
+        for (let item of this.props.items) {
+            if (!item.visible) {
+                continue;
+            }
+
+            if (item.childItems.length > 0) {
+                leafItems = leafItems.concat(this.getLeafItemsInCategory(item.text, item.childItems));
+            } else {
+                leafItems = leafItems.concat(this.getLeafItemsInCategory(item.text, [item]));
+            }
+        }
+
+        return leafItems;
+    }
+
+    getLeafItemsInCategory(category: string, items: ItemData[], leafItemsInCategory: JSX.Element[] = []): JSX.Element[] {
+        for (let item of items) {
+            if (!item.visible) {
+                continue;
+            }
+
+            if (item.childItems.length == 0) {
+                leafItemsInCategory.push(<SearchResultItem
+                    data={item}
+                    libraryContainer={this.props.libraryContainer}
+                    category={category}
+                    highlightedText={this.state.searchText} />);
+            } else {
+                this.getLeafItemsInCategory(category, item.childItems, leafItemsInCategory);
+            }
+        }
+
+        return leafItemsInCategory;
     }
 
     onTextChange(event: any) {
@@ -39,7 +93,7 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
         let hasText = text.length > 0;
 
         if (hasText) {
-            // Starting searching immediately after user typings, 
+            // Starting searching immediately after user input, 
             // but only show change on ui after 300ms
             searchItemResursive(this.props.items, text);
 
@@ -54,15 +108,18 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
 
     updateSearchView(text: string) {
         this.setState({ searchText: text });
-        this.props.onSearchModeChanged(text.length > 0);;
+
+        // Update library container of current search
+        this.props.onSearchModeChanged(text.length > 0);
     }
 
     render() {
-        let listItems: JSX.Element[] = [];
+        let listItems: JSX.Element[] = null;
+
         if (this.state.searchText.length > 0) {
-            listItems = this.generateStructuredItems();
-        } else {
-            // Reset ItemData when search text is cleared
+            searchItemResursive(this.props.items, this.state.searchText);
+            listItems = (this.state.displayMode === "structure") ? this.generateStructuredItems() : this.generateListItems();
+        } else {  // Reset ItemData when search text is cleared
             setItemStateRecursive(this.props.items, true, false);
         }
 

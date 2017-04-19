@@ -16,7 +16,7 @@ if (productionBuild) {
             minimize: true,
             sourceMap: true, 
             mangle: {
-                except: ["LibraryView", "on"]
+                except: ["on"]
             }
         })
     );
@@ -25,7 +25,7 @@ if (productionBuild) {
 module.exports = {
     entry: [
         "./src/LibraryUtilities.ts",
-        "./src/LibraryView.tsx"
+        "./src/entry-point.tsx"
     ],
     target: "node",
     output: {
@@ -65,7 +65,7 @@ module.exports = {
                 loader: ["style-loader", "css-loader"]
             },
             {
-                test: /\.ttf$/,
+                test: /\.ttf|.svg$/,
                 loader: "file-loader",
                 options: {
                     name: '/resources/[name].[ext]'
