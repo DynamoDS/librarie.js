@@ -1,6 +1,6 @@
 import * as React from "react";
 import { LibraryItem } from "./LibraryItem";
-import { LibraryView } from "../LibraryView";
+import { LibraryContainer } from "./LibraryContainer";
 import { searchItemResursive, setItemStateRecursive, ItemData } from "../LibraryUtilities";
 
 interface SearchModeChangedFunc {
@@ -9,7 +9,7 @@ interface SearchModeChangedFunc {
 
 interface SearchViewProps {
     onSearchModeChanged: SearchModeChangedFunc;
-    libraryView: LibraryView;
+    libraryContainer: LibraryContainer;
     items: ItemData[];
 }
 
@@ -31,7 +31,7 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
         let structuredItems: JSX.Element[] = [];
         let index = 0;
         return this.props.items.map((item: ItemData) =>
-            <LibraryItem key={index++} libraryView={this.props.libraryView} data={item} />);
+            <LibraryItem key={index++} libraryContainer={this.props.libraryContainer} data={item} />);
     }
 
     onTextChange(event: any) {

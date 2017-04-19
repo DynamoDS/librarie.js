@@ -18,12 +18,12 @@
 */
 
 import * as React from "react";
-import { LibraryView } from "../LibraryView";
+import { LibraryContainer } from "./LibraryContainer";
 import { LibraryItem } from "./LibraryItem";
 import { ItemData } from "../LibraryUtilities";
 
 export interface ClusterViewProps {
-    libraryView: LibraryView,
+    libraryContainer: LibraryContainer,
     icon: any,
     borderColor: string,
     childItems: ItemData[]
@@ -53,7 +53,7 @@ export class ClusterView extends React.Component<ClusterViewProps, undefined> {
 
         let index = 0;
         return this.props.childItems.map((item: ItemData) => {
-            return (<LibraryItem key={index++} libraryView={this.props.libraryView} data={item} />);
+            return (<LibraryItem key={index++} libraryContainer={this.props.libraryContainer} data={item} />);
         });
     }
 

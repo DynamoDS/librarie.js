@@ -1,3 +1,5 @@
+/// <reference path="../node_modules/@types/node/index.d.ts" />
+
 type MemberType = "none" | "creation" | "action" | "query";
 type ElementType = "none" | "category" | "group";
 type ItemType = "none" | "category" | "group" | "creation" | "action" | "query";
@@ -137,6 +139,48 @@ export function constructNestedLibraryItems(
     return rootLibraryItem;
 }
 
+export class JsonDownloader {
+
+    callback: Function = null;
+    downloadedJson: any = {};
+
+    constructor(jsonUrls: string[], callback: Function) {
+
+        this.notifyOwner = this.notifyOwner.bind(this);
+        this.fetchJsonContent = this.fetchJsonContent.bind(this);
+        this.getDownloadedJsonObjects = this.getDownloadedJsonObjects.bind(this);
+
+        // Begin download each contents.
+        this.callback = callback;
+        for (let key in jsonUrls) {
+            this.fetchJsonContent(jsonUrls[key]);
+        }
+    }
+
+    notifyOwner(jsonUrl: string, jsonObject: any) {
+        this.callback(jsonUrl, jsonObject);
+    }
+
+    fetchJsonContent(jsonUrl: string) {
+
+        let thisObject = this;
+
+        // Download the locally hosted data type json file.
+        fetch(jsonUrl)
+            .then(function (response: Response) {
+                return response.text();
+            }).then(function (jsonString) {
+                let parsedJsonObject = JSON.parse(jsonString);
+                thisObject.downloadedJson[jsonUrl] = parsedJsonObject;
+                thisObject.notifyOwner(jsonUrl, parsedJsonObject);
+            });
+    }
+
+    getDownloadedJsonObjects() {
+        return this.downloadedJson;
+    }
+}
+
 /**
  * This method merges a type node (and its immediate sub nodes) under the given
  * library item.
@@ -255,7 +299,7 @@ export function buildLibraryItemsFromLayoutSpecs(loadedTypes: any, layoutSpecs: 
 // Recursively set visible and expanded states of ItemData
 export function setItemStateRecursive(items: ItemData | ItemData[], visible: boolean, expanded: boolean) {
     items = (items instanceof Array) ? items : [items];
-    for(let item of items) {
+    for (let item of items) {
         item.visible = visible;
         item.expanded = expanded;
         setItemStateRecursive(item.childItems, visible, expanded);
