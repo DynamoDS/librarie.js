@@ -245,43 +245,32 @@ export function constructLibraryItem(
                 continue; // Not matching, skip to the next type node.
             }
 
-            // If a matching node is found, check if the parts of includePath match those
-            // of fullyQualifiedName.
             let fullyQualifiedNameParts = fullyQualifiedName.split('.');
-            if (matchedUpTo(fullyQualifiedNameParts, includeParts)) {
 
-                // Check if the includePath represents a leaf node.
-                if (includePath.length < fullyQualifiedName.length)
-                    isLeafNode = false;
+            // Check if each part in fullyQualifiedName matches those in includePath,
+            // and if fullyQualifiedName contains more parts than includePath.
+            let k = leftoverPart(fullyQualifiedNameParts, includeParts);
 
+            if (k >= 0) {
+                nodeFound = true;
                 parentNode = constructNestedLibraryItems(includeParts,
                     typeListNodes[j], inclusive, parentNode, layoutElement.include[i].iconUrl);
+            }
 
-                if (isLeafNode && parentNode && (parentNode != result)) {
-                    // If the new node created is a leaf node, append it as a child of 
-                    // the current existing node. This step is necessary for nodes that
-                    // have overloads with the same name but different parameters.
-                    result.appendChild(parentNode);
-                    nodeFound = true;
+            if (k == 0) {
+                // If fullyQualifiedName == includePath, then includePath represents a leaf node
+                result.appendChild(parentNode);
 
-                    // Reset the value of parentNode, to check through the rest of typeListNodes.
-                    parentNode = inclusive ? null : result;
-                }
+                // Reset the value of parentNode, to check through the rest of typeListNodes.
+                parentNode = inclusive ? null : result;
             }
         }
+        if (parentNode && (parentNode != result)) {
+            result.appendChild(parentNode);
+        }
 
-        // If a node that matches the includePath cannot be found
         if (!nodeFound) {
-
-            // isLeafNode is set to true if there are no nodes that can match the includePath,
-            // or if the node is a leaf node.
-            if (isLeafNode) {
-                console.warn("Matching type not found: " + includePath);
-            }
-            if (parentNode && (parentNode != result)) {
-                // Otherwise, if there is a parentNode created
-                result.appendChild(parentNode);
-            }
+            console.warn("Matching type not found: " + includePath);
         }
     }
 
@@ -294,21 +283,32 @@ export function constructLibraryItem(
     return result;
 }
 
-// E.g. Consider the following scenario with each variable value being:
-// "fullyQualifiedName" = "DSCore.Math.RandomList"
-// "includePath" = DSCore.Math.Random
-// "fullyQualifiedNameParts" = [ "DSCore", "Math", "RandomList" ]
-// "includeParts" = [ "DSCore", "Math", "Random" ]
-// Comparing fullyQualifiedName and includePath with only startsWith() will return true,
-// which is undesired since Random and RandomList are two different nodes.
-// Further checking is required to match the two strings using matchedUpTo().
-function matchedUpTo(fullyQualifiedNameParts: string[], includeParts: string[]): boolean {
-    _.each(includeParts, function (part, index) {
-        if (fullyQualifiedNameParts[index] != includeParts[index]) {
-            return false;
+/**
+ * Compare two arrays of strings and check if the strings in the first array match
+ * those in the second array.
+ * 
+ * @param {string[]} parts 
+ * The array of strings to be checked.
+ * 
+ * @param {string[]} partsToInclude 
+ * The array of strings that should be present in 'parts'.
+ * 
+ * @returns
+ * Returns 0 if the two inputs match completely.
+ * Returns how many items 'parts' has more than 'partsToInclude', provided that
+ * 'parts' contains all items in 'partsToInclude'.
+ * Returns undefined if the two inputs do not match.
+ * 
+ */
+function leftoverPart(parts: string[], partsToInclude: string[]): number | undefined {
+    let leftover = parts.length;
+    for (let i = 0; i < partsToInclude.length; i++) {
+        leftover--;
+        if (parts[i] != partsToInclude[i]) {
+            return undefined;
         }
-    })
-    return true;
+    }
+    return leftover;
 }
 
 /**
