@@ -266,6 +266,8 @@ export function constructLibraryItem(
             }
         }
         if (parentNode && (parentNode != result)) {
+            // If a new parent node was created, append it as a child of 
+            // the current resulting node.
             result.appendChild(parentNode);
         }
 
