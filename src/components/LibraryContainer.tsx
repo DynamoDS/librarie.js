@@ -48,6 +48,7 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
             let libraryListItems: JSX.Element[] = null;
             let packageView: JSX.Element = null;
             let allItems = this.generatedLibraryItems.concat(this.generatedPackageItems);
+            
             const searchView = <SearchView
                 onSearchModeChanged={this.onSearchModeChanged.bind(this)} libraryContainer={this} items={allItems} />;
 

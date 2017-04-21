@@ -308,14 +308,13 @@ export function buildPackageItemsFromLoadedTypes(loadedTypes: any): ItemData[] {
     // Converting raw data to strongly typed data.
     for (let loadedType of loadedTypes.loadedTypes) {
         let node = new TypeListNode(loadedType);
-        if (node.fullyQualifiedName.startsWith("pkg://")) {
-            node.fullyQualifiedName = node.fullyQualifiedName.substring(6);
+        let pkgPrefix = "pkg://";
+        if (node.fullyQualifiedName.startsWith(pkgPrefix)) {
+            node.fullyQualifiedName = node.fullyQualifiedName.substring(pkgPrefix.length);
             pkgTypeListNodes.push(node);
         }
     }
-
-    console.log(pkgTypeListNodes);
-
+    
     return convertToPackageTree(pkgTypeListNodes);
 }
 
