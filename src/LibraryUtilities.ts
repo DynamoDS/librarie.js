@@ -361,15 +361,76 @@ export function buildLibraryItemsFromLayoutSpecs(loadedTypes: any, layoutSpecs: 
     }
 
     let libraryTreeItems: ItemData[] = convertToLibraryTree(typeListNodes, layoutElements);
+    let unprocessedNodes: TypeListNode[] = [];
 
     // Search for the nodes that are not displayed in library view.
     _.each(typeListNodes, function (node) {
         if (!node.processed) {
             console.warn("Item filtered out from library view: " + node.contextData);
+            unprocessedNodes.push(node);
         }
     });
 
+    let miscNode = convertToMiscNodes(unprocessedNodes);
+    miscNode.text = "Miscellaneous";
+    
+    // Change the itemType of the outermost parents
+    _.each(miscNode.childItems, function(node) {
+        if (node.itemType == "group") node.itemType = "category";
+    })
+
+    libraryTreeItems.push(miscNode);
     return libraryTreeItems;
+}
+
+/**
+ * Convert an array of typeListNodes to ItemData based on their fullyQualifiedNames.
+ * 
+ * @param unprocessedNodes 
+ * The nodes to be converted into itemData 
+ * 
+ * @returns
+ * Returns a single ItemData that contains the new nodes in its childItems.
+ */
+function convertToMiscNodes(unprocessedNodes: TypeListNode[]): ItemData {
+    let miscNode = new ItemData("");
+    _.each(unprocessedNodes, function (node) {
+        buildLibraryItemsFromName(node, miscNode)
+    })
+    return miscNode;
+}
+
+function buildLibraryItemsFromName(typeListNode: TypeListNode, parentNode: ItemData) {
+    let fullyQualifiedNameParts: string[] = typeListNode.fullyQualifiedName.split('.');
+
+    // If the fullyQualifiedName represents a leaf node
+    if (fullyQualifiedNameParts.length == 1)
+    {
+        let newNode: ItemData = new ItemData(fullyQualifiedNameParts[0]);
+        newNode.contextData = typeListNode.contextData;
+        newNode.iconUrl = typeListNode.iconUrl;
+        newNode.itemType = typeListNode.memberType;
+        parentNode.appendChild(newNode);
+        return;
+    }
+    let slicedParts = fullyQualifiedNameParts.slice(1, fullyQualifiedNameParts.length);
+    typeListNode.fullyQualifiedName = slicedParts.join('.');
+
+    // Check through the parent's child items to see if a node of the same name already exists
+    for (let i = 0; i < parentNode.childItems.length; i++) {
+        if (parentNode.childItems[i].text == fullyQualifiedNameParts[0]) {
+            buildLibraryItemsFromName(typeListNode, parentNode.childItems[i]);
+            return;
+        }
+    }
+
+    // Otherwise, create a new parent node
+    let newParentNode = new ItemData(fullyQualifiedNameParts[0]);
+    newParentNode.contextData = typeListNode.contextData;
+    newParentNode.iconUrl = typeListNode.iconUrl;
+    newParentNode.itemType = "group";
+    buildLibraryItemsFromName(typeListNode, newParentNode);
+    parentNode.appendChild(newParentNode);
 }
 
 // Recursively set visible and expanded states of ItemData
