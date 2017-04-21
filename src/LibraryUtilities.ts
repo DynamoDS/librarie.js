@@ -289,13 +289,79 @@ export function buildLibraryItemsFromLayoutSpecs(loadedTypes: any, layoutSpecs: 
 
     // Converting raw data to strongly typed data.
     for (let i = 0; i < loadedTypes.loadedTypes.length; i++) {
-        typeListNodes.push(new TypeListNode(loadedTypes.loadedTypes[i]));
+        let node = new TypeListNode(loadedTypes.loadedTypes[i]);
+        if (!node.fullyQualifiedName.startsWith("pkg://")) {
+            typeListNodes.push(node);
+        }
     }
 
     for (let i = 0; i < layoutSpecs.elements.length; i++) {
         layoutElements.push(new LayoutElement(layoutSpecs.elements[i]));
     }
+
     return convertToLibraryTree(typeListNodes, layoutElements);
+}
+
+export function buildPackageItemsFromLoadedTypes(loadedTypes: any): ItemData[] {
+    let pkgTypeListNodes: TypeListNode[] = [];
+
+    // Converting raw data to strongly typed data.
+    for (let loadedType of loadedTypes.loadedTypes) {
+        let node = new TypeListNode(loadedType);
+        if (node.fullyQualifiedName.startsWith("pkg://")) {
+            node.fullyQualifiedName = node.fullyQualifiedName.substring(6);
+            pkgTypeListNodes.push(node);
+        }
+    }
+
+    console.log(pkgTypeListNodes);
+
+    return convertToPackageTree(pkgTypeListNodes);
+}
+
+export function convertToPackageTree(typeListNodes: TypeListNode[]): ItemData[] {
+    let results: ItemData[] = [];
+    
+    for (let typeListNode of typeListNodes) {
+        let fullNameParts: string[] = typeListNode.fullyQualifiedName.split(".");
+        let parentItem: any = results;
+
+        for (let i = 0; i < fullNameParts.length; i++) {
+            let name = fullNameParts[i];
+            let item = new ItemData(name);
+
+            if (i == 0 && !containsItemWithText(parentItem, name)) {
+                item.itemType = "category";
+                results.push(item);
+                parentItem = item;
+            } else if (containsItemWithText(parentItem, name)) {
+                parentItem = containsItemWithText(parentItem, name);
+            } else if (i == fullNameParts.length - 1) {
+                item.itemType = typeListNode.memberType;
+                parentItem.appendChild(item);
+            } else {
+                item.itemType = "group";
+                parentItem.appendChild(item);
+                parentItem = item;
+            }
+        }
+    }
+
+    return results;
+}
+
+export function containsItemWithText(items: ItemData | ItemData[], text: string): ItemData {
+    if (!(items instanceof Array)) {
+        items = items.childItems;
+    }
+
+    for (let item of items) {
+        if (item.text == text) {
+            return item;
+        }
+    }
+
+    return null;
 }
 
 // Recursively set visible and expanded states of ItemData

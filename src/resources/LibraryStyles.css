@@ -202,9 +202,44 @@ body {
     color: #4ac8ef;
 }
 
+.PackageView {
+    margin-top: 50px;
+}
+
+.PackageView .PackageViewHeader {
+    display: flex;
+    border-bottom: solid 1px #494949;
+}
+
+.PackageView .HeaderText {
+    color: white;
+    padding: 10px 0px;
+}
+
+.PackageView .PlusButton {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+    font-size: 25px;
+    padding: 0px 10px;
+    color: #999;
+    transition: 0.15s;
+}
+
+.PackageView .AddOnIcon {
+    height: 20px;
+    padding: 10px;
+}
+
+.PackageView .PlusButton:hover {
+    color: white;
+    cursor: pointer;
+}
+
+
 ::-webkit-input-placeholder {
-  color: #dddddd;
-  font-style: italic;
+    color: #dddddd;
+    font-style: italic;
 }
 
 ::-webkit-scrollbar {
