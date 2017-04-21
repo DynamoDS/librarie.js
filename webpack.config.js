@@ -1,3 +1,4 @@
+"use strict";
 const webpack = require('webpack');
 let productionBuild = (process.env.NODE_ENV == "production");
 let version = "v0.0.1";
@@ -32,7 +33,7 @@ module.exports = {
         filename: productionBuild ? "librarie.min.js" : "librarie.js",
         path: __dirname + "/dist/" + version + "/",
         publicPath: "./dist/" + version,
-        libraryTarget: "var",
+        libraryTarget: "umd",
         library: "LibraryEntryPoint"
     },
     plugins: plugins,
