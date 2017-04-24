@@ -314,13 +314,13 @@ export function buildPackageItemsFromLoadedTypes(loadedTypes: any): ItemData[] {
             pkgTypeListNodes.push(node);
         }
     }
-    
+
     return convertToPackageTree(pkgTypeListNodes);
 }
 
 export function convertToPackageTree(typeListNodes: TypeListNode[]): ItemData[] {
     let results: ItemData[] = [];
-    
+
     for (let typeListNode of typeListNodes) {
         let fullNameParts: string[] = typeListNode.fullyQualifiedName.split(".");
         let parentItem: any = results;
@@ -329,12 +329,12 @@ export function convertToPackageTree(typeListNodes: TypeListNode[]): ItemData[] 
             let name = fullNameParts[i];
             let item = new ItemData(name);
 
-            if (i == 0 && !containsItemWithText(parentItem, name)) {
+            if (i == 0 && !getItemWithText(parentItem, name)) {
                 item.itemType = "category";
                 results.push(item);
                 parentItem = item;
-            } else if (containsItemWithText(parentItem, name)) {
-                parentItem = containsItemWithText(parentItem, name);
+            } else if (getItemWithText(parentItem, name)) {
+                parentItem = getItemWithText(parentItem, name);
             } else if (i == fullNameParts.length - 1) {
                 item.itemType = typeListNode.memberType;
                 parentItem.appendChild(item);
@@ -349,7 +349,8 @@ export function convertToPackageTree(typeListNodes: TypeListNode[]): ItemData[] 
     return results;
 }
 
-export function containsItemWithText(items: ItemData | ItemData[], text: string): ItemData {
+// Returns the item if there is an item with the same text in items
+export function getItemWithText(items: ItemData | ItemData[], text: string): ItemData {
     if (!(items instanceof Array)) {
         items = items.childItems;
     }

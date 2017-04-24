@@ -9,7 +9,7 @@ interface SearchResultItemProps {
     highlightedText: string;
 }
 
-interface SearchResultItemStates {}
+interface SearchResultItemStates { }
 
 export class SearchResultItem extends React.Component<SearchResultItemProps, SearchResultItemStates> {
 
@@ -25,7 +25,7 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
 
         return (
             <div className={"SearchResultItemContainer"} onClick={this.onItemClicked.bind(this)}>
-                <img className={"ItemIcon"} src={iconPath} onError={this.onImageLoadFail.bind(this)}/>
+                <img className={"ItemIcon"} src={iconPath} onError={this.onImageLoadFail.bind(this)} />
                 <div className={"ItemInfo"}>
                     <div className={"ItemTitle"}>{highLightedItemText}</div>
                     <div className={"ItemDetails"}>
