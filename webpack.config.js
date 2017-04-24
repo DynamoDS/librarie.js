@@ -1,3 +1,4 @@
+"use strict";
 const webpack = require('webpack');
 let productionBuild = (process.env.NODE_ENV == "production");
 let version = "v0.0.1";
