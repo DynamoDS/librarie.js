@@ -141,48 +141,6 @@ export function constructNestedLibraryItems(
     return rootLibraryItem;
 }
 
-export class JsonDownloader {
-
-    callback: Function = null;
-    downloadedJson: any = {};
-
-    constructor(jsonUrls: string[], callback: Function) {
-
-        this.notifyOwner = this.notifyOwner.bind(this);
-        this.fetchJsonContent = this.fetchJsonContent.bind(this);
-        this.getDownloadedJsonObjects = this.getDownloadedJsonObjects.bind(this);
-
-        // Begin download each contents.
-        this.callback = callback;
-        for (let key in jsonUrls) {
-            this.fetchJsonContent(jsonUrls[key]);
-        }
-    }
-
-    notifyOwner(jsonUrl: string, jsonObject: any) {
-        this.callback(jsonUrl, jsonObject);
-    }
-
-    fetchJsonContent(jsonUrl: string) {
-
-        let thisObject = this;
-
-        // Download the locally hosted data type json file.
-        fetch(jsonUrl)
-            .then(function (response: Response) {
-                return response.text();
-            }).then(function (jsonString) {
-                let parsedJsonObject = JSON.parse(jsonString);
-                thisObject.downloadedJson[jsonUrl] = parsedJsonObject;
-                thisObject.notifyOwner(jsonUrl, parsedJsonObject);
-            });
-    }
-
-    getDownloadedJsonObjects() {
-        return this.downloadedJson;
-    }
-}
-
 /**
  * This method merges a type node (and its immediate sub nodes) under the given
  * library item.
@@ -206,14 +164,14 @@ export function constructLibraryItem(
     result.constructFromLayoutElement(layoutElement);
 
     // Traverse through the strings in 'include'
-    for (let i = 0; i < layoutElement.include.length; i++) {
+    for (let include of layoutElement.include) {
 
-        let includePath = layoutElement.include[i].path;
+        let includePath = include.path;
         let includeParts = includePath.split('.');
 
         let inclusive = true; // If not specified, inclusive by default.
-        if (layoutElement.include[i].inclusive) {
-            inclusive = layoutElement.include[i].inclusive;
+        if (include.inclusive) {
+            inclusive = include.inclusive;
         }
 
         // If inclusive, then a new root node will be created (in the first iteration 
@@ -222,15 +180,14 @@ export function constructLibraryItem(
         // 
         let parentNode = inclusive ? null : result;
 
-        for (let j = 0; j < typeListNodes.length; j++) {
+        for (let typeListNode of typeListNodes) {
 
-            let fullyQualifiedName = typeListNodes[j].fullyQualifiedName;
+            let fullyQualifiedName = typeListNode.fullyQualifiedName;
             if (!fullyQualifiedName.startsWith(includePath)) {
                 continue; // Not matching, skip to the next type node.
             }
 
-            parentNode = constructNestedLibraryItems(includeParts,
-                typeListNodes[j], inclusive, parentNode, layoutElement.include[i].iconUrl);
+            parentNode = constructNestedLibraryItems(includeParts, typeListNode, inclusive, parentNode, include.iconUrl);
         }
 
         if (parentNode && (parentNode != result)) {
@@ -241,8 +198,7 @@ export function constructLibraryItem(
     }
 
     // Construct all child library items from child layout elements.
-    for (let i = 0; i < layoutElement.childElements.length; i++) {
-        let childLayoutElement = layoutElement.childElements[i];
+    for (let childLayoutElement of layoutElement.childElements) {
         result.appendChild(constructLibraryItem(typeListNodes, childLayoutElement));
     }
 
@@ -271,14 +227,8 @@ export function constructLibraryItem(
 export function convertToLibraryTree(
     typeListNodes: TypeListNode[],
     layoutElements: LayoutElement[]): ItemData[] {
-    let results: ItemData[] = []; // Resulting tree of library items.
 
-    // Generate the resulting library item tree before merging data types.
-    for (let i = 0; i < layoutElements.length; i++) {
-
-        let layoutElement = layoutElements[i];
-        results.push(constructLibraryItem(typeListNodes, layoutElement));
-    }
+    let results = layoutElements.map(layoutElement => constructLibraryItem(typeListNodes, layoutElement));
 
     return results;
 }
@@ -288,15 +238,15 @@ export function buildLibraryItemsFromLayoutSpecs(loadedTypes: any, layoutSpecs: 
     let layoutElements: LayoutElement[] = [];
 
     // Converting raw data to strongly typed data.
-    for (let i = 0; i < loadedTypes.loadedTypes.length; i++) {
-        let node = new TypeListNode(loadedTypes.loadedTypes[i]);
+    for (let loadedType of loadedTypes.loadedTypes) {
+        let node = new TypeListNode(loadedType);
         if (!node.fullyQualifiedName.startsWith("pkg://")) {
             typeListNodes.push(node);
         }
     }
 
-    for (let i = 0; i < layoutSpecs.elements.length; i++) {
-        layoutElements.push(new LayoutElement(layoutSpecs.elements[i]));
+    for (let element of layoutSpecs.elements) {
+        layoutElements.push(new LayoutElement(element));
     }
 
     return convertToLibraryTree(typeListNodes, layoutElements);
@@ -416,4 +366,46 @@ export function getHighlightedText(text: string, highlightedText: string): React
     }
 
     return spans;
+}
+
+export class JsonDownloader {
+
+    callback: Function = null;
+    downloadedJson: any = {};
+
+    constructor(jsonUrls: string[], callback: Function) {
+
+        this.notifyOwner = this.notifyOwner.bind(this);
+        this.fetchJsonContent = this.fetchJsonContent.bind(this);
+        this.getDownloadedJsonObjects = this.getDownloadedJsonObjects.bind(this);
+
+        // Begin download each contents.
+        this.callback = callback;
+        for (let key in jsonUrls) {
+            this.fetchJsonContent(jsonUrls[key]);
+        }
+    }
+
+    notifyOwner(jsonUrl: string, jsonObject: any) {
+        this.callback(jsonUrl, jsonObject);
+    }
+
+    fetchJsonContent(jsonUrl: string) {
+
+        let thisObject = this;
+
+        // Download the locally hosted data type json file.
+        fetch(jsonUrl)
+            .then(function (response: Response) {
+                return response.text();
+            }).then(function (jsonString) {
+                let parsedJsonObject = JSON.parse(jsonString);
+                thisObject.downloadedJson[jsonUrl] = parsedJsonObject;
+                thisObject.notifyOwner(jsonUrl, parsedJsonObject);
+            });
+    }
+
+    getDownloadedJsonObjects() {
+        return this.downloadedJson;
+    }
 }
