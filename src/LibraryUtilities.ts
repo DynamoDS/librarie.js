@@ -329,12 +329,12 @@ export function convertToPackageTree(typeListNodes: TypeListNode[]): ItemData[] 
             let name = fullNameParts[i];
             let item = new ItemData(name);
 
-            if (i == 0 && !getItemWithText(parentItem, name)) {
+            if (getItemWithText(parentItem, name)) {
+                parentItem = getItemWithText(parentItem, name);
+            } else if (i == 0) {
                 item.itemType = "category";
                 results.push(item);
                 parentItem = item;
-            } else if (getItemWithText(parentItem, name)) {
-                parentItem = getItemWithText(parentItem, name);
             } else if (i == fullNameParts.length - 1) {
                 item.itemType = typeListNode.memberType;
                 parentItem.appendChild(item);
@@ -355,13 +355,7 @@ export function getItemWithText(items: ItemData | ItemData[], text: string): Ite
         items = items.childItems;
     }
 
-    for (let item of items) {
-        if (item.text == text) {
-            return item;
-        }
-    }
-
-    return null;
+    return items.find(item => item.text == text);
 }
 
 // Recursively set visible and expanded states of ItemData
