@@ -22,7 +22,7 @@ app.get("/", function (req, res) {
 });
 
 app.get("/loadedTypes", function(req, res) {
-  loadJsonFromFile("./docs/RawTypeData.json", req, res);
+  loadJsonFromFile("./docs/RawTypeData-pkg.json", req, res);
 });
 
 app.get("/layoutSpecs", function(req, res) {

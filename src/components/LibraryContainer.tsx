@@ -6,7 +6,7 @@ import * as React from "react";
 import { LibraryController } from "../entry-point";
 import { LibraryItem } from "./LibraryItem";
 import { SearchView } from "./SearchView";
-import { buildLibraryItemsFromLayoutSpecs, ItemData } from "../LibraryUtilities";
+import { buildLibraryItemsFromLayoutSpecs, buildPackageItemsFromLoadedTypes, ItemData } from "../LibraryUtilities";
 
 declare var boundContainer: any; // Object set from C# side.
 
@@ -23,6 +23,7 @@ export interface LibraryContainerStates {
 export class LibraryContainer extends React.Component<LibraryContainerProps, LibraryContainerStates> {
 
     generatedLibraryItems: any = null;
+    generatedPackageItems: any = null;
 
     constructor(props: LibraryContainerProps) {
 
@@ -30,6 +31,7 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
         this.state = { inSearchMode: false };
         this.generatedLibraryItems = buildLibraryItemsFromLayoutSpecs(
             this.props.loadedTypesJson, this.props.layoutSpecsJson);
+        this.generatedPackageItems = buildPackageItemsFromLoadedTypes(this.props.loadedTypesJson);
     }
 
     raiseEvent(name: string, params?: any | any[]) {
@@ -43,19 +45,40 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
     render() {
 
         try {
-            let listItems: JSX.Element[] = null;
-            const childItems = this.generatedLibraryItems;
-            const searchView = <SearchView onSearchModeChanged={this.onSearchModeChanged.bind(this)} libraryContainer={this} items={childItems} />;
+            let libraryListItems: JSX.Element[] = null;
+            let packageView: JSX.Element = null;
+            let allItems = this.generatedLibraryItems.concat(this.generatedPackageItems);
+            
+            const searchView = <SearchView
+                onSearchModeChanged={this.onSearchModeChanged.bind(this)} libraryContainer={this} items={allItems} />;
 
             if (!this.state.inSearchMode) {
                 let index = 0;
-                listItems = childItems.map((item: ItemData) => (<LibraryItem key={index++} libraryContainer={this} data={item} />));
+                libraryListItems = this.generatedLibraryItems.map((item: ItemData) =>
+                    (<LibraryItem key={index++} libraryContainer={this} data={item} />)
+                );
+
+                let packageListItems = this.generatedPackageItems.map((item: ItemData) =>
+                    (<LibraryItem key={index++} libraryContainer={this} data={item} />)
+                );
+
+                packageView = (
+                    <div className="PackageView">
+                        <div className="PackageViewHeader">
+                            <img className="AddOnIcon" src={require("../resources/icons/add-on.svg")} />
+                            <div className="HeaderText">Add-ons</div>
+                            <div className="PlusButton">+</div>
+                        </div>
+                        {packageListItems}
+                    </div>
+                );
             }
 
             return (
                 <div>
                     <div>{searchView}</div>
-                    <div>{listItems}</div>
+                    <div>{libraryListItems}</div>
+                    <div>{packageView}</div>
                 </div>
             );
         } catch (exception) {
