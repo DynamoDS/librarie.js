@@ -1,12 +1,12 @@
 # librarie.js
 Reusable lightweight library component based on React.js
 
-### Set up
+## Set up
 Installing all dependencies
 
     $ npm install
 
-### Build and run librarie.js
+## Build and run librarie.js
 - Build source scripts
 
     `$ npm run build`
@@ -19,19 +19,26 @@ Installing all dependencies
 
 - Navigate to `localhost:3456` in Google Chrome browser
 
-### Usage
-The following simple HTML code illustrates the way to embed library view into an existing web page. Note that this is a work-in-progress, `LibraryContainer` API set will be further simplified in the near future.
-
-`LibraryEntryPoint.CreateLibraryController` function is used to create a new `LibraryController`. This object is required as an entry point to the rest of the `librarie.js` system:
+## Usage
+There are few ways in which library view (i.e. `LibraryContainer` object) can be constructed. Regardless of which method is used, the caller should first call `LibraryEntryPoint.CreateLibraryController` method to create `LibraryController` before obtaining an instance of `LibraryContainer` object.
 
 ```html
     <script>
         let libController = LibraryEntryPoint.CreateLibraryController();
-        let libContainer = libController.createLibraryByElementId(...);
     </script>
-
 ```
 
+### Method 1
+Constructing library view given the ID of an existing HTML element:
+
+```html
+    <div id="libraryContainerPlaceholder"></div>
+    <script>
+        let libController = LibraryEntryPoint.CreateLibraryController();
+        let libContainer = libController.createLibraryByElementId("libraryContainerPlaceholder",
+            loadedTypesJsonObject, layoutSpecsJsonObject);
+    </script>
+```
 
 `LibraryController.createLibraryByElementId` function takes the following values as its arguments:
 
@@ -40,6 +47,23 @@ The following simple HTML code illustrates the way to embed library view into an
 - `loadedTypesJsonObject` - The JSON object to be used by library view as Loaded Data Types. This argument is mandatory.
 
 - `layoutSpecsJsonObject` - The JSON object to be used by library view as Layout Specification. This argument is mandatory.
+
+### Method 2
+Constructing a library view for consumption by other React.js components (e.g. hosting the library within a React.js tab control). This method creates a valid `JSX.Element` object so that it can be directly embedded under another React.js element. For details of `loadedTypesJsonObject` and `layoutSpecsJsonObject`, please refer to the above section.
+
+```html
+    <script>
+        let libController = LibraryEntryPoint.CreateLibraryController();
+        let libContainer = libController.createLibraryContainer(,
+            loadedTypesJsonObject, layoutSpecsJsonObject);
+
+        let aReactJsTabContainer = ...;
+        aReactJsTabContainer.addTabPage(libContainer);
+    </script>
+```
+
+## Sample usage of librarie.js
+The following simple HTML code illustrates the way to embed library view into an existing web page.
 
 ```html
 <!DOCTYPE html>
@@ -83,7 +107,7 @@ The following simple HTML code illustrates the way to embed library view into an
 </html>
 ```
 
-### Registering event handlers
+## Registering event handlers
 
 `LibraryController` object supports several events. So subscribe to an event of interest, do the following:
 
@@ -94,7 +118,7 @@ libController.on("someEventName", function(data) {
 });
 ```
 
-#### Event 'itemClicked'
+### Event 'itemClicked'
 
 This event is raised when a library item is clicked. The registered event handler will be called with the following argument:
 
@@ -106,7 +130,7 @@ libController.on("itemClicked", function(contextData) {
 })
 ```
 
-#### Event 'searchTextUpdated'
+### Event 'searchTextUpdated'
 
 This event is raised when user starts typing on the search bar, and the display mode of SearchView is `list`. In this event, it should call a search algorithm from some other components, and return a list of [Search Result Items](./docs/v0.0.1/search-items.md) in JSON format to the caller.
 

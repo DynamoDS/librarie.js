@@ -22,6 +22,7 @@ interface SearchViewStates {
 }
 
 export class SearchView extends React.Component<SearchViewProps, SearchViewStates> {
+    timeout: number;
 
     searchResultListItems: any;
 
@@ -86,25 +87,40 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
     }
 
     onTextChange(event: any) {
+        clearTimeout(this.timeout);
+
         let text = event.target.value.trim().toLowerCase();
         let hasText = text.length > 0;
 
-        // Raise search event only when in list display mode
-        if (this.state.displayMode === "list" && hasText) {
+        if (hasText) {
+            // Starting searching immediately after user input, 
+            // but only show change on ui after 300ms
+            searchItemResursive(this.props.items, text);
+
+            this.timeout = setTimeout(function () {
+                this.updateSearchView(text);
+            }.bind(this), 300);
+        } else {
+            // Show change on ui immediately if search text is cleared
+            this.updateSearchView(text);
+        }
+    }
+
+    updateSearchView(text: string) {
+        if (this.state.displayMode === "list") {
             this.props.libraryContainer.raiseEvent("searchTextUpdated", text);
         }
 
         this.setState({ searchText: text });
 
         // Update library container of current search
-        this.props.onSearchModeChanged(hasText);
+        this.props.onSearchModeChanged(text.length > 0);
     }
 
     render() {
         let listItems: JSX.Element[] = null;
 
         if (this.state.searchText.length > 0) {
-            searchItemResursive(this.props.items, this.state.searchText);
             listItems = (this.state.displayMode === "structure") ? this.generateStructuredItems() : this.generateListItems();
         } else {  // Reset ItemData when search text is cleared
             setItemStateRecursive(this.props.items, true, false);
