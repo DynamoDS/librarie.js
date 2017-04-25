@@ -6,12 +6,15 @@ type MemberType = "none" | "creation" | "action" | "query";
 type ElementType = "none" | "category" | "group";
 type ItemType = "none" | "category" | "group" | "creation" | "action" | "query";
 
+import * as _ from 'underscore';
+
 export class TypeListNode {
 
     fullyQualifiedName: string = "";
     iconUrl: string = "";
     contextData: string = "";
     memberType: MemberType = "none";
+    processed: boolean = false;
 
     constructor(data: any) {
         this.fullyQualifiedName = data.fullyQualifiedName;
@@ -115,13 +118,25 @@ export function constructNestedLibraryItems(
     for (let i = startIndex; i < fullNameParts.length; i++) {
         let libraryItem = new ItemData(fullNameParts[i]);
         libraryItem.itemType = "none";
-        libraryItem.iconUrl = iconUrl;
+
+        if (iconUrl) {
+            libraryItem.iconUrl = iconUrl;
+        } else {
+            // If 'i' is now '2' (i.e. it points to 'C'), then we will construct 
+            // the iconName as 'A.B.C'. And since the second parameter of 'slice' 
+            // is exclusive, we add '1' to it otherwise 'C' won't be included.
+            //  
+            libraryItem.iconUrl = fullNameParts.slice(0, i + 1).join(".");
+        }
 
         // If this is the leaf most level, copy all item information over.
         if (i == fullNameParts.length - 1) {
             libraryItem.contextData = typeListNode.contextData;
             libraryItem.iconUrl = typeListNode.iconUrl;
             libraryItem.itemType = typeListNode.memberType;
+
+            // Mark the typeListNode as processed.
+            typeListNode.processed = true;
         }
 
         if (parentItem) {
@@ -221,22 +236,43 @@ export function constructLibraryItem(
         // current 'result' as the parent node for child nodes to be appended.
         // 
         let parentNode = inclusive ? null : result;
+        let nodeFound: boolean = false;
+        let isLeafNode: boolean = true;
 
         for (let j = 0; j < typeListNodes.length; j++) {
-
             let fullyQualifiedName = typeListNodes[j].fullyQualifiedName;
             if (!fullyQualifiedName.startsWith(includePath)) {
                 continue; // Not matching, skip to the next type node.
             }
 
-            parentNode = constructNestedLibraryItems(includeParts,
-                typeListNodes[j], inclusive, parentNode, layoutElement.include[i].iconUrl);
-        }
+            let fullyQualifiedNameParts = fullyQualifiedName.split('.');
 
+            // Check if each part in fullyQualifiedName matches those in includePath,
+            // and if fullyQualifiedName contains more parts than includePath.
+            let k = leftoverPart(fullyQualifiedNameParts, includeParts);
+
+            if (k >= 0) {
+                nodeFound = true;
+                parentNode = constructNestedLibraryItems(includeParts,
+                    typeListNodes[j], inclusive, parentNode, layoutElement.include[i].iconUrl);
+            }
+
+            if (k == 0) {
+                // If fullyQualifiedName == includePath, then includePath represents a leaf node
+                result.appendChild(parentNode);
+
+                // Reset the value of parentNode, to check through the rest of typeListNodes.
+                parentNode = inclusive ? null : result;
+            }
+        }
         if (parentNode && (parentNode != result)) {
             // If a new parent node was created, append it as a child of 
             // the current resulting node.
             result.appendChild(parentNode);
+        }
+
+        if (!nodeFound) {
+            console.warn("Matching type not found: " + includePath);
         }
     }
 
@@ -247,6 +283,34 @@ export function constructLibraryItem(
     }
 
     return result;
+}
+
+/**
+ * Compare two arrays of strings and check if the strings in the first array match
+ * those in the second array.
+ * 
+ * @param {string[]} parts 
+ * The array of strings to be checked.
+ * 
+ * @param {string[]} partsToInclude 
+ * The array of strings that should be present in 'parts'.
+ * 
+ * @returns
+ * Returns 0 if the two inputs match completely.
+ * Returns how many items 'parts' has more than 'partsToInclude', provided that
+ * 'parts' contains all items in 'partsToInclude'.
+ * Returns undefined if the two inputs do not match.
+ * 
+ */
+function leftoverPart(parts: string[], partsToInclude: string[]): number | undefined {
+    let leftover = parts.length;
+    for (let i = 0; i < partsToInclude.length; i++) {
+        leftover--;
+        if (parts[i] != partsToInclude[i]) {
+            return undefined;
+        }
+    }
+    return leftover;
 }
 
 /**
@@ -295,7 +359,17 @@ export function buildLibraryItemsFromLayoutSpecs(loadedTypes: any, layoutSpecs: 
     for (let i = 0; i < layoutSpecs.elements.length; i++) {
         layoutElements.push(new LayoutElement(layoutSpecs.elements[i]));
     }
-    return convertToLibraryTree(typeListNodes, layoutElements);
+
+    let libraryTreeItems: ItemData[] = convertToLibraryTree(typeListNodes, layoutElements);
+
+    // Search for the nodes that are not displayed in library view.
+    _.each(typeListNodes, function (node) {
+        if (!node.processed) {
+            console.warn("Item filtered out from library view: " + node.contextData);
+        }
+    });
+
+    return libraryTreeItems;
 }
 
 // Recursively set visible and expanded states of ItemData
