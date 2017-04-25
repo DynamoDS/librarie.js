@@ -423,6 +423,66 @@ describe('constructLibraryItem function', function () {
     expect(cNode.childItems[1].text).to.equal('e');
   })
 
+    /*
+    The following test creates a nested layoutElement:
+    {
+      ... //  parent item 1
+      "include": []
+      "childItems": [
+        {
+          ... // parent item 2
+          "include": [ 
+            { "path": "a.b.c", "inclusive": false } 
+            ],
+          "childItems": []
+        }
+      ]
+    }
+
+    And two typeListNodes:
+    {
+      {
+        "fullyQualifiedName": "a.b.c.d"
+      },
+      {
+        "fullyQualifiedName": "a.b.c.e"
+      }
+    }
+
+    The result should have the following structure:
+    - parent item 1 (result)
+      |- parent item 2
+           |- d
+           |- e
+  */
+  it('should not construct items that are not inclusive', function () {
+    let layoutElement = new LibraryUtilities.LayoutElement(new testClasses.LayoutElementData());
+    layoutElement.include = [];
+
+    let childLayoutElement = new LibraryUtilities.LayoutElement(new testClasses.LayoutElementData());
+    childLayoutElement.include = [];
+    includeInfo1 = { path: 'a.b.c', inclusive: false };
+    childLayoutElement.include.push(includeInfo1);
+    layoutElement.childElements.push(childLayoutElement);
+
+    let typeListNode1 = new LibraryUtilities.TypeListNode(new testClasses.TypeListNodeData());
+    typeListNode1.fullyQualifiedName = 'a.b.c.d';
+    typeListNodes.push(typeListNode1);
+
+    let typeListNode2 = new LibraryUtilities.TypeListNode(new testClasses.TypeListNodeData());
+    typeListNode2.fullyQualifiedName = 'a.b.c.e';
+    typeListNodes.push(typeListNode2);
+
+    result = LibraryUtilities.constructLibraryItem(typeListNodes, layoutElement);
+    expect(result.childItems.length).to.equal(1);
+    expect(result.childItems[0].childItems.length).to.equal(2);
+
+    let parentNode2 = result.childItems[0];
+    expect(parentNode2.childItems.length).to.equal(2);
+    expect(parentNode2.childItems[0].text).to.equal('d');
+    expect(parentNode2.childItems[1].text).to.equal('e');
+  })
+
   /*
     The following test creates two layoutElements:
     {
@@ -488,6 +548,89 @@ describe('constructLibraryItem function', function () {
   })
 });
 
+describe('convertToItemData function', function () {
+  var typeListNodes: LibraryUtilities.TypeListNode[];
+  var result: any;
+
+  beforeEach(function () {
+    typeListNodes = [];
+  });
+  
+  /*
+    The following test creates a typeListNode:
+    {
+      {
+        "fullyQualifiedName": "a.b.c"
+      }
+    }
+
+    The result should have the following structure:
+    - a
+      |- b
+         |- c
+  */
+  it('should construct a library item with fullyQualifiedName', function () {
+    let typeListNode1 = new LibraryUtilities.TypeListNode(new testClasses.TypeListNodeData());
+    typeListNode1.fullyQualifiedName = 'a.b.c';
+    typeListNodes.push(typeListNode1);
+
+    result = LibraryUtilities.convertToItemData(typeListNodes);
+    let aNode = result.childItems[0];
+    expect(aNode.text).to.equal('a');
+    expect(aNode.childItems.length).to.equal(1);
+    expect(aNode.childItems[0].text).to.equal('b');
+    expect(aNode.childItems[0].childItems.length).to.equal(1);
+    expect(aNode.childItems[0].childItems[0].text).to.equal('c');
+    expect(aNode.childItems[0].childItems[0].childItems.length).to.equal(0);
+  });
+  
+  /*
+    The following test creates typeListNodes:
+    {
+      {
+        "fullyQualifiedName": "a.b.c"
+      },
+      {
+        "fullyQualifiedName": "a.b.d"
+      },
+      {
+        "fullyQualifiedName": "a.e"
+      }
+    }
+
+    The result should have the following structure:
+    - a
+      |- b
+         |- c
+         |- d
+      |- e
+  */
+  it('should construct correctly nested library items with fullyQualifiedName', function () {
+    let typeListNode1 = new LibraryUtilities.TypeListNode(new testClasses.TypeListNodeData());
+    typeListNode1.fullyQualifiedName = 'a.b.c';
+    typeListNodes.push(typeListNode1);
+
+    let typeListNode2 = new LibraryUtilities.TypeListNode(new testClasses.TypeListNodeData());
+    typeListNode2.fullyQualifiedName = 'a.b.d';
+    typeListNodes.push(typeListNode2);
+
+    let typeListNode3 = new LibraryUtilities.TypeListNode(new testClasses.TypeListNodeData());
+    typeListNode3.fullyQualifiedName = 'a.e';
+    typeListNodes.push(typeListNode3);
+
+    result = LibraryUtilities.convertToItemData(typeListNodes);
+    let aNode = result.childItems[0];
+    expect(aNode.text).to.equal('a');
+    expect(aNode.childItems.length).to.equal(2);
+    expect(aNode.childItems[0].text).to.equal('b');
+    expect(aNode.childItems[1].text).to.equal('e');
+    expect(aNode.childItems[0].childItems.length).to.equal(2);
+    expect(aNode.childItems[0].childItems[0].text).to.equal('c');
+    expect(aNode.childItems[0].childItems[1].text).to.equal('d');
+    expect(aNode.childItems[1].childItems.length).to.equal(0);
+  });
+});
+
 describe('ResetItemData function', function () {
   var itemArray: LibraryUtilities.ItemData[];
   let itemData1 = new LibraryUtilities.ItemData("1");
@@ -510,7 +653,7 @@ describe('ResetItemData function', function () {
     }
     return true;
   }
-
+  
   it('should work on empty array', function () {
     LibraryUtilities.resetItemData(itemArray);
     expect(isAllDefault(itemArray)).to.equal(true);
@@ -583,7 +726,7 @@ describe("ShowItemRecursive function", function () {
 
     return true;
   }
-
+  
   it('should set one ItemData', function () {
     itemData1.visible = false;
     itemData1.expanded = false;

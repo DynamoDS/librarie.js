@@ -22,8 +22,8 @@ export interface LibraryContainerStates {
 
 export class LibraryContainer extends React.Component<LibraryContainerProps, LibraryContainerStates> {
 
-    generatedLibraryItems: any = null;
-    miscItems: any = null;
+    generatedLibraryItems: ItemData[] = null;
+    miscItems: ItemData[] = null;
 
     constructor(props: LibraryContainerProps) {
 
