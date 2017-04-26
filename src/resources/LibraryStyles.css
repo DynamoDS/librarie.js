@@ -94,6 +94,20 @@ body {
     color: #a9a9a9;
 }
 
+.LibraryItemMiscHeader {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 3;
+    color: white;
+}
+
+.LibraryItemMiscText {
+    padding: 10px 0px 10px 10px;
+    font-size: 15px;
+    color: #a9a9a9;
+}
+
 .Arrow {
     padding: 10px 10px 10px 15px;
     height: 11px;

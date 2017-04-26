@@ -22,7 +22,8 @@ export interface LibraryContainerStates {
 
 export class LibraryContainer extends React.Component<LibraryContainerProps, LibraryContainerStates> {
 
-    generatedLibraryItems: any = null;
+    generatedLibraryItems: ItemData[] = null;
+    miscItems: ItemData[] = null;
 
     constructor(props: LibraryContainerProps) {
 
@@ -30,6 +31,7 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
         this.state = { inSearchMode: false };
         this.generatedLibraryItems = buildLibraryItemsFromLayoutSpecs(
             this.props.loadedTypesJson, this.props.layoutSpecsJson);
+        this.miscItems = this.generatedLibraryItems.pop().childItems; // Get the unprocessed nodes
     }
 
     raiseEvent(name: string, params?: any | any[]) {
@@ -44,18 +46,30 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
 
         try {
             let listItems: JSX.Element[] = null;
+            let miscListItems: JSX.Element[] = null;
             const childItems = this.generatedLibraryItems;
-            const searchView = <SearchView onSearchModeChanged={this.onSearchModeChanged.bind(this)} libraryContainer={this} items={childItems} />;
+            const miscItems = this.miscItems;
+            const searchView = <SearchView onSearchModeChanged={this.onSearchModeChanged.bind(this)} libraryContainer={this} items={childItems.concat(miscItems)} />;
+
+            let miscHeader = null;
 
             if (!this.state.inSearchMode) {
                 let index = 0;
                 listItems = childItems.map((item: ItemData) => (<LibraryItem key={index++} libraryContainer={this} data={item} />));
+                miscListItems = miscItems.map((item: ItemData) => (<LibraryItem key={index++} libraryContainer={this} data={item} />));
+                if (miscListItems.length > 0) {
+                    miscHeader =
+                        <div className="LibraryItemMiscHeader">
+                            <div className="LibraryItemMiscText">Miscellaneous</div>
+                        </div>;
+                }
             }
 
             return (
                 <div>
                     <div>{searchView}</div>
                     <div>{listItems}</div>
+                    <div>{miscHeader}{miscListItems}</div>
                 </div>
             );
         } catch (exception) {
