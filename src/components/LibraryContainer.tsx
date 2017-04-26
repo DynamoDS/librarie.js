@@ -22,16 +22,14 @@ export interface LibraryContainerStates {
 
 export class LibraryContainer extends React.Component<LibraryContainerProps, LibraryContainerStates> {
 
-    generatedLibraryItems: ItemData[] = null;
-    miscItems: ItemData[] = null;
+    generatedSections: ItemData[] = null;
 
     constructor(props: LibraryContainerProps) {
 
         super(props);
         this.state = { inSearchMode: false };
-        this.generatedLibraryItems = buildLibraryItemsFromLayoutSpecs(
-            this.props.loadedTypesJson, this.props.layoutSpecsJson);
-        this.miscItems = this.generatedLibraryItems.pop().childItems; // Get the unprocessed nodes
+
+        this.generatedSections = buildLibraryItemsFromLayoutSpecs(this.props.loadedTypesJson, this.props.layoutSpecsJson);
     }
 
     raiseEvent(name: string, params?: any | any[]) {
@@ -45,31 +43,25 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
     render() {
 
         try {
-            let listItems: JSX.Element[] = null;
-            let miscListItems: JSX.Element[] = null;
-            const childItems = this.generatedLibraryItems;
-            const miscItems = this.miscItems;
-            const searchView = <SearchView onSearchModeChanged={this.onSearchModeChanged.bind(this)} libraryContainer={this} items={childItems.concat(miscItems)} />;
+            let sectionView: JSX.Element[] = null;
+            let searchItems: ItemData[] = [];
 
-            let miscHeader = null;
+            for(let section of this.generatedSections) {
+                searchItems = searchItems.concat(section.childItems);
+            }
+
+            const searchView = <SearchView onSearchModeChanged={this.onSearchModeChanged.bind(this)}
+                libraryContainer={this} items={searchItems} />;
 
             if (!this.state.inSearchMode) {
                 let index = 0;
-                listItems = childItems.map((item: ItemData) => (<LibraryItem key={index++} libraryContainer={this} data={item} />));
-                miscListItems = miscItems.map((item: ItemData) => (<LibraryItem key={index++} libraryContainer={this} data={item} />));
-                if (miscListItems.length > 0) {
-                    miscHeader =
-                        <div className="LibraryItemMiscHeader">
-                            <div className="LibraryItemMiscText">Miscellaneous</div>
-                        </div>;
-                }
+                sectionView = this.generatedSections.map(data => <LibraryItem key={index++} libraryContainer={this} data={data} />)
             }
 
             return (
                 <div>
                     <div>{searchView}</div>
-                    <div>{listItems}</div>
-                    <div>{miscHeader}{miscListItems}</div>
+                    <div>{sectionView}</div>
                 </div>
             );
         } catch (exception) {

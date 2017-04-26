@@ -1,4 +1,30 @@
 {
+  "sections": [
+    {
+      "text": "default",
+      "iconUrl": "",
+      "elementType": "section",
+      "hideSectionHeader": true,
+      "include": [],
+      "childElements": []
+    },
+    {
+      "text": "Miscellaneous",
+      "iconUrl": "",
+      "elementType": "section",
+      "hideSectionHeader": false,
+      "include": [],
+      "childElements": []
+    },
+    {
+      "text": "Add on",
+      "iconUrl": "/src/resources/ui/add-on.svg",
+      "elementType": "section",
+      "hideSectionHeader": false,
+      "include": [],
+      "childElements": []
+    }
+  ],
   "elements": [
     {
       "text": "List",

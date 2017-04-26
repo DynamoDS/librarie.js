@@ -10,6 +10,14 @@ body {
     cursor: default;
 }
 
+.LibraryItemContainerSection {
+    display: flex;
+    flex-direction: column;
+    background: #353535;
+    border-bottom: solid 1px #494949;
+    margin-bottom: 40px;
+}
+
 .LibraryItemContainerCategory {
     display: flex;
     flex-direction: column;
@@ -30,6 +38,13 @@ body {
     overflow-x: hidden;
 }
 
+.LibrarySectionHeader {
+    display: flex;
+    padding: 10px;
+    color: white;
+    transition: 0.15s;
+}
+
 .LibraryItemHeader {
     display: flex;
     flex-direction: row;
@@ -39,7 +54,7 @@ body {
     transition: 0.15s;
 }
 
-.LibraryItemHeader:hover {
+.LibraryItemHeader:hover, .LibrarySectionHeader:hover {
     color: white;
     background: rgba(255, 255, 255, 0.1);
 }
@@ -59,6 +74,13 @@ body {
     flex-direction: row;
     align-items: center;
     background: #414141;
+}
+
+.LibraryItemContainerSection .LibraryItemIcon {
+    width: 20px;
+    height: 20px;
+    padding-right: 10px;
+    -webkit-user-drag: none;
 }
 
 .LibraryItemContainerCategory .LibraryItemIcon {

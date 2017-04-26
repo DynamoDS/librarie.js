@@ -3,8 +3,8 @@
 import * as React from "react";
 
 type MemberType = "none" | "creation" | "action" | "query";
-type ElementType = "none" | "category" | "group";
-type ItemType = "none" | "category" | "group" | "creation" | "action" | "query";
+type ElementType = "none" | "section" | "category" | "group";
+type ItemType = "none" | "section" | "category" | "group" | "creation" | "action" | "query";
 
 import * as _ from 'underscore';
 
@@ -34,6 +34,7 @@ export class LayoutElement {
 
     text: string = "";
     iconUrl: string = "";
+    hideSectionHeader: boolean = false;
     elementType: ElementType = "none";
     include: IncludeInfo[] = [];
     childElements: LayoutElement[] = [];
@@ -43,12 +44,18 @@ export class LayoutElement {
         this.iconUrl = data.iconUrl;
         this.elementType = data.elementType;
         this.include = data.include;
+
         if (data.childElements) {
             for (let i = 0; i < data.childElements.length; i++) {
                 this.childElements.push(new LayoutElement(data.childElements[i]));
             }
         }
+
+        if (data.hideSectionHeader) {
+            this.hideSectionHeader = data.hideSectionHeader;
+        }
     }
+
     appendChild(childElement: LayoutElement) {
         this.childElements.push(childElement);
     }
@@ -61,6 +68,7 @@ export class ItemData {
     itemType: ItemType = "none";
     visible: boolean = true;
     expanded: boolean = false;
+    hideSectionHeader: boolean = false;
     searchStrings: string[] = [];
     childItems: ItemData[] = [];
 
@@ -74,6 +82,7 @@ export class ItemData {
         this.contextData = layoutElement.text;
         this.iconUrl = layoutElement.iconUrl;
         this.itemType = layoutElement.elementType;
+        this.hideSectionHeader = layoutElement.hideSectionHeader;
     }
 
     appendChild(childItem: ItemData) {
@@ -336,22 +345,25 @@ function compareParts(parts: string[], partsToInclude: string[]): number {
  */
 export function convertToLibraryTree(
     typeListNodes: TypeListNode[],
-    layoutElements: LayoutElement[]): ItemData[] {
-    let results: ItemData[] = []; // Resulting tree of library items.
+    layoutElements: LayoutElement[],
+    section: LayoutElement): ItemData {
+
+    let defaultSection = new ItemData(section.text)
+    defaultSection.constructFromLayoutElement(section);
 
     // Generate the resulting library item tree before merging data types.
     for (let i = 0; i < layoutElements.length; i++) {
-
         let layoutElement = layoutElements[i];
-        results.push(constructLibraryItem(typeListNodes, layoutElement));
+        defaultSection.appendChild(constructLibraryItem(typeListNodes, layoutElement));
     }
 
-    return results;
+    return defaultSection;
 }
 
 export function buildLibraryItemsFromLayoutSpecs(loadedTypes: any, layoutSpecs: any): ItemData[] {
     let typeListNodes: TypeListNode[] = [];
     let layoutElements: LayoutElement[] = [];
+    let sections: LayoutElement[] = [];
 
     // Converting raw data to strongly typed data.
     for (let i = 0; i < loadedTypes.loadedTypes.length; i++) {
@@ -362,31 +374,28 @@ export function buildLibraryItemsFromLayoutSpecs(loadedTypes: any, layoutSpecs: 
         layoutElements.push(new LayoutElement(layoutSpecs.elements[i]));
     }
 
-    let libraryTreeItems: ItemData[] = convertToLibraryTree(typeListNodes, layoutElements);
-    let unprocessedNodes: TypeListNode[] = [];
+    for (let section of layoutSpecs.sections) {
+        sections.push(new LayoutElement(section));
+    }
 
-    // Search for the nodes that are not displayed in library view.
-    _.each(typeListNodes, function (node) {
-        if (!node.processed) {
-            console.warn("Item filtered out from library view: " + node.contextData);
-            unprocessedNodes.push(node);
-        }
-    });
+    let results: ItemData[] = [];
+    let defaultSection: ItemData = convertToLibraryTree(typeListNodes, layoutElements, sections.shift());
+    let miscSection = convertToItemData(typeListNodes, sections.shift());
 
-    let miscNode = convertToItemData(unprocessedNodes);
-    miscNode.text = "Miscellaneous";
+    results.push(defaultSection);
+    results.push(miscSection);
 
-    // Change the itemType of the outermost parents
-    _.each(miscNode.childItems, function (node) {
-        if (node.itemType == "group") node.itemType = "category";
+    sections.forEach(section => {
+        let sectionData = new ItemData(section.text);
+        sectionData.constructFromLayoutElement(section);
+        results.push(sectionData);
     })
 
-    libraryTreeItems.push(miscNode);
-    return libraryTreeItems;
+    return results;
 }
 
 /**
- * Convert an array of typeListNodes to ItemData based on their fullyQualifiedNames, by
+ * Convert an array of typeListNodes to ItemData which are not processed based on their fullyQualifiedNames, by
  * splitting the name with '.'.
  * 
  * As an example, for two typeListNodes 'A.B.C' and 'A.B.D', the resulting nodes are:
@@ -395,18 +404,36 @@ export function buildLibraryItemsFromLayoutSpecs(loadedTypes: any, layoutSpecs: 
  *      |- C
  *      |- D
  * 
- * @param unprocessedNodes 
- * The nodes to be converted into itemData 
+ * @param allNodes 
+ * All the typeListNodes
  * 
  * @returns
  * Returns a single ItemData that contains the new nodes in its childItems.
  */
-export function convertToItemData(unprocessedNodes: TypeListNode[]): ItemData {
-    let miscNode = new ItemData("");
+export function convertToItemData(allNodes: TypeListNode[], section: LayoutElement): ItemData {
+    let miscSection = new ItemData(section.text);
+    miscSection.constructFromLayoutElement(section);
+
+    // Search for the nodes that are not displayed in library view.
+    let unprocessedNodes: TypeListNode[] = [];
+
+    _.each(allNodes, function (node) {
+        if (!node.processed) {
+            console.warn("Item filtered out from library view: " + node.contextData);
+            unprocessedNodes.push(node);
+        }
+    });
+
     _.each(unprocessedNodes, function (node) {
-        buildLibraryItemsFromName(node, miscNode)
+        buildLibraryItemsFromName(node, miscSection)
     })
-    return miscNode;
+
+    // Change the itemType of the outermost parents
+    _.each(miscSection.childItems, function (node) {
+        if (node.itemType === "group") node.itemType = "category";
+    })
+
+    return miscSection;
 }
 
 function buildLibraryItemsFromName(typeListNode: TypeListNode, parentNode: ItemData) {
@@ -417,7 +444,7 @@ function buildLibraryItemsFromName(typeListNode: TypeListNode, parentNode: ItemD
     //       fullyQualifiedNameParts  = [ A, B, C, D ];
     // At each recursive call, the fullyQualifiedName is sliced to exclude its first 
     // part, and the sliced name is reassigned to fullyQualifiedName.
-    
+
     // Check if the fullyQualifiedName represents a leaf node
     // (i.e. the name has been reduced to 'D')
     if (fullyQualifiedNameParts.length == 1) {

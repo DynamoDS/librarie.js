@@ -63,7 +63,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
 
         // Assign initial state
         this.state = {
-            expanded: this.props.data.expanded
+            expanded: this.props.data.itemType === "section" ? true : this.props.data.expanded
         };
     }
 
@@ -108,11 +108,12 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         }
 
 
-        let arrow = null;
-        let bodyIndentation = null;
+        let arrow: JSX.Element = null;
+        let bodyIndentation: JSX.Element = null;
+        let header: JSX.Element = null;
 
-        // Indentation and arrow are only added for non-category items
-        if (this.props.data.itemType !== "category") {
+        // Indentation and arrow are only added for non-category and non-section items
+        if (this.props.data.itemType !== "category" && this.props.data.itemType !== "section") {
 
             // Indent one level for clustered and nested elements
             if (clusteredElements || nestedElements) {
@@ -126,14 +127,20 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
             }
         }
 
-        return (
-            <div className={this.getLibraryItemContainerStyle()}>
-                <div className={"LibraryItemHeader"} onClick={this.onLibraryItemClicked.bind(this)} 
-                        onMouseOver={this.onLibraryItemHoveredOn.bind(this)} onMouseLeave={this.onLibraryItemMouseLeave.bind(this)}>
+        if (!this.props.data.hideSectionHeader) {
+            header = (
+                <div className={this.getLibraryItemHeaderStyle()} onClick={this.onLibraryItemClicked.bind(this)}
+                    onMouseOver={this.onLibraryItemHoveredOn.bind(this)} onMouseLeave={this.onLibraryItemMouseLeave.bind(this)}>
                     {arrow}
                     {iconElement}
                     <div className={libraryItemTextStyle}>{this.props.data.text}</div>
                 </div>
+            );
+        }
+
+        return (
+            <div className={this.getLibraryItemContainerStyle()}>
+                {header}
                 <div className={"LibraryItemBodyContainer"}>
                     {bodyIndentation}
                     <div className={"LibraryItemBodyElements"}>
@@ -151,12 +158,12 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
 
     getLibraryItemContainerStyle(): string {
         switch (this.props.data.itemType) {
+            case "section":
+                return "LibraryItemContainerSection";
             case "category":
                 return "LibraryItemContainerCategory";
-
             case "group":
                 return "LibraryItemContainerGroup";
-
             case "none":
             case "creation":
             case "action":
@@ -165,6 +172,15 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         }
 
         return "LibraryItemContainerNone";
+    }
+
+    getLibraryItemHeaderStyle(): string {
+        switch (this.props.data.itemType) {
+            case "section":
+                return "LibrarySectionHeader";
+            default:
+                return "LibraryItemHeader";
+        }
     }
 
     getNestedElements(groupedItems: GroupedItems): JSX.Element {
@@ -180,7 +196,6 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
                 {
                     // 'getNestedElements' method is meant to render all other 
                     // types of items except ones of type creation/action/query.
-                    // 
                     regularItems.map((item: ItemData) => {
                         return (<LibraryItem key={index++} libraryContainer={this.props.libraryContainer} data={item} />);
                     })
@@ -236,14 +251,13 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
     }
 
     onLibraryItemClicked() {
-
         // Toggle expansion state.
         let currentlyExpanded = this.state.expanded;
         this.setState({ expanded: !currentlyExpanded });
 
         let libraryContainer = this.props.libraryContainer;
         if (this.props.data.childItems.length == 0) {
-            libraryContainer.raiseEvent(libraryContainer.props.libraryController.ItemClickedEventName, 
+            libraryContainer.raiseEvent(libraryContainer.props.libraryController.ItemClickedEventName,
                 this.props.data.contextData);
         }
     }
