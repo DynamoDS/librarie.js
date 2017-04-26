@@ -243,21 +243,23 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
 
         let libraryContainer = this.props.libraryContainer;
         if (this.props.data.childItems.length == 0) {
-            libraryContainer.raiseEvent("itemClicked", this.props.data.contextData);
+            libraryContainer.raiseEvent(libraryContainer.props.libraryController.ItemClickedEventName, 
+                this.props.data.contextData);
         }
     }
 
     onLibraryItemHoveredOn() {
         let libraryContainer = this.props.libraryContainer;
         if (this.props.data.childItems.length == 0) {
-            libraryContainer.raiseEvent("itemHoveredOn", this.props.data.contextData);
+            libraryContainer.raiseEvent(libraryContainer.props.libraryController.ItemHoveredOnEventName,
+                this.props.data.contextData);
         }
     }
 
     onLibraryItemMouseLeave() {
         let libraryContainer = this.props.libraryContainer;
         if (this.props.data.childItems.length == 0) {
-            libraryContainer.raiseEvent("itemMouseLeave", true);
+            libraryContainer.raiseEvent(libraryContainer.props.libraryController.ItemMouseLeaveEventName, true);
         }
     }
 }
