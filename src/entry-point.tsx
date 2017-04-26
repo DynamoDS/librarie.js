@@ -15,6 +15,10 @@ export function CreateLibraryController() {
 
 export class LibraryController {
 
+    ItemClickedEventName = "itemClicked";
+    ItemHoveredOnEventName = "itemHoveredOn";
+    ItemMouseLeaveEventName = "itemMouseLeave";
+
     reactor: Reactor = null;
 
     constructor() {
