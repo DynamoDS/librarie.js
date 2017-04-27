@@ -29,7 +29,7 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
                 <div className={"ItemInfo"}>
                     <div className={"ItemTitle"}>{highLightedItemText}</div>
                     <div className={"ItemDetails"}>
-                        <img className={"ItemTypeIcon"} src={ItemTypeIconPath} onError={this.onImageLoadFail.bind(this)} />
+                        <img className={"ItemTypeIcon"} src={ItemTypeIconPath} onLoad={this.onImageLoad.bind(this)} onError={this.onImageLoadFail.bind(this)} />
                         <div className={"ItemCategory"}>{highLightedCategoryText}</div>
                     </div>
                 </div>

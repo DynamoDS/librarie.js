@@ -25,7 +25,6 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
     generatedSections: ItemData[] = null;
 
     constructor(props: LibraryContainerProps) {
-
         super(props);
         this.state = { inSearchMode: false };
         this.generatedSections = buildLibraryItemsFromLayoutSpecs(this.props.loadedTypesJson, this.props.layoutSpecsJson);
@@ -58,8 +57,8 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
 
             return (
                 <div>
-                    <div>{searchView}</div>
-                    <div>{sections}</div>
+                    {searchView}
+                    {sections}
                 </div>
             );
         } catch (exception) {
