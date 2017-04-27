@@ -48,7 +48,7 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
             }
 
             const searchView = <SearchView onSearchModeChanged={this.onSearchModeChanged.bind(this)}
-                libraryContainer={this} items={searchItems} />;
+                libraryContainer={this} sections={this.generatedSections} />;
 
             if (!this.state.inSearchMode) {
                 let index = 0;

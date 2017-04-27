@@ -128,7 +128,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
             }
         }
 
-        if (!this.props.data.hideSectionHeader) {
+        if (this.props.data.showHeader) {
             header = (
                 <div className={this.getLibraryItemHeaderStyle()} onClick={this.onLibraryItemClicked.bind(this)}
                     onMouseOver={this.onLibraryItemHoveredOn.bind(this)} onMouseLeave={this.onLibraryItemMouseLeave.bind(this)}>

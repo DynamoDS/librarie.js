@@ -34,7 +34,7 @@ export class LayoutElement {
 
     text: string = "";
     iconUrl: string = "";
-    hideSectionHeader: boolean = false;
+    showHeader: boolean = true;
     elementType: ElementType = "none";
     include: IncludeInfo[] = [];
     childElements: LayoutElement[] = [];
@@ -51,8 +51,8 @@ export class LayoutElement {
             }
         }
 
-        if (data.hideSectionHeader) {
-            this.hideSectionHeader = data.hideSectionHeader;
+        if (data.showHeader == false) {
+            this.showHeader = data.hideSectionHeader;
         }
     }
 
@@ -68,7 +68,7 @@ export class ItemData {
     itemType: ItemType = "none";
     visible: boolean = true;
     expanded: boolean = false;
-    hideSectionHeader: boolean = false;
+    showHeader: boolean = true;
     searchStrings: string[] = [];
     childItems: ItemData[] = [];
 
@@ -82,7 +82,7 @@ export class ItemData {
         this.contextData = layoutElement.text;
         this.iconUrl = layoutElement.iconUrl;
         this.itemType = layoutElement.elementType;
-        this.hideSectionHeader = layoutElement.hideSectionHeader;
+        this.showHeader = layoutElement.showHeader;
     }
 
     appendChild(childItem: ItemData) {

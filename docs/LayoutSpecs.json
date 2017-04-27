@@ -4,7 +4,7 @@
       "text": "default",
       "iconUrl": "",
       "elementType": "section",
-      "hideSectionHeader": true,
+      "showHeader": false,
       "include": [],
       "childElements": [
         {
@@ -1374,7 +1374,7 @@
       "text": "Miscellaneous",
       "iconUrl": "",
       "elementType": "section",
-      "hideSectionHeader": false,
+      "showHeader": true,
       "include": [],
       "childElements": []
     },
@@ -1382,7 +1382,7 @@
       "text": "Add on",
       "iconUrl": "/src/resources/ui/add-on.svg",
       "elementType": "section",
-      "hideSectionHeader": false,
+      "showHeader": true,
       "include": [],
       "childElements": []
     }
