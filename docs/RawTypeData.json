@@ -28,13 +28,13 @@
       "fullyQualifiedName": "Core.Color.Color Range",
       "iconUrl": "/src/resources/icons/CoreNodeModels.ColorRange.png",
       "contextData": "Color Range",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Core.List.List.Create",
       "iconUrl": "/src/resources/icons/CoreNodeModels.CreateList.png",
       "contextData": "List.Create",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Core.Scripting.Formula",
@@ -46,13 +46,13 @@
       "fullyQualifiedName": "Core.List.Range",
       "iconUrl": "/src/resources/icons/CoreNodeModels.Range.png",
       "contextData": "Range",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Core.List.Sequence",
       "iconUrl": "/src/resources/icons/CoreNodeModels.Sequence.png",
       "contextData": "Sequence",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Core.View.Watch",
@@ -604,43 +604,43 @@
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Arc.ByThreePoints",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Arc.ByThreePoints.png",
       "contextData": "Autodesk.DesignScript.Geometry.Arc.ByThreePoints@Autodesk.DesignScript.Geometry.Point,Autodesk.DesignScript.Geometry.Point,Autodesk.DesignScript.Geometry.Point",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Arc.ByCenterPointRadiusAngle",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Arc.ByCenterPointRadiusAngle.png",
       "contextData": "Autodesk.DesignScript.Geometry.Arc.ByCenterPointRadiusAngle@Autodesk.DesignScript.Geometry.Point,double,double,double,Autodesk.DesignScript.Geometry.Vector",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Arc.ByCenterPointStartPointSweepAngle",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Arc.ByCenterPointStartPointSweepAngle.png",
       "contextData": "Autodesk.DesignScript.Geometry.Arc.ByCenterPointStartPointSweepAngle@Autodesk.DesignScript.Geometry.Point,Autodesk.DesignScript.Geometry.Point,double,Autodesk.DesignScript.Geometry.Vector",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Arc.ByCenterPointStartPointEndPoint",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Arc.ByCenterPointStartPointEndPoint.png",
       "contextData": "Autodesk.DesignScript.Geometry.Arc.ByCenterPointStartPointEndPoint@Autodesk.DesignScript.Geometry.Point,Autodesk.DesignScript.Geometry.Point,Autodesk.DesignScript.Geometry.Point",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Arc.ByFillet",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Arc.ByFillet.png",
       "contextData": "Autodesk.DesignScript.Geometry.Arc.ByFillet@Autodesk.DesignScript.Geometry.Curve,Autodesk.DesignScript.Geometry.Curve,double",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Arc.ByFilletTangentToCurve",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Arc.ByFilletTangentToCurve.png",
       "contextData": "Autodesk.DesignScript.Geometry.Arc.ByFilletTangentToCurve@Autodesk.DesignScript.Geometry.Curve,Autodesk.DesignScript.Geometry.Curve,Autodesk.DesignScript.Geometry.Curve",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Arc.ByBestFitThroughPoints",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Arc.ByBestFitThroughPoints.png",
       "contextData": "Autodesk.DesignScript.Geometry.Arc.ByBestFitThroughPoints@Autodesk.DesignScript.Geometry.Point[]",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Arc.ByStartEndAndTangencies",
@@ -652,7 +652,7 @@
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Arc.ByStartPointEndPointStartTangent",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Arc.ByStartPointEndPointStartTangent.png",
       "contextData": "Autodesk.DesignScript.Geometry.Arc.ByStartPointEndPointStartTangent@Autodesk.DesignScript.Geometry.Point,Autodesk.DesignScript.Geometry.Point,Autodesk.DesignScript.Geometry.Vector",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Arc.CenterPoint",
@@ -682,19 +682,19 @@
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Curve.ByParameterLineOnSurface",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Curve.ByParameterLineOnSurface.png",
       "contextData": "Autodesk.DesignScript.Geometry.Curve.ByParameterLineOnSurface@Autodesk.DesignScript.Geometry.Surface,Autodesk.DesignScript.Geometry.UV,Autodesk.DesignScript.Geometry.UV",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Curve.ByBlendBetweenCurves",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Curve.ByBlendBetweenCurves.png",
       "contextData": "Autodesk.DesignScript.Geometry.Curve.ByBlendBetweenCurves@Autodesk.DesignScript.Geometry.Curve,Autodesk.DesignScript.Geometry.Curve,bool,bool,bool",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Curve.ByIsoCurveOnSurface",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Curve.ByIsoCurveOnSurface.png",
       "contextData": "Autodesk.DesignScript.Geometry.Curve.ByIsoCurveOnSurface@Autodesk.DesignScript.Geometry.Surface,int,double",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Curve.Length",
@@ -1228,13 +1228,13 @@
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.BoundingBox.ByGeometry",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.BoundingBox.ByGeometry.png",
       "contextData": "Autodesk.DesignScript.Geometry.BoundingBox.ByGeometry@Autodesk.DesignScript.Geometry.Geometry[]",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.BoundingBox.ByCorners",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.BoundingBox.ByCorners.png",
       "contextData": "Autodesk.DesignScript.Geometry.BoundingBox.ByCorners@Autodesk.DesignScript.Geometry.Point,Autodesk.DesignScript.Geometry.Point",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.BoundingBox.MinPoint",
@@ -1288,61 +1288,61 @@
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.CoordinateSystem.Identity",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.CoordinateSystem.Identity.png",
       "contextData": "Autodesk.DesignScript.Geometry.CoordinateSystem.Identity",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.CoordinateSystem.ByMatrix",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.CoordinateSystem.ByMatrix.png",
       "contextData": "Autodesk.DesignScript.Geometry.CoordinateSystem.ByMatrix@double[]",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.CoordinateSystem.ByOrigin",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.CoordinateSystem.ByOrigin.double-double.png",
       "contextData": "Autodesk.DesignScript.Geometry.CoordinateSystem.ByOrigin@double,double",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.CoordinateSystem.ByOrigin",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.CoordinateSystem.ByOrigin.double-double-double.png",
       "contextData": "Autodesk.DesignScript.Geometry.CoordinateSystem.ByOrigin@double,double,double",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.CoordinateSystem.ByOrigin",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.CoordinateSystem.ByOrigin.Point.png",
       "contextData": "Autodesk.DesignScript.Geometry.CoordinateSystem.ByOrigin@Autodesk.DesignScript.Geometry.Point",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.CoordinateSystem.ByPlane",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.CoordinateSystem.ByPlane.png",
       "contextData": "Autodesk.DesignScript.Geometry.CoordinateSystem.ByPlane@Autodesk.DesignScript.Geometry.Plane",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.CoordinateSystem.ByOriginVectors",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.CoordinateSystem.ByOriginVectors.Point-Vector-Vector.png",
       "contextData": "Autodesk.DesignScript.Geometry.CoordinateSystem.ByOriginVectors@Autodesk.DesignScript.Geometry.Point,Autodesk.DesignScript.Geometry.Vector,Autodesk.DesignScript.Geometry.Vector",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.CoordinateSystem.ByOriginVectors",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.CoordinateSystem.ByOriginVectors.Point-Vector-Vector-Vector.png",
       "contextData": "Autodesk.DesignScript.Geometry.CoordinateSystem.ByOriginVectors@Autodesk.DesignScript.Geometry.Point,Autodesk.DesignScript.Geometry.Vector,Autodesk.DesignScript.Geometry.Vector,Autodesk.DesignScript.Geometry.Vector",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.CoordinateSystem.ByCylindricalCoordinates",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.CoordinateSystem.ByCylindricalCoordinates.png",
       "contextData": "Autodesk.DesignScript.Geometry.CoordinateSystem.ByCylindricalCoordinates@Autodesk.DesignScript.Geometry.CoordinateSystem,double,double,double",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.CoordinateSystem.BySphericalCoordinates",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.CoordinateSystem.BySphericalCoordinates.png",
       "contextData": "Autodesk.DesignScript.Geometry.CoordinateSystem.BySphericalCoordinates@Autodesk.DesignScript.Geometry.CoordinateSystem,double,double,double",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.CoordinateSystem.IsSingular",
@@ -1546,37 +1546,37 @@
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Vector.ByCoordinates",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Vector.ByCoordinates.double-double-double.png",
       "contextData": "Autodesk.DesignScript.Geometry.Vector.ByCoordinates@double,double,double",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Vector.ByCoordinates",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Vector.ByCoordinates.double-double-double-bool.png",
       "contextData": "Autodesk.DesignScript.Geometry.Vector.ByCoordinates@double,double,double,bool",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Vector.ByTwoPoints",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Vector.ByTwoPoints.png",
       "contextData": "Autodesk.DesignScript.Geometry.Vector.ByTwoPoints@Autodesk.DesignScript.Geometry.Point,Autodesk.DesignScript.Geometry.Point",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Vector.XAxis",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Vector.XAxis.png",
       "contextData": "Autodesk.DesignScript.Geometry.Vector.XAxis",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Vector.YAxis",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Vector.YAxis.png",
       "contextData": "Autodesk.DesignScript.Geometry.Vector.YAxis",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Vector.ZAxis",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Vector.ZAxis.png",
       "contextData": "Autodesk.DesignScript.Geometry.Vector.ZAxis",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Vector.X",
@@ -1702,37 +1702,37 @@
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Point.ByCoordinates",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Point.ByCoordinates.double-double.png",
       "contextData": "Autodesk.DesignScript.Geometry.Point.ByCoordinates@double,double",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Point.ByCoordinates",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Point.ByCoordinates.double-double-double.png",
       "contextData": "Autodesk.DesignScript.Geometry.Point.ByCoordinates@double,double,double",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Point.Origin",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Point.Origin.png",
       "contextData": "Autodesk.DesignScript.Geometry.Point.Origin",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Point.ByCartesianCoordinates",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Point.ByCartesianCoordinates.png",
       "contextData": "Autodesk.DesignScript.Geometry.Point.ByCartesianCoordinates@Autodesk.DesignScript.Geometry.CoordinateSystem,double,double,double",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Point.ByCylindricalCoordinates",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Point.ByCylindricalCoordinates.png",
       "contextData": "Autodesk.DesignScript.Geometry.Point.ByCylindricalCoordinates@Autodesk.DesignScript.Geometry.CoordinateSystem,double,double,double",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Point.BySphericalCoordinates",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Point.BySphericalCoordinates.png",
       "contextData": "Autodesk.DesignScript.Geometry.Point.BySphericalCoordinates@Autodesk.DesignScript.Geometry.CoordinateSystem,double,double,double",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Point.PruneDuplicates",
@@ -1786,55 +1786,55 @@
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Plane.ByOriginNormal",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Plane.ByOriginNormal.png",
       "contextData": "Autodesk.DesignScript.Geometry.Plane.ByOriginNormal@Autodesk.DesignScript.Geometry.Point,Autodesk.DesignScript.Geometry.Vector",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Plane.ByOriginNormalXAxis",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Plane.ByOriginNormalXAxis.png",
       "contextData": "Autodesk.DesignScript.Geometry.Plane.ByOriginNormalXAxis@Autodesk.DesignScript.Geometry.Point,Autodesk.DesignScript.Geometry.Vector,Autodesk.DesignScript.Geometry.Vector",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Plane.ByOriginXAxisYAxis",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Plane.ByOriginXAxisYAxis.png",
       "contextData": "Autodesk.DesignScript.Geometry.Plane.ByOriginXAxisYAxis@Autodesk.DesignScript.Geometry.Point,Autodesk.DesignScript.Geometry.Vector,Autodesk.DesignScript.Geometry.Vector",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Plane.ByBestFitThroughPoints",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Plane.ByBestFitThroughPoints.png",
       "contextData": "Autodesk.DesignScript.Geometry.Plane.ByBestFitThroughPoints@Autodesk.DesignScript.Geometry.Point[]",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Plane.ByLineAndPoint",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Plane.ByLineAndPoint.png",
       "contextData": "Autodesk.DesignScript.Geometry.Plane.ByLineAndPoint@Autodesk.DesignScript.Geometry.Line,Autodesk.DesignScript.Geometry.Point",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Plane.ByThreePoints",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Plane.ByThreePoints.png",
       "contextData": "Autodesk.DesignScript.Geometry.Plane.ByThreePoints@Autodesk.DesignScript.Geometry.Point,Autodesk.DesignScript.Geometry.Point,Autodesk.DesignScript.Geometry.Point",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Plane.XY",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Plane.XY.png",
       "contextData": "Autodesk.DesignScript.Geometry.Plane.XY",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Plane.XZ",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Plane.XZ.png",
       "contextData": "Autodesk.DesignScript.Geometry.Plane.XZ",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Plane.YZ",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Plane.YZ.png",
       "contextData": "Autodesk.DesignScript.Geometry.Plane.YZ",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Plane.Origin",
@@ -1876,49 +1876,49 @@
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Surface.ByLoft",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Surface.ByLoft.Curve1.png",
       "contextData": "Autodesk.DesignScript.Geometry.Surface.ByLoft@Autodesk.DesignScript.Geometry.Curve[]",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Surface.ByLoft",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Surface.ByLoft.Curve1-Curve1.png",
       "contextData": "Autodesk.DesignScript.Geometry.Surface.ByLoft@Autodesk.DesignScript.Geometry.Curve[],Autodesk.DesignScript.Geometry.Curve[]",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Surface.ByRuledLoft",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Surface.ByRuledLoft.png",
       "contextData": "Autodesk.DesignScript.Geometry.Surface.ByRuledLoft@Autodesk.DesignScript.Geometry.Line[]",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Surface.BySweep",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Surface.BySweep.png",
       "contextData": "Autodesk.DesignScript.Geometry.Surface.BySweep@Autodesk.DesignScript.Geometry.Curve,Autodesk.DesignScript.Geometry.Curve",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Surface.ByPerimeterPoints",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Surface.ByPerimeterPoints.png",
       "contextData": "Autodesk.DesignScript.Geometry.Surface.ByPerimeterPoints@Autodesk.DesignScript.Geometry.Point[]",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Surface.BySweep2Rails",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Surface.BySweep2Rails.png",
       "contextData": "Autodesk.DesignScript.Geometry.Surface.BySweep2Rails@Autodesk.DesignScript.Geometry.Curve,Autodesk.DesignScript.Geometry.Curve,Autodesk.DesignScript.Geometry.Curve",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Surface.ByRevolve",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Surface.ByRevolve.png",
       "contextData": "Autodesk.DesignScript.Geometry.Surface.ByRevolve@Autodesk.DesignScript.Geometry.Curve,Autodesk.DesignScript.Geometry.Point,Autodesk.DesignScript.Geometry.Vector,double,double",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Surface.ByPatch",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Surface.ByPatch.png",
       "contextData": "Autodesk.DesignScript.Geometry.Surface.ByPatch@Autodesk.DesignScript.Geometry.Curve",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Surface.Area",
@@ -2098,7 +2098,7 @@
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.UV.ByCoordinates",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.UV.ByCoordinates.png",
       "contextData": "Autodesk.DesignScript.Geometry.UV.ByCoordinates@double,double",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.UV.U",
@@ -2116,19 +2116,19 @@
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.PolyCurve.ByJoinedCurves",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.PolyCurve.ByJoinedCurves.png",
       "contextData": "Autodesk.DesignScript.Geometry.PolyCurve.ByJoinedCurves@Autodesk.DesignScript.Geometry.Curve[]",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.PolyCurve.ByPoints",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.PolyCurve.ByPoints.png",
       "contextData": "Autodesk.DesignScript.Geometry.PolyCurve.ByPoints@Autodesk.DesignScript.Geometry.Point[],bool",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.PolyCurve.ByThickeningCurve",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.PolyCurve.ByThickeningCurve.png",
       "contextData": "Autodesk.DesignScript.Geometry.PolyCurve.ByThickeningCurve@Autodesk.DesignScript.Geometry.Curve,double,Autodesk.DesignScript.Geometry.Vector",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.PolyCurve.NumberOfCurves",
@@ -2194,43 +2194,43 @@
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Solid.ByJoinedSurfaces",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Solid.ByJoinedSurfaces.png",
       "contextData": "Autodesk.DesignScript.Geometry.Solid.ByJoinedSurfaces@Autodesk.DesignScript.Geometry.Surface[]",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Solid.ByLoft",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Solid.ByLoft.Curve1.png",
       "contextData": "Autodesk.DesignScript.Geometry.Solid.ByLoft@Autodesk.DesignScript.Geometry.Curve[]",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Solid.ByLoft",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Solid.ByLoft.Curve1-Curve1.png",
       "contextData": "Autodesk.DesignScript.Geometry.Solid.ByLoft@Autodesk.DesignScript.Geometry.Curve[],Autodesk.DesignScript.Geometry.Curve[]",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Solid.BySweep",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Solid.BySweep.png",
       "contextData": "Autodesk.DesignScript.Geometry.Solid.BySweep@Autodesk.DesignScript.Geometry.Curve,Autodesk.DesignScript.Geometry.Curve",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Solid.BySweep2Rails",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Solid.BySweep2Rails.png",
       "contextData": "Autodesk.DesignScript.Geometry.Solid.BySweep2Rails@Autodesk.DesignScript.Geometry.Curve,Autodesk.DesignScript.Geometry.Curve,Autodesk.DesignScript.Geometry.Curve",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Solid.ByRevolve",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Solid.ByRevolve.png",
       "contextData": "Autodesk.DesignScript.Geometry.Solid.ByRevolve@Autodesk.DesignScript.Geometry.Curve,Autodesk.DesignScript.Geometry.Point,Autodesk.DesignScript.Geometry.Vector,double,double",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Solid.ByUnion",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Solid.ByUnion.png",
       "contextData": "Autodesk.DesignScript.Geometry.Solid.ByUnion@Autodesk.DesignScript.Geometry.Solid[]",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Solid.Area",
@@ -2296,49 +2296,49 @@
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.NurbsCurve.ByControlPoints",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.NurbsCurve.ByControlPoints.Point1.png",
       "contextData": "Autodesk.DesignScript.Geometry.NurbsCurve.ByControlPoints@Autodesk.DesignScript.Geometry.Point[]",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.NurbsCurve.ByControlPoints",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.NurbsCurve.ByControlPoints.Point1-int.png",
       "contextData": "Autodesk.DesignScript.Geometry.NurbsCurve.ByControlPoints@Autodesk.DesignScript.Geometry.Point[],int",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.NurbsCurve.ByControlPoints",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.NurbsCurve.ByControlPoints.Point1-int-bool.png",
       "contextData": "Autodesk.DesignScript.Geometry.NurbsCurve.ByControlPoints@Autodesk.DesignScript.Geometry.Point[],int,bool",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.NurbsCurve.ByControlPointsWeightsKnots",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.NurbsCurve.ByControlPointsWeightsKnots.png",
       "contextData": "Autodesk.DesignScript.Geometry.NurbsCurve.ByControlPointsWeightsKnots@Autodesk.DesignScript.Geometry.Point[],double[],double[],int",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.NurbsCurve.ByPoints",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.NurbsCurve.ByPoints.Point1.png",
       "contextData": "Autodesk.DesignScript.Geometry.NurbsCurve.ByPoints@Autodesk.DesignScript.Geometry.Point[]",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.NurbsCurve.ByPoints",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.NurbsCurve.ByPoints.Point1-bool.png",
       "contextData": "Autodesk.DesignScript.Geometry.NurbsCurve.ByPoints@Autodesk.DesignScript.Geometry.Point[],bool",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.NurbsCurve.ByPoints",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.NurbsCurve.ByPoints.Point1-int.png",
       "contextData": "Autodesk.DesignScript.Geometry.NurbsCurve.ByPoints@Autodesk.DesignScript.Geometry.Point[],int",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.NurbsCurve.ByPointsTangents",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.NurbsCurve.ByPointsTangents.png",
       "contextData": "Autodesk.DesignScript.Geometry.NurbsCurve.ByPointsTangents@Autodesk.DesignScript.Geometry.Point[],Autodesk.DesignScript.Geometry.Vector,Autodesk.DesignScript.Geometry.Vector",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.NurbsCurve.Degree",
@@ -2380,25 +2380,25 @@
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Cuboid.ByLengths",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Cuboid.ByLengths.double-double-double.png",
       "contextData": "Autodesk.DesignScript.Geometry.Cuboid.ByLengths@double,double,double",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Cuboid.ByLengths",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Cuboid.ByLengths.Point-double-double-double.png",
       "contextData": "Autodesk.DesignScript.Geometry.Cuboid.ByLengths@Autodesk.DesignScript.Geometry.Point,double,double,double",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Cuboid.ByLengths",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Cuboid.ByLengths.CoordinateSystem-double-double-double.png",
       "contextData": "Autodesk.DesignScript.Geometry.Cuboid.ByLengths@Autodesk.DesignScript.Geometry.CoordinateSystem,double,double,double",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Cuboid.ByCorners",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Cuboid.ByCorners.png",
       "contextData": "Autodesk.DesignScript.Geometry.Cuboid.ByCorners@Autodesk.DesignScript.Geometry.Point,Autodesk.DesignScript.Geometry.Point",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Cuboid.Length",
@@ -2422,43 +2422,43 @@
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.PolySurface.ByLoft",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.PolySurface.ByLoft.Curve1.png",
       "contextData": "Autodesk.DesignScript.Geometry.PolySurface.ByLoft@Autodesk.DesignScript.Geometry.Curve[]",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.PolySurface.ByLoft",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.PolySurface.ByLoft.Curve1-Curve.png",
       "contextData": "Autodesk.DesignScript.Geometry.PolySurface.ByLoft@Autodesk.DesignScript.Geometry.Curve[],Autodesk.DesignScript.Geometry.Curve",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.PolySurface.ByLoftGuides",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.PolySurface.ByLoftGuides.png",
       "contextData": "Autodesk.DesignScript.Geometry.PolySurface.ByLoftGuides@Autodesk.DesignScript.Geometry.Curve[],Autodesk.DesignScript.Geometry.Curve[]",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.PolySurface.ByJoinedSurfaces",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.PolySurface.ByJoinedSurfaces.png",
       "contextData": "Autodesk.DesignScript.Geometry.PolySurface.ByJoinedSurfaces@Autodesk.DesignScript.Geometry.Surface[]",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.PolySurface.BySolid",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.PolySurface.BySolid.png",
       "contextData": "Autodesk.DesignScript.Geometry.PolySurface.BySolid@Autodesk.DesignScript.Geometry.Solid",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.PolySurface.BySweep",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.PolySurface.BySweep.Curve-Curve1.png",
       "contextData": "Autodesk.DesignScript.Geometry.PolySurface.BySweep@Autodesk.DesignScript.Geometry.Curve,Autodesk.DesignScript.Geometry.Curve[]",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.PolySurface.BySweep",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.PolySurface.BySweep.Curve-Curve.png",
       "contextData": "Autodesk.DesignScript.Geometry.PolySurface.BySweep@Autodesk.DesignScript.Geometry.Curve,Autodesk.DesignScript.Geometry.Curve",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.PolySurface.Surfaces",
@@ -2524,31 +2524,31 @@
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Circle.ByCenterPointRadius",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Circle.ByCenterPointRadius.png",
       "contextData": "Autodesk.DesignScript.Geometry.Circle.ByCenterPointRadius@Autodesk.DesignScript.Geometry.Point,double",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Circle.ByCenterPointRadiusNormal",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Circle.ByCenterPointRadiusNormal.png",
       "contextData": "Autodesk.DesignScript.Geometry.Circle.ByCenterPointRadiusNormal@Autodesk.DesignScript.Geometry.Point,double,Autodesk.DesignScript.Geometry.Vector",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Circle.ByPlaneRadius",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Circle.ByPlaneRadius.png",
       "contextData": "Autodesk.DesignScript.Geometry.Circle.ByPlaneRadius@Autodesk.DesignScript.Geometry.Plane,double",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Circle.ByThreePoints",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Circle.ByThreePoints.png",
       "contextData": "Autodesk.DesignScript.Geometry.Circle.ByThreePoints@Autodesk.DesignScript.Geometry.Point,Autodesk.DesignScript.Geometry.Point,Autodesk.DesignScript.Geometry.Point",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Circle.ByBestFitThroughPoints",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Circle.ByBestFitThroughPoints.png",
       "contextData": "Autodesk.DesignScript.Geometry.Circle.ByBestFitThroughPoints@Autodesk.DesignScript.Geometry.Point[]",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Circle.CenterPoint",
@@ -2608,25 +2608,25 @@
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Cone.ByPointsRadius",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Cone.ByPointsRadius.png",
       "contextData": "Autodesk.DesignScript.Geometry.Cone.ByPointsRadius@Autodesk.DesignScript.Geometry.Point,Autodesk.DesignScript.Geometry.Point,double",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Cone.ByPointsRadii",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Cone.ByPointsRadii.png",
       "contextData": "Autodesk.DesignScript.Geometry.Cone.ByPointsRadii@Autodesk.DesignScript.Geometry.Point,Autodesk.DesignScript.Geometry.Point,double,double",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Cone.ByCoordinateSystemHeightRadius",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Cone.ByCoordinateSystemHeightRadius.png",
       "contextData": "Autodesk.DesignScript.Geometry.Cone.ByCoordinateSystemHeightRadius@Autodesk.DesignScript.Geometry.CoordinateSystem,double,double",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Cone.ByCoordinateSystemHeightRadii",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Cone.ByCoordinateSystemHeightRadii.png",
       "contextData": "Autodesk.DesignScript.Geometry.Cone.ByCoordinateSystemHeightRadii@Autodesk.DesignScript.Geometry.CoordinateSystem,double,double,double",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Cone.StartPoint",
@@ -2704,13 +2704,13 @@
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Cylinder.ByRadiusHeight",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Cylinder.ByRadiusHeight.png",
       "contextData": "Autodesk.DesignScript.Geometry.Cylinder.ByRadiusHeight@Autodesk.DesignScript.Geometry.CoordinateSystem,double,double",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Cylinder.ByPointsRadius",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Cylinder.ByPointsRadius.png",
       "contextData": "Autodesk.DesignScript.Geometry.Cylinder.ByPointsRadius@Autodesk.DesignScript.Geometry.Point,Autodesk.DesignScript.Geometry.Point,double",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Cylinder.Radius",
@@ -2722,25 +2722,25 @@
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Ellipse.ByOriginRadii",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Ellipse.ByOriginRadii.png",
       "contextData": "Autodesk.DesignScript.Geometry.Ellipse.ByOriginRadii@Autodesk.DesignScript.Geometry.Point,double,double",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Ellipse.ByOriginVectors",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Ellipse.ByOriginVectors.png",
       "contextData": "Autodesk.DesignScript.Geometry.Ellipse.ByOriginVectors@Autodesk.DesignScript.Geometry.Point,Autodesk.DesignScript.Geometry.Vector,Autodesk.DesignScript.Geometry.Vector",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Ellipse.ByCoordinateSystemRadii",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Ellipse.ByCoordinateSystemRadii.png",
       "contextData": "Autodesk.DesignScript.Geometry.Ellipse.ByCoordinateSystemRadii@Autodesk.DesignScript.Geometry.CoordinateSystem,double,double",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Ellipse.ByPlaneRadii",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Ellipse.ByPlaneRadii.png",
       "contextData": "Autodesk.DesignScript.Geometry.Ellipse.ByPlaneRadii@Autodesk.DesignScript.Geometry.Plane,double,double",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Ellipse.CenterPoint",
@@ -2764,7 +2764,7 @@
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.EllipseArc.ByPlaneRadiiAngles",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.EllipseArc.ByPlaneRadiiAngles.png",
       "contextData": "Autodesk.DesignScript.Geometry.EllipseArc.ByPlaneRadiiAngles@Autodesk.DesignScript.Geometry.Plane,double,double,double,double",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.EllipseArc.CenterPoint",
@@ -2806,7 +2806,7 @@
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Helix.ByAxis",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Helix.ByAxis.png",
       "contextData": "Autodesk.DesignScript.Geometry.Helix.ByAxis@Autodesk.DesignScript.Geometry.Point,Autodesk.DesignScript.Geometry.Vector,Autodesk.DesignScript.Geometry.Point,double,double",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Helix.Angle",
@@ -2842,13 +2842,13 @@
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.IndexGroup.ByIndices",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.IndexGroup.ByIndices.int-int-int-int.png",
       "contextData": "Autodesk.DesignScript.Geometry.IndexGroup.ByIndices@int,int,int,int",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.IndexGroup.ByIndices",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.IndexGroup.ByIndices.int-int-int.png",
       "contextData": "Autodesk.DesignScript.Geometry.IndexGroup.ByIndices@int,int,int",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.IndexGroup.Count",
@@ -2884,25 +2884,25 @@
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Line.ByStartPointEndPoint",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Line.ByStartPointEndPoint.png",
       "contextData": "Autodesk.DesignScript.Geometry.Line.ByStartPointEndPoint@Autodesk.DesignScript.Geometry.Point,Autodesk.DesignScript.Geometry.Point",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Line.ByBestFitThroughPoints",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Line.ByBestFitThroughPoints.png",
       "contextData": "Autodesk.DesignScript.Geometry.Line.ByBestFitThroughPoints@Autodesk.DesignScript.Geometry.Point[]",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Line.ByTangency",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Line.ByTangency.png",
       "contextData": "Autodesk.DesignScript.Geometry.Line.ByTangency@Autodesk.DesignScript.Geometry.Curve,double",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Line.ByStartPointDirectionLength",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Line.ByStartPointDirectionLength.png",
       "contextData": "Autodesk.DesignScript.Geometry.Line.ByStartPointDirectionLength@Autodesk.DesignScript.Geometry.Point,Autodesk.DesignScript.Geometry.Vector,double",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Line.Direction",
@@ -2914,7 +2914,7 @@
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Mesh.ByPointsFaceIndices",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Mesh.ByPointsFaceIndices.png",
       "contextData": "Autodesk.DesignScript.Geometry.Mesh.ByPointsFaceIndices@Autodesk.DesignScript.Geometry.Point[],Autodesk.DesignScript.Geometry.IndexGroup[]",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Mesh.FaceIndices",
@@ -2938,31 +2938,31 @@
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.NurbsSurface.ByPoints",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.NurbsSurface.ByPoints.png",
       "contextData": "Autodesk.DesignScript.Geometry.NurbsSurface.ByPoints@Autodesk.DesignScript.Geometry.Point[][],int,int",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.NurbsSurface.ByPointsTangents",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.NurbsSurface.ByPointsTangents.png",
       "contextData": "Autodesk.DesignScript.Geometry.NurbsSurface.ByPointsTangents@Autodesk.DesignScript.Geometry.Point[][],Autodesk.DesignScript.Geometry.Vector[],Autodesk.DesignScript.Geometry.Vector[],Autodesk.DesignScript.Geometry.Vector[],Autodesk.DesignScript.Geometry.Vector[]",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.NurbsSurface.ByPointsTangentsKnotsDerivatives",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.NurbsSurface.ByPointsTangentsKnotsDerivatives.png",
       "contextData": "Autodesk.DesignScript.Geometry.NurbsSurface.ByPointsTangentsKnotsDerivatives@Autodesk.DesignScript.Geometry.Point[][],Autodesk.DesignScript.Geometry.Vector[],Autodesk.DesignScript.Geometry.Vector[],Autodesk.DesignScript.Geometry.Vector[],Autodesk.DesignScript.Geometry.Vector[],double[],double[],Autodesk.DesignScript.Geometry.Vector[]",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.NurbsSurface.ByControlPoints",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.NurbsSurface.ByControlPoints.png",
       "contextData": "Autodesk.DesignScript.Geometry.NurbsSurface.ByControlPoints@Autodesk.DesignScript.Geometry.Point[][],int,int",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.NurbsSurface.ByControlPointsWeightsKnots",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.NurbsSurface.ByControlPointsWeightsKnots.png",
       "contextData": "Autodesk.DesignScript.Geometry.NurbsSurface.ByControlPointsWeightsKnots@Autodesk.DesignScript.Geometry.Point[][],double[][],double[],double[],int,int",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.NurbsSurface.DegreeU",
@@ -3034,13 +3034,13 @@
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Polygon.ByPoints",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Polygon.ByPoints.png",
       "contextData": "Autodesk.DesignScript.Geometry.Polygon.ByPoints@Autodesk.DesignScript.Geometry.Point[]",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Polygon.RegularPolygon",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Polygon.RegularPolygon.png",
       "contextData": "Autodesk.DesignScript.Geometry.Polygon.RegularPolygon@Autodesk.DesignScript.Geometry.Circle,int",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Polygon.Points",
@@ -3082,31 +3082,31 @@
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Rectangle.ByCornerPoints",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Rectangle.ByCornerPoints.Point1.png",
       "contextData": "Autodesk.DesignScript.Geometry.Rectangle.ByCornerPoints@Autodesk.DesignScript.Geometry.Point[]",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Rectangle.ByCornerPoints",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Rectangle.ByCornerPoints.Point-Point-Point-Point.png",
       "contextData": "Autodesk.DesignScript.Geometry.Rectangle.ByCornerPoints@Autodesk.DesignScript.Geometry.Point,Autodesk.DesignScript.Geometry.Point,Autodesk.DesignScript.Geometry.Point,Autodesk.DesignScript.Geometry.Point",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Rectangle.ByWidthLength",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Rectangle.ByWidthLength.double-double.png",
       "contextData": "Autodesk.DesignScript.Geometry.Rectangle.ByWidthLength@double,double",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Rectangle.ByWidthLength",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Rectangle.ByWidthLength.Plane-double-double.png",
       "contextData": "Autodesk.DesignScript.Geometry.Rectangle.ByWidthLength@Autodesk.DesignScript.Geometry.Plane,double,double",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Rectangle.ByWidthLength",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Rectangle.ByWidthLength.CoordinateSystem-double-double.png",
       "contextData": "Autodesk.DesignScript.Geometry.Rectangle.ByWidthLength@Autodesk.DesignScript.Geometry.CoordinateSystem,double,double",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Rectangle.Width",
@@ -3124,19 +3124,19 @@
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Sphere.ByCenterPointRadius",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Sphere.ByCenterPointRadius.png",
       "contextData": "Autodesk.DesignScript.Geometry.Sphere.ByCenterPointRadius@Autodesk.DesignScript.Geometry.Point,double",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Sphere.ByFourPoints",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Sphere.ByFourPoints.png",
       "contextData": "Autodesk.DesignScript.Geometry.Sphere.ByFourPoints@Autodesk.DesignScript.Geometry.Point[]",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Sphere.ByBestFit",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Sphere.ByBestFit.png",
       "contextData": "Autodesk.DesignScript.Geometry.Sphere.ByBestFit@Autodesk.DesignScript.Geometry.Point[]",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Autodesk.DesignScript.Geometry.Sphere.CenterPoint",
@@ -3178,7 +3178,7 @@
       "fullyQualifiedName": "DSCore.Color.ByARGB",
       "iconUrl": "/src/resources/icons/DSCore.Color.ByARGB.png",
       "contextData": "DSCore.Color.ByARGB@int,int,int,int",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "DSCore.Color.Brightness",
@@ -3208,25 +3208,25 @@
       "fullyQualifiedName": "DSCore.Color.Add",
       "iconUrl": "/src/resources/icons/DSCore.Color.Add.png",
       "contextData": "DSCore.Color.Add@DSCore.Color,DSCore.Color",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "DSCore.Color.Multiply",
       "iconUrl": "/src/resources/icons/DSCore.Color.Multiply.png",
       "contextData": "DSCore.Color.Multiply@DSCore.Color,double",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "DSCore.Color.Divide",
       "iconUrl": "/src/resources/icons/DSCore.Color.Divide.png",
       "contextData": "DSCore.Color.Divide@DSCore.Color,double",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "DSCore.ColorRange2D.ByColorsAndParameters",
       "iconUrl": "/src/resources/icons/DSCore.ColorRange2D.ByColorsAndParameters.png",
       "contextData": "DSCore.ColorRange2D.ByColorsAndParameters@DSCore.Color[],Autodesk.DesignScript.Geometry.UV[]",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "DSCore.ColorRange2D.GetColorAtParameter",
@@ -4354,7 +4354,7 @@
       "fullyQualifiedName": "DynamoUnits.Location.ByLatitudeAndLongitude",
       "iconUrl": "/src/resources/icons/DynamoUnits.Location.ByLatitudeAndLongitude.png",
       "contextData": "DynamoUnits.Location.ByLatitudeAndLongitude@double,double,string",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Tessellation.ConvexHull.ByPoints",
@@ -4384,7 +4384,7 @@
       "fullyQualifiedName": "Analysis.Label.ByPointAndString",
       "iconUrl": "/src/resources/icons/Analysis.Label.ByPointAndString.png",
       "contextData": "Analysis.Label.ByPointAndString@Autodesk.DesignScript.Geometry.Point,string",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Analysis.AnalysisExtensions.IsAlmostEqualTo",
@@ -4396,13 +4396,13 @@
       "fullyQualifiedName": "Display.Display.ByGeometryColor",
       "iconUrl": "/src/resources/icons/Display.Display.ByGeometryColor.png",
       "contextData": "Display.Display.ByGeometryColor@Autodesk.DesignScript.Geometry.Geometry,DSCore.Color",
-      "itemType": "creation"
+      "itemType": "create"
     },
     {
       "fullyQualifiedName": "Display.Display.BySurfaceColors",
       "iconUrl": "/src/resources/icons/Display.Display.BySurfaceColors.png",
       "contextData": "Display.Display.BySurfaceColors@Autodesk.DesignScript.Geometry.Surface,DSCore.Color[][]",
-      "itemType": "creation"
+      "itemType": "create"
     }
   ]
 }
