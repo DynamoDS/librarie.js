@@ -32,7 +32,7 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
         // set default state
         this.state = ({
             searchText: "",
-            displayMode: "structure"
+            displayMode: "list"
         })
 
         this.searchResultListItems = null;

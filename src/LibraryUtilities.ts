@@ -442,7 +442,23 @@ function buildLibraryItemsFromName(typeListNode: TypeListNode, parentNode: ItemD
         newNode.contextData = typeListNode.contextData;
         newNode.iconUrl = typeListNode.iconUrl;
         newNode.itemType = typeListNode.memberType;
-        parentNode.appendChild(newNode);
+
+        // All items without category will fall under Others
+        if (parentNode.itemType === "section") {
+            let categoryName = "Others";
+            let category = parentNode.childItems.find(item => item.text == categoryName);
+
+            if (!category) {
+                category = new ItemData(categoryName);
+                category.itemType = "category";
+                parentNode.appendChild(category);
+            }
+
+            category.appendChild(newNode);
+        } else {
+            parentNode.appendChild(newNode);
+        }
+
         return;
     }
 
@@ -475,7 +491,7 @@ function buildLibraryItemsFromName(typeListNode: TypeListNode, parentNode: ItemD
 
     // Create nested items for the name 'B.C.D' while passing 'A' as the parent node.
     buildLibraryItemsFromName(typeListNode, newParentNode);
-    parentNode.appendChild(newParentNode);
+    parentNode.childItems.unshift(newParentNode);
 }
 
 // Recursively set visible and expanded states of ItemData
