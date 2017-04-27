@@ -41,12 +41,6 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
     render() {
         try {
             let sections: JSX.Element[] = null;
-            let searchItems: ItemData[] = [];
-
-            for (let section of this.generatedSections) {
-                searchItems = searchItems.concat(section.childItems);
-            }
-
             const searchView = <SearchView onSearchModeChanged={this.onSearchModeChanged.bind(this)}
                 libraryContainer={this} sections={this.generatedSections} />;
 
