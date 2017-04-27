@@ -2,9 +2,9 @@
 
 import * as React from "react";
 
-type MemberType = "none" | "creation" | "action" | "query";
+type MemberType = "none" | "create" | "action" | "query";
 type ElementType = "none" | "category" | "group";
-type ItemType = "none" | "category" | "group" | "creation" | "action" | "query";
+type ItemType = "none" | "category" | "group" | "create" | "action" | "query";
 
 import * as _ from 'underscore';
 
@@ -12,7 +12,7 @@ export class TypeListNode {
 
     fullyQualifiedName: string = "";
     iconUrl: string = "";
-    contextData: string = "";
+    contextData: any = "";
     memberType: MemberType = "none";
     processed: boolean = false;
 
@@ -57,7 +57,7 @@ export class LayoutElement {
 export class ItemData {
 
     iconUrl: string = "";
-    contextData: string = "";
+    contextData: any = "";
     itemType: ItemType = "none";
     visible: boolean = true;
     expanded: boolean = false;

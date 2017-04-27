@@ -10,7 +10,7 @@ This flat list of loaded data types takes the following form: it must contain ex
 
 - `contextData` - The string value that will be passed to the event handler when a given library item is clicked.
 
-- `itemType` - This value can either be `creation`, `action` or `query`. For more details of these values, please refer to [Layout Specification](./layout-specs.md) document.
+- `itemType` - This value can either be `create`, `action` or `query`. For more details of these values, please refer to [Layout Specification](./layout-specs.md) document.
 
 - More fields will be added soon.
 
