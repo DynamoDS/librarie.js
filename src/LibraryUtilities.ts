@@ -325,43 +325,36 @@ function compareParts(parts: string[], partsToInclude: string[]): number {
 }
 
 /**
- * Combine a data type tree and layout element tree to produce the resulting
- * library item tree.
+ * Combine a data type tree and layout element tree to 
+ * produce the resulting library item tree under a specific section .
  * 
  * @param {TypeTreeNode[]} typeTreeNodes
  * A tree of hierarchical data type identifiers. This tree is constructed 
  * based entirely on the loaded data types and their fully qualified names.
  * See TypeTreeNode for more information.
  * 
- * @param {LayoutElement[]} layoutElements
- * A tree serving as layout specifications from which library item tree is 
- * constructed. The specifications also contain information of how a given 
- * data type is merged into the resulting library item tree node.
+ * @param section
+ * The section that the converted items will be under
  * 
  * @returns
  * Returns the resulting library item tree containing nodes merged from the 
  * type tree. The merging operation is done through the specifications of 
  * layout element tree.
  */
-export function convertToLibraryTree(
-    typeListNodes: TypeListNode[],
-    layoutElements: LayoutElement[],
-    section: LayoutElement): ItemData {
-
-    let defaultSection = new ItemData(section.text)
-    defaultSection.constructFromLayoutElement(section);
+export function convertToDefaultSection(typeListNodes: TypeListNode[], section: LayoutElement): ItemData {
+    let layoutElements = section.childElements;
+    let sectionData = convertSectionToItemData(section);
 
     // Generate the resulting library item tree before merging data types.
     for (let layoutElement of layoutElements) {
-        defaultSection.appendChild(constructLibraryItem(typeListNodes, layoutElement));
+        sectionData.appendChild(constructLibraryItem(typeListNodes, layoutElement));
     }
 
-    return defaultSection;
+    return sectionData;
 }
 
 export function buildLibraryItemsFromLayoutSpecs(loadedTypes: any, layoutSpecs: any): ItemData[] {
     let typeListNodes: TypeListNode[] = [];
-    let layoutElements: LayoutElement[] = [];
     let sections: LayoutElement[] = [];
 
     // Converting raw data to strongly typed data.
@@ -369,33 +362,33 @@ export function buildLibraryItemsFromLayoutSpecs(loadedTypes: any, layoutSpecs: 
         typeListNodes.push(new TypeListNode(loadedType));
     }
 
-    for (let element of layoutSpecs.elements) {
-        layoutElements.push(new LayoutElement(element));
-    }
-
     for (let section of layoutSpecs.sections) {
         sections.push(new LayoutElement(section));
     }
 
     let results: ItemData[] = [];
-    let defaultSection: ItemData = convertToLibraryTree(typeListNodes, layoutElements, sections.shift());
-    let miscSection = convertToItemData(typeListNodes, sections.shift());
+    let defaultSection = sections.find(x => x.text == "default");
+    let miscSection = sections.find(x => x.text == "Miscellaneous");
 
-    results.push(defaultSection);
-    results.push(miscSection);
+    results.push(convertToDefaultSection(typeListNodes, defaultSection));
+    results.push(convertToMiscSection(typeListNodes, miscSection));
 
     sections.forEach(section => {
-        let sectionData = new ItemData(section.text);
-        sectionData.constructFromLayoutElement(section);
-        results.push(sectionData);
-    })
+        results.push(convertSectionToItemData(section));
+    });
 
     return results;
 }
 
+export function convertSectionToItemData(section: LayoutElement): ItemData {
+    let sectionData = new ItemData(section.text);
+    sectionData.constructFromLayoutElement(section);
+    return sectionData;
+}
+
 /**
- * Convert an array of typeListNodes to ItemData which are not processed based on their fullyQualifiedNames, by
- * splitting the name with '.'.
+ * Convert an array of typeListNodes to ItemData which are not processed based on their fullyQualifiedNames, 
+ * by splitting the name with '.', and put them under a specific section.
  * 
  * As an example, for two typeListNodes 'A.B.C' and 'A.B.D', the resulting nodes are:
  * - A
@@ -406,15 +399,17 @@ export function buildLibraryItemsFromLayoutSpecs(loadedTypes: any, layoutSpecs: 
  * @param allNodes 
  * All the typeListNodes
  * 
+ * @param section
+ * The section that the converted items will be under
+ * 
  * @returns
  * Returns a single ItemData that contains the new nodes in its childItems.
  */
-export function convertToItemData(allNodes: TypeListNode[], section: LayoutElement): ItemData {
-    let miscSection = new ItemData(section.text);
-    miscSection.constructFromLayoutElement(section);
+export function convertToMiscSection(allNodes: TypeListNode[], section: LayoutElement): ItemData {
 
     // Search for the nodes that are not displayed in library view.
     let unprocessedNodes: TypeListNode[] = [];
+    let sectionData = convertSectionToItemData(section);
 
     _.each(allNodes, function (node) {
         if (!node.processed) {
@@ -424,15 +419,15 @@ export function convertToItemData(allNodes: TypeListNode[], section: LayoutEleme
     });
 
     _.each(unprocessedNodes, function (node) {
-        buildLibraryItemsFromName(node, miscSection)
+        buildLibraryItemsFromName(node, sectionData)
     })
 
     // Change the itemType of the outermost parents
-    _.each(miscSection.childItems, function (node) {
+    _.each(sectionData.childItems, function (node) {
         if (node.itemType === "group") node.itemType = "category";
     })
 
-    return miscSection;
+    return sectionData;
 }
 
 function buildLibraryItemsFromName(typeListNode: TypeListNode, parentNode: ItemData) {
