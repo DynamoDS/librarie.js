@@ -61,7 +61,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
     constructor(props: LibraryItemProps) {
         super(props);
 
-        // Assign initial state
+        // All items are collapsed by default, except for section items
         this.state = {
             expanded: this.props.data.itemType === "section" ? true : this.props.data.expanded
         };
@@ -88,11 +88,12 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         // Group displays only text without icon.
         if (this.props.data.itemType !== "group") {
             libraryItemTextStyle = "LibraryItemText";
-            iconElement = (<img className={"LibraryItemIcon"} src={this.props.data.iconUrl} onError={this.onImageLoadFail} />);
+            iconElement = (<img className={"LibraryItemIcon"} src={this.props.data.iconUrl}
+                onLoad={this.onImageLoad} onError={this.onImageLoadFail} />);
         }
 
-        let nestedElements = null;
-        let clusteredElements = null;
+        let nestedElements: JSX.Element = null;
+        let clusteredElements: JSX.Element = null;
 
         // visible only nested elements when expanded.
         if (this.state.expanded && this.props.data.childItems.length > 0) {
@@ -152,6 +153,10 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         );
     }
 
+    onImageLoad(event: any) {
+        event.target.style.visibility = "visible";
+    }
+
     onImageLoadFail(event: any) {
         event.target.style.visibility = "hidden";
     }
@@ -164,14 +169,9 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
                 return "LibraryItemContainerCategory";
             case "group":
                 return "LibraryItemContainerGroup";
-            case "none":
-            case "creation":
-            case "action":
-            case "query":
+            default:
                 return "LibraryItemContainerNone";
         }
-
-        return "LibraryItemContainerNone";
     }
 
     getLibraryItemHeaderStyle(): string {

@@ -352,8 +352,7 @@ export function convertToLibraryTree(
     defaultSection.constructFromLayoutElement(section);
 
     // Generate the resulting library item tree before merging data types.
-    for (let i = 0; i < layoutElements.length; i++) {
-        let layoutElement = layoutElements[i];
+    for (let layoutElement of layoutElements) {
         defaultSection.appendChild(constructLibraryItem(typeListNodes, layoutElement));
     }
 
@@ -366,12 +365,12 @@ export function buildLibraryItemsFromLayoutSpecs(loadedTypes: any, layoutSpecs: 
     let sections: LayoutElement[] = [];
 
     // Converting raw data to strongly typed data.
-    for (let i = 0; i < loadedTypes.loadedTypes.length; i++) {
-        typeListNodes.push(new TypeListNode(loadedTypes.loadedTypes[i]));
+    for (let loadedType of loadedTypes.loadedTypes) {
+        typeListNodes.push(new TypeListNode(loadedType));
     }
 
-    for (let i = 0; i < layoutSpecs.elements.length; i++) {
-        layoutElements.push(new LayoutElement(layoutSpecs.elements[i]));
+    for (let element of layoutSpecs.elements) {
+        layoutElements.push(new LayoutElement(element));
     }
 
     for (let section of layoutSpecs.sections) {

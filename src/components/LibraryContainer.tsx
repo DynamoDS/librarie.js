@@ -28,7 +28,6 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
 
         super(props);
         this.state = { inSearchMode: false };
-
         this.generatedSections = buildLibraryItemsFromLayoutSpecs(this.props.loadedTypesJson, this.props.layoutSpecsJson);
     }
 
@@ -41,12 +40,11 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
     }
 
     render() {
-
         try {
-            let sectionView: JSX.Element[] = null;
+            let sections: JSX.Element[] = null;
             let searchItems: ItemData[] = [];
 
-            for(let section of this.generatedSections) {
+            for (let section of this.generatedSections) {
                 searchItems = searchItems.concat(section.childItems);
             }
 
@@ -55,13 +53,13 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
 
             if (!this.state.inSearchMode) {
                 let index = 0;
-                sectionView = this.generatedSections.map(data => <LibraryItem key={index++} libraryContainer={this} data={data} />)
+                sections = this.generatedSections.map(data => <LibraryItem key={index++} libraryContainer={this} data={data} />)
             }
 
             return (
                 <div>
                     <div>{searchView}</div>
-                    <div>{sectionView}</div>
+                    <div>{sections}</div>
                 </div>
             );
         } catch (exception) {
