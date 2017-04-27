@@ -34,16 +34,35 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
         this.props.onDetailedModeChanged();
     }
 
-    onCategoriesChange(event: any) {
-        let categories = this.state.selectedCategories;
-        if (_.contains(this.state.selectedCategories, event.target.name)) {
-            categories = _.without(categories, event.target.name);
+    onAllCheckboxChange(event: any) {
+        if (event.target.checked) {
+            this.setState({ selectedCategories: this.props.categories });
         }
         else {
-            categories.push(event.target.name);
+            this.setState({ selectedCategories: [] })
+        }
+    }
+
+    onCategoriesChange(event: any) {
+        let categories = this.state.selectedCategories;
+        if (event.target.checked) {
+            if (!_.contains(this.state.selectedCategories, event.target.name)) {
+                categories.push(event.target.name);
+            }
+        }
+        else {
+            categories = _.without(categories, event.target.name);
         }
         this.setState({ selectedCategories: categories })
         this.props.onCategoriesChange(categories);
+    }
+
+    isAllSelected() {
+        return (this.state.selectedCategories.length == this.props.categories.length);
+    }
+
+    isSelectedCategory(category: string) {
+        return _.contains(this.state.selectedCategories, category);
     }
 
     render() {
@@ -51,8 +70,16 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
         let searchOptionsBtn = <button id="SearchOptionsBtn" className="ArrowBg" onClick={this.onOptionsButtonClick.bind(this)}></button>;
         let thisObj = this;
         let checkboxes: JSX.Element[] = [];
+
+        checkboxes.push(<input type="checkbox" name="All" className="OptionCheckbox" onChange={this.onAllCheckboxChange.bind(thisObj)}
+            checked={this.isAllSelected()} />);
+        checkboxes.push(<span className="OptionText">All</span>);
+        checkboxes.push(<br />);
+
         _.each(this.props.categories, function (c) {
-            checkboxes.push(<input type="checkbox" name={c} className="OptionCheckbox" onChange={thisObj.onCategoriesChange.bind(thisObj)} />);
+            let checked = thisObj.isSelectedCategory(c);
+            checkboxes.push(<input type="checkbox" name={c} className="OptionCheckbox" onChange={thisObj.onCategoriesChange.bind(thisObj)}
+                checked={checked} />);
             checkboxes.push(<span className="OptionText">{c}</span>);
             checkboxes.push(<br />);
         })

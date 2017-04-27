@@ -23,6 +23,7 @@ interface SearchViewStates {
     selectedCategories: string[];
     structured: boolean;
     detailed: boolean;
+}
 
 export class SearchView extends React.Component<SearchViewProps, SearchViewStates> {
     timeout: number;
