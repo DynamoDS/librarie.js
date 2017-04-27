@@ -6,7 +6,7 @@ import * as React from "react";
 import { LibraryController } from "../entry-point";
 import { LibraryItem } from "./LibraryItem";
 import { SearchView } from "./SearchView";
-import { buildLibraryItemsFromLayoutSpecs, ItemData } from "../LibraryUtilities";
+import { buildLibrarySectionsFromLayoutSpecs, ItemData } from "../LibraryUtilities";
 
 declare var boundContainer: any; // Object set from C# side.
 
@@ -27,7 +27,7 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
     constructor(props: LibraryContainerProps) {
         super(props);
         this.state = { inSearchMode: false };
-        this.generatedSections = buildLibraryItemsFromLayoutSpecs(this.props.loadedTypesJson, this.props.layoutSpecsJson);
+        this.generatedSections = buildLibrarySectionsFromLayoutSpecs(this.props.loadedTypesJson, this.props.layoutSpecsJson);
     }
 
     raiseEvent(name: string, params?: any | any[]) {

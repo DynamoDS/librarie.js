@@ -353,7 +353,7 @@ export function convertToDefaultSection(typeListNodes: TypeListNode[], section: 
     return sectionData;
 }
 
-export function buildLibraryItemsFromLayoutSpecs(loadedTypes: any, layoutSpecs: any): ItemData[] {
+export function buildLibrarySectionsFromLayoutSpecs(loadedTypes: any, layoutSpecs: any): ItemData[] {
     let typeListNodes: TypeListNode[] = [];
     let sections: LayoutElement[] = [];
 
@@ -372,10 +372,6 @@ export function buildLibraryItemsFromLayoutSpecs(loadedTypes: any, layoutSpecs: 
 
     results.push(convertToDefaultSection(typeListNodes, defaultSection));
     results.push(convertToMiscSection(typeListNodes, miscSection));
-
-    sections.forEach(section => {
-        results.push(convertSectionToItemData(section));
-    });
 
     return results;
 }
