@@ -254,17 +254,17 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
     onLibraryItemMouseLeave() {
         let libraryContainer = this.props.libraryContainer;
         if (this.props.data.childItems.length == 0) {
-            libraryContainer.raiseEvent(libraryContainer.props.libraryController.ItemMouseLeaveEventName, true);
+            libraryContainer.raiseEvent(libraryContainer.props.libraryController.ItemMouseLeaveEventName,
+                                            {data: this.props.data.contextData});
         }
     }
 
     onLibraryItemMouseEnter() {
         let libraryContainer = this.props.libraryContainer;
         if (this.props.data.childItems.length == 0) {
-            var rect = ReactDOM.findDOMNode(this).getBoundingClientRect();
-            let middle = (rect.bottom + rect.top)/2.0;
+            var rec = ReactDOM.findDOMNode(this).getBoundingClientRect();
             libraryContainer.raiseEvent(libraryContainer.props.libraryController.ItemMouseEnterEventName, 
-                                            {name: this.props.data.contextData, posY: middle});
+                                            {data: this.props.data.contextData, rect: rec});
         }
     }
 }
