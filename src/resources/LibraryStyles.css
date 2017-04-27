@@ -43,6 +43,7 @@ body {
     padding: 10px;
     color: white;
     transition: 0.15s;
+    border-bottom: solid 1px #494949;
 }
 
 .LibraryItemHeader {
