@@ -18,13 +18,13 @@
 */
 
 import * as React from "react";
-import { LibraryView } from "../LibraryView";
+import { LibraryContainer } from "./LibraryContainer";
 import { LibraryItem } from "./LibraryItem";
 import { ItemData } from "../LibraryUtilities";
 
 export interface ClusterViewProps {
-    libraryView: LibraryView,
-    iconPath: string,
+    libraryContainer: LibraryContainer,
+    icon: any,
     borderColor: string,
     childItems: ItemData[]
 }
@@ -40,7 +40,7 @@ export class ClusterView extends React.Component<ClusterViewProps, undefined> {
         return (
             <div className={"ClusterViewContainer"}>
                 <div className={"ClusterLeftPane"} style={localStyle}>
-                    <img className={"ClusterIcon"} src={this.props.iconPath} />
+                    <img className={"ClusterIcon"} src={this.props.icon} />
                 </div>
                 <div className={"ClusterRightPane"}>
                     {this.getNestedElements()}
@@ -53,7 +53,7 @@ export class ClusterView extends React.Component<ClusterViewProps, undefined> {
 
         let index = 0;
         return this.props.childItems.map((item: ItemData) => {
-            return (<LibraryItem key={index++} libraryView={this.props.libraryView} data={item} indentLevel={0} />);
+            return (<LibraryItem key={index++} libraryContainer={this.props.libraryContainer} data={item} />);
         });
     }
 

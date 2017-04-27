@@ -18,13 +18,12 @@
 
 import * as React from "react";
 import { ClusterView } from "./ClusterView";
-import { LibraryView } from "../LibraryView";
+import { LibraryContainer } from "./LibraryContainer";
 import { ItemData } from "../LibraryUtilities";
 
 export interface LibraryItemProps {
-    libraryView: LibraryView,
-    data: ItemData,
-    indentLevel: number
+    libraryContainer: LibraryContainer,
+    data: ItemData
 }
 
 export interface LibraryItemState {
@@ -87,14 +86,13 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         let libraryItemTextStyle = "LibraryItemGroupText";
 
         // Group displays only text without icon.
-        if (this.props.data.itemType != "group") {
+        if (this.props.data.itemType !== "group") {
             libraryItemTextStyle = "LibraryItemText";
-            iconElement = (<img className={"LibraryItemIcon"} src={this.props.data.iconUrl} />);
+            iconElement = (<img className={"LibraryItemIcon"} src={this.props.data.iconUrl} onError={this.onImageLoadFail} />);
         }
 
         let nestedElements = null;
         let clusteredElements = null;
-        let indentElements = this.getIndentElements();
 
         // visible only nested elements when expanded.
         if (this.state.expanded && this.props.data.childItems.length > 0) {
@@ -109,17 +107,46 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
             nestedElements = this.getNestedElements(groupedItems);
         }
 
+
+        let arrow = null;
+        let bodyIndentation = null;
+
+        // Indentation and arrow are only added for non-category items
+        if (this.props.data.itemType !== "category") {
+
+            // Indent one level for clustered and nested elements
+            if (clusteredElements || nestedElements) {
+                bodyIndentation = (<div className={"BodyIndentation"} />);
+            }
+
+            // Show arrow for non-leaf items
+            if (this.props.data.childItems.length > 0) {
+                let arrowIcon = this.state.expanded ? require("../resources/ui/indent-arrow-down.svg") : require("../resources/ui/indent-arrow-right.svg");
+                arrow = <img className={"Arrow"} src={arrowIcon} onError={this.onImageLoadFail} />;
+            }
+        }
+
         return (
             <div className={this.getLibraryItemContainerStyle()}>
-                <div className={"LibraryItemHeader"} onClick={this.onLibraryItemClicked.bind(this)} >
-                    {indentElements}
+                <div className={"LibraryItemHeader"} onClick={this.onLibraryItemClicked.bind(this)} 
+                        onMouseOver={this.onLibraryItemHoveredOn.bind(this)} onMouseLeave={this.onLibraryItemMouseLeave.bind(this)}>
+                    {arrow}
                     {iconElement}
                     <div className={libraryItemTextStyle}>{this.props.data.text}</div>
                 </div>
-                {clusteredElements}
-                {nestedElements}
+                <div className={"LibraryItemBodyContainer"}>
+                    {bodyIndentation}
+                    <div className={"LibraryItemBodyElements"}>
+                        {clusteredElements}
+                        {nestedElements}
+                    </div>
+                </div>
             </div>
         );
+    }
+
+    onImageLoadFail(event: any) {
+        event.target.style.visibility = "hidden";
     }
 
     getLibraryItemContainerStyle(): string {
@@ -140,27 +167,6 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         return "LibraryItemContainerNone";
     }
 
-    getIndentElements(): JSX.Element {
-        if (this.props.indentLevel <= 0) {
-            return null;
-        }
-
-        let indents: JSX.Element[] = [];
-        let indentationIconRootPath = "/src/resources/ui/";
-
-        for (let i = 1; i <= this.props.indentLevel; i++) {
-            let indentationPath = indentationIconRootPath;
-            if (i == this.props.indentLevel) {
-                indentationPath += "indent-line-t.svg";
-            } else {
-                indentationPath += "indent-line-i.svg";
-            }
-            indents.push(<img key={i} className={"Indentation"} src={indentationPath} />);
-        }
-
-        return (<div className={"Indents"}>{indents}</div>);
-    }
-
     getNestedElements(groupedItems: GroupedItems): JSX.Element {
 
         let regularItems = groupedItems.getOtherItems();
@@ -176,7 +182,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
                     // types of items except ones of type creation/action/query.
                     // 
                     regularItems.map((item: ItemData) => {
-                        return (<LibraryItem key={index++} libraryView={this.props.libraryView} data={item} indentLevel={this.props.indentLevel + 1} />);
+                        return (<LibraryItem key={index++} libraryContainer={this.props.libraryContainer} data={item} />);
                     })
                 }
             </div>
@@ -192,8 +198,8 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         let creationCluster = null;
         if (creationMethods.length > 0 && creationMethods.some(item => item.visible)) {
             creationCluster = (<ClusterView
-                libraryView={this.props.libraryView}
-                iconPath="src/resources/icons/library-creation.svg"
+                libraryContainer={this.props.libraryContainer}
+                icon={require("../resources/icons/library-creation.svg")}
                 borderColor="#62895b" /* green */
                 childItems={creationMethods} />);
         }
@@ -201,8 +207,8 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         let actionCluster = null;
         if (actionMethods.length > 0 && actionMethods.some(item => item.visible)) {
             actionCluster = (<ClusterView
-                libraryView={this.props.libraryView}
-                iconPath="src/resources/icons/library-action.svg"
+                libraryContainer={this.props.libraryContainer}
+                icon={require("../resources/icons/library-action.svg")}
                 borderColor="#ad5446" /* red */
                 childItems={actionMethods} />);
         }
@@ -210,8 +216,8 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         let queryCluster = null;
         if (queryMethods.length > 0 && queryMethods.some(item => item.visible)) {
             queryCluster = (<ClusterView
-                libraryView={this.props.libraryView}
-                iconPath="src/resources/icons/library-query.svg"
+                libraryContainer={this.props.libraryContainer}
+                icon={require("../resources/icons/library-query.svg")}
                 borderColor="#4b9dbf" /* blue */
                 childItems={queryMethods} />);
         }
@@ -235,7 +241,25 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         let currentlyExpanded = this.state.expanded;
         this.setState({ expanded: !currentlyExpanded });
 
-        let libraryView = this.props.libraryView;
-        libraryView.raiseEvent("itemClicked", this.props.data.contextData);
+        let libraryContainer = this.props.libraryContainer;
+        if (this.props.data.childItems.length == 0) {
+            libraryContainer.raiseEvent(libraryContainer.props.libraryController.ItemClickedEventName, 
+                this.props.data.contextData);
+        }
+    }
+
+    onLibraryItemHoveredOn() {
+        let libraryContainer = this.props.libraryContainer;
+        if (this.props.data.childItems.length == 0) {
+            libraryContainer.raiseEvent(libraryContainer.props.libraryController.ItemHoveredOnEventName,
+                this.props.data.contextData);
+        }
+    }
+
+    onLibraryItemMouseLeave() {
+        let libraryContainer = this.props.libraryContainer;
+        if (this.props.data.childItems.length == 0) {
+            libraryContainer.raiseEvent(libraryContainer.props.libraryController.ItemMouseLeaveEventName, true);
+        }
     }
 }
