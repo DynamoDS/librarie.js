@@ -9,13 +9,18 @@ export interface SearchBarProps {
     categories: string[];
 }
 
-export interface SearchBarState { expanded: boolean; selectedCategories: string[] }
+export interface SearchBarState {
+    expanded: boolean;
+    selectedCategories: string[];
+    structured: boolean;
+    detailed: boolean;
+}
 
 export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
 
     constructor(props: SearchBarProps) {
         super(props);
-        this.state = { expanded: false, selectedCategories: [] };
+        this.state = { expanded: false, selectedCategories: [], structured: false, detailed: false };
     }
 
     onTextChange(event: any) {
@@ -28,10 +33,12 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
 
     onStructuredModeChange(event: any) {
         this.props.onStructuredModeChanged();
+        this.setState({ structured: !this.state.structured });
     }
 
     onDetailedModeChange(event: any) {
         this.props.onDetailedModeChanged();
+        this.setState({ detailed: !this.state.detailed });
     }
 
     onAllCheckboxChange(event: any) {
@@ -65,37 +72,43 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
         return _.contains(this.state.selectedCategories, category);
     }
 
+    createCheckbox(name: string, checkboxClassName: string, checked: boolean, onChangeFunc: any, displayText?: string): JSX.Element {
+        let checkSymbol = checked ? <img className="CheckboxSymbol" src="/src/resources/UI/check-symbol.svg" /> : null;
+        if (!displayText) displayText = name;
+
+        let checkbox: JSX.Element =
+            <label className="CheckboxLabel">
+                {checkSymbol}
+                <input type="checkbox" name={name} className={checkboxClassName} onChange={onChangeFunc} checked={checked} />
+                <div className="CheckboxLabelText">{displayText}</div>
+            </label>;
+        return checkbox;
+    }
+
     render() {
         let options = null;
         let searchOptionsBtn = <button id="SearchOptionsBtn" className="ArrowBg" onClick={this.onOptionsButtonClick.bind(this)}></button>;
         let thisObj = this;
         let checkboxes: JSX.Element[] = [];
 
-        checkboxes.push(<input type="checkbox" name="All" className="OptionCheckbox" onChange={this.onAllCheckboxChange.bind(thisObj)}
-            checked={this.isAllSelected()} />);
-        checkboxes.push(<span className="OptionText">All</span>);
-        checkboxes.push(<br />);
+        checkboxes.push(this.createCheckbox("All", "CategoryCheckbox", this.isAllSelected(), this.onAllCheckboxChange.bind(this)));
 
         _.each(this.props.categories, function (c) {
             let checked = thisObj.isSelectedCategory(c);
-            checkboxes.push(<input type="checkbox" name={c} className="OptionCheckbox" onChange={thisObj.onCategoriesChange.bind(thisObj)}
-                checked={checked} />);
-            checkboxes.push(<span className="OptionText">{c}</span>);
-            checkboxes.push(<br />);
+            checkboxes.push(thisObj.createCheckbox(c, "CategoryCheckbox", checked, thisObj.onCategoriesChange.bind(thisObj)));
         })
 
         if (this.state.expanded) {
             searchOptionsBtn = <button id="SearchOptionsBtn" className="ArrowReversedBg" onClick={this.onOptionsButtonClick.bind(this)}></button>
             options =
-                <div className="SearchOptions"><div className="SearchOptionsContainer">
-                    <input type="checkbox" className="OptionCheckbox" onChange={this.onStructuredModeChange.bind(this)} />
-                    <span className="OptionText">Display as structured view</span><br />
-                    <input type="checkbox" className="OptionCheckbox" onChange={this.onDetailedModeChange.bind(this)} />
-                    <span className="OptionText">Display detailed info</span>
-                </div>
+                <div className="SearchOptions">
                     <div className="SearchOptionsContainer">
-                        Filter by category:
-                <div className="CategoryContainer">
+                        {this.createCheckbox("Structured", "SearchCheckbox", this.state.structured, this.onStructuredModeChange.bind(this), "Display as structured view")}
+                        {this.createCheckbox("Detailed", "SearchCheckbox", this.state.detailed, this.onDetailedModeChange.bind(this), "Display detailed info")}
+                    </div>
+                    <div className="SearchOptionsContainer">
+                        <div className="SearchOptionsHeader">Filter by category:</div>
+                        <div className="CategoryCheckboxContainer">
                             {checkboxes}
                         </div>
                     </div></div>;

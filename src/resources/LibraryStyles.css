@@ -225,19 +225,50 @@ body {
 .SearchBar .SearchOptionsContainer {
     font-size: 13px;
     color:#fff;
-    margin:0px 5px 5px 5px;
+    margin: 0px 0px 5px 0px;
     background-color:#414141;
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+
+.SearchBar .SearchOptionsHeader {
     padding:5px;
-    border-radius:5px;
+    margin-left:10px;
 }
 
-.OptionCheckbox, .OptionText {
-    vertical-align:middle;
-}
-
-.SearchBar .CategoryContainer {
+.SearchBar .CategoryCheckboxContainer {
     max-height:100px;
     overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+.CheckboxLabel {
+    position: relative;
+    background-color:#414141;
+    width: 100%;
+    display: block;
+    padding: 5px;
+}
+
+.CheckboxLabel:hover {
+    background-color: #555;
+    cursor: pointer;
+}
+
+.CheckboxLabel .CheckboxSymbol {
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    width: 10px;
+    height: 10px;
+}
+
+.CheckboxLabel .CheckboxLabelText {
+    margin-left: 20px;
+}
+
+.SearchCheckbox, .CategoryCheckbox {
+    display: none;
 }
 
 #SearchInput::-webkit-search-cancel-button {

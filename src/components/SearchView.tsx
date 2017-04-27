@@ -39,7 +39,7 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
         this.state = {
             searchText: '',
             displayMode: "list",
-            selectedCategories: [],
+            selectedCategories: this.categories,
             structured: false,
             detailed: false
         };
