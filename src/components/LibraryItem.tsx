@@ -17,6 +17,7 @@
 */
 
 import * as React from "react";
+import * as ReactDOM from "react-dom";
 import { ClusterView } from "./ClusterView";
 import { LibraryContainer } from "./LibraryContainer";
 import { ItemData } from "../LibraryUtilities";
@@ -128,8 +129,10 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
 
         return (
             <div className={this.getLibraryItemContainerStyle()}>
-                <div className={"LibraryItemHeader"} onClick={this.onLibraryItemClicked.bind(this)} 
-                        onMouseOver={this.onLibraryItemHoveredOn.bind(this)} onMouseLeave={this.onLibraryItemMouseLeave.bind(this)}>
+                <div className={"LibraryItemHeader"} 
+                        onClick={this.onLibraryItemClicked.bind(this)} 
+                        onMouseEnter={this.onLibraryItemMouseEnter.bind(this)}
+                        onMouseLeave={this.onLibraryItemMouseLeave.bind(this)}>
                     {arrow}
                     {iconElement}
                     <div className={libraryItemTextStyle}>{this.props.data.text}</div>
@@ -248,18 +251,20 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         }
     }
 
-    onLibraryItemHoveredOn() {
-        let libraryContainer = this.props.libraryContainer;
-        if (this.props.data.childItems.length == 0) {
-            libraryContainer.raiseEvent(libraryContainer.props.libraryController.ItemHoveredOnEventName,
-                this.props.data.contextData);
-        }
-    }
-
     onLibraryItemMouseLeave() {
         let libraryContainer = this.props.libraryContainer;
         if (this.props.data.childItems.length == 0) {
-            libraryContainer.raiseEvent(libraryContainer.props.libraryController.ItemMouseLeaveEventName, true);
+            libraryContainer.raiseEvent(libraryContainer.props.libraryController.ItemMouseLeaveEventName,
+                                            {data: this.props.data.contextData});
+        }
+    }
+
+    onLibraryItemMouseEnter() {
+        let libraryContainer = this.props.libraryContainer;
+        if (this.props.data.childItems.length == 0) {
+            var rec = ReactDOM.findDOMNode(this).getBoundingClientRect();
+            libraryContainer.raiseEvent(libraryContainer.props.libraryController.ItemMouseEnterEventName, 
+                                            {data: this.props.data.contextData, rect: rec});
         }
     }
 }
