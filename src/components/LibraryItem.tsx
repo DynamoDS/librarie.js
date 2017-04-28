@@ -89,8 +89,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         // Group displays only text without icon.
         if (this.props.data.itemType !== "group") {
             libraryItemTextStyle = "LibraryItemText";
-            iconElement = (<img className={"LibraryItemIcon"} src={this.props.data.iconUrl}
-                onLoad={this.onImageLoad} onError={this.onImageLoadFail} />);
+            iconElement = (<img className={"LibraryItemIcon"} src={this.props.data.iconUrl} onError={this.onImageLoadFail} />);
         }
 
         let nestedElements: JSX.Element = null;
@@ -125,7 +124,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
             // Show arrow for non-leaf items
             if (this.props.data.childItems.length > 0) {
                 let arrowIcon = this.state.expanded ? require("../resources/ui/indent-arrow-down.svg") : require("../resources/ui/indent-arrow-right.svg");
-                arrow = <img className={"Arrow"} src={arrowIcon} onLoad={this.onImageLoad} onError={this.onImageLoadFail} />;
+                arrow = <img className={"Arrow"} src={arrowIcon} onError={this.onImageLoadFail} />;
             }
         }
 
@@ -152,10 +151,6 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
                 </div>
             </div>
         );
-    }
-
-    onImageLoad(event: any) {
-        event.target.style.visibility = "visible";
     }
 
     onImageLoadFail(event: any) {
@@ -267,7 +262,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         let libraryContainer = this.props.libraryContainer;
         if (this.props.data.childItems.length == 0) {
             libraryContainer.raiseEvent(libraryContainer.props.libraryController.ItemMouseLeaveEventName,
-                                            {data: this.props.data.contextData});
+                { data: this.props.data.contextData });
         }
     }
 
@@ -275,8 +270,8 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         let libraryContainer = this.props.libraryContainer;
         if (this.props.data.childItems.length == 0) {
             var rec = ReactDOM.findDOMNode(this).getBoundingClientRect();
-            libraryContainer.raiseEvent(libraryContainer.props.libraryController.ItemMouseEnterEventName, 
-                                            {data: this.props.data.contextData, rect: rec});
+            libraryContainer.raiseEvent(libraryContainer.props.libraryController.ItemMouseEnterEventName,
+                { data: this.props.data.contextData, rect: rec });
         }
     }
 }
