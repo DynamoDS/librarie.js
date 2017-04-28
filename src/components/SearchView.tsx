@@ -13,7 +13,7 @@ interface SearchModeChangedFunc {
 interface SearchViewProps {
     onSearchModeChanged: SearchModeChangedFunc;
     libraryContainer: LibraryContainer;
-    items: ItemData[];
+    sections: ItemData[];
 }
 
 interface SearchViewStates {
@@ -44,14 +44,19 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
 
     generateStructuredItems(): JSX.Element[] {
         let index = 0;
-        return this.props.items.map((item: ItemData) =>
+        return this.props.sections.map((item: ItemData) =>
             <LibraryItem key={index++} libraryContainer={this.props.libraryContainer} data={item} />);
     }
 
     generateListItems(): JSX.Element[] {
         let leafItems: JSX.Element[] = [];
+        let categoryItems: ItemData[] = [];
 
-        for (let item of this.props.items) {
+        this.props.sections.forEach(section =>
+            categoryItems = categoryItems.concat(section.childItems)
+        );
+
+        for (let item of categoryItems) {
             if (!item.visible) {
                 continue;
             }
@@ -95,7 +100,7 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
         if (hasText) {
             // Starting searching immediately after user input, 
             // but only show change on ui after 300ms
-            searchItemResursive(this.props.items, text);
+            searchItemResursive(this.props.sections, text);
 
             this.timeout = setTimeout(function () {
                 this.updateSearchView(text);
@@ -123,7 +128,7 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
         if (this.state.searchText.length > 0) {
             listItems = (this.state.displayMode === "structure") ? this.generateStructuredItems() : this.generateListItems();
         } else {  // Reset ItemData when search text is cleared
-            setItemStateRecursive(this.props.items, true, false);
+            setItemStateRecursive(this.props.sections, true, false);
         }
 
         return (

@@ -6,7 +6,7 @@ import * as React from "react";
 import { LibraryController } from "../entry-point";
 import { LibraryItem } from "./LibraryItem";
 import { SearchView } from "./SearchView";
-import { buildLibraryItemsFromLayoutSpecs, ItemData } from "../LibraryUtilities";
+import { buildLibrarySectionsFromLayoutSpecs, ItemData } from "../LibraryUtilities";
 
 declare var boundContainer: any; // Object set from C# side.
 
@@ -22,16 +22,12 @@ export interface LibraryContainerStates {
 
 export class LibraryContainer extends React.Component<LibraryContainerProps, LibraryContainerStates> {
 
-    generatedLibraryItems: ItemData[] = null;
-    miscItems: ItemData[] = null;
+    generatedSections: ItemData[] = null;
 
     constructor(props: LibraryContainerProps) {
-
         super(props);
         this.state = { inSearchMode: false };
-        this.generatedLibraryItems = buildLibraryItemsFromLayoutSpecs(
-            this.props.loadedTypesJson, this.props.layoutSpecsJson);
-        this.miscItems = this.generatedLibraryItems.pop().childItems; // Get the unprocessed nodes
+        this.generatedSections = buildLibrarySectionsFromLayoutSpecs(this.props.loadedTypesJson, this.props.layoutSpecsJson);
     }
 
     raiseEvent(name: string, params?: any | any[]) {
@@ -43,33 +39,20 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
     }
 
     render() {
-
         try {
-            let listItems: JSX.Element[] = null;
-            let miscListItems: JSX.Element[] = null;
-            const childItems = this.generatedLibraryItems;
-            const miscItems = this.miscItems;
-            const searchView = <SearchView onSearchModeChanged={this.onSearchModeChanged.bind(this)} libraryContainer={this} items={childItems.concat(miscItems)} />;
-
-            let miscHeader = null;
+            let sections: JSX.Element[] = null;
+            const searchView = <SearchView onSearchModeChanged={this.onSearchModeChanged.bind(this)}
+                libraryContainer={this} sections={this.generatedSections} />;
 
             if (!this.state.inSearchMode) {
                 let index = 0;
-                listItems = childItems.map((item: ItemData) => (<LibraryItem key={index++} libraryContainer={this} data={item} />));
-                miscListItems = miscItems.map((item: ItemData) => (<LibraryItem key={index++} libraryContainer={this} data={item} />));
-                if (miscListItems.length > 0) {
-                    miscHeader =
-                        <div className="LibraryItemMiscHeader">
-                            <div className="LibraryItemMiscText">Miscellaneous</div>
-                        </div>;
-                }
+                sections = this.generatedSections.map(data => <LibraryItem key={index++} libraryContainer={this} data={data} />)
             }
 
             return (
                 <div>
-                    <div>{searchView}</div>
-                    <div>{listItems}</div>
-                    <div>{miscHeader}{miscListItems}</div>
+                    {searchView}
+                    {sections}
                 </div>
             );
         } catch (exception) {
