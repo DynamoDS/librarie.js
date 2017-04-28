@@ -1,4 +1,5 @@
 import * as React from "react";
+import * as _ from "underscore";
 import { LibraryItem } from "./LibraryItem";
 import { SearchResultItem } from "./SearchResultItem";
 import { LibraryContainer } from "./LibraryContainer";
@@ -73,7 +74,7 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
         let leafItems: JSX.Element[] = [];
 
         for (let item of this.props.items) {
-            if (!item.visible) {
+            if (!item.visible || !_.contains(this.state.selectedCategories, item.text)) {
                 continue;
             }
 
@@ -142,7 +143,7 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
         let listItems: JSX.Element[] = null;
 
         if (this.state.searchText.length > 0) {
-            listItems = (this.state.displayMode === "structure") ? this.generateStructuredItems() : this.generateListItems();
+            listItems = (this.state.structured) ? this.generateStructuredItems() : this.generateListItems();
         } else {  // Reset ItemData when search text is cleared
             setItemStateRecursive(this.props.items, true, false);
         }

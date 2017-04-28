@@ -20,7 +20,7 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
 
     constructor(props: SearchBarProps) {
         super(props);
-        this.state = { expanded: false, selectedCategories: [], structured: false, detailed: false };
+        this.state = { expanded: false, selectedCategories: this.props.categories, structured: false, detailed: false };
     }
 
     onTextChange(event: any) {
@@ -44,9 +44,11 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
     onAllCheckboxChange(event: any) {
         if (event.target.checked) {
             this.setState({ selectedCategories: this.props.categories });
+            this.props.onCategoriesChange(this.props.categories);
         }
         else {
             this.setState({ selectedCategories: [] })
+            this.props.onCategoriesChange([]);
         }
     }
 
