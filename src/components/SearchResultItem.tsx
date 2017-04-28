@@ -38,7 +38,7 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
     }
 
     onImageLoadFail(event: any) {
-        event.target.style.visibility = "hidden";
+        event.target.src = require("../resources/ui/dynamo.png");
     }
 
     onItemClicked() {

@@ -149,7 +149,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
     }
 
     onImageLoadFail(event: any) {
-        event.target.style.visibility = "hidden";
+        event.target.src = require("../resources/ui/dynamo.png");
     }
 
     getLibraryItemContainerStyle(): string {
