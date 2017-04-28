@@ -100,14 +100,14 @@
     },
     {
       "fullyQualifiedName": "Core.Math.And",
-      "iconUrl": "http://54.169.171.233:3456/src/resources/icons/CoreNodeModels.Logic.And.png",
+      "iconUrl": "/src/resources/icons/CoreNodeModels.Logic.And.png",
       "contextData": "And",
       "itemType": "action",
       "keywords": "DSCore.Logic.And, DSCoreNodesUI.Logic.And, And"
     },
     {
       "fullyQualifiedName": "Core.Math.Or",
-      "iconUrl": "http://54.169.171.233:3456/src/resources/icons/CoreNodeModels.Logic.Or.png",
+      "iconUrl": "/src/resources/icons/CoreNodeModels.Logic.Or.png",
       "contextData": "Or",
       "itemType": "action",
       "keywords": "DSCore.Logic.Or, DSCoreNodesUI.Logic.Or, Or"
@@ -205,7 +205,7 @@
     },
     {
       "fullyQualifiedName": "Core.Color.Color Palette",
-      "iconUrl": "http://54.169.171.233:3456/src/resources/icons/CoreNodeModels.Input.ColorPalette.png",
+      "iconUrl": "/src/resources/icons/CoreNodeModels.Input.ColorPalette.png",
       "contextData": "Color Palette",
       "itemType": "create",
       "keywords": "Color Palette, ColorUISearchTags"
@@ -261,7 +261,7 @@
     },
     {
       "fullyQualifiedName": "Core.File.DirectoryFromPath",
-      "iconUrl": "http://54.169.171.233:3456/src/resources/icons/CoreNodeModels.Input.DirectoryObject.png",
+      "iconUrl": "/src/resources/icons/CoreNodeModels.Input.DirectoryObject.png",
       "contextData": "DirectoryFromPath",
       "itemType": "action",
       "keywords": "DSCore.File.DirectoryObject, DSCoreNodesUI.Input.DirectoryObject, Directory.FromPath, DirectoryFromPath, directorypath, filepath"
@@ -321,6 +321,20 @@
       "contextData": "Watch 3D",
       "itemType": "action",
       "keywords": "Dynamo.Nodes.dyn3DPreview, Dynamo.Nodes.3DPreview, Dynamo.Nodes.Watch3D, DynamoWatch3D.Watch3D, Watch 3D"
+    },
+    {
+      "fullyQualifiedName": "Dynamo.Translation.Models.Filter CAD Objects",
+      "iconUrl": "/src/resources/icons/Dynamo.Translation.Models.ObjectFilter.png",
+      "contextData": "Filter CAD Objects",
+      "itemType": "action",
+      "keywords": "ObjectFilter, Filter CAD Objects, translate, atf, filter, select"
+    },
+    {
+      "fullyQualifiedName": "Dynamo.Translation.Models.Select CAD Objects",
+      "iconUrl": "/src/resources/icons/Dynamo.Translation.Models.ObjectSelector.png",
+      "contextData": "Select CAD Objects",
+      "itemType": "action",
+      "keywords": "ObjectSelector, Select CAD Objects, translate, atf, filter, select"
     },
     {
       "fullyQualifiedName": "Rank",
@@ -3579,14 +3593,14 @@
     },
     {
       "fullyQualifiedName": "DSCore.ColorRange.ByColorsAndParameters",
-      "iconUrl": "http://54.169.171.233:3456/src/resources/icons/DSCore.ColorRange.ByColorsAndParameters.png",
+      "iconUrl": "/src/resources/icons/DSCore.ColorRange.ByColorsAndParameters.png",
       "contextData": "DSCore.ColorRange.ByColorsAndParameters@DSCore.Color[],Autodesk.DesignScript.Geometry.UV[]",
       "itemType": "create",
       "keywords": ""
     },
     {
       "fullyQualifiedName": "DSCore.ColorRange.GetColorAtParameter",
-      "iconUrl": "http://54.169.171.233:3456/src/resources/icons/DSCore.ColorRange.GetColorAtParameter.png",
+      "iconUrl": "/src/resources/icons/DSCore.ColorRange.GetColorAtParameter.png",
       "contextData": "DSCore.ColorRange.GetColorAtParameter@Autodesk.DesignScript.Geometry.UV",
       "itemType": "action",
       "keywords": ""
@@ -3621,7 +3635,7 @@
     },
     {
       "fullyQualifiedName": "DSCore.DateTime.Format",
-      "iconUrl": "http://54.169.171.233:3456/src/resources/icons/DSCore.DateTime.Format.png",
+      "iconUrl": "/src/resources/icons/DSCore.DateTime.Format.png",
       "contextData": "DSCore.DateTime.Format@var,string",
       "itemType": "action",
       "keywords": ""
@@ -3894,98 +3908,98 @@
     },
     {
       "fullyQualifiedName": "DSCore.List.Contains",
-      "iconUrl": "http://54.169.171.233:3456/src/resources/icons/DSCore.List.Contains.png",
+      "iconUrl": "/src/resources/icons/DSCore.List.Contains.png",
       "contextData": "DSCore.List.Contains@var[]..[],var[]..[]",
       "itemType": "action",
       "keywords": "item, search, in, listcontains"
     },
     {
       "fullyQualifiedName": "DSCore.List.IsHomogeneous",
-      "iconUrl": "http://54.169.171.233:3456/src/resources/icons/DSCore.List.IsHomogeneous.png",
+      "iconUrl": "/src/resources/icons/DSCore.List.IsHomogeneous.png",
       "contextData": "DSCore.List.IsHomogeneous@var[]..[]",
       "itemType": "action",
       "keywords": "homogeneous, ishomogeneous, same, type"
     },
     {
       "fullyQualifiedName": "DSCore.List.IsRectangular",
-      "iconUrl": "http://54.169.171.233:3456/src/resources/icons/DSCore.List.IsRectangular.png",
+      "iconUrl": "/src/resources/icons/DSCore.List.IsRectangular.png",
       "contextData": "DSCore.List.IsRectangular@var[]..[]",
       "itemType": "action",
       "keywords": "rectangular, isrectangular, same, sublist, row"
     },
     {
       "fullyQualifiedName": "DSCore.List.IsUniformDepth",
-      "iconUrl": "http://54.169.171.233:3456/src/resources/icons/DSCore.List.IsUniformDepth.png",
+      "iconUrl": "/src/resources/icons/DSCore.List.IsUniformDepth.png",
       "contextData": "DSCore.List.IsUniformDepth@var[]..[]",
       "itemType": "action",
       "keywords": "depth, uniform, isuniformdepth, sublist"
     },
     {
       "fullyQualifiedName": "DSCore.List.SetDifference",
-      "iconUrl": "http://54.169.171.233:3456/src/resources/icons/DSCore.List.SetDifference.png",
+      "iconUrl": "/src/resources/icons/DSCore.List.SetDifference.png",
       "contextData": "DSCore.List.SetDifference@var[],var[]",
       "itemType": "action",
       "keywords": "difference, setdifference, set"
     },
     {
       "fullyQualifiedName": "DSCore.List.SetIntersection",
-      "iconUrl": "http://54.169.171.233:3456/src/resources/icons/DSCore.List.SetIntersection.png",
+      "iconUrl": "/src/resources/icons/DSCore.List.SetIntersection.png",
       "contextData": "DSCore.List.SetIntersection@var[],var[]",
       "itemType": "action",
       "keywords": "intersection, setintersection, set"
     },
     {
       "fullyQualifiedName": "DSCore.List.SetUnion",
-      "iconUrl": "http://54.169.171.233:3456/src/resources/icons/DSCore.List.SetUnion.png",
+      "iconUrl": "/src/resources/icons/DSCore.List.SetUnion.png",
       "contextData": "DSCore.List.SetUnion@var[],var[]",
       "itemType": "action",
       "keywords": "union, setunion, set"
     },
     {
       "fullyQualifiedName": "DSCore.List.IndexOf",
-      "iconUrl": "http://54.169.171.233:3456/src/resources/icons/DSCore.List.IndexOf.png",
+      "iconUrl": "/src/resources/icons/DSCore.List.IndexOf.png",
       "contextData": "DSCore.List.IndexOf@var[]..[],var",
       "itemType": "action",
       "keywords": "index, indexof"
     },
     {
       "fullyQualifiedName": "DSCore.List.CountFalse",
-      "iconUrl": "http://54.169.171.233:3456/src/resources/icons/DSCore.List.CountFalse.png",
+      "iconUrl": "/src/resources/icons/DSCore.List.CountFalse.png",
       "contextData": "DSCore.List.CountFalse@var[]..[]",
       "itemType": "action",
       "keywords": "false, countfalse"
     },
     {
       "fullyQualifiedName": "DSCore.List.CountTrue",
-      "iconUrl": "http://54.169.171.233:3456/src/resources/icons/DSCore.List.CountTrue.png",
+      "iconUrl": "/src/resources/icons/DSCore.List.CountTrue.png",
       "contextData": "DSCore.List.CountTrue@var[]..[]",
       "itemType": "action",
       "keywords": "true, counttrue"
     },
     {
       "fullyQualifiedName": "DSCore.List.Insert",
-      "iconUrl": "http://54.169.171.233:3456/src/resources/icons/DSCore.List.Insert.png",
+      "iconUrl": "/src/resources/icons/DSCore.List.Insert.png",
       "contextData": "DSCore.List.Insert@var[]..[],var[]..[],int",
       "itemType": "action",
       "keywords": "insert, add"
     },
     {
       "fullyQualifiedName": "DSCore.List.Reorder",
-      "iconUrl": "http://54.169.171.233:3456/src/resources/icons/DSCore.List.Reorder.png",
+      "iconUrl": "/src/resources/icons/DSCore.List.Reorder.png",
       "contextData": "DSCore.List.Reorder@var[]..[],var[]..[]",
       "itemType": "action",
       "keywords": "reorder, index, indices"
     },
     {
       "fullyQualifiedName": "DSCore.List.SortIndexByValue",
-      "iconUrl": "http://54.169.171.233:3456/src/resources/icons/DSCore.List.SortIndexByValue.png",
+      "iconUrl": "/src/resources/icons/DSCore.List.SortIndexByValue.png",
       "contextData": "DSCore.List.SortIndexByValue@double[]",
       "itemType": "action",
       "keywords": ""
     },
     {
       "fullyQualifiedName": "DSCore.List.NormalizeDepth",
-      "iconUrl": "http://54.169.171.233:3456/src/resources/icons/DSCore.List.NormalizeDepth.png",
+      "iconUrl": "/src/resources/icons/DSCore.List.NormalizeDepth.png",
       "contextData": "DSCore.List.NormalizeDepth@var[]..[],int",
       "itemType": "action",
       "keywords": ""
@@ -4139,14 +4153,14 @@
     },
     {
       "fullyQualifiedName": "DSCore.List.AllTrue",
-      "iconUrl": "http://54.169.171.233:3456/src/resources/icons/DSCore.List.AllTrue.png",
+      "iconUrl": "/src/resources/icons/DSCore.List.AllTrue.png",
       "contextData": "DSCore.List.AllTrue@var[]..[]",
       "itemType": "action",
       "keywords": "test, all, true"
     },
     {
       "fullyQualifiedName": "DSCore.List.AllFalse",
-      "iconUrl": "http://54.169.171.233:3456/src/resources/icons/DSCore.List.AllFalse.png",
+      "iconUrl": "/src/resources/icons/DSCore.List.AllFalse.png",
       "contextData": "DSCore.List.AllFalse@var[]..[]",
       "itemType": "action",
       "keywords": "test, all, false"
@@ -4314,14 +4328,14 @@
     },
     {
       "fullyQualifiedName": "DSCore.Math.Map",
-      "iconUrl": "http://54.169.171.233:3456/src/resources/icons/DSCore.Math.Map.png",
+      "iconUrl": "/src/resources/icons/DSCore.Math.Map.png",
       "contextData": "DSCore.Math.Map@double,double,double",
       "itemType": "action",
       "keywords": "map, range, minimum, maximum, normalize"
     },
     {
       "fullyQualifiedName": "DSCore.Math.MapTo",
-      "iconUrl": "http://54.169.171.233:3456/src/resources/icons/DSCore.Math.MapTo.png",
+      "iconUrl": "/src/resources/icons/DSCore.Math.MapTo.png",
       "contextData": "DSCore.Math.MapTo@double,double,double,double,double",
       "itemType": "action",
       "keywords": "map, range, mapto, minimum, maximum, normalize"
@@ -4440,7 +4454,7 @@
     },
     {
       "fullyQualifiedName": "DSCore.Math.EvaluateFormula",
-      "iconUrl": "http://54.169.171.233:3456/src/resources/icons/DSCore.Math.EvaluateFormula.png",
+      "iconUrl": "/src/resources/icons/DSCore.Math.EvaluateFormula.png",
       "contextData": "DSCore.Math.EvaluateFormula@string,string[],var[]",
       "itemType": "action",
       "keywords": ""
@@ -4601,7 +4615,7 @@
     },
     {
       "fullyQualifiedName": "DSCore.Math.Xor",
-      "iconUrl": "http://54.169.171.233:3456/src/resources/icons/DSCore.Math.Xor.png",
+      "iconUrl": "/src/resources/icons/DSCore.Math.Xor.png",
       "contextData": "DSCore.Math.Xor@bool,bool",
       "itemType": "action",
       "keywords": "xor, exclusive, or"
@@ -4853,77 +4867,77 @@
     },
     {
       "fullyQualifiedName": "DSCore.IO.File.CombinePath",
-      "iconUrl": "http://54.169.171.233:3456/src/resources/icons/DSCore.IO.File.CombinePath.png",
+      "iconUrl": "/src/resources/icons/DSCore.IO.File.CombinePath.png",
       "contextData": "DSCore.IO.File.CombinePath@string[]",
       "itemType": "action",
       "keywords": ""
     },
     {
       "fullyQualifiedName": "DSCore.IO.File.FileExtension",
-      "iconUrl": "http://54.169.171.233:3456/src/resources/icons/DSCore.IO.File.FileExtension.png",
+      "iconUrl": "/src/resources/icons/DSCore.IO.File.FileExtension.png",
       "contextData": "DSCore.IO.File.FileExtension@string",
       "itemType": "action",
       "keywords": ""
     },
     {
       "fullyQualifiedName": "DSCore.IO.File.ChangePathExtension",
-      "iconUrl": "http://54.169.171.233:3456/src/resources/icons/DSCore.IO.File.ChangePathExtension.png",
+      "iconUrl": "/src/resources/icons/DSCore.IO.File.ChangePathExtension.png",
       "contextData": "DSCore.IO.File.ChangePathExtension@string,string",
       "itemType": "action",
       "keywords": ""
     },
     {
       "fullyQualifiedName": "DSCore.IO.File.DirectoryName",
-      "iconUrl": "http://54.169.171.233:3456/src/resources/icons/DSCore.IO.File.DirectoryName.png",
+      "iconUrl": "/src/resources/icons/DSCore.IO.File.DirectoryName.png",
       "contextData": "DSCore.IO.File.DirectoryName@string",
       "itemType": "action",
       "keywords": "directorypath"
     },
     {
       "fullyQualifiedName": "DSCore.IO.File.FileName",
-      "iconUrl": "http://54.169.171.233:3456/src/resources/icons/DSCore.IO.File.FileName.png",
+      "iconUrl": "/src/resources/icons/DSCore.IO.File.FileName.png",
       "contextData": "DSCore.IO.File.FileName@string,bool",
       "itemType": "action",
       "keywords": ""
     },
     {
       "fullyQualifiedName": "DSCore.IO.File.FileHasExtension",
-      "iconUrl": "http://54.169.171.233:3456/src/resources/icons/DSCore.IO.File.FileHasExtension.png",
+      "iconUrl": "/src/resources/icons/DSCore.IO.File.FileHasExtension.png",
       "contextData": "DSCore.IO.File.FileHasExtension@string",
       "itemType": "action",
       "keywords": ""
     },
     {
       "fullyQualifiedName": "DSCore.IO.File.GetDirectoryContents",
-      "iconUrl": "http://54.169.171.233:3456/src/resources/icons/DSCore.IO.File.GetDirectoryContents.png",
+      "iconUrl": "/src/resources/icons/DSCore.IO.File.GetDirectoryContents.png",
       "contextData": "DSCore.IO.File.GetDirectoryContents@var,string",
       "itemType": "action",
       "keywords": ""
     },
     {
       "fullyQualifiedName": "DSCore.IO.File.CopyDirectory",
-      "iconUrl": "http://54.169.171.233:3456/src/resources/icons/DSCore.IO.File.CopyDirectory.png",
+      "iconUrl": "/src/resources/icons/DSCore.IO.File.CopyDirectory.png",
       "contextData": "DSCore.IO.File.CopyDirectory@var,string,bool",
       "itemType": "action",
       "keywords": ""
     },
     {
       "fullyQualifiedName": "DSCore.IO.File.DeleteDirectory",
-      "iconUrl": "http://54.169.171.233:3456/src/resources/icons/DSCore.IO.File.DeleteDirectory.png",
+      "iconUrl": "/src/resources/icons/DSCore.IO.File.DeleteDirectory.png",
       "contextData": "DSCore.IO.File.DeleteDirectory@string,bool",
       "itemType": "action",
       "keywords": ""
     },
     {
       "fullyQualifiedName": "DSCore.IO.File.DirectoryExists",
-      "iconUrl": "http://54.169.171.233:3456/src/resources/icons/DSCore.IO.File.DirectoryExists.png",
+      "iconUrl": "/src/resources/icons/DSCore.IO.File.DirectoryExists.png",
       "contextData": "DSCore.IO.File.DirectoryExists@string",
       "itemType": "action",
       "keywords": "directorypath"
     },
     {
       "fullyQualifiedName": "DSCore.IO.File.MoveDirectory",
-      "iconUrl": "http://54.169.171.233:3456/src/resources/icons/DSCore.IO.File.MoveDirectory.png",
+      "iconUrl": "/src/resources/icons/DSCore.IO.File.MoveDirectory.png",
       "contextData": "DSCore.IO.File.MoveDirectory@string,string,bool",
       "itemType": "action",
       "keywords": ""
@@ -4972,28 +4986,28 @@
     },
     {
       "fullyQualifiedName": "DSOffice.Data.ExportCSV",
-      "iconUrl": "http://54.169.171.233:3456/src/resources/icons/DSOffice.Data.ExportCSV.png",
+      "iconUrl": "/src/resources/icons/DSOffice.Data.ExportCSV.png",
       "contextData": "DSOffice.Data.ExportCSV@string,var[][]",
       "itemType": "action",
       "keywords": "write, text, file"
     },
     {
       "fullyQualifiedName": "DSOffice.Data.ImportCSV",
-      "iconUrl": "http://54.169.171.233:3456/src/resources/icons/DSOffice.Data.ImportCSV.png",
+      "iconUrl": "/src/resources/icons/DSOffice.Data.ImportCSV.png",
       "contextData": "DSOffice.Data.ImportCSV@string,bool",
       "itemType": "action",
       "keywords": "import, csv, comma, file, list, separate, transpose"
     },
     {
       "fullyQualifiedName": "DSOffice.Data.ImportExcel",
-      "iconUrl": "http://54.169.171.233:3456/src/resources/icons/DSOffice.Data.ImportExcel.png",
+      "iconUrl": "/src/resources/icons/DSOffice.Data.ImportExcel.png",
       "contextData": "DSOffice.Data.ImportExcel@var,string,bool",
       "itemType": "action",
       "keywords": ""
     },
     {
       "fullyQualifiedName": "DSOffice.Data.ExportExcel",
-      "iconUrl": "http://54.169.171.233:3456/src/resources/icons/DSOffice.Data.ExportExcel.png",
+      "iconUrl": "/src/resources/icons/DSOffice.Data.ExportExcel.png",
       "contextData": "DSOffice.Data.ExportExcel@string,string,int,int,var[][],bool",
       "itemType": "action",
       "keywords": ""
@@ -7657,6 +7671,27 @@
       "contextData": "DynamoText.Text.FromStringOriginAndScale@string,Autodesk.DesignScript.Geometry.Point,double",
       "itemType": "action",
       "keywords": ""
+    },
+    {
+      "fullyQualifiedName": "Dynamo.Translation.CAD.Import",
+      "iconUrl": "/src/resources/icons/Dynamo.Translation.CAD.Import.png",
+      "contextData": "Dynamo.Translation.CAD.Import@string",
+      "itemType": "create",
+      "keywords": "fileloader, frompath, translate, atf, import, open, read, dwg, dxf, fbx, obj, sat, skp, stl, 3dm, autocad, filmbox, wavefront, acis, sketchup, stereolithography, rhino, rhinoceros"
+    },
+    {
+      "fullyQualifiedName": "Dynamo.Translation.CAD.Export",
+      "iconUrl": "/src/resources/icons/Dynamo.Translation.CAD.Export.png",
+      "contextData": "Dynamo.Translation.CAD.Export@string,Autodesk.DesignScript.Geometry.Geometry[]",
+      "itemType": "action",
+      "keywords": "filewriter, fromgeometries, translate, atf, export, dwg, dxf, autocad"
+    },
+    {
+      "fullyQualifiedName": "Dynamo.Translation.CAD.ConvertToGeometries",
+      "iconUrl": "/src/resources/icons/Dynamo.Translation.CAD.ConvertToGeometries.png",
+      "contextData": "Dynamo.Translation.CAD.ConvertToGeometries",
+      "itemType": "action",
+      "keywords": "translate, atf"
     }
   ]
 }
