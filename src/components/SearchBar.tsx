@@ -64,7 +64,7 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
         this.props.onCategoriesChange(categories);
     }
 
-    isAllSelected() {
+    allCategoriesSelected() {
         return (this.state.selectedCategories.length == this.props.categories.length);
     }
 
@@ -91,7 +91,7 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
         let thisObj = this;
         let checkboxes: JSX.Element[] = [];
 
-        checkboxes.push(this.createCheckbox("All", "CategoryCheckbox", this.isAllSelected(), this.onAllCheckboxChange.bind(this)));
+        checkboxes.push(this.createCheckbox("All", "CategoryCheckbox", this.allCategoriesSelected(), this.onAllCheckboxChange.bind(this)));
 
         _.each(this.props.categories, function (c) {
             let checked = thisObj.isSelectedCategory(c);
