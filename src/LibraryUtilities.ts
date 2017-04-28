@@ -333,7 +333,7 @@ function compareParts(parts: string[], partsToInclude: string[]): number {
  * based entirely on the loaded data types and their fully qualified names.
  * See TypeTreeNode for more information.
  * 
- * @param section
+ * @param {LayoutElement} section
  * The section that the converted items will be under
  * 
  * @returns
@@ -392,10 +392,10 @@ export function convertSectionToItemData(section: LayoutElement): ItemData {
  *      |- C
  *      |- D
  * 
- * @param allNodes 
+ * @param {TypeListNode[]} allNodes 
  * All the typeListNodes
  * 
- * @param section
+ * @param {LayoutElement} section
  * The section that the converted items will be under
  * 
  * @returns
