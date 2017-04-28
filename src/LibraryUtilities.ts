@@ -371,9 +371,51 @@ export function buildLibrarySectionsFromLayoutSpecs(loadedTypes: any, layoutSpec
     let miscSection = sections.find(x => x.text == "Miscellaneous");
 
     results.push(convertToDefaultSection(typeListNodes, defaultSection));
+
+    _.each(sections, function (section) {
+        if (section.text != "default" && section.text != "Miscellaneous") {
+            results.push(convertToOtherSection(typeListNodes, section));
+        }
+    })
+
     results.push(convertToMiscSection(typeListNodes, miscSection));
 
     return results;
+}
+
+function convertToOtherSection(typeListNodes: TypeListNode[], section: LayoutElement): ItemData {
+    let sectionData = convertSectionToItemData(section);
+    let prefixes = section.include;
+    let nodeToProcess: TypeListNode[] = [];
+
+    _.each(typeListNodes, function (node) {
+        _.each(prefixes, function (prefix) {
+            if (node.fullyQualifiedName.startsWith(prefix.path)) {
+                let newName = (prefix.path.indexOf("://") == -1) ? node.fullyQualifiedName : node.fullyQualifiedName.split(prefix.path)[1];
+
+                // Copy all data over
+                let newTypeListNode = new TypeListNode(newName);
+                newTypeListNode.fullyQualifiedName = newName;
+                newTypeListNode.contextData = node.contextData;
+                newTypeListNode.iconUrl = node.iconUrl;
+                newTypeListNode.memberType = node.memberType;
+                newTypeListNode.processed = true;
+
+                node.processed = true;
+                nodeToProcess.push(newTypeListNode);
+            }
+        })
+    })
+
+    _.each(nodeToProcess, function (node) {
+        buildLibraryItemsFromName(node, sectionData);
+    })
+
+    // Change the itemType of the outermost parents
+    _.each(sectionData.childItems, function (node) {
+        if (node.itemType === "group") node.itemType = "category";
+    })
+    return sectionData;
 }
 
 export function convertSectionToItemData(section: LayoutElement): ItemData {

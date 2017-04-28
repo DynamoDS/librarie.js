@@ -42,7 +42,7 @@ body {
     padding: 10px;
     color: white;
     transition: 0.15s;
-    border-bottom: solid 1px #494949;
+    border-bottom: solid 6px #494949;
 }
 
 .LibraryItemHeader {
@@ -52,6 +52,7 @@ body {
     padding: 3;
     color: white;
     transition: 0.15s;
+    overflow-y: hidden;
 }
 
 .LibraryItemHeader:hover, .LibrarySectionHeader:hover {
