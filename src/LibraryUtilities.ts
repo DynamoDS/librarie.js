@@ -353,7 +353,7 @@ export function convertToDefaultSection(typeListNodes: TypeListNode[], section: 
     return sectionData;
 }
 
-export function buildLibrarySectionsFromLayoutSpecs(loadedTypes: any, layoutSpecs: any): ItemData[] {
+export function buildLibrarySectionsFromLayoutSpecs(loadedTypes: any, layoutSpecs: any, defaultSectionStr: string, miscSectionStr: string): ItemData[] {
     let typeListNodes: TypeListNode[] = [];
     let sections: LayoutElement[] = [];
 
@@ -367,54 +367,59 @@ export function buildLibrarySectionsFromLayoutSpecs(loadedTypes: any, layoutSpec
     }
 
     let results: ItemData[] = [];
-    let defaultSection = sections.find(x => x.text == "default");
-    let miscSection = sections.find(x => x.text == "Miscellaneous");
+    let defaultSection = sections.find(x => x.text == defaultSectionStr);
+    let miscSection = sections.find(x => x.text == miscSectionStr);
 
     results.push(convertToDefaultSection(typeListNodes, defaultSection));
 
     _.each(sections, function (section) {
-        if (section.text != "default" && section.text != "Miscellaneous") {
-            results.push(convertToOtherSection(typeListNodes, section));
+        if (section.text != defaultSectionStr && section.text != miscSectionStr) {
+            let convertedSection = convertToOtherSection(typeListNodes, section);
+
+            // Change the itemType of the outermost parents
+            _.each(convertedSection.childItems, function (node) {
+                if (node.itemType === "group") node.itemType = "category";
+            })
+            results.push(convertedSection);
         }
     })
 
-    results.push(convertToMiscSection(typeListNodes, miscSection));
+    let convertedMiscSection = convertToMiscSection(typeListNodes, miscSection);
+
+    // Change the itemType of the outermost parents
+    _.each(convertedMiscSection.childItems, function (node) {
+        if (node.itemType === "group") node.itemType = "category";
+    })
+
+    results.push(convertedMiscSection);
 
     return results;
 }
 
 function convertToOtherSection(typeListNodes: TypeListNode[], section: LayoutElement): ItemData {
     let sectionData = convertSectionToItemData(section);
-    let prefixes = section.include;
+    let includePatterns = section.include;
     let nodeToProcess: TypeListNode[] = [];
 
     _.each(typeListNodes, function (node) {
-        _.each(prefixes, function (prefix) {
-            if (node.fullyQualifiedName.startsWith(prefix.path)) {
-                let newName = (prefix.path.indexOf("://") == -1) ? node.fullyQualifiedName : node.fullyQualifiedName.split(prefix.path)[1];
+        _.each(includePatterns, function (includePattern) {
+            if (node.fullyQualifiedName.startsWith(includePattern.path)) {
+                // If the path contains '://', remove it with the text before it from the fullyQualifiedName 
+                let tempName = (includePattern.path.indexOf("://") == -1) ? node.fullyQualifiedName : node.fullyQualifiedName.split(includePattern.path)[1];
 
-                // Copy all data over
-                let newTypeListNode = new TypeListNode(newName);
-                newTypeListNode.fullyQualifiedName = newName;
-                newTypeListNode.contextData = node.contextData;
-                newTypeListNode.iconUrl = node.iconUrl;
-                newTypeListNode.memberType = node.memberType;
-                newTypeListNode.processed = true;
+                let oldName = node.fullyQualifiedName;
 
+                // Insert under section with a new name first
+                node.fullyQualifiedName = tempName;
                 node.processed = true;
-                nodeToProcess.push(newTypeListNode);
+                buildLibraryItemsFromName(node, sectionData);
+
+                // Then change back to old name
+                node.fullyQualifiedName = oldName;
             }
         })
     })
 
-    _.each(nodeToProcess, function (node) {
-        buildLibraryItemsFromName(node, sectionData);
-    })
-
-    // Change the itemType of the outermost parents
-    _.each(sectionData.childItems, function (node) {
-        if (node.itemType === "group") node.itemType = "category";
-    })
     return sectionData;
 }
 
@@ -458,11 +463,6 @@ export function convertToMiscSection(allNodes: TypeListNode[], section: LayoutEl
 
     _.each(unprocessedNodes, function (node) {
         buildLibraryItemsFromName(node, sectionData)
-    })
-
-    // Change the itemType of the outermost parents
-    _.each(sectionData.childItems, function (node) {
-        if (node.itemType === "group") node.itemType = "category";
     })
 
     return sectionData;
