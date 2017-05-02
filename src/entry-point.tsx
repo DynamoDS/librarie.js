@@ -18,6 +18,9 @@ export class LibraryController {
     ItemClickedEventName = "itemClicked";
     ItemMouseEnterEventName = "itemMouseEnter";
     ItemMouseLeaveEventName = "itemMouseLeave";
+    DefaultSectionName = "default";
+    MiscSectionName = "Miscellaneous";
+
 
     reactor: Reactor = null;
 
@@ -43,13 +46,17 @@ export class LibraryController {
         return ReactDOM.render(<LibraryContainer
             libraryController={this}
             loadedTypesJson={loadedTypesJson}
-            layoutSpecsJson={layoutSpecsJson} />, htmlElement);
+            layoutSpecsJson={layoutSpecsJson}
+            defaultSectionString={this.DefaultSectionName}
+            miscSectionString={this.MiscSectionName} />, htmlElement);
     }
 
     createLibraryContainer(layoutSpecsJson: any, loadedTypesJson: any) {
         return (<LibraryContainer
             libraryController={this}
             layoutSpecsJson={layoutSpecsJson}
-            loadedTypesJson={loadedTypesJson} />);
+            loadedTypesJson={loadedTypesJson}
+            defaultSectionString={this.DefaultSectionName}
+            miscSectionString={this.MiscSectionName} />);
     }
 }
