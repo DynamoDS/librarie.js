@@ -17,6 +17,7 @@
 */
 
 import * as React from "react";
+import * as ReactDOM from "react-dom";
 import { ClusterView } from "./ClusterView";
 import { LibraryContainer } from "./LibraryContainer";
 import { ItemData } from "../LibraryUtilities";
@@ -32,7 +33,7 @@ export interface LibraryItemState {
 
 class GroupedItems {
 
-    creations: ItemData[] = [];
+    creates: ItemData[] = [];
     actions: ItemData[] = [];
     queries: ItemData[] = [];
     others: ItemData[] = [];
@@ -42,7 +43,7 @@ class GroupedItems {
         for (let i = 0; i < items.length; i++) {
 
             switch (items[i].itemType) {
-                case "creation": this.creations.push(items[i]); break;
+                case "create": this.creates.push(items[i]); break;
                 case "action": this.actions.push(items[i]); break;
                 case "query": this.queries.push(items[i]); break;
                 default: this.others.push(items[i]); break;
@@ -50,7 +51,7 @@ class GroupedItems {
         }
     }
 
-    getCreationItems(): ItemData[] { return this.creations; }
+    getCreateItems(): ItemData[] { return this.creates; }
     getActionItems(): ItemData[] { return this.actions; }
     getQueryItems(): ItemData[] { return this.queries; }
     getOtherItems(): ItemData[] { return this.others; }
@@ -61,9 +62,9 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
     constructor(props: LibraryItemProps) {
         super(props);
 
-        // Assign initial state
+        // All items are collapsed by default, except for section items
         this.state = {
-            expanded: this.props.data.expanded
+            expanded: this.props.data.itemType === "section" ? true : this.props.data.expanded
         };
     }
 
@@ -91,8 +92,8 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
             iconElement = (<img className={"LibraryItemIcon"} src={this.props.data.iconUrl} onError={this.onImageLoadFail} />);
         }
 
-        let nestedElements = null;
-        let clusteredElements = null;
+        let nestedElements: JSX.Element = null;
+        let clusteredElements: JSX.Element = null;
 
         // visible only nested elements when expanded.
         if (this.state.expanded && this.props.data.childItems.length > 0) {
@@ -108,11 +109,12 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         }
 
 
-        let arrow = null;
-        let bodyIndentation = null;
+        let arrow: JSX.Element = null;
+        let bodyIndentation: JSX.Element = null;
+        let header: JSX.Element = null;
 
-        // Indentation and arrow are only added for non-category items
-        if (this.props.data.itemType !== "category") {
+        // Indentation and arrow are only added for non-category and non-section items
+        if (this.props.data.itemType !== "category" && this.props.data.itemType !== "section") {
 
             // Indent one level for clustered and nested elements
             if (clusteredElements || nestedElements) {
@@ -126,14 +128,20 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
             }
         }
 
-        return (
-            <div className={this.getLibraryItemContainerStyle()}>
-                <div className={"LibraryItemHeader"} onClick={this.onLibraryItemClicked.bind(this)} 
-                        onMouseOver={this.onLibraryItemHoveredOn.bind(this)} onMouseLeave={this.onLibraryItemMouseLeave.bind(this)}>
+        if (this.props.data.showHeader) {
+            header = (
+                <div className={this.getLibraryItemHeaderStyle()} onClick={this.onLibraryItemClicked.bind(this)}
+                    onMouseOver={this.onLibraryItemMouseEnter.bind(this)} onMouseLeave={this.onLibraryItemMouseLeave.bind(this)}>
                     {arrow}
                     {iconElement}
                     <div className={libraryItemTextStyle}>{this.props.data.text}</div>
                 </div>
+            );
+        }
+
+        return (
+            <div className={this.getLibraryItemContainerStyle()}>
+                {header}
                 <div className={"LibraryItemBodyContainer"}>
                     {bodyIndentation}
                     <div className={"LibraryItemBodyElements"}>
@@ -146,25 +154,29 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
     }
 
     onImageLoadFail(event: any) {
-        event.target.style.visibility = "hidden";
+        event.target.src = require("../resources/ui/dynamo.png");
     }
 
     getLibraryItemContainerStyle(): string {
         switch (this.props.data.itemType) {
+            case "section":
+                return "LibraryItemContainerSection";
             case "category":
                 return "LibraryItemContainerCategory";
-
             case "group":
                 return "LibraryItemContainerGroup";
-
-            case "none":
-            case "creation":
-            case "action":
-            case "query":
+            default:
                 return "LibraryItemContainerNone";
         }
+    }
 
-        return "LibraryItemContainerNone";
+    getLibraryItemHeaderStyle(): string {
+        switch (this.props.data.itemType) {
+            case "section":
+                return "LibrarySectionHeader";
+            default:
+                return "LibraryItemHeader";
+        }
     }
 
     getNestedElements(groupedItems: GroupedItems): JSX.Element {
@@ -179,8 +191,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
             <div className={"LibraryItemBody"}>
                 {
                     // 'getNestedElements' method is meant to render all other 
-                    // types of items except ones of type creation/action/query.
-                    // 
+                    // types of items except ones of type create/action/query.
                     regularItems.map((item: ItemData) => {
                         return (<LibraryItem key={index++} libraryContainer={this.props.libraryContainer} data={item} />);
                     })
@@ -191,17 +202,17 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
 
     getClusteredElements(groupedItems: GroupedItems): JSX.Element {
 
-        let creationMethods = groupedItems.getCreationItems();
+        let createMethods = groupedItems.getCreateItems();
         let actionMethods = groupedItems.getActionItems();
         let queryMethods = groupedItems.getQueryItems();
 
-        let creationCluster = null;
-        if (creationMethods.length > 0 && creationMethods.some(item => item.visible)) {
-            creationCluster = (<ClusterView
+        let createCluster = null;
+        if (createMethods.length > 0 && createMethods.some(item => item.visible)) {
+            createCluster = (<ClusterView
                 libraryContainer={this.props.libraryContainer}
-                icon={require("../resources/icons/library-creation.svg")}
+                icon={require("../resources/icons/library-create.svg")}
                 borderColor="#62895b" /* green */
-                childItems={creationMethods} />);
+                childItems={createMethods} />);
         }
 
         let actionCluster = null;
@@ -222,13 +233,13 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
                 childItems={queryMethods} />);
         }
 
-        if ((!creationCluster) && (!actionCluster) && (!queryCluster)) {
+        if ((!createCluster) && (!actionCluster) && (!queryCluster)) {
             return null; // No cluster should be generated.
         }
 
         return (
             <div className={"LibraryItemBody"}>
-                {creationCluster}
+                {createCluster}
                 {actionCluster}
                 {queryCluster}
             </div>
@@ -236,22 +247,13 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
     }
 
     onLibraryItemClicked() {
-
         // Toggle expansion state.
         let currentlyExpanded = this.state.expanded;
         this.setState({ expanded: !currentlyExpanded });
 
         let libraryContainer = this.props.libraryContainer;
         if (this.props.data.childItems.length == 0) {
-            libraryContainer.raiseEvent(libraryContainer.props.libraryController.ItemClickedEventName, 
-                this.props.data.contextData);
-        }
-    }
-
-    onLibraryItemHoveredOn() {
-        let libraryContainer = this.props.libraryContainer;
-        if (this.props.data.childItems.length == 0) {
-            libraryContainer.raiseEvent(libraryContainer.props.libraryController.ItemHoveredOnEventName,
+            libraryContainer.raiseEvent(libraryContainer.props.libraryController.ItemClickedEventName,
                 this.props.data.contextData);
         }
     }
@@ -259,7 +261,17 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
     onLibraryItemMouseLeave() {
         let libraryContainer = this.props.libraryContainer;
         if (this.props.data.childItems.length == 0) {
-            libraryContainer.raiseEvent(libraryContainer.props.libraryController.ItemMouseLeaveEventName, true);
+            libraryContainer.raiseEvent(libraryContainer.props.libraryController.ItemMouseLeaveEventName,
+                { data: this.props.data.contextData });
+        }
+    }
+
+    onLibraryItemMouseEnter() {
+        let libraryContainer = this.props.libraryContainer;
+        if (this.props.data.childItems.length == 0) {
+            var rec = ReactDOM.findDOMNode(this).getBoundingClientRect();
+            libraryContainer.raiseEvent(libraryContainer.props.libraryController.ItemMouseEnterEventName,
+                { data: this.props.data.contextData, rect: rec });
         }
     }
 }

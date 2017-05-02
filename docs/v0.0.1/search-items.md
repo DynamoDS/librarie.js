@@ -7,7 +7,7 @@ This flat list of search result items takes the following form: it must contain 
 - `text` - The name of a given search result item.
 - `iconUrl`- The absolute URL of icon of a given search result item.
 - `contextData` - The string value that will be passed to the event handler when a given search result item is clicked.
-- `itemType` - This value can either be `creation`, `action` or `query`. For more details of these values, please refer to [Layout Specification](./layout-specs.md) document.
+- `itemType` - This value can either be `create`, `action` or `query`. For more details of these values, please refer to [Layout Specification](./layout-specs.md) document.
 - `description` - The description text of a given search result item.
 - More fields will be added soon.
 
@@ -18,7 +18,7 @@ This flat list of search result items takes the following form: it must contain 
       "text": "ByCoordinates",
       "iconUrl": "/src/resources/icons/Autodesk.DesignScript.Geometry.Point.ByCoordinates.double-double.png",
       "contextData": "Autodesk.DesignScript.Geometry.Point.ByCoordinates@double,double",
-      "itemType": "creation",
+      "itemType": "create",
       "description": "Form a Point in the XY plane given two cartesian coordinates. The Z component is 0."
     },
     {
