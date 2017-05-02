@@ -43,9 +43,9 @@ export class LibraryController {
 
     createLibraryByElementId(htmlElementId: string, layoutSpecsJson: any, loadedTypesJson: any) {
         let htmlElement: any;
-        htmlElement = document.querySelector(htmlElementId);
+        htmlElement = document.querySelector(htmlElementId) || document.getElementById(htmlElementId);
         if (!htmlElement) {
-            htmlElement = document.getElementById(htmlElementId);
+            throw new Error("Element " + htmlElementId + " is not defined");
         }
         return ReactDOM.render(<LibraryContainer
             libraryController={this}
