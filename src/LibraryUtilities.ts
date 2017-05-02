@@ -14,6 +14,7 @@ export class TypeListNode {
     iconUrl: string = "";
     contextData: any = "";
     memberType: MemberType = "none";
+    keywords: string = "";
     processed: boolean = false;
 
     constructor(data: any) {
@@ -21,6 +22,7 @@ export class TypeListNode {
         this.iconUrl = data.iconUrl;
         this.contextData = data.contextData;
         this.memberType = data.itemType;
+        this.keywords = data.keywords;
     }
 }
 
@@ -69,16 +71,14 @@ export class ItemData {
     visible: boolean = true;
     expanded: boolean = false;
     showHeader: boolean = true;
-    searchStrings: string[] = [];
+    keywords: string[] = [];
     childItems: ItemData[] = [];
 
     constructor(public text: string) {
-        this.searchStrings.push(text ? text.toLowerCase() : text);
+        this.keywords.push(text ? text.toLowerCase() : text);
     }
 
     constructFromLayoutElement(layoutElement: LayoutElement) {
-        this.searchStrings.pop();
-        this.searchStrings.push(this.text ? this.text.toLowerCase() : this.text);
         this.contextData = layoutElement.text;
         this.iconUrl = layoutElement.iconUrl;
         this.itemType = layoutElement.elementType;
@@ -142,6 +142,7 @@ export function constructNestedLibraryItems(
             libraryItem.contextData = typeListNode.contextData;
             libraryItem.iconUrl = typeListNode.iconUrl;
             libraryItem.itemType = typeListNode.memberType;
+            pushKeywords(libraryItem, typeListNode);
 
             // Mark the typeListNode as processed.
             typeListNode.processed = true;
@@ -442,6 +443,7 @@ function buildLibraryItemsFromName(typeListNode: TypeListNode, parentNode: ItemD
         newNode.contextData = typeListNode.contextData;
         newNode.iconUrl = typeListNode.iconUrl;
         newNode.itemType = typeListNode.memberType;
+        pushKeywords(newNode, typeListNode);
 
         // All items without category will fall under Others
         if (parentNode.itemType === "section") {
@@ -465,7 +467,6 @@ function buildLibraryItemsFromName(typeListNode: TypeListNode, parentNode: ItemD
     // 'slicedParts' excludes the first item in fullyQualifiedNameParts.
     // Given fullyQualifiedNameParts  = [ A, B, C, D ];
     // then slicedParts = [ B, C, D ];
-    // 
     let slicedParts = fullyQualifiedNameParts.slice(1);
 
     // Assign the reduced parts ('B.C.D') to fullyQualifiedName of the node 
@@ -494,6 +495,15 @@ function buildLibraryItemsFromName(typeListNode: TypeListNode, parentNode: ItemD
     parentNode.childItems.unshift(newParentNode);
 }
 
+// Get keywords from typeListNode and push them into itemData
+export function pushKeywords(itemData: ItemData, typeListNode: TypeListNode) {
+    let keywords = typeListNode.keywords.split(",");
+    keywords.forEach(keyword => {
+        itemData.keywords.push(keyword.toLowerCase().trim())
+    });
+    itemData.keywords.push(typeListNode.fullyQualifiedName.toLowerCase());
+}
+
 // Recursively set visible and expanded states of ItemData
 export function setItemStateRecursive(items: ItemData | ItemData[], visible: boolean, expanded: boolean) {
     items = (items instanceof Array) ? items : [items];
@@ -506,11 +516,8 @@ export function setItemStateRecursive(items: ItemData | ItemData[], visible: boo
 
 export function search(text: string, item: ItemData) {
     if (item.itemType !== "group") {
-        let index = -1;
-
-        for (let searchString of item.searchStrings) {
-            index = searchString.indexOf(text);
-            if (index >= 0) {
+        for (let keyword of item.keywords) {
+            if (keyword.includes(text)) {
                 // Show all items recursively if a given text is found in the current 
                 // (parent) item. Note that this does not apply to items of "group" type
                 setItemStateRecursive(item, true, true);
@@ -538,7 +545,17 @@ export function searchItemResursive(items: ItemData[], text: string) {
     }
 }
 
-export function getHighlightedText(text: string, highlightedText: string): React.DOMElement<React.HTMLAttributes<HTMLSpanElement>, HTMLSpanElement>[] {
+export function getHighlightedText(text: string, highlightedText: string, matchDelimiter: boolean): React.DOMElement<React.HTMLAttributes<HTMLSpanElement>, HTMLSpanElement>[] {
+    if (matchDelimiter) {
+        let delimiter = ".";
+        if (highlightedText.includes(delimiter)) {
+            let leafText = highlightedText.split(delimiter).pop();
+            if (text.toLowerCase().includes(leafText)) {
+                highlightedText = leafText;
+            }
+        }
+    }
+
     let regex = new RegExp(highlightedText, 'gi');
     let segments = text.split(regex);
     let replacements = text.match(regex);
