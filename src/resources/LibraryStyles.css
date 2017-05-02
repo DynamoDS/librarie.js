@@ -10,6 +10,10 @@ body {
     cursor: default;
 }
 
+input {
+    font-family: "Open Sans";
+}
+
 .LibraryItemContainerSection {
     display: flex;
     flex-direction: column;
@@ -178,7 +182,7 @@ body {
 
 .searchView .searchBar input {
     width: 100%;
-    padding: 13px 10px 5px 15px;
+    padding: 10px;
     font-size: 15px;
     background: none;
     color: #fff;
