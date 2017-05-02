@@ -421,15 +421,9 @@ function convertToOtherSection(typeListNodes: TypeListNode[], section: LayoutEle
                 // If the path contains '://', remove it with the text before it from the fullyQualifiedName 
                 let tempName = (includePattern.path.indexOf("://") == -1) ? node.fullyQualifiedName : node.fullyQualifiedName.split(includePattern.path)[1];
 
-                let oldName = node.fullyQualifiedName;
-
-                // Insert under section with a new name first
-                node.fullyQualifiedName = tempName;
+                // Construct the library item using the new name
                 node.processed = true;
-                buildLibraryItemsFromName(node, sectionData);
-
-                // Then change back to old name
-                node.fullyQualifiedName = oldName;
+                buildLibraryItemsFromName(node, sectionData, tempName);
             }
         })
     })
@@ -482,8 +476,8 @@ export function convertToMiscSection(allNodes: TypeListNode[], section: LayoutEl
     return sectionData;
 }
 
-function buildLibraryItemsFromName(typeListNode: TypeListNode, parentNode: ItemData) {
-    let fullyQualifiedNameParts: string[] = typeListNode.fullyQualifiedName.split('.');
+function buildLibraryItemsFromName(typeListNode: TypeListNode, parentNode: ItemData, newNodeName?: string) {
+    let fullyQualifiedNameParts: string[] = newNodeName ? newNodeName.split('.') : typeListNode.fullyQualifiedName.split('.');
 
     // Take an example:
     // Given fullyQualifiedName = 'A.B.C.D'
