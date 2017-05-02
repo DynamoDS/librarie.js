@@ -495,6 +495,34 @@
                 }
               ],
               "childElements": []
+            },
+            {
+              "text": "Object",
+              "iconUrl": "",
+              "elementType": "group",
+              "include": [
+                {
+                  "path": "DSCore.Object.IsNull"
+                },
+                {
+                  "path": "DSCore.Object.Identity"
+                },
+                {
+                  "path": "DSCore.Object.Type"
+                }
+              ],
+              "childElements": []
+            },
+            {
+              "text": "Thread",
+              "iconUrl": "",
+              "elementType": "group",
+              "include": [
+                {
+                  "path": "DSCore.Thread"
+                }
+              ],
+              "childElements": []
             }
           ]
         },
@@ -619,6 +647,9 @@
                 },
                 {
                   "path": "Core.Scripting.Formula"
+                },
+                {
+                  "path": "DSCore.Math.EvaluateFormula"
                 }
               ],
               "childElements": []
@@ -817,6 +848,9 @@
                 },
                 {
                   "path": "DSCore.Color.Divide"
+                },
+                {
+                  "path": "Core.Color.Color Palette"
                 }
               ],
               "childElements": []
@@ -1356,6 +1390,17 @@
               "childElements": []
             }
           ]
+        },
+        {
+          "text": "Revit",
+          "iconUrl": "/src/resources/ui/revit-icon.png",
+          "elementType": "category",
+          "include": [
+            {
+              "path": "Analysis"
+            }
+          ],
+          "childElements": []
         }
       ]
     },
@@ -1368,25 +1413,13 @@
       "childElements": []
     },
     {
-      "text": "Add on",
+      "text": "Add-ons",
       "iconUrl": "/src/resources/ui/plus-symbol.svg",
       "elementType": "section",
       "showHeader": true,
       "include": [
         {
           "path": "pkg://"
-        }
-      ],
-      "childElements": []
-    },
-    {
-      "text": "Revit",
-      "iconUrl": "/src/resources/ui/revit-icon.png",
-      "elementType": "section",
-      "showHeader": true,
-      "include": [
-        {
-          "path": "Analysis"
         }
       ],
       "childElements": []

@@ -347,7 +347,12 @@ export function convertToDefaultSection(typeListNodes: TypeListNode[], section: 
 
     // Generate the resulting library item tree before merging data types.
     for (let layoutElement of layoutElements) {
-        sectionData.appendChild(constructLibraryItem(typeListNodes, layoutElement));
+        let libItem = constructLibraryItem(typeListNodes, layoutElement);
+
+        if (libItem.childItems.length > 0) {
+            // Only append the new item header if there are child nodes generated
+            sectionData.appendChild(libItem);
+        }
     }
 
     return sectionData;
@@ -386,12 +391,14 @@ export function buildLibrarySectionsFromLayoutSpecs(loadedTypes: any, layoutSpec
 
     let convertedMiscSection = convertToMiscSection(typeListNodes, miscSection);
 
-    // Change the itemType of the outermost parents
-    _.each(convertedMiscSection.childItems, function (node) {
-        if (node.itemType === "group") node.itemType = "category";
-    })
-
-    results.push(convertedMiscSection);
+    // If there are leftover nodes, add the Miscellaneous section into results
+    if (convertedMiscSection.childItems.length > 0) {
+        // Change the itemType of the outermost parents
+        _.each(convertedMiscSection.childItems, function (node) {
+            if (node.itemType === "group") node.itemType = "category";
+        })
+        results.push(convertedMiscSection);
+    }
 
     return results;
 }
