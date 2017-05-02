@@ -498,7 +498,12 @@ function buildLibraryItemsFromName(typeListNode: TypeListNode, parentNode: ItemD
 // Get keywords from typeListNode and push them into itemData
 export function pushKeywords(itemData: ItemData, typeListNode: TypeListNode) {
     let keywords = typeListNode.keywords.split(",");
-    keywords.forEach(keyword => itemData.keywords.push(keyword.toLowerCase().trim()));
+    keywords.forEach(keyword => {
+        itemData.keywords.push(keyword.toLowerCase().trim())
+    });
+
+    let index = typeListNode.contextData.indexOf("@");
+    itemData.keywords.push(typeListNode.contextData.substring(0, index).toLowerCase());
 }
 
 // Recursively set visible and expanded states of ItemData
@@ -513,11 +518,8 @@ export function setItemStateRecursive(items: ItemData | ItemData[], visible: boo
 
 export function search(text: string, item: ItemData) {
     if (item.itemType !== "group") {
-        let index = -1;
-
         for (let keyword of item.keywords) {
-            index = keyword.indexOf(text);
-            if (index >= 0) {
+            if (keyword.includes(text)) {
                 // Show all items recursively if a given text is found in the current 
                 // (parent) item. Note that this does not apply to items of "group" type
                 setItemStateRecursive(item, true, true);
