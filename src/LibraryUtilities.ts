@@ -486,7 +486,6 @@ function buildLibraryItemsFromName(typeListNode: TypeListNode, parentNode: ItemD
 
     // Otherwise, create the new parent node 'A' (using the previous example).
     let newParentNode = new ItemData(fullyQualifiedNameParts[0]);
-    let keywords = typeListNode.keywords.split(",");
     newParentNode.contextData = typeListNode.contextData;
     newParentNode.iconUrl = typeListNode.iconUrl;
     newParentNode.itemType = "group";
