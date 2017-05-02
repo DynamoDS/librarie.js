@@ -501,9 +501,7 @@ export function pushKeywords(itemData: ItemData, typeListNode: TypeListNode) {
     keywords.forEach(keyword => {
         itemData.keywords.push(keyword.toLowerCase().trim())
     });
-
-    let index = typeListNode.contextData.indexOf("@");
-    itemData.keywords.push(typeListNode.contextData.substring(0, index).toLowerCase());
+    itemData.keywords.push(typeListNode.fullyQualifiedName.toLowerCase());
 }
 
 // Recursively set visible and expanded states of ItemData
@@ -551,9 +549,10 @@ export function getHighlightedText(text: string, highlightedText: string, matchD
     if (matchDelimiter) {
         let delimiter = ".";
         if (highlightedText.includes(delimiter)) {
-            let texts = highlightedText.split(delimiter);
-            let matchedText = texts.find(x => text.toLowerCase().includes(x));
-            highlightedText = matchedText ? matchedText : highlightedText;
+            let leafText = highlightedText.split(delimiter).pop();
+            if (text.toLowerCase().includes(leafText)) {
+                highlightedText = leafText;
+            }
         }
     }
 
