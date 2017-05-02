@@ -545,7 +545,16 @@ export function searchItemResursive(items: ItemData[], text: string) {
     }
 }
 
-export function getHighlightedText(text: string, highlightedText: string): React.DOMElement<React.HTMLAttributes<HTMLSpanElement>, HTMLSpanElement>[] {
+export function getHighlightedText(text: string, highlightedText: string, matchDelimiter: boolean): React.DOMElement<React.HTMLAttributes<HTMLSpanElement>, HTMLSpanElement>[] {
+    if (matchDelimiter) {
+        let delimiter = ".";
+        if (highlightedText.includes(delimiter)) {
+            let texts = highlightedText.split(delimiter);
+            let matchedText = texts.find(x => text.toLowerCase().includes(x));
+            highlightedText = matchedText ? matchedText : highlightedText;
+        }
+    }
+
     let regex = new RegExp(highlightedText, 'gi');
     let segments = text.split(regex);
     let replacements = text.match(regex);
