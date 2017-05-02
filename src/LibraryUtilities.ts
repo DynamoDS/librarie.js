@@ -286,7 +286,11 @@ export function constructLibraryItem(
     // Construct all child library items from child layout elements.
     for (let i = 0; i < layoutElement.childElements.length; i++) {
         let childLayoutElement = layoutElement.childElements[i];
-        result.appendChild(constructLibraryItem(typeListNodes, childLayoutElement));
+        let libItem = constructLibraryItem(typeListNodes, childLayoutElement);
+        if (libItem.childItems.length > 0) {
+            // Only append the item to results if there are nodes generated
+            result.appendChild(libItem);
+        }
     }
 
     return result;
