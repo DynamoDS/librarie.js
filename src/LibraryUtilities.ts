@@ -381,11 +381,14 @@ export function buildLibrarySectionsFromLayoutSpecs(loadedTypes: any, layoutSpec
         if (section.text != defaultSectionStr && section.text != miscSectionStr) {
             let convertedSection = convertToOtherSection(typeListNodes, section);
 
-            // Change the itemType of the outermost parents
-            _.each(convertedSection.childItems, function (node) {
-                if (node.itemType === "group") node.itemType = "category";
-            })
-            results.push(convertedSection);
+            // If there are nodes generated in the section, append it to results
+            if (convertedSection.childItems.length > 0) {
+                // Change the itemType of the outermost parents
+                _.each(convertedSection.childItems, function (node) {
+                    if (node.itemType === "group") node.itemType = "category";
+                })
+                results.push(convertedSection);
+            }
         }
     })
 
