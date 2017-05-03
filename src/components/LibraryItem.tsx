@@ -154,7 +154,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
     }
 
     onImageLoadFail(event: any) {
-        event.target.src = require("../resources/ui/dynamo.png");
+        event.target.src = require("../resources/icons/Dynamo.svg");
     }
 
     getLibraryItemContainerStyle(): string {

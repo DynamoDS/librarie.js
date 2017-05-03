@@ -44,7 +44,7 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
     }
 
     onImageLoadFail(event: any) {
-        event.target.src = require("../resources/ui/dynamo.png");
+        event.target.src = require("../resources/icons/Dynamo.svg");
     }
 
     onTextClicked(event: any) {
