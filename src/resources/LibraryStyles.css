@@ -235,11 +235,11 @@ input {
     color: #aaaaaa;
     padding-left: 5px;
     transition: 0.15s;
+    text-decoration: underline;
 }
 
 .SearchResultItemContainer .ItemCategory:hover {
     cursor: pointer;
-    text-decoration: underline;
     color: white;
 }
 
@@ -254,7 +254,7 @@ input {
     color: #4ac8ef;
 }
 
-.SearchResultItemContainer .ItemCategory:hover .HighlightedText{
+.SearchResultItemContainer .ItemCategory:hover .HighlightedText {
     font-weight: normal;
     color: white;
 }

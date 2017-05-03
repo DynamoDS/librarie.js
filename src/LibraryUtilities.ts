@@ -621,18 +621,16 @@ export function getHighlightedText(text: string, highlightedText: string, matchD
     return spans;
 }
 
-export function findItemInLibrary(item: ItemData, data: ItemData) {
-    for (let childItem of item.childItems) {
-        if (childItem.childItems.length == 0) {
-            if (childItem.iconUrl == data.iconUrl) {
-                childItem.expanded = true;
-                return true;
-            }
-        } else if (this.findItemInLibrary(childItem, data)) {
-            childItem.expanded = true;
-            return true;
-        }
-    }
+export function findItemByPath(pathToItem: ItemData[], allItems: ItemData[]): boolean {
+    let item: ItemData;
 
-    return false;
+    if (pathToItem.length == 1) {
+        item = allItems.find(item => item.iconUrl == pathToItem[0].iconUrl);
+        return item ? true : false;
+    } else {
+        item = allItems.find(item => item.text == pathToItem[0].text);
+        pathToItem.shift();
+        item.expanded = true;
+        return findItemByPath(pathToItem, item.childItems);
+    }
 }

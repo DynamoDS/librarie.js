@@ -2,7 +2,7 @@ import * as React from "react";
 import { LibraryItem } from "./LibraryItem";
 import { SearchResultItem } from "./SearchResultItem";
 import { LibraryContainer } from "./LibraryContainer";
-import { searchItemResursive, setItemStateRecursive, ItemData } from "../LibraryUtilities";
+import { searchItemResursive, setItemStateRecursive, findItemByPath, ItemData } from "../LibraryUtilities";
 
 type displayMode = "structure" | "list";
 
@@ -24,7 +24,6 @@ interface SearchViewStates {
 
 export class SearchView extends React.Component<SearchViewProps, SearchViewStates> {
     timeout: number;
-
     searchResultListItems: any;
 
     constructor(props: SearchViewProps) {
@@ -101,42 +100,9 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
 
     onResultItemClicked(pathToItem: ItemData[]) {
         setItemStateRecursive(this.props.sections, true, false);
-
-        let found = this.findItemInLibrary(pathToItem.slice(0), this.props.sections);
-        console.log("found? :" + found);
-
-        if (found) {
-            console.log("found");
+        if (findItemByPath(pathToItem.slice(0), this.props.sections)) {
             this.setState({ directFromResultItem: true });
             this.clearSearch();
-        }
-
-        // for (let section of this.props.sections) {
-        //     for (let categoryItem of section.childItems) {
-        //         if (categoryItem.text == categoryText && findItemInLibrary(categoryItem, data)) {
-        //             categoryItem.expanded = true;
-        //             section.expanded = true;
-
-        //             this.setState({ directFromResultItem: true });
-        //             this.clearSearch();
-
-        //             return;
-        //         }
-        //     }
-        // }
-    }
-
-    findItemInLibrary(pathToItem: ItemData[], allItems: ItemData[]): boolean {
-        let item: ItemData;
-        console.log(pathToItem.length);
-        if (pathToItem.length == 1) {
-            item = allItems.find(item => item.iconUrl == pathToItem[0].iconUrl);
-            return item ? true : false;
-        } else {
-            item = allItems.find(item => item.text == pathToItem.shift().text);
-            console.log(item.text);
-            item.expanded = true;
-            return this.findItemInLibrary(pathToItem, item.childItems);
         }
     }
 
@@ -155,7 +121,6 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
     }
 
     clearSearch() {
-        console.log("clear");
         let searchInput: any = document.getElementById("searchInput");
         searchInput.value = "";
 
