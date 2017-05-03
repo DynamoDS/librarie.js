@@ -6,8 +6,9 @@ import { LibraryContainer } from "./LibraryContainer";
 interface SearchResultItemProps {
     data: ItemData;
     libraryContainer: LibraryContainer;
-    category: string;
     highlightedText: string;
+    pathToItem: ItemData[];
+    onResultItemClicked: Function;
 }
 
 interface SearchResultItemStates { }
@@ -20,8 +21,9 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
 
     render() {
         let iconPath = this.props.data.iconUrl;
+        let categoryText = this.props.pathToItem.find(item => item.itemType === "category").text;
         let highLightedItemText = getHighlightedText(this.props.data.text, this.props.highlightedText, true);
-        let highLightedCategoryText = getHighlightedText(this.props.category, this.props.highlightedText, false);
+        let highLightedCategoryText = getHighlightedText(categoryText, this.props.highlightedText, false);
         let ItemTypeIconPath = "src/resources/icons/library-" + this.props.data.itemType + ".svg";
 
         return (
@@ -32,7 +34,9 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
                     <div className={"ItemTitle"}>{highLightedItemText}</div>
                     <div className={"ItemDetails"}>
                         <img className={"ItemTypeIcon"} src={ItemTypeIconPath} onError={this.onImageLoadFail.bind(this)} />
-                        <div className={"ItemCategory"}>{highLightedCategoryText}</div>
+                        <div className={"ItemCategory"} onClick={this.onTextClicked.bind(this)}>
+                            {highLightedCategoryText}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -41,6 +45,11 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
 
     onImageLoadFail(event: any) {
         event.target.src = require("../resources/ui/dynamo.png");
+    }
+
+    onTextClicked(event: any) {
+        event.stopPropagation();
+        this.props.onResultItemClicked(this.props.pathToItem);
     }
 
     onItemClicked() {

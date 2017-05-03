@@ -19,6 +19,7 @@ interface SearchViewProps {
 interface SearchViewStates {
     searchText: string;
     displayMode: displayMode;
+    directFromResultItem: boolean;
 }
 
 export class SearchView extends React.Component<SearchViewProps, SearchViewStates> {
@@ -32,7 +33,8 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
         // set default state
         this.state = ({
             searchText: "",
-            displayMode: "list"
+            displayMode: "list",
+            directFromResultItem: false
         })
 
         this.searchResultListItems = null;
@@ -48,47 +50,33 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
             <LibraryItem key={index++} libraryContainer={this.props.libraryContainer} data={item} />);
     }
 
-    generateListItems(): JSX.Element[] {
-        let leafItems: JSX.Element[] = [];
-        let categoryItems: ItemData[] = [];
+    generateListItems(
+        items: ItemData[] = this.props.sections,
+        pathToItem: ItemData[] = [],
+        leafItems: JSX.Element[] = []): JSX.Element[] {
 
-        this.props.sections.forEach(section =>
-            categoryItems = categoryItems.concat(section.childItems)
-        );
-
-        for (let item of categoryItems) {
-            if (!item.visible) {
-                continue;
-            }
-
-            if (item.childItems.length > 0) {
-                leafItems = leafItems.concat(this.getLeafItemsInCategory(item.text, item.childItems));
-            } else {
-                leafItems = leafItems.concat(this.getLeafItemsInCategory(item.text, [item]));
-            }
-        }
-
-        return leafItems;
-    }
-
-    getLeafItemsInCategory(category: string, items: ItemData[], leafItemsInCategory: JSX.Element[] = []): JSX.Element[] {
         for (let item of items) {
             if (!item.visible) {
                 continue;
             }
 
+            let pathToThisItem = pathToItem.slice(0);
+            pathToThisItem.push(item);
+
             if (item.childItems.length == 0) {
-                leafItemsInCategory.push(<SearchResultItem
+                leafItems.push(<SearchResultItem
                     data={item}
                     libraryContainer={this.props.libraryContainer}
-                    category={category}
-                    highlightedText={this.state.searchText} />);
+                    highlightedText={this.state.searchText}
+                    pathToItem={pathToThisItem}
+                    onResultItemClicked={this.onResultItemClicked.bind(this)}
+                />);
             } else {
-                this.getLeafItemsInCategory(category, item.childItems, leafItemsInCategory);
+                this.generateListItems(item.childItems, pathToThisItem, leafItems);
             }
         }
 
-        return leafItemsInCategory;
+        return leafItems;
     }
 
     onTextChange(event: any) {
@@ -111,15 +99,68 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
         }
     }
 
+    onResultItemClicked(pathToItem: ItemData[]) {
+        setItemStateRecursive(this.props.sections, true, false);
+
+        let found = this.findItemInLibrary(pathToItem.slice(0), this.props.sections);
+        console.log("found? :" + found);
+
+        if (found) {
+            console.log("found");
+            this.setState({ directFromResultItem: true });
+            this.clearSearch();
+        }
+
+        // for (let section of this.props.sections) {
+        //     for (let categoryItem of section.childItems) {
+        //         if (categoryItem.text == categoryText && findItemInLibrary(categoryItem, data)) {
+        //             categoryItem.expanded = true;
+        //             section.expanded = true;
+
+        //             this.setState({ directFromResultItem: true });
+        //             this.clearSearch();
+
+        //             return;
+        //         }
+        //     }
+        // }
+    }
+
+    findItemInLibrary(pathToItem: ItemData[], allItems: ItemData[]): boolean {
+        let item: ItemData;
+        console.log(pathToItem.length);
+        if (pathToItem.length == 1) {
+            item = allItems.find(item => item.iconUrl == pathToItem[0].iconUrl);
+            return item ? true : false;
+        } else {
+            item = allItems.find(item => item.text == pathToItem.shift().text);
+            console.log(item.text);
+            item.expanded = true;
+            return this.findItemInLibrary(pathToItem, item.childItems);
+        }
+    }
+
     updateSearchView(text: string) {
         if (this.state.displayMode === "list") {
             this.props.libraryContainer.raiseEvent("searchTextUpdated", text);
         }
 
-        this.setState({ searchText: text });
+        this.setState({
+            searchText: text,
+            directFromResultItem: false
+        });
 
         // Update library container of current search
         this.props.onSearchModeChanged(text.length > 0);
+    }
+
+    clearSearch() {
+        console.log("clear");
+        let searchInput: any = document.getElementById("searchInput");
+        searchInput.value = "";
+
+        this.setState({ searchText: searchInput.value })
+        this.props.onSearchModeChanged(false);
     }
 
     render() {
@@ -127,7 +168,7 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
 
         if (this.state.searchText.length > 0) {
             listItems = (this.state.displayMode === "structure") ? this.generateStructuredItems() : this.generateListItems();
-        } else {  // Reset ItemData when search text is cleared
+        } else if (!this.state.directFromResultItem) { // Reset ItemData when search text is cleared
             setItemStateRecursive(this.props.sections, true, false);
         }
 

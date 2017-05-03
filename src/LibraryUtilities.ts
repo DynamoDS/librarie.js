@@ -620,3 +620,19 @@ export function getHighlightedText(text: string, highlightedText: string, matchD
 
     return spans;
 }
+
+export function findItemInLibrary(item: ItemData, data: ItemData) {
+    for (let childItem of item.childItems) {
+        if (childItem.childItems.length == 0) {
+            if (childItem.iconUrl == data.iconUrl) {
+                childItem.expanded = true;
+                return true;
+            }
+        } else if (this.findItemInLibrary(childItem, data)) {
+            childItem.expanded = true;
+            return true;
+        }
+    }
+
+    return false;
+}
