@@ -13,7 +13,9 @@ declare var boundContainer: any; // Object set from C# side.
 export interface LibraryContainerProps {
     libraryController: LibraryController,
     loadedTypesJson: any,
-    layoutSpecsJson: any
+    layoutSpecsJson: any,
+    defaultSectionString: string,
+    miscSectionString: string
 }
 
 export interface LibraryContainerStates {
@@ -27,7 +29,7 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
     constructor(props: LibraryContainerProps) {
         super(props);
         this.state = { inSearchMode: false };
-        this.generatedSections = buildLibrarySectionsFromLayoutSpecs(this.props.loadedTypesJson, this.props.layoutSpecsJson);
+        this.generatedSections = buildLibrarySectionsFromLayoutSpecs(this.props.loadedTypesJson, this.props.layoutSpecsJson, this.props.defaultSectionString, this.props.miscSectionString);
     }
 
     raiseEvent(name: string, params?: any | any[]) {

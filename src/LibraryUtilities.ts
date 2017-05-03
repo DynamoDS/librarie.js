@@ -14,6 +14,7 @@ export class TypeListNode {
     iconUrl: string = "";
     contextData: any = "";
     memberType: MemberType = "none";
+    keywords: string = "";
     processed: boolean = false;
 
     constructor(data: any) {
@@ -21,6 +22,7 @@ export class TypeListNode {
         this.iconUrl = data.iconUrl;
         this.contextData = data.contextData;
         this.memberType = data.itemType;
+        this.keywords = data.keywords;
     }
 }
 
@@ -69,16 +71,14 @@ export class ItemData {
     visible: boolean = true;
     expanded: boolean = false;
     showHeader: boolean = true;
-    searchStrings: string[] = [];
+    keywords: string[] = [];
     childItems: ItemData[] = [];
 
     constructor(public text: string) {
-        this.searchStrings.push(text ? text.toLowerCase() : text);
+        this.keywords.push(text ? text.toLowerCase() : text);
     }
 
     constructFromLayoutElement(layoutElement: LayoutElement) {
-        this.searchStrings.pop();
-        this.searchStrings.push(this.text ? this.text.toLowerCase() : this.text);
         this.contextData = layoutElement.text;
         this.iconUrl = layoutElement.iconUrl;
         this.itemType = layoutElement.elementType;
@@ -142,6 +142,7 @@ export function constructNestedLibraryItems(
             libraryItem.contextData = typeListNode.contextData;
             libraryItem.iconUrl = typeListNode.iconUrl;
             libraryItem.itemType = typeListNode.memberType;
+            pushKeywords(libraryItem, typeListNode);
 
             // Mark the typeListNode as processed.
             typeListNode.processed = true;
@@ -286,7 +287,11 @@ export function constructLibraryItem(
     // Construct all child library items from child layout elements.
     for (let i = 0; i < layoutElement.childElements.length; i++) {
         let childLayoutElement = layoutElement.childElements[i];
-        result.appendChild(constructLibraryItem(typeListNodes, childLayoutElement));
+        let libItem = constructLibraryItem(typeListNodes, childLayoutElement);
+        if (libItem.childItems.length > 0) {
+            // Only append the item to results if there are nodes generated
+            result.appendChild(libItem);
+        }
     }
 
     return result;
@@ -347,13 +352,18 @@ export function convertToDefaultSection(typeListNodes: TypeListNode[], section: 
 
     // Generate the resulting library item tree before merging data types.
     for (let layoutElement of layoutElements) {
-        sectionData.appendChild(constructLibraryItem(typeListNodes, layoutElement));
+        let libItem = constructLibraryItem(typeListNodes, layoutElement);
+
+        if (libItem.childItems.length > 0) {
+            // Only append the new item header if there are child nodes generated
+            sectionData.appendChild(libItem);
+        }
     }
 
     return sectionData;
 }
 
-export function buildLibrarySectionsFromLayoutSpecs(loadedTypes: any, layoutSpecs: any): ItemData[] {
+export function buildLibrarySectionsFromLayoutSpecs(loadedTypes: any, layoutSpecs: any, defaultSectionStr: string, miscSectionStr: string): ItemData[] {
     let typeListNodes: TypeListNode[] = [];
     let sections: LayoutElement[] = [];
 
@@ -367,13 +377,59 @@ export function buildLibrarySectionsFromLayoutSpecs(loadedTypes: any, layoutSpec
     }
 
     let results: ItemData[] = [];
-    let defaultSection = sections.find(x => x.text == "default");
-    let miscSection = sections.find(x => x.text == "Miscellaneous");
+    let defaultSection = sections.find(x => x.text == defaultSectionStr);
+    let miscSection = sections.find(x => x.text == miscSectionStr);
 
     results.push(convertToDefaultSection(typeListNodes, defaultSection));
-    results.push(convertToMiscSection(typeListNodes, miscSection));
+
+    _.each(sections, function (section) {
+        if (section.text != defaultSectionStr && section.text != miscSectionStr) {
+            let convertedSection = convertToOtherSection(typeListNodes, section);
+
+            // If there are nodes generated in the section, append it to results
+            if (convertedSection.childItems.length > 0) {
+                // Change the itemType of the outermost parents
+                _.each(convertedSection.childItems, function (node) {
+                    if (node.itemType === "group") node.itemType = "category";
+                })
+                results.push(convertedSection);
+            }
+        }
+    })
+
+    let convertedMiscSection = convertToMiscSection(typeListNodes, miscSection);
+
+    // If there are leftover nodes, add the Miscellaneous section into results
+    if (convertedMiscSection.childItems.length > 0) {
+        // Change the itemType of the outermost parents
+        _.each(convertedMiscSection.childItems, function (node) {
+            if (node.itemType === "group") node.itemType = "category";
+        })
+        results.push(convertedMiscSection);
+    }
 
     return results;
+}
+
+function convertToOtherSection(typeListNodes: TypeListNode[], section: LayoutElement): ItemData {
+    let sectionData = convertSectionToItemData(section);
+    let includePatterns = section.include;
+    let nodeToProcess: TypeListNode[] = [];
+
+    _.each(typeListNodes, function (node) {
+        _.each(includePatterns, function (includePattern) {
+            if (node.fullyQualifiedName.startsWith(includePattern.path)) {
+                // If the path contains '://', remove it with the text before it from the fullyQualifiedName 
+                let tempName = (includePattern.path.indexOf("://") == -1) ? node.fullyQualifiedName : node.fullyQualifiedName.split(includePattern.path)[1];
+
+                // Construct the library item using the new name
+                node.processed = true;
+                buildLibraryItemsFromName(node, sectionData, tempName);
+            }
+        })
+    })
+
+    return sectionData;
 }
 
 export function convertSectionToItemData(section: LayoutElement): ItemData {
@@ -418,16 +474,11 @@ export function convertToMiscSection(allNodes: TypeListNode[], section: LayoutEl
         buildLibraryItemsFromName(node, sectionData)
     })
 
-    // Change the itemType of the outermost parents
-    _.each(sectionData.childItems, function (node) {
-        if (node.itemType === "group") node.itemType = "category";
-    })
-
     return sectionData;
 }
 
-function buildLibraryItemsFromName(typeListNode: TypeListNode, parentNode: ItemData) {
-    let fullyQualifiedNameParts: string[] = typeListNode.fullyQualifiedName.split('.');
+function buildLibraryItemsFromName(typeListNode: TypeListNode, parentNode: ItemData, newNodeName?: string) {
+    let fullyQualifiedNameParts: string[] = newNodeName ? newNodeName.split('.') : typeListNode.fullyQualifiedName.split('.');
 
     // Take an example:
     // Given fullyQualifiedName = 'A.B.C.D'
@@ -442,6 +493,7 @@ function buildLibraryItemsFromName(typeListNode: TypeListNode, parentNode: ItemD
         newNode.contextData = typeListNode.contextData;
         newNode.iconUrl = typeListNode.iconUrl;
         newNode.itemType = typeListNode.memberType;
+        pushKeywords(newNode, typeListNode);
 
         // All items without category will fall under Others
         if (parentNode.itemType === "section") {
@@ -465,7 +517,6 @@ function buildLibraryItemsFromName(typeListNode: TypeListNode, parentNode: ItemD
     // 'slicedParts' excludes the first item in fullyQualifiedNameParts.
     // Given fullyQualifiedNameParts  = [ A, B, C, D ];
     // then slicedParts = [ B, C, D ];
-    // 
     let slicedParts = fullyQualifiedNameParts.slice(1);
 
     // Assign the reduced parts ('B.C.D') to fullyQualifiedName of the node 
@@ -494,6 +545,15 @@ function buildLibraryItemsFromName(typeListNode: TypeListNode, parentNode: ItemD
     parentNode.childItems.unshift(newParentNode);
 }
 
+// Get keywords from typeListNode and push them into itemData
+export function pushKeywords(itemData: ItemData, typeListNode: TypeListNode) {
+    let keywords = typeListNode.keywords.split(",");
+    keywords.forEach(keyword => {
+        itemData.keywords.push(keyword.toLowerCase().trim())
+    });
+    itemData.keywords.push(typeListNode.fullyQualifiedName.toLowerCase());
+}
+
 // Recursively set visible and expanded states of ItemData
 export function setItemStateRecursive(items: ItemData | ItemData[], visible: boolean, expanded: boolean) {
     items = (items instanceof Array) ? items : [items];
@@ -506,11 +566,8 @@ export function setItemStateRecursive(items: ItemData | ItemData[], visible: boo
 
 export function search(text: string, item: ItemData) {
     if (item.itemType !== "group") {
-        let index = -1;
-
-        for (let searchString of item.searchStrings) {
-            index = searchString.indexOf(text);
-            if (index >= 0) {
+        for (let keyword of item.keywords) {
+            if (keyword.includes(text)) {
                 // Show all items recursively if a given text is found in the current 
                 // (parent) item. Note that this does not apply to items of "group" type
                 setItemStateRecursive(item, true, true);
@@ -538,7 +595,17 @@ export function searchItemResursive(items: ItemData[], text: string) {
     }
 }
 
-export function getHighlightedText(text: string, highlightedText: string): React.DOMElement<React.HTMLAttributes<HTMLSpanElement>, HTMLSpanElement>[] {
+export function getHighlightedText(text: string, highlightedText: string, matchDelimiter: boolean): React.DOMElement<React.HTMLAttributes<HTMLSpanElement>, HTMLSpanElement>[] {
+    if (matchDelimiter) {
+        let delimiter = ".";
+        if (highlightedText.includes(delimiter)) {
+            let leafText = highlightedText.split(delimiter).pop();
+            if (text.toLowerCase().includes(leafText)) {
+                highlightedText = leafText;
+            }
+        }
+    }
+
     let regex = new RegExp(highlightedText, 'gi');
     let segments = text.split(regex);
     let replacements = text.match(regex);

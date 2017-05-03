@@ -19,8 +19,8 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
 
     render() {
         let iconPath = this.props.data.iconUrl;
-        let highLightedItemText = getHighlightedText(this.props.data.text, this.props.highlightedText);
-        let highLightedCategoryText = getHighlightedText(this.props.category, this.props.highlightedText);
+        let highLightedItemText = getHighlightedText(this.props.data.text, this.props.highlightedText, true);
+        let highLightedCategoryText = getHighlightedText(this.props.category, this.props.highlightedText, false);
         let ItemTypeIconPath = "src/resources/icons/library-" + this.props.data.itemType + ".svg";
 
         return (
