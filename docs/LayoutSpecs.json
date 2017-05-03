@@ -1395,11 +1395,7 @@
           "text": "Revit",
           "iconUrl": "/src/resources/icons/Category.Revit.svg",
           "elementType": "category",
-          "include": [
-            {
-              "path": "Analysis"
-            }
-          ],
+          "include": [],
           "childElements": []
         }
       ]
