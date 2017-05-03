@@ -74,15 +74,25 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
         return _.contains(this.state.selectedCategories, category);
     }
 
+    setSelectedCategory(event: any) {
+        this.setState({ selectedCategories: [event.target.name] })
+    }
+
     createCheckbox(name: string, checkboxClassName: string, checked: boolean, onChangeFunc: any, displayText?: string): JSX.Element {
         let checkSymbol = checked ? <img className="CheckboxSymbol" src="/src/resources/UI/check-symbol.svg" /> : null;
         if (!displayText) displayText = name;
+
+        let only = null;
+        if ((checkboxClassName == "CategoryCheckbox") && (name != "All")) {
+            only = <label><input type="button" name={name} className="CheckboxLabelRightButton" onClick={this.setSelectedCategory.bind(this)} value={"only"}/></label>
+        }
 
         let checkbox: JSX.Element =
             <label className="CheckboxLabel">
                 {checkSymbol}
                 <input type="checkbox" name={name} className={checkboxClassName} onChange={onChangeFunc} checked={checked} />
                 <div className="CheckboxLabelText">{displayText}</div>
+                {only}
             </label>;
         return checkbox;
     }
@@ -120,7 +130,7 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
             <div className="SearchBar">
                 <div className="SearchInput">
                     <div className="SearchInputContainer">
-                        <img src="/src/resources/UI/search.svg" className="SearchBarIcon"/>
+                        <img src="/src/resources/UI/search.svg" className="SearchBarIcon" />
                         <input id="SearchInputText" type="search" placeholder="Search..." onChange={this.onTextChange.bind(this)}></input>
                     </div>
                     {searchOptionsBtn}

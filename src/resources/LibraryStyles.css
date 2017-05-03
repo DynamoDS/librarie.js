@@ -188,10 +188,8 @@ input {
 }
 
 .SearchInputContainer {
-    margin-left:5px;
     width:100%;
     height:30px;
-    border-radius:7px;
     background-color:#fff;
     display: flex;
     justify-content:space-around;
@@ -219,9 +217,7 @@ input {
     height: 32px;
     width: 32px;
     color: #ddd;
-    border: 1px;
-    border-radius: 5px;
-    margin: 5px;
+    border: 0px;
 }
 
 .SearchBar #SearchOptionsBtn:hover {
@@ -268,8 +264,6 @@ input {
 }
 
 .SearchBar .CategoryCheckboxContainer {
-    max-height:100px;
-    overflow-y: scroll;
     overflow-x: hidden;
 }
 
@@ -296,6 +290,29 @@ input {
 
 .CheckboxLabel .CheckboxLabelText {
     margin-left: 20px;
+}
+
+.CheckboxLabel .CheckboxLabelRightButton {
+    position: absolute;
+    transform: translate(-70%, 25%);
+    top: 0px;
+    right: 0px;
+    color: #aaa;
+    background: transparent;
+    border: none;
+    outline: none;
+    display: none;
+    margin: 0px;
+    padding: 0px;
+}
+
+.CheckboxLabelRightButton:hover {
+    color: white;
+    cursor: pointer;
+}
+
+.CheckboxLabel:hover .CheckboxLabelRightButton {
+    display: block;
 }
 
 .SearchCheckbox, .CategoryCheckbox {
