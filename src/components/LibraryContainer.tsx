@@ -25,11 +25,19 @@ export interface LibraryContainerStates {
 export class LibraryContainer extends React.Component<LibraryContainerProps, LibraryContainerStates> {
 
     generatedSections: ItemData[] = null;
+    searchCategories: string[] = [];
 
     constructor(props: LibraryContainerProps) {
         super(props);
         this.state = { inSearchMode: false };
-        this.generatedSections = buildLibrarySectionsFromLayoutSpecs(this.props.loadedTypesJson, this.props.layoutSpecsJson, this.props.defaultSectionString, this.props.miscSectionString);
+        this.generatedSections = buildLibrarySectionsFromLayoutSpecs(this.props.loadedTypesJson, this.props.layoutSpecsJson, 
+        this.props.defaultSectionString, this.props.miscSectionString);
+
+        // Obtain the categories from each section to be added into the filtering options for search
+        for (let section of this.generatedSections) {
+            for (let childItem of section.childItems)
+                this.searchCategories.push(childItem.text);
+        }
     }
 
     raiseEvent(name: string, params?: any | any[]) {
@@ -44,7 +52,7 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
         try {
             let sections: JSX.Element[] = null;
             const searchView = <SearchView onSearchModeChanged={this.onSearchModeChanged.bind(this)}
-                libraryContainer={this} sections={this.generatedSections} />;
+                libraryContainer={this} sections={this.generatedSections} categories={this.searchCategories}/>;
 
             if (!this.state.inSearchMode) {
                 let index = 0;

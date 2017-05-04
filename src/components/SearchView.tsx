@@ -16,6 +16,7 @@ interface SearchViewProps {
     onSearchModeChanged: SearchModeChangedFunc;
     libraryContainer: LibraryContainer;
     sections: ItemData[];
+    categories: string[];
 }
 
 interface SearchViewStates {
@@ -30,17 +31,14 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
     timeout: number;
 
     searchResultListItems: any;
-    categories: string[] = [];
 
     constructor(props: SearchViewProps) {
         super(props);
 
-        this.categories = ["List", "Input", "Math", "Script", "Display", "ImportExport", "String", "Geometry"];
-
         this.state = {
             searchText: '',
             displayMode: "list",
-            selectedCategories: this.categories,
+            selectedCategories: this.props.categories,
             structured: false,
             detailed: false
         };
@@ -51,23 +49,35 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
         return this.state.searchText;
     }
 
-    onStructuredModeChange() {
-        this.setState({ structured: !this.state.structured });
+    onStructuredModeChanged(value: boolean) {
+        this.setState({ structured: value });
     }
 
-    onDetailedModeChange() {
-        this.setState({ detailed: !this.state.detailed });
+    onDetailedModeChanged(value: boolean) {
+        this.setState({ detailed: value });
     }
 
-    onCategoriesChange(categories: string[]) {
+    onCategoriesChanged(categories: string[]) {
         this.setState({ selectedCategories: categories })
     }
 
-    generateStructuredItems() {
+    generateStructuredItems(): JSX.Element[] {
         let structuredItems: JSX.Element[] = [];
+        let categoryItems: ItemData[] = [];
+        
         let index = 0;
-        return this.props.sections.map((item: ItemData) =>
-            <LibraryItem key={index++} libraryContainer={this.props.libraryContainer} data={item} />);
+
+        this.props.sections.forEach(section =>
+            categoryItems = categoryItems.concat(section.childItems)
+        );
+
+        for (let item of categoryItems) {
+            if (!item.visible || !_.contains(this.state.selectedCategories, item.text)) {
+                continue;
+            }
+            structuredItems = structuredItems.concat([<LibraryItem key={index++} libraryContainer={this.props.libraryContainer} data={item} />])
+        }
+        return structuredItems;
     }
 
     generateListItems(): JSX.Element[] {
@@ -113,7 +123,7 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
         return leafItemsInCategory;
     }
 
-    onTextChange(event: any) {
+    onTextChanged(event: any) {
         clearTimeout(this.timeout);
 
         let text = event.target.value.trim().toLowerCase();
@@ -155,7 +165,7 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
 
         return (
             <div className="searchView">
-                <SearchBar onStructuredModeChanged={this.onStructuredModeChange.bind(this)} onDetailedModeChanged={this.onDetailedModeChange.bind(this)} categories={this.categories} onCategoriesChange={this.onCategoriesChange.bind(this)} onTextChange={this.onTextChange.bind(this)}></SearchBar>
+                <SearchBar onStructuredModeChanged={this.onStructuredModeChanged.bind(this)} onDetailedModeChanged={this.onDetailedModeChanged.bind(this)} categories={this.props.categories} onCategoriesChanged={this.onCategoriesChanged.bind(this)} onTextChanged={this.onTextChanged.bind(this)}></SearchBar>
                 <div>{listItems}</div>
             </div>
         );

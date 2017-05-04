@@ -259,8 +259,25 @@ input {
 }
 
 .SearchBar .SearchOptionsHeader {
-    padding:5px;
-    margin-left:10px;
+    padding: 5px;
+    margin-left: 10px;
+}
+
+.SearchBar .SearchOptionsHeader span {
+    font-weight: 600;
+}
+
+.SearchBar .SearchOptionsHeader .SelectAllBtn {
+    color: #aaa;
+    background: transparent;
+    border: none;
+    outline: none;
+    float: right;
+}
+
+.SearchBar .SearchOptionsHeader .SelectAllBtn:hover {
+    cursor: pointer;
+    color: white;
 }
 
 .SearchBar .CategoryCheckboxContainer {
