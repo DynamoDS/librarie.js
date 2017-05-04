@@ -559,7 +559,7 @@ export function setItemStateRecursive(items: ItemData | ItemData[], visible: boo
     items = (items instanceof Array) ? items : [items];
     for (let item of items) {
         item.visible = visible;
-        item.expanded = expanded;
+        item.expanded = item.itemType === "section" ? true : expanded;
         setItemStateRecursive(item.childItems, visible, expanded);
     }
 }

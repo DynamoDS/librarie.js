@@ -19,7 +19,6 @@ interface SearchViewProps {
 interface SearchViewStates {
     searchText: string;
     displayMode: displayMode;
-    directFromResultItem: boolean;
 }
 
 export class SearchView extends React.Component<SearchViewProps, SearchViewStates> {
@@ -32,8 +31,7 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
         // set default state
         this.state = ({
             searchText: "",
-            displayMode: "list",
-            directFromResultItem: false
+            displayMode: "structure"
         })
 
         this.searchResultListItems = null;
@@ -94,6 +92,7 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
             }.bind(this), 300);
         } else {
             // Show change on ui immediately if search text is cleared
+            setItemStateRecursive(this.props.sections, true, false);
             this.updateSearchView(text);
         }
     }
@@ -101,40 +100,30 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
     onResultItemClicked(pathToItem: ItemData[]) {
         setItemStateRecursive(this.props.sections, true, false);
         if (findItemByPath(pathToItem.slice(0), this.props.sections)) {
-            this.setState({ directFromResultItem: true });
             this.clearSearch();
         }
     }
 
     updateSearchView(text: string) {
-        if (this.state.displayMode === "list") {
+        if (text.length > 0 && this.state.displayMode === "list") {
             this.props.libraryContainer.raiseEvent("searchTextUpdated", text);
         }
 
-        this.setState({
-            searchText: text,
-            directFromResultItem: false
-        });
-
-        // Update library container of current search
+        this.setState({ searchText: text });
         this.props.onSearchModeChanged(text.length > 0);
     }
 
     clearSearch() {
         let searchInput: any = document.getElementById("searchInput");
         searchInput.value = "";
-
         this.setState({ searchText: searchInput.value })
         this.props.onSearchModeChanged(false);
     }
 
     render() {
         let listItems: JSX.Element[] = null;
-
         if (this.state.searchText.length > 0) {
             listItems = (this.state.displayMode === "structure") ? this.generateStructuredItems() : this.generateListItems();
-        } else if (!this.state.directFromResultItem) { // Reset ItemData when search text is cleared
-            setItemStateRecursive(this.props.sections, true, false);
         }
 
         return (
