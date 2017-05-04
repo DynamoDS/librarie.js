@@ -234,13 +234,14 @@ input {
     font-size: 12px;
     color: #aaaaaa;
     padding-left: 5px;
-    transition: 0.15s;
+    transition: 0.1s;
     text-decoration: underline;
 }
 
 .SearchResultItemContainer .ItemCategory:hover {
     cursor: pointer;
     color: white;
+    font-weight: bold;
 }
 
 .SearchResultItemContainer .ItemTypeIcon {
@@ -255,7 +256,6 @@ input {
 }
 
 .SearchResultItemContainer .ItemCategory:hover .HighlightedText {
-    font-weight: normal;
     color: white;
 }
 
