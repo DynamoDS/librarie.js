@@ -24,7 +24,8 @@ import { ItemData } from "../LibraryUtilities";
 
 export interface LibraryItemProps {
     libraryContainer: LibraryContainer,
-    data: ItemData
+    data: ItemData,
+    onExpand?: Function
 }
 
 export interface LibraryItemState {
@@ -193,7 +194,8 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
                     // 'getNestedElements' method is meant to render all other 
                     // types of items except ones of type create/action/query.
                     regularItems.map((item: ItemData) => {
-                        return (<LibraryItem key={index++} libraryContainer={this.props.libraryContainer} data={item} />);
+                        return (<LibraryItem
+                            key={index++} libraryContainer={this.props.libraryContainer} data={item} onExpand={this.onExpand.bind(this)} />);
                     })
                 }
             </div>
@@ -249,6 +251,9 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
     onLibraryItemClicked() {
         // Toggle expansion state.
         let currentlyExpanded = this.state.expanded;
+        if (this.props.data.childItems.length > 0 && !currentlyExpanded) {
+            this.props.onExpand();
+        }
         this.setState({ expanded: !currentlyExpanded });
 
         let libraryContainer = this.props.libraryContainer;
@@ -256,6 +261,14 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
             libraryContainer.raiseEvent(libraryContainer.props.libraryController.ItemClickedEventName,
                 this.props.data.contextData);
         }
+    }
+
+    // Unexpand all other slibling items when one item is being expanded
+    onExpand() {
+        for (let item of this.props.data.childItems) {
+            item.expanded = false;
+        }
+        this.setState({ expanded: true });
     }
 
     onLibraryItemMouseLeave() {
