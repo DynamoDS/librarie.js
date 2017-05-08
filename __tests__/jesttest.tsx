@@ -1,71 +1,81 @@
-// import * as React from 'react';
-// import * as renderer from 'react-test-renderer';
-// import * as ReactTestUtils from 'react-dom/lib/ReactTestUtils';
-// import LibraryContainer from '../src/components/LibraryContainer';
-// import * as LibraryEntryPoint from '../src/entry-point';
+import * as React from 'react';
+import * as renderer from 'react-test-renderer';
+import * as ReactTestUtils from 'react-dom/lib/ReactTestUtils';
+import * as LibraryEntryPoint from '../src/entry-point';
+import LibraryContainer from '../src/components/LibraryContainer';
+import LibraryItem from '../src/components/LibraryItem';
 
-// test("add two numbers", function () {
-//   expect(1 + 2).toBe(3);
-// });
+var fs = require('fs');
 
-// test("create library item", function () {
-//   let jsonUrls = ["testLoadedTypes", "testlayoutSpecs"];
-//   let downloader = LibraryEntryPoint.CreateJsonDownloader(jsonUrls, function (jsonUrl, jsonObject) {
+test("add two numbers", function () {
+  expect(1 + 2).toBe(3);
+});
 
-//     let downloaded = downloader.getDownloadedJsonObjects();
-//     let loadedTypesJson = downloaded["loadedTypes"];
-//     let layoutSpecsJson = downloaded["layoutSpecs"];
+test("create library item", function () {
 
+  let loadedTypesJson = {
+    "loadedTypes": [{
+      "fullyQualifiedName": "Child1",
+      "iconUrl": "",
+      "contextData": "Input",
+      "itemType": "action",
+      "keywords": ""
+    },
+    {
+      "fullyQualifiedName": "Child2",
+      "iconUrl": "",
+      "contextData": "",
+      "itemType": "action",
+      "keywords": ""
+    }
+    ]
+  };
 
-//     if (!loadedTypesJson || (!layoutSpecsJson)) {
-//       return; // Not fully downloaded yet, bail.
-//     }
+  let layoutSpecsJson = {
+    "sections": [{
+      "text": "default",
+      "iconUrl": "",
+      "elementType": "section",
+      "showHeader": false,
+      "include": [],
+      "childElements": [{
+        "text": "Parent",
+        "iconUrl": "",
+        "elementType": "category",
+        "include": [{
+          "path": "Child1"
+        },
+        {
+          "path": "Child2"
+        }
+        ],
+        "childElements": []
+      }]
+    },
+    {
+      "text": "Miscellaneous",
+      "iconUrl": "",
+      "elementType": "section",
+      "showHeader": true,
+      "include": [],
+      "childElements": []
+    }]
+  };
 
-//     let libController = LibraryEntryPoint.CreateLibraryController();
+  let libController = LibraryEntryPoint.CreateLibraryController();
 
-//     libController.on("itemClicked", function (item) {
-//       console.log(item);
-//     })
+  libController.on("itemClicked", function (item) {
+    console.log(item);
+  })
 
-//     libController.on("searchTextUpdated", function (searchText) {
-//       console.log(searchText);
-//       return null;
-//     });
+  libController.on("searchTextUpdated", function (searchText) {
+    console.log(searchText);
+    return null;
+  });
 
-//     let libContainer = libController.createLibraryByElementId(
-//       "libraryContainerPlaceholder", layoutSpecsJson, loadedTypesJson);
+  let libContainer = ReactTestUtils.renderIntoDocument(
+    libController.createLibraryContainer(layoutSpecsJson, loadedTypesJson)
+  );
+});
 
-//   });
-// });
-
-// /*
-// test('Link changes the class when hovered', () => {
-//   // const component = renderer.create(
-//   //   <Link page="http://www.facebook.com">Facebook</Link>
-//   // );
-//   // let tree = component.toJSON();
-//   // expect(tree).toMatchSnapshot();
-//   let component = ReactTestUtils.renderIntoDocument(
-//     <Link page="http://www.facebook.com">Facebook</Link>
-//   );
-
-//   let a = ReactTestUtils.findRenderedDOMComponentWithTag(component, "a");
-
-//   expect(a.getDOMNode().)
-
-//   // ReactTestUtils.Simulate.onMouseEnter(component);
-
-//   // manually trigger the callback
-//   tree.props.onMouseEnter();
-//   // re-rendering
-//   tree = component.toJSON();
-//   expect(tree).toMatchSnapshot();
-
-//   // manually trigger the callback
-//   tree.props.onMouseLeave();
-//   // re-rendering
-//   tree = component.toJSON();
-//   expect(tree).toMatchSnapshot();
-// });
-// */
 

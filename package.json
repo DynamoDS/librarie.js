@@ -26,7 +26,6 @@
   "devDependencies": {
     "@types/chai": "^3.4.35",
     "@types/jest": "^19.2.3",
-    "@types/mocha": "^2.2.39",
     "@types/node": "^7.0.5",
     "@types/react": "^15.0.0",
     "@types/react-dom": "^0.14.20",
@@ -57,6 +56,10 @@
       "tsx",
       "js",
       "json"
-    ]
+    ],
+    "moduleNameMapper": {
+      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/__mocks__/fileMock.ts",
+      "\\.(css|less)$": "<rootDir>/__mocks__/styleMock.ts"
+    }
   }
 }
