@@ -15,6 +15,7 @@ export class TypeListNode {
     contextData: any = "";
     memberType: MemberType = "none";
     keywords: string = "";
+    parameters: string = "";
     processed: boolean = false;
 
     constructor(data: any) {
@@ -23,6 +24,7 @@ export class TypeListNode {
         this.contextData = data.contextData;
         this.memberType = data.itemType;
         this.keywords = data.keywords;
+        this.parameters = data.parameters;
     }
 }
 
@@ -72,6 +74,7 @@ export class ItemData {
     expanded: boolean = false;
     showHeader: boolean = true;
     keywords: string[] = [];
+    parameters: string = "";
     childItems: ItemData[] = [];
 
     constructor(public text: string) {
@@ -83,6 +86,14 @@ export class ItemData {
         this.iconUrl = layoutElement.iconUrl;
         this.itemType = layoutElement.elementType;
         this.showHeader = layoutElement.showHeader;
+    }
+
+    constructFromTypeListNode(typeListNode: TypeListNode, shouldPushKeywords?: boolean) {
+        this.contextData = typeListNode.contextData;
+        this.iconUrl = typeListNode.iconUrl;
+        this.itemType = typeListNode.memberType;
+        this.parameters = typeListNode.parameters;
+        if (shouldPushKeywords) pushKeywords(this, typeListNode);
     }
 
     appendChild(childItem: ItemData) {
@@ -139,10 +150,7 @@ export function constructNestedLibraryItems(
         }
         // If this is the leaf most level, copy all item information over.
         if (i == fullNameParts.length - 1) {
-            libraryItem.contextData = typeListNode.contextData;
-            libraryItem.iconUrl = typeListNode.iconUrl;
-            libraryItem.itemType = typeListNode.memberType;
-            pushKeywords(libraryItem, typeListNode);
+            libraryItem.constructFromTypeListNode(typeListNode);
 
             // Mark the typeListNode as processed.
             typeListNode.processed = true;
@@ -490,10 +498,7 @@ function buildLibraryItemsFromName(typeListNode: TypeListNode, parentNode: ItemD
     // (i.e. the name has been reduced to 'D')
     if (fullyQualifiedNameParts.length == 1) {
         let newNode: ItemData = new ItemData(fullyQualifiedNameParts[0]);
-        newNode.contextData = typeListNode.contextData;
-        newNode.iconUrl = typeListNode.iconUrl;
-        newNode.itemType = typeListNode.memberType;
-        pushKeywords(newNode, typeListNode);
+        newNode.constructFromTypeListNode(typeListNode);
 
         // All items without category will fall under Others
         if (parentNode.itemType === "section") {
@@ -536,8 +541,7 @@ function buildLibraryItemsFromName(typeListNode: TypeListNode, parentNode: ItemD
 
     // Otherwise, create the new parent node 'A' (using the previous example).
     let newParentNode = new ItemData(fullyQualifiedNameParts[0]);
-    newParentNode.contextData = typeListNode.contextData;
-    newParentNode.iconUrl = typeListNode.iconUrl;
+    newParentNode.constructFromTypeListNode(typeListNode, false);
     newParentNode.itemType = "group";
 
     // Create nested items for the name 'B.C.D' while passing 'A' as the parent node.
