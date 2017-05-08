@@ -88,12 +88,11 @@ export class ItemData {
         this.showHeader = layoutElement.showHeader;
     }
 
-    constructFromTypeListNode(typeListNode: TypeListNode, shouldPushKeywords?: boolean) {
+    constructFromTypeListNode(typeListNode: TypeListNode) {
         this.contextData = typeListNode.contextData;
         this.iconUrl = typeListNode.iconUrl;
         this.itemType = typeListNode.memberType;
         this.parameters = typeListNode.parameters;
-        if (shouldPushKeywords) pushKeywords(this, typeListNode);
     }
 
     appendChild(childItem: ItemData) {
@@ -151,6 +150,7 @@ export function constructNestedLibraryItems(
         // If this is the leaf most level, copy all item information over.
         if (i == fullNameParts.length - 1) {
             libraryItem.constructFromTypeListNode(typeListNode);
+            pushKeywords(libraryItem, typeListNode);
 
             // Mark the typeListNode as processed.
             typeListNode.processed = true;
@@ -499,6 +499,7 @@ function buildLibraryItemsFromName(typeListNode: TypeListNode, parentNode: ItemD
     if (fullyQualifiedNameParts.length == 1) {
         let newNode: ItemData = new ItemData(fullyQualifiedNameParts[0]);
         newNode.constructFromTypeListNode(typeListNode);
+        pushKeywords(newNode, typeListNode);
 
         // All items without category will fall under Others
         if (parentNode.itemType === "section") {
@@ -541,7 +542,7 @@ function buildLibraryItemsFromName(typeListNode: TypeListNode, parentNode: ItemD
 
     // Otherwise, create the new parent node 'A' (using the previous example).
     let newParentNode = new ItemData(fullyQualifiedNameParts[0]);
-    newParentNode.constructFromTypeListNode(typeListNode, false);
+    newParentNode.constructFromTypeListNode(typeListNode);
     newParentNode.itemType = "group";
 
     // Create nested items for the name 'B.C.D' while passing 'A' as the parent node.
