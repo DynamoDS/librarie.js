@@ -1,15 +1,16 @@
-
 var fs = require("fs");
 var express = require("express");
 var app = express();
 
 function loadJsonFromFile(jsonPath, req, res) {
 
-  fs.readFile(jsonPath, function(err, data) {
+  fs.readFile(jsonPath, function (err, data) {
     if (err) {
       res.end(err.message);
     } else {
-      res.writeHead(200, { "Content-Type": "application/json" });
+      res.writeHead(200, {
+        "Content-Type": "application/json"
+      });
       res.end(data.toString());
     }
   });
@@ -21,12 +22,20 @@ app.get("/", function (req, res) {
   res.render("index.html");
 });
 
-app.get("/loadedTypes", function(req, res) {
+app.get("/loadedTypes", function (req, res) {
   loadJsonFromFile("./docs/RawTypeData.json", req, res);
 });
 
-app.get("/layoutSpecs", function(req, res) {
+app.get("/layoutSpecs", function (req, res) {
   loadJsonFromFile("./docs/LayoutSpecs.json", req, res);
+});
+
+app.get("/testLoadedTypes", function (req, res) {
+  loadJsonFromFile("./__tests__/data/testLoadedTypes.json", req, res);
+});
+
+app.get("/testLayoutSpecs", function (req, res) {
+  loadJsonFromFile("./__tests__/data/testLayoutSpecs.json", req, res);
 });
 
 app.listen(3456, function () {

@@ -1,0 +1,17 @@
+{
+    "loadedTypes": [{
+            "fullyQualifiedName": "Child1",
+            "iconUrl": "",
+            "contextData": "Input",
+            "itemType": "action",
+            "keywords": ""
+        },
+        {
+            "fullyQualifiedName": "Child2",
+            "iconUrl": "",
+            "contextData": "",
+            "itemType": "action",
+            "keywords": ""
+        }
+    ]
+}

@@ -1,0 +1,22 @@
+{
+    "sections": [{
+        "text": "default",
+        "iconUrl": "",
+        "elementType": "section",
+        "showHeader": false,
+        "include": [],
+        "childElements": [{
+            "text": "Parent",
+            "iconUrl": "",
+            "elementType": "category",
+            "include": [{
+                    "path": "Child1"
+                },
+                {
+                    "path": "Child2"
+                }
+            ],
+            "childElements": []
+        }]
+    }]
+}
