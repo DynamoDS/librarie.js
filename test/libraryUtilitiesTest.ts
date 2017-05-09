@@ -655,7 +655,7 @@ describe('convertToDefaultSection and convertToMiscSection functions', function 
     expect(miscSection.childItems.length).to.equal(0);
   })
 
-  it('should construct left-over items in Miscellaneous section', function() {
+  it('should construct left-over items in Miscellaneous section', function () {
     let layoutElement = new LibraryUtilities.LayoutElement(new testClasses.LayoutElementData());
     layoutElement.text = 'x';
     layoutElement.include = [];
@@ -933,24 +933,24 @@ describe('Search function', function () {
 });
 
 describe("findItemByPath function", function () {
-  let allItems: LibraryUtilities.ItemData[] = [];
-  let itemData1 : LibraryUtilities.ItemData;
-  let itemData11 : LibraryUtilities.ItemData;
-  let itemData111 : LibraryUtilities.ItemData;
-  let itemData112 : LibraryUtilities.ItemData;
-  let itemData113 : LibraryUtilities.ItemData;
+  let allItems: LibraryUtilities.ItemData[];
+  let itemData1: LibraryUtilities.ItemData;
+  let itemData11: LibraryUtilities.ItemData;
+  let itemData111: LibraryUtilities.ItemData;
+  let itemData112: LibraryUtilities.ItemData;
+  let itemData113: LibraryUtilities.ItemData;
 
   beforeEach(function () {
-    let itemData1 = new LibraryUtilities.ItemData("1");
-    let itemData11 = new LibraryUtilities.ItemData("11");
-    let itemData111 = new LibraryUtilities.ItemData("111");
-    let itemData112 = new LibraryUtilities.ItemData("112");
+    itemData1 = new LibraryUtilities.ItemData("1");
+    itemData11 = new LibraryUtilities.ItemData("11");
+    itemData111 = new LibraryUtilities.ItemData("111");
+    itemData112 = new LibraryUtilities.ItemData("112");
 
     itemData11.appendChild(itemData111);
     itemData11.appendChild(itemData112);
     itemData1.appendChild(itemData11);
 
-    allItems.push(itemData1);
+    allItems = [itemData1];
   });
 
   it("should return true if an item is found", function () {
