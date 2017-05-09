@@ -1,8 +1,10 @@
 import * as React from "react";
+import * as _ from "underscore";
 import { LibraryItem } from "./LibraryItem";
 import { SearchResultItem } from "./SearchResultItem";
 import { LibraryContainer } from "./LibraryContainer";
 import { searchItemResursive, setItemStateRecursive, findItemByPath, ItemData } from "../LibraryUtilities";
+import { SearchBar } from "./SearchBar";
 
 type displayMode = "structure" | "list";
 
@@ -14,11 +16,15 @@ interface SearchViewProps {
     onSearchModeChanged: SearchModeChangedFunc;
     libraryContainer: LibraryContainer;
     sections: ItemData[];
+    categories: string[];
 }
 
 interface SearchViewStates {
     searchText: string;
     displayMode: displayMode;
+    selectedCategories: string[];
+    structured: boolean;
+    detailed: boolean;
 }
 
 export class SearchView extends React.Component<SearchViewProps, SearchViewStates> {
@@ -28,12 +34,13 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
     constructor(props: SearchViewProps) {
         super(props);
 
-        // set default state
-        this.state = ({
-            searchText: "",
-            displayMode: "list"
-        })
-
+        this.state = {
+            searchText: '',
+            displayMode: "list",
+            selectedCategories: this.props.categories,
+            structured: false,
+            detailed: false
+        };
         this.searchResultListItems = null;
     }
 
@@ -41,10 +48,35 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
         return this.state.searchText;
     }
 
+    onStructuredModeChanged(value: boolean) {
+        this.setState({ structured: value });
+    }
+
+    onDetailedModeChanged(value: boolean) {
+        this.setState({ detailed: value });
+    }
+
+    onCategoriesChanged(categories: string[]) {
+        this.setState({ selectedCategories: categories })
+    }
+
     generateStructuredItems(): JSX.Element[] {
+        let structuredItems: JSX.Element[] = [];
+        let categoryItems: ItemData[] = [];
+        
         let index = 0;
-        return this.props.sections.map((item: ItemData) =>
-            <LibraryItem key={index++} libraryContainer={this.props.libraryContainer} data={item} />);
+
+        this.props.sections.forEach(section =>
+            categoryItems = categoryItems.concat(section.childItems)
+        );
+
+        for (let item of categoryItems) {
+            if (!item.visible || !_.contains(this.state.selectedCategories, item.text)) {
+                continue;
+            }
+            structuredItems = structuredItems.concat([<LibraryItem key={index++} libraryContainer={this.props.libraryContainer} data={item} />])
+        }
+        return structuredItems;
     }
 
     generateListItems(
@@ -76,7 +108,7 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
         return leafItems;
     }
 
-    onTextChange(event: any) {
+    onTextChanged(event: any) {
         clearTimeout(this.timeout);
 
         let text = event.target.value.trim().toLowerCase();
@@ -123,14 +155,14 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
     render() {
         let listItems: JSX.Element[] = null;
         if (this.state.searchText.length > 0) {
-            listItems = (this.state.displayMode === "structure") ? this.generateStructuredItems() : this.generateListItems();
+            listItems = (this.state.structured) ? this.generateStructuredItems() : this.generateListItems();
+        } else {  // Reset ItemData when search text is cleared
+            setItemStateRecursive(this.props.sections, true, false);
         }
 
         return (
             <div className="searchView">
-                <div className="searchBar">
-                    <input id="searchInput" type="search" placeholder="Search..." onChange={this.onTextChange.bind(this)}></input>
-                </div>
+                <SearchBar onStructuredModeChanged={this.onStructuredModeChanged.bind(this)} onDetailedModeChanged={this.onDetailedModeChanged.bind(this)} categories={this.props.categories} onCategoriesChanged={this.onCategoriesChanged.bind(this)} onTextChanged={this.onTextChanged.bind(this)}></SearchBar>
                 <div>{listItems}</div>
             </div>
         );
