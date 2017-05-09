@@ -129,7 +129,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
             }
         }
 
-        if (this.props.data.parameters) {
+        if (this.props.data.parameters && (this.props.data.parameters.length > 0)) {
             parameters = <div className="LibraryItemParameters">{this.props.data.parameters}</div>;
         }
 
