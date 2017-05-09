@@ -49,10 +49,10 @@
                   "path": "DSCore.List.IsRectangular"
                 },
                 {
-                  "path": "TrueForAll"
+                  "path": "List.TrueForAll"
                 },
                 {
-                  "path": "TrueForAny"
+                  "path": "List.TrueForAny"
                 },
                 {
                   "path": "DSCore.List.IsEmpty"
@@ -64,7 +64,7 @@
                   "path": "DSCore.List.FirstIndexOf"
                 },
                 {
-                  "path": "Equals"
+                  "path": "List.Equals"
                 },
                 {
                   "path": "DSCore.List.CountTrue"
@@ -111,7 +111,7 @@
               "elementType": "group",
               "include": [
                 {
-                  "path": "RemoveIfNot"
+                  "path": "List.RemoveIfNot"
                 },
                 {
                   "path": "Core.List.List.Reduce"
@@ -124,9 +124,6 @@
                 },
                 {
                   "path": "DSCore.List.RestOfItems"
-                },
-                {
-                  "path": "DSCore.List.Flatten"
                 },
                 {
                   "path": "DSCore.List.Flatten"
@@ -206,13 +203,13 @@
               "elementType": "group",
               "include": [
                 {
-                  "path": "GroupByFunction"
+                  "path": "List.GroupByFunction"
                 },
                 {
                   "path": "DSCore.List.Reorder"
                 },
                 {
-                  "path": "SortByFunction"
+                  "path": "List.SortByFunction"
                 },
                 {
                   "path": "DSCore.List.SortIndexByValue"
@@ -225,22 +222,22 @@
                   "elementType": "category",
                   "include": [
                     {
-                      "path": "GetKeys"
+                      "path": "List.GetKeys"
                     },
                     {
-                      "path": "GetValues"
+                      "path": "List.GetValues"
                     },
                     {
-                      "path": "MaximumItemByKey"
+                      "path": "List.MaximumItemByKey"
                     },
                     {
-                      "path": "MinimumItemByKey"
+                      "path": "List.MinimumItemByKey"
                     },
                     {
-                      "path": "ContainsKey"
+                      "path": "List.ContainsKey"
                     },
                     {
-                      "path": "RemoveKey"
+                      "path": "List.RemoveKey"
                     },
                     {
                       "path": "DSCore.List.GroupByKey"
@@ -1395,11 +1392,7 @@
           "text": "Revit",
           "iconUrl": "/src/resources/icons/Category.Revit.svg",
           "elementType": "category",
-          "include": [
-            {
-              "path": "Analysis"
-            }
-          ],
+          "include": [],
           "childElements": []
         }
       ]

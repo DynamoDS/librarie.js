@@ -423,38 +423,38 @@ describe('constructLibraryItem function', function () {
     expect(cNode.childItems[1].text).to.equal('e');
   })
 
-    /*
-    The following test creates a nested layoutElement:
-    {
-      ... //  parent item 1
-      "include": []
-      "childItems": [
-        {
-          ... // parent item 2
-          "include": [ 
-            { "path": "a.b.c", "inclusive": false } 
-            ],
-          "childItems": []
-        }
-      ]
-    }
-
-    And two typeListNodes:
-    {
+  /*
+  The following test creates a nested layoutElement:
+  {
+    ... //  parent item 1
+    "include": []
+    "childItems": [
       {
-        "fullyQualifiedName": "a.b.c.d"
-      },
-      {
-        "fullyQualifiedName": "a.b.c.e"
+        ... // parent item 2
+        "include": [ 
+          { "path": "a.b.c", "inclusive": false } 
+          ],
+        "childItems": []
       }
-    }
+    ]
+  }
 
-    The result should have the following structure:
-    - parent item 1 (result)
-      |- parent item 2
-           |- d
-           |- e
-  */
+  And two typeListNodes:
+  {
+    {
+      "fullyQualifiedName": "a.b.c.d"
+    },
+    {
+      "fullyQualifiedName": "a.b.c.e"
+    }
+  }
+
+  The result should have the following structure:
+  - parent item 1 (result)
+    |- parent item 2
+         |- d
+         |- e
+*/
   it('should not construct items that are not inclusive', function () {
     let layoutElement = new LibraryUtilities.LayoutElement(new testClasses.LayoutElementData());
     layoutElement.include = [];
@@ -546,19 +546,159 @@ describe('constructLibraryItem function', function () {
     expect(result.childItems[0].childItems[0].text).to.equal('b');
     expect(result.childItems[1].childItems[0].text).to.equal('b');
   })
+
+  /*
+    The following test creates a nested layoutElement:
+    {
+      ... //  parent item 1
+      "include": [
+        { "path": "a.b" }
+      ]
+    }
+
+    And two typeListNodes:
+    {
+      {
+        "fullyQualifiedName": "a.b.c.d"
+      },
+      {
+        "fullyQualifiedName": "a.b.c.e"
+      }
+    }
+
+    The result should have the following structure:
+    - a (result)
+      |- b
+          |- c
+             |- d
+             |- e
+  */
+  it('should construct nested items using fullyQualifiedName for partial paths', function () {
+    let layoutElement = new LibraryUtilities.LayoutElement(new testClasses.LayoutElementData());
+    layoutElement.include = [];
+    layoutElement.include.push({ path: 'a.b' });
+
+    let typeListNode1 = new LibraryUtilities.TypeListNode(new testClasses.TypeListNodeData());
+    typeListNode1.fullyQualifiedName = 'a.b.c.d';
+    typeListNodes.push(typeListNode1);
+    let typeListNode2 = new LibraryUtilities.TypeListNode(new testClasses.TypeListNodeData());
+    typeListNode2.fullyQualifiedName = 'a.b.c.e';
+    typeListNodes.push(typeListNode2);
+
+    result = LibraryUtilities.constructLibraryItem(typeListNodes, layoutElement);
+    expect(result.childItems.length).to.equal(1);
+    expect(result.childItems[0].text).to.equal('b');
+    expect(result.childItems[0].childItems.length).to.equal(1);
+
+    let cNode = result.childItems[0].childItems[0];
+    expect(cNode.text).to.equal('c');
+    expect(cNode.childItems.length).to.equal(2);
+    expect(cNode.childItems[0].text).to.equal('d');
+    expect(cNode.childItems[1].text).to.equal('e');
+  })
 });
 
-describe('convertToMiscSection function', function () {
+describe('convertToDefaultSection and convertToMiscSection functions', function () {
+  var layoutElements: LibraryUtilities.LayoutElement[];
   var typeListNodes: LibraryUtilities.TypeListNode[];
-  var section: LibraryUtilities.LayoutElement;
-  var result: any;
+  var result: LibraryUtilities.ItemData[];
+
+  beforeEach(function () {
+    layoutElements = [];
+    typeListNodes = [];
+    result = [];
+
+    let defaultSection = new LibraryUtilities.LayoutElement(new testClasses.LayoutElementSectionData());
+    defaultSection.text = "default";
+    layoutElements.push(defaultSection);
+
+    let miscSection = new LibraryUtilities.LayoutElement(new testClasses.LayoutElementSectionData());
+    miscSection.text = "Miscellaneous";
+    layoutElements.push(miscSection);
+  })
+
+  it('should correctly construct default section', function () {
+    let layoutElement = new LibraryUtilities.LayoutElement(new testClasses.LayoutElementData());
+    layoutElement.text = 'a';
+    layoutElement.include = [];
+    layoutElement.include.push({ path: 'a.b' });
+    layoutElements[0].childElements.push(layoutElement);
+
+    let typeListNode = new LibraryUtilities.TypeListNode(new testClasses.TypeListNodeData());
+    typeListNode.fullyQualifiedName = 'a.b.c';
+    typeListNodes.push(typeListNode);
+
+    let typeListNode2 = new LibraryUtilities.TypeListNode(new testClasses.TypeListNodeData());
+    typeListNode2.fullyQualifiedName = 'a.b.d';
+    typeListNodes.push(typeListNode2);
+
+    /*
+    The result in default section should be:
+    - a
+      |- b
+         |- c
+         |- d
+    */
+    result.push(LibraryUtilities.convertToDefaultSection(typeListNodes, layoutElements[0]));
+    result.push(LibraryUtilities.convertToMiscSection(typeListNodes, layoutElements[1]));
+
+    let aNode = result[0].childItems[0]; // result[0] = default section
+    expect(aNode.text).to.equal('a');
+    expect(aNode.childItems.length).to.equal(1);
+    expect(aNode.childItems[0].text).to.equal('b');
+    expect(aNode.childItems[0].childItems.length).to.equal(2);
+    expect(aNode.childItems[0].childItems[0].text).to.equal('c');
+    expect(aNode.childItems[0].childItems[1].text).to.equal('d');
+
+    let miscSection = result[1];
+    expect(miscSection.text).to.equal("Miscellaneous");
+    expect(miscSection.childItems.length).to.equal(0);
+  })
+
+  it('should construct left-over items in Miscellaneous section', function() {
+    let layoutElement = new LibraryUtilities.LayoutElement(new testClasses.LayoutElementData());
+    layoutElement.text = 'x';
+    layoutElement.include = [];
+    layoutElement.include.push({ path: 'x.y' });
+    layoutElements[0].childElements.push(layoutElement);
+
+    let typeListNode = new LibraryUtilities.TypeListNode(new testClasses.TypeListNodeData());
+    typeListNode.fullyQualifiedName = 'a.b.c';
+    typeListNodes.push(typeListNode);
+
+    let typeListNode2 = new LibraryUtilities.TypeListNode(new testClasses.TypeListNodeData());
+    typeListNode2.fullyQualifiedName = 'a.d.e';
+    typeListNodes.push(typeListNode2);
+
+    // All the items should be displayed in Miscellaneous section
+    result.push(LibraryUtilities.convertToDefaultSection(typeListNodes, layoutElements[0]));
+    result.push(LibraryUtilities.convertToMiscSection(typeListNodes, layoutElements[1]));
+
+    let defaultSection = result[0];
+    expect(defaultSection.childItems.length).to.equal(0);
+
+    let miscSection = result[1];
+    expect(miscSection.childItems.length).to.equal(1);
+    expect(miscSection.childItems[0].text).to.equal('a');
+    expect(miscSection.childItems[0].childItems.length).to.equal(2);
+    expect(miscSection.childItems[0].childItems[0].text).to.equal('d');
+    expect(miscSection.childItems[0].childItems[0].childItems.length).to.equal(1);
+    expect(miscSection.childItems[0].childItems[0].childItems[0].text).to.equal('e');
+    expect(miscSection.childItems[0].childItems[1].text).to.equal('b');
+    expect(miscSection.childItems[0].childItems[1].childItems.length).to.equal(1);
+    expect(miscSection.childItems[0].childItems[1].childItems[0].text).to.equal('c');
+  })
+})
+
+describe('buildLibraryItemsFromName function', function () {
+  var typeListNodes: LibraryUtilities.TypeListNode[];
+  var result: LibraryUtilities.ItemData;
 
   beforeEach(function () {
     typeListNodes = [];
-    section = new LibraryUtilities.LayoutElement(new testClasses.LayoutElementData());
-    section.elementType = "section";
+    result = new LibraryUtilities.ItemData('');
   });
-  
+
   /*
     The following test creates a typeListNode:
     {
@@ -566,7 +706,6 @@ describe('convertToMiscSection function', function () {
         "fullyQualifiedName": "a.b.c"
       }
     }
-
     The result should have the following structure:
     - a
       |- b
@@ -577,7 +716,7 @@ describe('convertToMiscSection function', function () {
     typeListNode1.fullyQualifiedName = 'a.b.c';
     typeListNodes.push(typeListNode1);
 
-    result = LibraryUtilities.convertToMiscSection(typeListNodes, section);
+    LibraryUtilities.buildLibraryItemsFromName(typeListNode1, result);
     let aNode = result.childItems[0];
     expect(aNode.text).to.equal('a');
     expect(aNode.childItems.length).to.equal(1);
@@ -586,7 +725,7 @@ describe('convertToMiscSection function', function () {
     expect(aNode.childItems[0].childItems[0].text).to.equal('c');
     expect(aNode.childItems[0].childItems[0].childItems.length).to.equal(0);
   });
-  
+
   /*
     The following test creates typeListNodes:
     {
@@ -600,7 +739,6 @@ describe('convertToMiscSection function', function () {
         "fullyQualifiedName": "a.e"
       }
     }
-
     The result should have the following structure:
     - a
       |- b
@@ -621,7 +759,9 @@ describe('convertToMiscSection function', function () {
     typeListNode3.fullyQualifiedName = 'a.e';
     typeListNodes.push(typeListNode3);
 
-    result = LibraryUtilities.convertToMiscSection(typeListNodes, section);
+    for (let node of typeListNodes) {
+      LibraryUtilities.buildLibraryItemsFromName(node, result);
+    }
     let aNode = result.childItems[0];
     expect(aNode.text).to.equal('a');
     expect(aNode.childItems.length).to.equal(2);
@@ -672,7 +812,7 @@ describe('setItemStateRecursive function', function () {
     }
     return true;
   }
-  
+
   it('should work on empty array', function () {
     LibraryUtilities.setItemStateRecursive(itemArray, true, false);
     expect(isSetToValue(itemArray, true, false)).to.equal(true);
