@@ -198,7 +198,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
                             key={index++}
                             libraryContainer={this.props.libraryContainer}
                             data={item}
-                            onItemWillExpand={this.onItemWillExpand.bind(this)}
+                            onItemWillExpand={this.onSingleChildItemWillExpand.bind(this)}
                         />);
                     })
                 }
@@ -269,7 +269,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
     }
 
     // Collapse all child items when one of the child items is expanded
-    onItemWillExpand() {
+    onSingleChildItemWillExpand() {
         for (let item of this.props.data.childItems) {
             item.expanded = false;
         }
