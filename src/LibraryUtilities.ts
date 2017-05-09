@@ -261,8 +261,22 @@ export function constructLibraryItem(
 
             if (k >= 0) {
                 nodeFound = true;
-                parentNode = constructNestedLibraryItems(includeParts,
-                    typeListNodes[j], inclusive, parentNode, layoutElement.include[i].iconUrl);
+
+                if (k > 1) {
+                    // If the includePath does not represent the immediate parent of the leaf node
+                    // E.g. includePath = "A.B", fullyQualifiedName = "A.B.C.D"
+                    // The library structure should be constructed such that B contains C, which
+                    // contains the leaf node D.
+
+                    // If the path is not inclusive, start constructing from "C.D" (B will not be created)
+                    // Otherwise, start constructing using "B.C.D"
+                    let newName = inclusive ? fullyQualifiedNameParts.slice(k - 1).join('.') : fullyQualifiedNameParts.slice(k).join('.');
+                    buildLibraryItemsFromName(typeListNodes[j], result, newName);
+                }
+                else {
+                    parentNode = constructNestedLibraryItems(includeParts,
+                        typeListNodes[j], inclusive, parentNode, layoutElement.include[i].iconUrl);
+                }
             }
 
             if (k == 0) {
@@ -477,7 +491,7 @@ export function convertToMiscSection(allNodes: TypeListNode[], section: LayoutEl
     return sectionData;
 }
 
-function buildLibraryItemsFromName(typeListNode: TypeListNode, parentNode: ItemData, newNodeName?: string) {
+export function buildLibraryItemsFromName(typeListNode: TypeListNode, parentNode: ItemData, newNodeName?: string) {
     let fullyQualifiedNameParts: string[] = newNodeName ? newNodeName.split('.') : typeListNode.fullyQualifiedName.split('.');
 
     // Take an example:
@@ -493,6 +507,8 @@ function buildLibraryItemsFromName(typeListNode: TypeListNode, parentNode: ItemD
         newNode.contextData = typeListNode.contextData;
         newNode.iconUrl = typeListNode.iconUrl;
         newNode.itemType = typeListNode.memberType;
+
+        typeListNode.processed = true;
         pushKeywords(newNode, typeListNode);
 
         // All items without category will fall under Others
@@ -519,8 +535,8 @@ function buildLibraryItemsFromName(typeListNode: TypeListNode, parentNode: ItemD
     // then slicedParts = [ B, C, D ];
     let slicedParts = fullyQualifiedNameParts.slice(1);
 
-    // Assign the reduced parts ('B.C.D') to fullyQualifiedName of the node 
-    typeListNode.fullyQualifiedName = slicedParts.join('.');
+    // Use the reduced parts ('B.C.D') as the new name of the node 
+    let newName = slicedParts.join('.');
 
     // Determine whether a node named 'A' should be created (using the previous example).
     // Check through the parent's child items to see if a node of the same name already exists.
@@ -529,7 +545,7 @@ function buildLibraryItemsFromName(typeListNode: TypeListNode, parentNode: ItemD
             // Since fullyQualifiedName of typeListNode has been reduced to 'B.C.D', 
             // this function will create nested items for the name 'B.C.D' while passing 'A'
             // as the parent node.
-            buildLibraryItemsFromName(typeListNode, item);
+            buildLibraryItemsFromName(typeListNode, item, newName);
             return;
         }
     }
@@ -541,7 +557,7 @@ function buildLibraryItemsFromName(typeListNode: TypeListNode, parentNode: ItemD
     newParentNode.itemType = "group";
 
     // Create nested items for the name 'B.C.D' while passing 'A' as the parent node.
-    buildLibraryItemsFromName(typeListNode, newParentNode);
+    buildLibraryItemsFromName(typeListNode, newParentNode, newName);
     parentNode.childItems.unshift(newParentNode);
 }
 

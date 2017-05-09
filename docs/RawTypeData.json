@@ -5069,20 +5069,6 @@
       "keywords": "uvs"
     },
     {
-      "fullyQualifiedName": "Analysis.Label.ByPointAndString",
-      "iconUrl": "http://54.169.171.233:3456/src/resources/icons/Analysis.Label.ByPointAndString.png",
-      "contextData": "Analysis.Label.ByPointAndString@Autodesk.DesignScript.Geometry.Point,string",
-      "itemType": "create",
-      "keywords": ""
-    },
-    {
-      "fullyQualifiedName": "Analysis.AnalysisExtensions.IsAlmostEqualTo",
-      "iconUrl": "http://54.169.171.233:3456/src/resources/icons/Analysis.AnalysisExtensions.IsAlmostEqualTo.png",
-      "contextData": "Analysis.AnalysisExtensions.IsAlmostEqualTo@Autodesk.DesignScript.Geometry.UV,Autodesk.DesignScript.Geometry.UV",
-      "itemType": "action",
-      "keywords": ""
-    },
-    {
       "fullyQualifiedName": "Modifiers.GeometryColor.ByGeometryColor",
       "iconUrl": "http://54.169.171.233:3456/src/resources/icons/Modifiers.GeometryColor.ByGeometryColor.png",
       "contextData": "Modifiers.GeometryColor.ByGeometryColor@Autodesk.DesignScript.Geometry.Geometry,DSCore.Color",
