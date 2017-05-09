@@ -548,12 +548,15 @@ describe('constructLibraryItem function', function () {
   })
 });
 
-describe('convertToItemData function', function () {
+describe('convertToMiscSection function', function () {
   var typeListNodes: LibraryUtilities.TypeListNode[];
+  var section: LibraryUtilities.LayoutElement;
   var result: any;
 
   beforeEach(function () {
     typeListNodes = [];
+    section = new LibraryUtilities.LayoutElement(new testClasses.LayoutElementData());
+    section.elementType = "section";
   });
   
   /*
@@ -574,7 +577,7 @@ describe('convertToItemData function', function () {
     typeListNode1.fullyQualifiedName = 'a.b.c';
     typeListNodes.push(typeListNode1);
 
-    result = LibraryUtilities.convertToItemData(typeListNodes);
+    result = LibraryUtilities.convertToMiscSection(typeListNodes, section);
     let aNode = result.childItems[0];
     expect(aNode.text).to.equal('a');
     expect(aNode.childItems.length).to.equal(1);
@@ -618,7 +621,7 @@ describe('convertToItemData function', function () {
     typeListNode3.fullyQualifiedName = 'a.e';
     typeListNodes.push(typeListNode3);
 
-    result = LibraryUtilities.convertToItemData(typeListNodes);
+    result = LibraryUtilities.convertToMiscSection(typeListNodes, section);
     let aNode = result.childItems[0];
     expect(aNode.text).to.equal('a');
     expect(aNode.childItems.length).to.equal(2);
@@ -628,6 +631,19 @@ describe('convertToItemData function', function () {
     expect(aNode.childItems[0].childItems[0].text).to.equal('c');
     expect(aNode.childItems[0].childItems[1].text).to.equal('d');
     expect(aNode.childItems[1].childItems.length).to.equal(0);
+  });
+});
+
+describe('convertSectionToItemData function', function() {
+  it('should convert layoutElement to ItemData', function() {
+    let section = new LibraryUtilities.LayoutElement(new testClasses.LayoutElementData());
+    section.text = "test";
+    section.elementType = "section";
+
+    let result = LibraryUtilities.convertSectionToItemData(section);
+    expect(result).to.be.instanceOf(LibraryUtilities.ItemData);
+    expect(result.text).to.equal(section.text);
+    expect(result.itemType).to.equal(section.elementType);
   });
 });
 
