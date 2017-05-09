@@ -147,7 +147,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         }
 
         return (
-            <div className={this.getLibraryItemContainerStyle()} >
+            <div className={this.getLibraryItemContainerStyle()}>
                 {header}
                 <div className={"LibraryItemBodyContainer"}>
                     {bodyIndentation}

@@ -131,6 +131,7 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
         }
     }
 
+    // Direct back to library and expand items based on pathToItem. 
     directToLibrary(pathToItem: ItemData[]) {
         setItemStateRecursive(this.props.sections, true, false);
         if (findItemByPath(pathToItem.slice(0), this.props.sections)) {
