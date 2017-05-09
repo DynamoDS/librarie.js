@@ -112,6 +112,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         let arrow: JSX.Element = null;
         let bodyIndentation: JSX.Element = null;
         let header: JSX.Element = null;
+        let parameters: JSX.Element = null;
 
         // Indentation and arrow are only added for non-category and non-section items
         if (this.props.data.itemType !== "category" && this.props.data.itemType !== "section") {
@@ -128,6 +129,10 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
             }
         }
 
+        if (this.props.data.parameters && (this.props.data.parameters.length > 0)) {
+            parameters = <div className="LibraryItemParameters">{this.props.data.parameters}</div>;
+        }
+
         if (this.props.data.showHeader) {
             header = (
                 <div className={this.getLibraryItemHeaderStyle()} onClick={this.onLibraryItemClicked.bind(this)}
@@ -135,6 +140,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
                     {arrow}
                     {iconElement}
                     <div className={libraryItemTextStyle}>{this.props.data.text}</div>
+                    {parameters}
                 </div>
             );
         }

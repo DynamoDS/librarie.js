@@ -157,6 +157,12 @@ input {
     color: #a9a9a9;
 }
 
+.LibraryItemParameters {
+    color: #888;
+    font-size: 9pt;
+    margin-left: 5px;
+}
+
 .Arrow {
     padding: 10px 10px 10px 15px;
     height: 11px;
