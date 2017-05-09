@@ -24,7 +24,8 @@ import { ItemData } from "../LibraryUtilities";
 
 export interface LibraryItemProps {
     libraryContainer: LibraryContainer,
-    data: ItemData
+    data: ItemData,
+    onItemWillExpand?: Function
 }
 
 export interface LibraryItemState {
@@ -112,6 +113,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         let arrow: JSX.Element = null;
         let bodyIndentation: JSX.Element = null;
         let header: JSX.Element = null;
+        let parameters: JSX.Element = null;
 
         // Indentation and arrow are only added for non-category and non-section items
         if (this.props.data.itemType !== "category" && this.props.data.itemType !== "section") {
@@ -128,6 +130,10 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
             }
         }
 
+        if (this.props.data.parameters && (this.props.data.parameters.length > 0)) {
+            parameters = <div className="LibraryItemParameters">{this.props.data.parameters}</div>;
+        }
+
         if (this.props.data.showHeader) {
             header = (
                 <div className={this.getLibraryItemHeaderStyle()} onClick={this.onLibraryItemClicked.bind(this)}
@@ -135,6 +141,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
                     {arrow}
                     {iconElement}
                     <div className={libraryItemTextStyle}>{this.props.data.text}</div>
+                    {parameters}
                 </div>
             );
         }
@@ -154,7 +161,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
     }
 
     onImageLoadFail(event: any) {
-        event.target.src = require("../resources/ui/dynamo.png");
+        event.target.src = require("../resources/icons/Dynamo.svg");
     }
 
     getLibraryItemContainerStyle(): string {
@@ -193,7 +200,12 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
                     // 'getNestedElements' method is meant to render all other 
                     // types of items except ones of type create/action/query.
                     regularItems.map((item: ItemData) => {
-                        return (<LibraryItem key={index++} libraryContainer={this.props.libraryContainer} data={item} />);
+                        return (<LibraryItem
+                            key={index++}
+                            libraryContainer={this.props.libraryContainer}
+                            data={item}
+                            onItemWillExpand={this.onSingleChildItemWillExpand.bind(this)}
+                        />);
                     })
                 }
             </div>
@@ -249,6 +261,10 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
     onLibraryItemClicked() {
         // Toggle expansion state.
         let currentlyExpanded = this.state.expanded;
+        if (this.props.data.childItems.length > 0 && !currentlyExpanded) {
+            this.props.onItemWillExpand();
+        }
+        
         this.setState({ expanded: !currentlyExpanded });
 
         let libraryContainer = this.props.libraryContainer;
@@ -256,6 +272,14 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
             libraryContainer.raiseEvent(libraryContainer.props.libraryController.ItemClickedEventName,
                 this.props.data.contextData);
         }
+    }
+
+    // Collapse all child items when one of the child items is expanded
+    onSingleChildItemWillExpand() {
+        for (let item of this.props.data.childItems) {
+            item.expanded = false;
+        }
+        this.setState({ expanded: true }); // Make the current item (parent) expanded.
     }
 
     onLibraryItemMouseLeave() {
