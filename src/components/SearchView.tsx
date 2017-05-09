@@ -6,8 +6,6 @@ import { LibraryContainer } from "./LibraryContainer";
 import { searchItemResursive, setItemStateRecursive, findItemByPath, ItemData } from "../LibraryUtilities";
 import { SearchBar } from "./SearchBar";
 
-type displayMode = "structure" | "list";
-
 interface SearchModeChangedFunc {
     (inSearchMode: boolean): void;
 }
@@ -21,7 +19,6 @@ interface SearchViewProps {
 
 interface SearchViewStates {
     searchText: string;
-    displayMode: displayMode;
     selectedCategories: string[];
     structured: boolean;
     detailed: boolean;
@@ -36,7 +33,6 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
 
         this.state = {
             searchText: '',
-            displayMode: "list",
             selectedCategories: this.props.categories,
             structured: false,
             detailed: false
@@ -63,7 +59,7 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
     generateStructuredItems(): JSX.Element[] {
         let structuredItems: JSX.Element[] = [];
         let categoryItems: ItemData[] = [];
-        
+
         let index = 0;
 
         this.props.sections.forEach(section =>
@@ -74,7 +70,9 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
             if (!item.visible || !_.contains(this.state.selectedCategories, item.text)) {
                 continue;
             }
-            structuredItems = structuredItems.concat([<LibraryItem key={index++} libraryContainer={this.props.libraryContainer} data={item} />])
+            structuredItems = structuredItems.concat([
+                <LibraryItem key={index++} libraryContainer={this.props.libraryContainer} data={item} />
+            ]);
         }
         return structuredItems;
     }
@@ -86,6 +84,10 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
 
         for (let item of items) {
             if (!item.visible) {
+                continue;
+            }
+
+            if (item.itemType === "category" && !_.contains(this.state.selectedCategories, item.text)) {
                 continue;
             }
 
@@ -137,7 +139,7 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
     }
 
     updateSearchView(text: string) {
-        if (text.length > 0 && this.state.displayMode === "list") {
+        if (text.length > 0 && !this.state.structured) {
             this.props.libraryContainer.raiseEvent("searchTextUpdated", text);
         }
 
@@ -146,7 +148,7 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
     }
 
     clearSearch() {
-        let searchInput: any = document.getElementById("searchInput");
+        let searchInput: any = document.getElementById("SearchInputText");
         searchInput.value = "";
         this.setState({ searchText: searchInput.value })
         this.props.onSearchModeChanged(false);
@@ -156,13 +158,17 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
         let listItems: JSX.Element[] = null;
         if (this.state.searchText.length > 0) {
             listItems = (this.state.structured) ? this.generateStructuredItems() : this.generateListItems();
-        } else {  // Reset ItemData when search text is cleared
-            setItemStateRecursive(this.props.sections, true, false);
         }
 
         return (
             <div className="searchView">
-                <SearchBar onStructuredModeChanged={this.onStructuredModeChanged.bind(this)} onDetailedModeChanged={this.onDetailedModeChanged.bind(this)} categories={this.props.categories} onCategoriesChanged={this.onCategoriesChanged.bind(this)} onTextChanged={this.onTextChanged.bind(this)}></SearchBar>
+                <SearchBar
+                    onStructuredModeChanged={this.onStructuredModeChanged.bind(this)}
+                    onDetailedModeChanged={this.onDetailedModeChanged.bind(this)}
+                    categories={this.props.categories}
+                    onCategoriesChanged={this.onCategoriesChanged.bind(this)}
+                    onTextChanged={this.onTextChanged.bind(this)}>
+                </SearchBar>
                 <div>{listItems}</div>
             </div>
         );
