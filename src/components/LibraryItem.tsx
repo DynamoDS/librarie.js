@@ -25,7 +25,7 @@ import { ItemData } from "../LibraryUtilities";
 export interface LibraryItemProps {
     libraryContainer: LibraryContainer,
     data: ItemData,
-    onExpand?: Function
+    onItemWillExpand?: Function
 }
 
 export interface LibraryItemState {
@@ -195,7 +195,11 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
                     // types of items except ones of type create/action/query.
                     regularItems.map((item: ItemData) => {
                         return (<LibraryItem
-                            key={index++} libraryContainer={this.props.libraryContainer} data={item} onExpand={this.onExpand.bind(this)} />);
+                            key={index++}
+                            libraryContainer={this.props.libraryContainer}
+                            data={item}
+                            onItemWillExpand={this.onItemWillExpand.bind(this)}
+                        />);
                     })
                 }
             </div>
@@ -252,8 +256,9 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         // Toggle expansion state.
         let currentlyExpanded = this.state.expanded;
         if (this.props.data.childItems.length > 0 && !currentlyExpanded) {
-            this.props.onExpand();
+            this.props.onItemWillExpand();
         }
+        
         this.setState({ expanded: !currentlyExpanded });
 
         let libraryContainer = this.props.libraryContainer;
@@ -263,12 +268,12 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         }
     }
 
-    // Unexpand all other slibling items when one item is being expanded
-    onExpand() {
+    // Collapse all child items when one of the child items is expanded
+    onItemWillExpand() {
         for (let item of this.props.data.childItems) {
             item.expanded = false;
         }
-        this.setState({ expanded: true });
+        this.setState({ expanded: true }); // Make the current item (parent) expanded.
     }
 
     onLibraryItemMouseLeave() {
