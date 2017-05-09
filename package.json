@@ -17,7 +17,6 @@
   "author": "Dynamo Team",
   "license": "MIT",
   "dependencies": {
-    "@types/react-test-renderer": "^15.5.0",
     "express": "^4.14.0",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
@@ -32,7 +31,7 @@
     "@types/react-test-renderer": "^15.5.0",
     "@types/underscore": "^1.8.0",
     "awesome-typescript-loader": "^3.0.0-beta.18",
-    "babel-jest": "^19.0.0",
+    "babel-jest": "^20.0.0",
     "chai": "^3.5.0",
     "cross-env": "^3.2.4",
     "css-loader": "^0.27.3",
@@ -48,7 +47,7 @@
   },
   "jest": {
     "transform": {
-      "^.+\\.tsx?$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+      ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
     },
     "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
     "moduleFileExtensions": [
