@@ -621,11 +621,31 @@ export function getHighlightedText(text: string, highlightedText: string, matchD
     return spans;
 }
 
+/**
+ * Find an item from all Items based on path to the item.
+ * 
+ * @param {ItemData[]} pathToItem
+ * An arry of ItemData which represents the path to an item.
+ * 
+ * For example, in the following tree, pathToItem for D would be [A, B, D]
+ * - A
+ *   |- B
+ *      |- C
+ *      |- D
+ * 
+ * @param {ItemData} allItems
+ * An array of ItemData, which contains all the items. In the example above,
+ * allItems would be [A]
+ * 
+ * @return {boolean} true if an item is found, false otherwise
+ */
 export function findItemByPath(pathToItem: ItemData[], allItems: ItemData[]): boolean {
     let item: ItemData;
 
     if (pathToItem.length == 1) {
-        item = allItems.find(item => item.iconUrl == pathToItem[0].iconUrl);
+        item = allItems.find(item =>
+            item.text == pathToItem[0].text && item.iconUrl == pathToItem[0].iconUrl
+        );
         return item ? true : false;
     } else {
         item = allItems.find(item => item.text == pathToItem[0].text);
