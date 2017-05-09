@@ -30,14 +30,6 @@ app.get("/layoutSpecs", function (req, res) {
   loadJsonFromFile("./docs/LayoutSpecs.json", req, res);
 });
 
-app.get("/testLoadedTypes", function (req, res) {
-  loadJsonFromFile("./__tests__/data/testLoadedTypes.json", req, res);
-});
-
-app.get("/testLayoutSpecs", function (req, res) {
-  loadJsonFromFile("./__tests__/data/testLayoutSpecs.json", req, res);
-});
-
 app.listen(3456, function () {
   console.log('Library hosting service listening on port 3456');
 });
