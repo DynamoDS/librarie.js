@@ -100,7 +100,7 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
                     libraryContainer={this.props.libraryContainer}
                     highlightedText={this.state.searchText}
                     pathToItem={pathToThisItem}
-                    onResultItemClicked={this.onResultItemClicked.bind(this)}
+                    onCategortTextClicked={this.directToLibrary.bind(this)}
                 />);
             } else {
                 this.generateListItems(item.childItems, pathToThisItem, leafItems);
@@ -131,7 +131,7 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
         }
     }
 
-    onResultItemClicked(pathToItem: ItemData[]) {
+    directToLibrary(pathToItem: ItemData[]) {
         setItemStateRecursive(this.props.sections, true, false);
         if (findItemByPath(pathToItem.slice(0), this.props.sections)) {
             this.clearSearch();

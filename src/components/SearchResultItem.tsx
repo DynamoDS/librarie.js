@@ -8,7 +8,7 @@ interface SearchResultItemProps {
     libraryContainer: LibraryContainer;
     highlightedText: string;
     pathToItem: ItemData[];
-    onResultItemClicked: Function;
+    onCategortTextClicked: Function;
 }
 
 interface SearchResultItemStates { }
@@ -34,7 +34,7 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
                     <div className={"ItemTitle"}>{highLightedItemText}</div>
                     <div className={"ItemDetails"}>
                         <img className={"ItemTypeIcon"} src={ItemTypeIconPath} onError={this.onImageLoadFail.bind(this)} />
-                        <div className={"ItemCategory"} onClick={this.onTextClicked.bind(this)}>
+                        <div className={"ItemCategory"} onClick={this.onCategoryTextClicked.bind(this)}>
                             {highLightedCategoryText}
                         </div>
                     </div>
@@ -47,9 +47,9 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
         event.target.src = require("../resources/icons/Dynamo.svg");
     }
 
-    onTextClicked(event: any) {
+    onCategoryTextClicked(event: any) {
         event.stopPropagation();
-        this.props.onResultItemClicked(this.props.pathToItem);
+        this.props.onCategortTextClicked(this.props.pathToItem);
     }
 
     onItemClicked() {
