@@ -1,17 +1,35 @@
 
 @font-face {
     font-family: "Open Sans";
-    src: url('fonts/OpenSans-Regular.ttf') format('truetype');
+    src: url("fonts/OpenSans-Regular.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "Artifakt Element";
+    src: url("fonts/ArtifaktElement-Regular.otf") format("opentype");
+}
+
+@font-face {
+    font-family: "Artifakt Element";
+    font-weight: 300;
+    src: url("fonts/ArtifaktElement-Light.otf") format("opentype");
+}
+
+@font-face {
+    font-family: "Artifakt Element";
+    font-weight: 600;
+    src: url("fonts/ArtifaktElement-Medium.otf") format("opentype");
 }
 
 body {
-    font-family: "Open Sans";
+    font-family: "Artifakt Element", "Open Sans";
+    font-weight: 300;
     -webkit-user-select: none;
     cursor: default;
 }
 
 input {
-    font-family: "Open Sans";
+    font-family: "Artifakt Element", "Open Sans";
 }
 
 .LibraryItemContainerSection {
@@ -139,6 +157,12 @@ input {
     color: #a9a9a9;
 }
 
+.LibraryItemParameters {
+    color: #888;
+    font-size: 9pt;
+    margin-left: 5px;
+}
+
 .Arrow {
     padding: 10px 10px 10px 15px;
     height: 11px;
@@ -174,23 +198,169 @@ input {
     -webkit-user-drag: none;
 }
 
-.searchView .searchBar {
-    width: 100%;
-    height: 40px;
+.SearchBar {
     background: #5b5a5a;
+    width: 100%;
 }
 
-.searchView .searchBar input {
+.SearchInput {
     width: 100%;
-    padding: 10px;
+    height: 40px;
+    display: flex;
+    justify-content:space-around;
+    align-items:center;
+}
+
+.SearchInputContainer {
+    width:100%;
+    height:30px;
+    background-color:#fff;
+    display: flex;
+    justify-content:space-around;
+    align-items:center;
+}
+
+.SearchBar .SearchBarIcon {
+    fill: #000;
+    width: 18px;
+    height: 18px;
+    margin-left: 11px;
+}
+
+.SearchBar #SearchInputText {
+    height:18px;
+    width:100%;
     font-size: 15px;
+    padding:10px;
     background: none;
-    color: #fff;
     outline: none;
     border: none;
 }
 
-#searchInput::-webkit-search-cancel-button {
+.SearchBar #SearchOptionsBtn {
+    height: 32px;
+    width: 32px;
+    color: #ddd;
+    border: 0px;
+}
+
+.SearchBar #SearchOptionsBtn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    cursor: pointer;
+}
+
+.SearchBar .ArrowBg {
+    background-color: #414141;
+    background-image: url("/src/resources/UI/arrow-upward.svg");
+    background-size: 20px 20px;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.SearchBar .ArrowReversedBg {
+    background-color: #414141;
+    background-image: url("/src/resources/UI/arrow-downward.svg");
+    background-size: 20px 20px;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.SearchBar #SearchOptionsBtn:focus {
+    outline: 0;
+}
+
+.SearchBar .SearchOptions {
+    padding-bottom:1px;
+}
+
+.SearchBar .SearchOptionsContainer {
+    font-size: 13px;
+    color:#fff;
+    margin: 0px 0px 5px 0px;
+    background-color:#414141;
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+
+.SearchBar .SearchOptionsHeader {
+    padding: 5px;
+    margin-left: 10px;
+}
+
+.SearchBar .SearchOptionsHeader span {
+    font-weight: 600;
+}
+
+.SearchBar .SearchOptionsHeader .SelectAllBtn {
+    color: #aaa;
+    background: transparent;
+    border: none;
+    outline: none;
+    float: right;
+}
+
+.SearchBar .SearchOptionsHeader .SelectAllBtn:hover {
+    cursor: pointer;
+    color: white;
+}
+
+.SearchBar .CategoryCheckboxContainer {
+    overflow-x: hidden;
+}
+
+.CheckboxLabel {
+    position: relative;
+    background-color:#414141;
+    width: 100%;
+    display: block;
+    padding: 5px;
+}
+
+.CheckboxLabel:hover {
+    background-color: #555;
+    cursor: pointer;
+}
+
+.CheckboxLabel .CheckboxSymbol {
+    position: absolute;
+    top: 9px;
+    left: 7px;
+    width: 10px;
+    height: 10px;
+}
+
+.CheckboxLabel .CheckboxLabelText {
+    margin-left: 20px;
+}
+
+.CheckboxLabel .CheckboxLabelRightButton {
+    position: absolute;
+    transform: translate(-70%, 25%);
+    top: 0px;
+    right: 0px;
+    color: #aaa;
+    background: transparent;
+    border: none;
+    outline: none;
+    display: none;
+    margin: 0px;
+    padding: 0px;
+}
+
+.CheckboxLabelRightButton:hover {
+    color: white;
+    cursor: pointer;
+}
+
+.CheckboxLabel:hover .CheckboxLabelRightButton {
+    display: block;
+}
+
+.SearchCheckbox, .CategoryCheckbox {
+    display: none;
+}
+
+#SearchInput::-webkit-search-cancel-button {
     -webkit-appearance: none;
 }
 
@@ -248,8 +418,7 @@ input {
 }
 
 ::-webkit-input-placeholder {
-  color: #dddddd;
-  font-style: italic;
+  color: #aaaaaa;
 }
 
 ::-webkit-scrollbar {
