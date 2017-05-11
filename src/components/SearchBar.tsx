@@ -1,10 +1,26 @@
 import * as React from 'react';
 import * as _ from 'underscore';
 
+interface StructuredModeChangedFunc {
+    (structured: boolean): void;
+}
+
+interface DetailedModeChangedFunc {
+    (detailed: boolean): void;
+}
+
+interface SearchCategoriesChangedFunc {
+    (categories: string[]): void;
+}
+
+interface SearchTextChangedFunc {
+    (event: any): void;
+}
+
 export interface SearchBarProps {
     onTextChanged: SearchTextChangedFunc;
-    onStructuredModeChanged: SearchDisplayModeChangedFunc;
-    onDetailedModeChanged: SearchDisplayModeChangedFunc;
+    onStructuredModeChanged: StructuredModeChangedFunc;
+    onDetailedModeChanged: DetailedModeChangedFunc;
     onCategoriesChanged: SearchCategoriesChangedFunc;
     categories: string[];
 }
@@ -14,18 +30,6 @@ export interface SearchBarState {
     selectedCategories: string[];
     structured: boolean;
     detailed: boolean;
-}
-
-interface SearchDisplayModeChangedFunc {
-    (value: boolean): void;
-}
-
-interface SearchCategoriesChangedFunc {
-    (categories: string[]): void;
-}
-
-interface SearchTextChangedFunc {
-    (event: any): void;
 }
 
 export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
