@@ -86,6 +86,15 @@ describe("LibraryContainer", function () {
     );
 
     expect(libContainer.find('SearchView')).to.have.lengthOf(1);
+
+    let libraryItem = libContainer.find('LibraryItem');
+    expect(libraryItem).to.have.lengthOf(1);
+    expect(libraryItem.prop('data').childItems).to.have.lengthOf(1);
+    expect(libraryItem.prop('data').childItems[0].text).to.equal("Parent");
+    expect(libraryItem.prop('data').childItems[0].itemType).to.equal("category");
+    expect(libraryItem.prop('data').childItems[0].childItems).to.have.lengthOf(2);
+    expect(libraryItem.prop('data').childItems[0].childItems[0].text).to.equal("Child1");
+    expect(libraryItem.prop('data').childItems[0].childItems[1].text).to.equal("Child2");
   });
 });
 
