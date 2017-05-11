@@ -62,7 +62,9 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
             return (
                 <div>
                     {searchView}
-                    {sections}
+                    <div className="LibraryItemContainer">
+                        {sections}
+                    </div>
                 </div>
             );
         } catch (exception) {
