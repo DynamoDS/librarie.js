@@ -7,6 +7,7 @@ interface SearchResultItemProps {
     libraryContainer: LibraryContainer;
     category: string;
     highlightedText: string;
+    detailed: boolean;
 }
 
 interface SearchResultItemStates { }
@@ -22,12 +23,18 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
         let highLightedItemText = getHighlightedText(this.props.data.text, this.props.highlightedText, true);
         let highLightedCategoryText = getHighlightedText(this.props.category, this.props.highlightedText, false);
         let ItemTypeIconPath = "src/resources/icons/library-" + this.props.data.itemType + ".svg";
+        let ItemDescription: JSX.Element = null;
+
+        if(this.props.detailed) {
+            ItemDescription = <div className={"ItemDescription"}>{this.props.data.description}</div>;
+        }
 
         return (
             <div className={"SearchResultItemContainer"} onClick={this.onItemClicked.bind(this)}>
                 <img className={"ItemIcon"} src={iconPath} onError={this.onImageLoadFail.bind(this)} />
                 <div className={"ItemInfo"}>
                     <div className={"ItemTitle"}>{highLightedItemText}</div>
+                    {ItemDescription}
                     <div className={"ItemDetails"}>
                         <img className={"ItemTypeIcon"} src={ItemTypeIconPath} onError={this.onImageLoadFail.bind(this)} />
                         <div className={"ItemCategory"}>{highLightedCategoryText}</div>

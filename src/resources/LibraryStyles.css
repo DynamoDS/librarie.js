@@ -385,6 +385,7 @@ input {
 
 .SearchResultItemContainer .ItemInfo {
     padding: 5px 0px 5px 0px;
+    width: 100%;
 }
 
 .SearchResultItemContainer .ItemIcon {
@@ -396,6 +397,12 @@ input {
 .SearchResultItemContainer .ItemTitle {
     font-size: 14px;
     margin-bottom: 2px;
+}
+
+.SearchResultItemContainer .ItemDescription {
+    font-size: 11px;
+    padding: 2px 0px;
+    color: #ccc;
 }
 
 .SearchResultItemContainer .ItemDetails {
