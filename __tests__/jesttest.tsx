@@ -68,23 +68,19 @@ describe("LibraryContainer", function () {
     };
 
     libController = LibraryEntryPoint.CreateLibraryController();
-
-    libController.on("itemClicked", function (item) {
-      console.log(item);
-    })
-
-    libController.on("searchTextUpdated", function (searchText) {
-      console.log(searchText);
-      return null;
-    });
-
   });
 
   it("should create a LibraryContainer", function () {
+
+    // shallow rendering renders a component only one-level deep, 
+    // errors in children components wouldn't propagate to top level components,
+    // this is useful when testing one component as a unit.
     let libContainer = shallow(
       libController.createLibraryContainer(layoutSpecsJson, loadedTypesJson)
     );
 
+    // find is used to find a rendered component by css selectors, 
+    // component constructors, display name or property selector.
     expect(libContainer.find('SearchView')).to.have.lengthOf(1);
 
     let libraryItem = libContainer.find('LibraryItem');
