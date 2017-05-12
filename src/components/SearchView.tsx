@@ -49,22 +49,10 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
         return this.state.searchText;
     }
 
-    onStructuredModeChanged(value: boolean) {
-        this.setState({ structured: value });
-    }
-
-    onDetailedModeChanged(value: boolean) {
-        this.setState({ detailed: value });
-    }
-
-    onCategoriesChanged(categories: string[]) {
-        this.setState({ selectedCategories: categories })
-    }
-
     generateStructuredItems(): JSX.Element[] {
         let structuredItems: JSX.Element[] = [];
         let categoryItems: ItemData[] = [];
-        
+
         let index = 0;
 
         this.props.sections.forEach(section =>
@@ -123,12 +111,11 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
         return leafItemsInCategory;
     }
 
-    onTextChanged(event: any) {
+    onTextChanged(text: string) {
         clearTimeout(this.timeout);
 
-        let text = event.target.value.trim().toLowerCase();
         let hasText = text.length > 0;
-
+        
         if (hasText) {
             // Starting searching immediately after user input, 
             // but only show change on ui after 300ms
@@ -141,6 +128,18 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
             // Show change on ui immediately if search text is cleared
             this.updateSearchView(text);
         }
+    }
+
+    onStructuredModeChanged(value: boolean) {
+        this.setState({ structured: value });
+    }
+
+    onDetailedModeChanged(value: boolean) {
+        this.setState({ detailed: value });
+    }
+
+    onCategoriesChanged(categories: string[]) {
+        this.setState({ selectedCategories: categories })
     }
 
     updateSearchView(text: string) {

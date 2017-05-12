@@ -14,17 +14,33 @@ export interface SearchBarState {
     selectedCategories: string[];
     structured: boolean;
     detailed: boolean;
+    hasText: boolean;
 }
 
 export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
 
     constructor(props: SearchBarProps) {
         super(props);
-        this.state = { expanded: false, selectedCategories: this.props.categories, structured: false, detailed: false };
+        this.state = {
+            expanded: false,
+            selectedCategories: this.props.categories,
+            structured: false,
+            detailed: false,
+            hasText: false
+        };
+    }
+
+    clearInput() {
+        let searchInput: any = document.getElementById("SearchInputText");
+        searchInput.value = '';
+        this.setState({ hasText: false });
+        this.props.onTextChanged(searchInput.value);
     }
 
     onTextChanged(event: any) {
-        this.props.onTextChanged(event);
+        let text = event.target.value.trim().toLowerCase();
+        this.setState({ hasText: text.length > 0 });
+        this.props.onTextChanged(event.target.value.trim().toLowerCase());
     }
 
     onExpandButtonClick() {
@@ -83,7 +99,7 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
 
         let only = null;
         if ((checkboxClassName == "CategoryCheckbox")) {
-            only = <label><input type="button" name={name} className="CheckboxLabelRightButton" onClick={this.onOnlyButtonClicked.bind(this)} value={"only"}/></label>
+            only = <label><input type="button" name={name} className="CheckboxLabelRightButton" onClick={this.onOnlyButtonClicked.bind(this)} value={"only"} /></label>
         }
 
         let checkbox: JSX.Element =
@@ -101,11 +117,21 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
         let searchOptionsBtn = <button id="SearchOptionsBtn" onClick={this.onExpandButtonClick.bind(this)}><i className="fa fa-angle-double-down fa-2x"></i></button>;
         let thisObj = this;
         let checkboxes: JSX.Element[] = [];
+        let cancelButton: JSX.Element = null;
 
-        _.each(this.props.categories, function (c) {
-            let checked = thisObj.isCategorySelected(c);
-            checkboxes.push(thisObj.createCheckbox(c, "CategoryCheckbox", checked, thisObj.onCategoriesChanged.bind(thisObj)));
-        })
+        _.each(this.props.categories, function (c: string) {
+            let checked = this.isCategorySelected(c);
+            checkboxes.push(this.createCheckbox(c, "CategoryCheckbox", checked, this.onCategoriesChanged.bind(thisObj)));
+        }.bind(this));
+
+
+        if (this.state.hasText) {
+            cancelButton = (
+                <div className="CancelButton">
+                    <button onClick={this.clearInput.bind(this)} >&times;</button>
+                </div>
+            );
+        }
 
         if (this.state.expanded) {
             searchOptionsBtn = <button id="SearchOptionsBtn" onClick={this.onExpandButtonClick.bind(this)}><i className="fa fa-angle-double-up fa-2x"></i></button>
@@ -132,6 +158,7 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
                     <div className="SearchInputContainer">
                         <i className="fa fa-search SearchBarIcon"></i>
                         <input id="SearchInputText" type="input" placeholder="Search..." onChange={this.onTextChanged.bind(this)}></input>
+                        {cancelButton}
                     </div>
                     {searchOptionsBtn}
                 </div>
