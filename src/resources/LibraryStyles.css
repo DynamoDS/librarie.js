@@ -166,6 +166,7 @@ input {
     color: #888;
     font-size: 9pt;
     margin-left: 5px;
+    display: inline-block;
 }
 
 .Arrow {
