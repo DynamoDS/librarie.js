@@ -32,8 +32,14 @@ input {
     font-family: "Artifakt Element", "Open Sans";
 }
 
+.LibraryContainer {
+    max-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
 .LibraryItemContainer {
-    height: calc(100vh - 40px);
+    flex-grow: 1;
     overflow-y: scroll;
 }
 

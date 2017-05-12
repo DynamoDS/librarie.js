@@ -60,7 +60,7 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
             }
 
             return (
-                <div>
+                <div className="LibraryContainer">
                     {searchView}
                     <div className="LibraryItemContainer">
                         {sections}
