@@ -662,13 +662,13 @@ export function getHighlightedText(text: string, highlightedText: string, matchD
 export function findItemByPath(pathToItem: ItemData[], allItems: ItemData[]): boolean {
     let item: ItemData;
 
+    item = allItems.find(item =>
+        item.text == pathToItem[0].text && item.iconUrl == pathToItem[0].iconUrl
+    );
+
     if (pathToItem.length == 1) {
-        item = allItems.find(item =>
-            item.text == pathToItem[0].text && item.iconUrl == pathToItem[0].iconUrl
-        );
         return item ? true : false;
     } else {
-        item = allItems.find(item => item.text == pathToItem[0].text);
         pathToItem.shift();
         item.expanded = true;
         return findItemByPath(pathToItem, item.childItems);

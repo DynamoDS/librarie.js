@@ -100,7 +100,7 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
                     libraryContainer={this.props.libraryContainer}
                     highlightedText={this.state.searchText}
                     pathToItem={pathToThisItem}
-                    onCategortTextClicked={this.directToLibrary.bind(this)}
+                    onGroupTextClicked={this.directToLibrary.bind(this)}
                 />);
             } else {
                 this.generateListItems(item.childItems, pathToThisItem, leafItems);

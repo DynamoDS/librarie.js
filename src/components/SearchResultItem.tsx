@@ -8,7 +8,7 @@ interface SearchResultItemProps {
     libraryContainer: LibraryContainer;
     highlightedText: string;
     pathToItem: ItemData[];
-    onCategortTextClicked: Function;
+    onGroupTextClicked: Function;
 }
 
 interface SearchResultItemStates { }
@@ -21,8 +21,10 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
 
     render() {
         let iconPath = this.props.data.iconUrl;
+        let parentText = this.props.pathToItem[this.props.pathToItem.length - 2].text;
         let categoryText = this.props.pathToItem.find(item => item.itemType === "category").text;
         let highLightedItemText = getHighlightedText(this.props.data.text, this.props.highlightedText, true);
+        let highLightedParentText = getHighlightedText(parentText, this.props.highlightedText, false);
         let highLightedCategoryText = getHighlightedText(categoryText, this.props.highlightedText, false);
         let ItemTypeIconPath = "src/resources/icons/library-" + this.props.data.itemType + ".svg";
 
@@ -33,10 +35,11 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
                 <div className={"ItemInfo"}>
                     <div className={"ItemTitle"}>{highLightedItemText}</div>
                     <div className={"ItemDetails"}>
-                        <img className={"ItemTypeIcon"} src={ItemTypeIconPath} onError={this.onImageLoadFail.bind(this)} />
-                        <div className={"ItemCategory"} onClick={this.onCategoryTextClicked.bind(this)}>
-                            {highLightedCategoryText}
+                        <div className={"ItemParent"} onClick={this.onGroupTextClicked.bind(this)}>
+                            {highLightedParentText}
                         </div>
+                        <img className={"ItemTypeIcon"} src={ItemTypeIconPath} onError={this.onImageLoadFail.bind(this)} />
+                        <div className={"ItemCategory"}>{highLightedCategoryText}</div>
                     </div>
                 </div>
             </div>
@@ -47,9 +50,9 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
         event.target.src = require("../resources/icons/Dynamo.svg");
     }
 
-    onCategoryTextClicked(event: any) {
+    onGroupTextClicked(event: any) {
         event.stopPropagation();
-        this.props.onCategortTextClicked(this.props.pathToItem);
+        this.props.onGroupTextClicked(this.props.pathToItem);
     }
 
     onItemClicked() {
