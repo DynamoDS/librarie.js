@@ -131,7 +131,7 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
                 <div className="SearchInput">
                     <div className="SearchInputContainer">
                         <i className="fa fa-search SearchBarIcon"></i>
-                        <input id="SearchInputText" type="search" placeholder="Search..." onChange={this.onTextChanged.bind(this)}></input>
+                        <input id="SearchInputText" type="input" placeholder="Search..." onChange={this.onTextChanged.bind(this)}></input>
                     </div>
                     {searchOptionsBtn}
                 </div>
