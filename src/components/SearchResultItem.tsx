@@ -25,8 +25,13 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
         let ItemTypeIconPath = "src/resources/icons/library-" + this.props.data.itemType + ".svg";
         let ItemDescription: JSX.Element = null;
 
-        if(this.props.detailed) {
-            ItemDescription = <div className={"ItemDescription"}>{this.props.data.description}</div>;
+        if (this.props.detailed) {
+            let description = "No description available";
+            if(this.props.data.description && this.props.data.description.length > 0) {
+                description = this.props.data.description;
+            }
+
+            ItemDescription = <div className={"ItemDescription"}>{description}</div>;
         }
 
         return (
