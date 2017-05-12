@@ -102,7 +102,7 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
 
     render() {
         let options = null;
-        let searchOptionsBtn = <button id="SearchOptionsBtn" className="ArrowBg" onClick={this.onExpandButtonClick.bind(this)}></button>;
+        let searchOptionsBtn = <button id="SearchOptionsBtn" onClick={this.onExpandButtonClick.bind(this)}><i className="fa fa-angle-double-down fa-2x"></i></button>;
         let thisObj = this;
         let checkboxes: JSX.Element[] = [];
 
@@ -112,7 +112,7 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
         let detailedCheckbox = new CategoryData("Detailed", "SearchCheckbox", this.state.detailed, this.onDetailedModeChanged.bind(this), "Display detailed info");
 
         if (this.state.expanded) {
-            searchOptionsBtn = <button id="SearchOptionsBtn" className="ArrowReversedBg" onClick={this.onExpandButtonClick.bind(this)}></button>
+            searchOptionsBtn = <button id="SearchOptionsBtn" onClick={this.onExpandButtonClick.bind(this)}><i className="fa fa-angle-double-up fa-2x"></i></button>
             options =
                 <div className="SearchOptions">
                     <div className="SearchOptionsContainer">
@@ -134,7 +134,7 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
             <div className="SearchBar">
                 <div className="SearchInput">
                     <div className="SearchInputContainer">
-                        <img src="/src/resources/UI/search.svg" className="SearchBarIcon" />
+                        <i className="fa fa-search SearchBarIcon"></i>
                         <input id="SearchInputText" type="search" placeholder="Search..." onChange={this.onTextChanged.bind(this)}></input>
                     </div>
                     {searchOptionsBtn}
@@ -165,7 +165,7 @@ class CategoryData {
     }
 
     createCheckbox(): JSX.Element {
-        let checkSymbol = this.checked ? <img className="CheckboxSymbol" src="/src/resources/UI/check-symbol.svg" /> : null;
+        let checkSymbol = this.checked ? <i className="fa fa-check CheckboxSymbol"></i> : null;
 
         let only = null;
         if (this.onOnlyButtonClicked) {
