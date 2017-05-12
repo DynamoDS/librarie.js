@@ -1,29 +1,17 @@
 
 @font-face {
-    font-family: "Open Sans";
-    src: url("fonts/OpenSans-Regular.ttf") format("truetype");
+    font-family: "Artifakt Element";
+    src: url("fonts/ArtifaktElement-Regular.woff") format("woff");
 }
 
 @font-face {
     font-family: "Artifakt Element";
-    src: url("fonts/ArtifaktElement-Regular.otf") format("opentype");
-}
-
-@font-face {
-    font-family: "Artifakt Element";
-    font-weight: 300;
-    src: url("fonts/ArtifaktElement-Light.otf") format("opentype");
-}
-
-@font-face {
-    font-family: "Artifakt Element";
-    font-weight: 600;
-    src: url("fonts/ArtifaktElement-Medium.otf") format("opentype");
+    font-weight: 700;
+    src: url("fonts/ArtifaktElement-Bold.woff") format("woff");
 }
 
 body {
     font-family: "Artifakt Element", "Open Sans";
-    font-weight: 300;
     -webkit-user-select: none;
     cursor: default;
 }
@@ -277,11 +265,10 @@ input {
 
 .SearchBar .SearchOptionsHeader {
     padding: 5px;
-    margin-left: 10px;
 }
 
 .SearchBar .SearchOptionsHeader span {
-    font-weight: 600;
+    font-weight: 700;
 }
 
 .SearchBar .SearchOptionsHeader .SelectAllBtn {
@@ -404,7 +391,7 @@ input {
 }
 
 .HighlightedText {
-    font-weight: bold;
+    font-weight: 700;
     color: #4ac8ef;
 }
 
