@@ -66,7 +66,7 @@ module.exports = {
                 loader: ["style-loader", "css-loader"]
             },
             {
-                test: /\.ttf|.otf|.svg|.png$/,
+                test: /\.ttf|.otf|.eot|.woff|.svg|.png$/,
                 loader: "file-loader",
                 options: {
                     name: '/resources/[name].[ext]'
