@@ -774,6 +774,19 @@ describe('buildLibraryItemsFromName function', function () {
   });
 });
 
+describe('convertSectionToItemData function', function() {
+  it('should convert LayoutElement to ItemData', function() {
+    let section = new LibraryUtilities.LayoutElement(new testClasses.LayoutElementData());
+    section.text = "test";
+    section.elementType = "section";
+
+    let result = LibraryUtilities.convertSectionToItemData(section);
+    expect(result).to.be.instanceOf(LibraryUtilities.ItemData);
+    expect(result.text).to.equal(section.text);
+    expect(result.itemType).to.equal(section.elementType);
+  });
+});
+
 describe('setItemStateRecursive function', function () {
   var itemArray: LibraryUtilities.ItemData[];
   let itemData1 = new LibraryUtilities.ItemData("1");

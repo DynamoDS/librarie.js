@@ -1,28 +1,16 @@
 @font-face {
-    font-family: "Open Sans";
-    src: url("fonts/OpenSans-Regular.ttf") format("truetype");
+    font-family: "Artifakt Element";
+    src: url("fonts/ArtifaktElement-Regular.woff") format("woff");
 }
 
 @font-face {
     font-family: "Artifakt Element";
-    src: url("fonts/ArtifaktElement-Regular.otf") format("opentype");
-}
-
-@font-face {
-    font-family: "Artifakt Element";
-    font-weight: 300;
-    src: url("fonts/ArtifaktElement-Light.otf") format("opentype");
-}
-
-@font-face {
-    font-family: "Artifakt Element";
-    font-weight: 600;
-    src: url("fonts/ArtifaktElement-Medium.otf") format("opentype");
+    font-weight: 700;
+    src: url("fonts/ArtifaktElement-Bold.woff") format("woff");
 }
 
 body {
     font-family: "Artifakt Element", "Open Sans";
-    font-weight: 300;
     -webkit-user-select: none;
     cursor: default;
 }
@@ -240,7 +228,7 @@ input {
     height: 18px;
     width: 100%;
     font-size: 15px;
-    padding: 10px;
+    padding: 15px 10px 10px 10px;
     background: none;
     outline: none;
     border: none;
@@ -278,11 +266,10 @@ input {
 
 .SearchBar .SearchOptionsHeader {
     padding: 5px;
-    margin-left: 10px;
 }
 
 .SearchBar .SearchOptionsHeader span {
-    font-weight: 600;
+    font-weight: 700;
 }
 
 .SearchBar .SearchOptionsHeader .SelectAllBtn {
@@ -353,6 +340,19 @@ input {
     display: none;
 }
 
+.SearchBar .CancelButton button {
+    font-size: 20px;
+    color: #ccc;
+    background: transparent;
+    border: 0px;
+    padding: 5px 10px 0px 0px;
+    outline: 0px;
+}
+
+.SearchBar .CancelButton button:hover {
+    cursor: pointer;
+}
+
 #SearchInput::-webkit-search-cancel-button {
     -webkit-appearance: none;
 }
@@ -373,6 +373,7 @@ input {
 
 .SearchResultItemContainer .ItemInfo {
     padding: 5px 0px 5px 0px;
+    width: 100%;
 }
 
 .SearchResultItemContainer .ItemIcon {
@@ -384,6 +385,12 @@ input {
 .SearchResultItemContainer .ItemTitle {
     font-size: 14px;
     margin-bottom: 2px;
+}
+
+.SearchResultItemContainer .ItemDescription {
+    font-size: 11px;
+    padding: 2px 0px;
+    color: #aaa;
 }
 
 .SearchResultItemContainer .ItemDetails {
@@ -404,11 +411,12 @@ input {
 .SearchResultItemContainer .ItemParent:hover {
     cursor: pointer;
     color: white;
-    font-weight: bold;
 }
 
 .SearchResultItemContainer .ItemCategory {
     display: inline-block;
+    font-size: 12px;
+    color: #ddd;
     padding-left: 5px;
 }
 
@@ -419,7 +427,7 @@ input {
 }
 
 .HighlightedText {
-    font-weight: bold;
+    font-weight: 700;
     color: #4ac8ef;
 }
 

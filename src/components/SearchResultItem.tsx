@@ -8,7 +8,8 @@ interface SearchResultItemProps {
     libraryContainer: LibraryContainer;
     highlightedText: string;
     pathToItem: ItemData[];
-    onGroupTextClicked: Function;
+    onParentTextClicked: Function;
+    detailed: boolean;
 }
 
 interface SearchResultItemStates { }
@@ -27,21 +28,34 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
 
         // Category of the item is the item with type category in the array pathToItem
         let categoryText = this.props.pathToItem.find(item => item.itemType === "category").text;
-        
+
         let parameters = this.props.data.parameters;
         let highLightedItemText = getHighlightedText(this.props.data.text, this.props.highlightedText, true);
         let highLightedParentText = getHighlightedText(parentText, this.props.highlightedText, false);
         let highLightedCategoryText = getHighlightedText(categoryText, this.props.highlightedText, false);
         let ItemTypeIconPath = "src/resources/icons/library-" + this.props.data.itemType + ".svg";
+        let itemDescription: JSX.Element = null;
+
+        if (this.props.detailed) {
+            let description = "No description available";
+            if (this.props.data.description && this.props.data.description.length > 0) {
+                description = this.props.data.description;
+            }
+
+            itemDescription = <div className={"ItemDescription"}>{description}</div>;
+        }
 
         return (
             <div className={"SearchResultItemContainer"} onClick={this.onItemClicked.bind(this)}
                 onMouseOver={this.onLibraryItemMouseEnter.bind(this)} onMouseLeave={this.onLibraryItemMouseLeave.bind(this)}>
                 <img className={"ItemIcon"} src={iconPath} onError={this.onImageLoadFail.bind(this)} />
                 <div className={"ItemInfo"}>
-                    <div className={"ItemTitle"}>{highLightedItemText}<div className={"LibraryItemParameters"}>{parameters}</div></div>
+                    <div className={"ItemTitle"}>{highLightedItemText}
+                        <div className={"LibraryItemParameters"}>{parameters}</div>
+                    </div>
+                    {itemDescription}
                     <div className={"ItemDetails"}>
-                        <div className={"ItemParent"} onClick={this.onGroupTextClicked.bind(this)}>
+                        <div className={"ItemParent"} onClick={this.onParentTextClicked.bind(this)}>
                             {highLightedParentText}
                         </div>
                         <img className={"ItemTypeIcon"} src={ItemTypeIconPath} onError={this.onImageLoadFail.bind(this)} />
@@ -56,9 +70,9 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
         event.target.src = require("../resources/icons/Dynamo.svg");
     }
 
-    onGroupTextClicked(event: any) {
+    onParentTextClicked(event: any) {
         event.stopPropagation();
-        this.props.onGroupTextClicked(this.props.pathToItem);
+        this.props.onParentTextClicked(this.props.pathToItem);
     }
 
     onItemClicked() {

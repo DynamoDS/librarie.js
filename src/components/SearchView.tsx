@@ -44,18 +44,6 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
         return this.state.searchText;
     }
 
-    onStructuredModeChanged(value: boolean) {
-        this.setState({ structured: value });
-    }
-
-    onDetailedModeChanged(value: boolean) {
-        this.setState({ detailed: value });
-    }
-
-    onCategoriesChanged(categories: string[]) {
-        this.setState({ selectedCategories: categories })
-    }
-
     generateStructuredItems(): JSX.Element[] {
         let structuredItems: JSX.Element[] = [];
         let categoryItems: ItemData[] = [];
@@ -101,7 +89,8 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
                     libraryContainer={this.props.libraryContainer}
                     highlightedText={this.state.searchText}
                     pathToItem={pathToThisItem}
-                    onGroupTextClicked={this.directToLibrary.bind(this)}
+                    onParentTextClicked={this.directToLibrary.bind(this)}
+                    detailed={this.state.detailed}
                 />);
             } else {
                 this.generateListItems(item.childItems, pathToThisItem, leafItems);
@@ -111,10 +100,9 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
         return leafItems;
     }
 
-    onTextChanged(event: any) {
+    onTextChanged(text: string) {
         clearTimeout(this.timeout);
 
-        let text = event.target.value.trim().toLowerCase();
         let hasText = text.length > 0;
 
         if (hasText) {
@@ -138,6 +126,18 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
         if (findAndExpandItemByPath(pathToItem.slice(0), this.props.sections)) {
             this.clearSearch();
         }
+    }
+
+    onStructuredModeChanged(value: boolean) {
+        this.setState({ structured: value });
+    }
+
+    onDetailedModeChanged(value: boolean) {
+        this.setState({ detailed: value });
+    }
+
+    onCategoriesChanged(categories: string[]) {
+        this.setState({ selectedCategories: categories });
     }
 
     updateSearchView(text: string) {

@@ -16,6 +16,7 @@ export class TypeListNode {
     memberType: MemberType = "none";
     keywords: string = "";
     parameters: string = "";
+    description: string = "";
     processed: boolean = false;
 
     constructor(data: any) {
@@ -25,6 +26,7 @@ export class TypeListNode {
         this.memberType = data.itemType;
         this.keywords = data.keywords;
         this.parameters = data.parameters;
+        this.description = data.description;
     }
 }
 
@@ -75,6 +77,7 @@ export class ItemData {
     showHeader: boolean = true;
     keywords: string[] = [];
     parameters: string = "";
+    description: string = "";
     childItems: ItemData[] = [];
 
     constructor(public text: string) {
@@ -93,6 +96,7 @@ export class ItemData {
         this.iconUrl = typeListNode.iconUrl;
         this.itemType = typeListNode.memberType;
         this.parameters = typeListNode.parameters;
+        this.description = typeListNode.description;
     }
 
     appendChild(childItem: ItemData) {
