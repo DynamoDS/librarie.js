@@ -49,22 +49,10 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
         return this.state.searchText;
     }
 
-    onStructuredModeChanged(value: boolean) {
-        this.setState({ structured: value });
-    }
-
-    onDetailedModeChanged(value: boolean) {
-        this.setState({ detailed: value });
-    }
-
-    onCategoriesChanged(categories: string[]) {
-        this.setState({ selectedCategories: categories })
-    }
-
     generateStructuredItems(): JSX.Element[] {
         let structuredItems: JSX.Element[] = [];
         let categoryItems: ItemData[] = [];
-        
+
         this.props.sections.forEach(section =>
             categoryItems = categoryItems.concat(section.childItems)
         );
@@ -122,10 +110,9 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
         return leafItemsInCategory;
     }
 
-    onTextChanged(event: any) {
+    onTextChanged(text: string) {
         clearTimeout(this.timeout);
 
-        let text = event.target.value.trim().toLowerCase();
         let hasText = text.length > 0;
 
         if (hasText) {
@@ -140,6 +127,18 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
             // Show change on ui immediately if search text is cleared
             this.updateSearchView(text);
         }
+    }
+
+    onStructuredModeChanged(value: boolean) {
+        this.setState({ structured: value });
+    }
+
+    onDetailedModeChanged(value: boolean) {
+        this.setState({ detailed: value });
+    }
+
+    onCategoriesChanged(categories: string[]) {
+        this.setState({ selectedCategories: categories })
     }
 
     updateSearchView(text: string) {

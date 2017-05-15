@@ -240,7 +240,7 @@ input {
     height:18px;
     width:100%;
     font-size: 15px;
-    padding:10px;
+    padding:15px 10px 10px 10px;
     background: none;
     outline: none;
     border: none;
@@ -350,6 +350,19 @@ input {
 
 .SearchCheckbox, .CategoryCheckbox {
     display: none;
+}
+
+.SearchBar .CancelButton button {
+    font-size: 20px;
+    color: #ccc;
+    background: transparent;
+    border: 0px;
+    padding: 5px 10px 0px 0px;
+    outline: 0px;
+}
+
+.SearchBar .CancelButton button:hover {
+    cursor: pointer;
 }
 
 #SearchInput::-webkit-search-cancel-button {
