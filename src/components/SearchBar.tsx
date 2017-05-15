@@ -40,7 +40,7 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
     onTextChanged(event: any) {
         let text = event.target.value.trim().toLowerCase();
         this.setState({ hasText: text.length > 0 });
-        this.props.onTextChanged(event.target.value.trim().toLowerCase());
+        this.props.onTextChanged(text);
     }
 
     onExpandButtonClick() {
@@ -115,13 +115,12 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
     render() {
         let options = null;
         let searchOptionsBtn = <button id="SearchOptionsBtn" onClick={this.onExpandButtonClick.bind(this)}><i className="fa fa-angle-double-down fa-2x"></i></button>;
-        let thisObj = this;
         let checkboxes: JSX.Element[] = [];
         let cancelButton: JSX.Element = null;
 
         _.each(this.props.categories, function (c: string) {
             let checked = this.isCategorySelected(c);
-            checkboxes.push(this.createCheckbox(c, "CategoryCheckbox", checked, this.onCategoriesChanged.bind(thisObj)));
+            checkboxes.push(this.createCheckbox(c, "CategoryCheckbox", checked, this.onCategoriesChanged.bind(this)));
         }.bind(this));
 
 

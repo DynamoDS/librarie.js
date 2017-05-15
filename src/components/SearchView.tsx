@@ -115,7 +115,7 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
         clearTimeout(this.timeout);
 
         let hasText = text.length > 0;
-        
+
         if (hasText) {
             // Starting searching immediately after user input, 
             // but only show change on ui after 300ms
