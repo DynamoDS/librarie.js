@@ -35,6 +35,7 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
 
     timeout: number;
     generatedSections: ItemData[] = null;
+    renderedSections: JSX.Element[] = null;
     searchCategories: string[] = [];
     searcher: Searcher = null;
 
@@ -48,6 +49,10 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
             for (let childItem of section.childItems)
                 this.searchCategories.push(childItem.text);
         }
+
+        // Render the default view of the library. This property is displayed whenever the user is not doing a search
+        let index = 0;
+        this.renderedSections = this.generatedSections.map(data => <LibraryItem key={index++} libraryContainer={this} data={data} />);
 
         // Initialize the search utilities
         this.searcher = new Searcher({
@@ -73,6 +78,11 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
 
     onSearchModeChanged(inSearchMode: boolean) {
         this.setState({ inSearchMode: inSearchMode });
+
+        if (!inSearchMode) {
+            // Reset ItemData when search text is cleared
+            setItemStateRecursive(this.generatedSections, true, false);
+        }
     }
 
     getSearchText(): string {
@@ -129,10 +139,8 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
             const searchBar = <SearchBar onTextChanged={this.onTextChanged.bind(this)} onCategoriesChanged={this.onCategoriesChanged.bind(this)} onDetailedModeChanged={this.onDetailedModeChanged.bind(this)} onStructuredModeChanged={this.onStructuredModeChanged.bind(this)} categories={this.searchCategories} />
 
             if (!this.state.inSearchMode) {
-                setItemStateRecursive(this.generatedSections, true, false);
-
-                let index = 0;
-                sections = this.generatedSections.map(data => <LibraryItem key={index++} libraryContainer={this} data={data} />);
+                // If the user is not doing a search, obtain all the library items previously rendered
+                sections = this.renderedSections;
             }
             else {
                 if (this.state.structured) {
