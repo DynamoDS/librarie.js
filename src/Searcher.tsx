@@ -49,7 +49,7 @@ export class Searcher extends React.Component<SearcherProps, SearcherStates> {
         return structuredItems;
     }
 
-    generateListItems(searchText: string, selectedCategories: string[]): JSX.Element[] {
+    generateListItems(searchText: string, detailed: boolean, selectedCategories: string[]): JSX.Element[] {
         let leafItems: JSX.Element[] = [];
         let categoryItems: ItemData[] = [];
 
@@ -63,16 +63,16 @@ export class Searcher extends React.Component<SearcherProps, SearcherStates> {
             }
 
             if (item.childItems.length > 0) {
-                leafItems = leafItems.concat(this.getLeafItemsInCategory(searchText, item.text, item.childItems));
+                leafItems = leafItems.concat(this.getLeafItemsInCategory(searchText, item.text, item.childItems, detailed));
             } else {
-                leafItems = leafItems.concat(this.getLeafItemsInCategory(searchText, item.text, [item]));
+                leafItems = leafItems.concat(this.getLeafItemsInCategory(searchText, item.text, [item], detailed));
             }
         }
 
         return leafItems;
     }
 
-    getLeafItemsInCategory(searchText: string, category: string, items: ItemData[], leafItemsInCategory: JSX.Element[] = []): JSX.Element[] {
+    getLeafItemsInCategory(searchText: string, category: string, items: ItemData[], detailed: boolean, leafItemsInCategory: JSX.Element[] = []): JSX.Element[] {
         for (let item of items) {
             if (!item.visible) {
                 continue;
@@ -83,9 +83,10 @@ export class Searcher extends React.Component<SearcherProps, SearcherStates> {
                     data={item}
                     libraryContainer={this.props.libraryContainer}
                     category={category}
-                    highlightedText={searchText} />);
+                    highlightedText={searchText}
+                    detailed={detailed}/>);
             } else {
-                this.getLeafItemsInCategory(searchText, category, item.childItems, leafItemsInCategory);
+                this.getLeafItemsInCategory(searchText, category, item.childItems, detailed, leafItemsInCategory);
             }
         }
 

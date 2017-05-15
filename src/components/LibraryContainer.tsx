@@ -139,7 +139,7 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
                     sections = this.searcher.generateStructuredItems(this.state.searchText, this.state.selectedCategories);
                 }
                 else {
-                    sections = this.searcher.generateListItems(this.state.searchText, this.state.selectedCategories);
+                    sections = this.searcher.generateListItems(this.state.searchText, this.state.detailed, this.state.selectedCategories);
                 }
             }
 
