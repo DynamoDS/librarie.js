@@ -642,7 +642,7 @@ export function getHighlightedText(text: string, highlightedText: string, matchD
 }
 
 /**
- * Find an item from all Items based on path to the item.
+ * Find an item from all Items based on path to the item, and expand all Items along the path.
  * 
  * @param {ItemData[]} pathToItem
  * An arry of ItemData which represents the path to an item.
@@ -659,7 +659,7 @@ export function getHighlightedText(text: string, highlightedText: string, matchD
  * 
  * @return {boolean} true if an item is found, false otherwise
  */
-export function findItemByPath(pathToItem: ItemData[], allItems: ItemData[]): boolean {
+export function findAndExpandItemByPath(pathToItem: ItemData[], allItems: ItemData[]): boolean {
     let item: ItemData;
 
     item = allItems.find(item =>
@@ -670,7 +670,8 @@ export function findItemByPath(pathToItem: ItemData[], allItems: ItemData[]): bo
         return item ? true : false;
     } else {
         pathToItem.shift();
-        item.expanded = true;
-        return findItemByPath(pathToItem, item.childItems);
+        let result = findAndExpandItemByPath(pathToItem, item.childItems);
+        item.expanded = result; // Expand only if item is found.
+        return result;
     }
 }

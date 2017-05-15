@@ -3,7 +3,7 @@ import * as _ from "underscore";
 import { LibraryItem } from "./LibraryItem";
 import { SearchResultItem } from "./SearchResultItem";
 import { LibraryContainer } from "./LibraryContainer";
-import { searchItemResursive, setItemStateRecursive, findItemByPath, ItemData } from "../LibraryUtilities";
+import { searchItemResursive, setItemStateRecursive, findAndExpandItemByPath, ItemData } from "../LibraryUtilities";
 import { SearchBar } from "./SearchBar";
 
 interface SearchModeChangedFunc {
@@ -70,9 +70,11 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
             if (!item.visible || !_.contains(this.state.selectedCategories, item.text)) {
                 continue;
             }
-            structuredItems = structuredItems.concat([
-                <LibraryItem key={index++} libraryContainer={this.props.libraryContainer} data={item} />
-            ]);
+            structuredItems.push(<LibraryItem
+                key={index++}
+                libraryContainer={this.props.libraryContainer}
+                data={item} />
+            );
         }
         return structuredItems;
     }
@@ -134,7 +136,7 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
     // Direct back to library and expand items based on pathToItem. 
     directToLibrary(pathToItem: ItemData[]) {
         setItemStateRecursive(this.props.sections, true, false);
-        if (findItemByPath(pathToItem.slice(0), this.props.sections)) {
+        if (findAndExpandItemByPath(pathToItem.slice(0), this.props.sections)) {
             this.clearSearch();
         }
     }

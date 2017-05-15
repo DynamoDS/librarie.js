@@ -83,7 +83,7 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
 
         let only = null;
         if ((checkboxClassName == "CategoryCheckbox")) {
-            only = <label><input type="button" name={name} className="CheckboxLabelRightButton" onClick={this.onOnlyButtonClicked.bind(this)} value={"only"}/></label>
+            only = <label><input type="button" name={name} className="CheckboxLabelRightButton" onClick={this.onOnlyButtonClicked.bind(this)} value={"only"} /></label>
         }
 
         let checkbox: JSX.Element =

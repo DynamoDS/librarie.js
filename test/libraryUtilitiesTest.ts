@@ -932,7 +932,7 @@ describe('Search function', function () {
 
 });
 
-describe("findItemByPath function", function () {
+describe("findAndExpandItemByPath function", function () {
   let allItems: LibraryUtilities.ItemData[];
   let itemData1: LibraryUtilities.ItemData;
   let itemData11: LibraryUtilities.ItemData;
@@ -955,12 +955,12 @@ describe("findItemByPath function", function () {
 
   it("should return true if an item is found", function () {
     let pathToItem = [itemData1, itemData11, itemData111];
-    expect(LibraryUtilities.findItemByPath(pathToItem, allItems)).to.equal(true);
+    expect(LibraryUtilities.findAndExpandItemByPath(pathToItem, allItems)).to.equal(true);
   });
 
   it("should return false if an item is not found", function () {
     let itemData113 = new LibraryUtilities.ItemData("113");
     let pathToItem = [itemData1, itemData11, itemData113];
-    expect(LibraryUtilities.findItemByPath(pathToItem, allItems)).to.equal(false);
+    expect(LibraryUtilities.findAndExpandItemByPath(pathToItem, allItems)).to.equal(false);
   });
 });

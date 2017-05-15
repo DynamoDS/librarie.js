@@ -21,8 +21,13 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
 
     render() {
         let iconPath = this.props.data.iconUrl;
+
+        // Parent of the item is the last but one item in the array pathToItem
         let parentText = this.props.pathToItem[this.props.pathToItem.length - 2].text;
+
+        // Category of the item is the item with type category in the array pathToItem
         let categoryText = this.props.pathToItem.find(item => item.itemType === "category").text;
+
         let highLightedItemText = getHighlightedText(this.props.data.text, this.props.highlightedText, true);
         let highLightedParentText = getHighlightedText(parentText, this.props.highlightedText, false);
         let highLightedCategoryText = getHighlightedText(categoryText, this.props.highlightedText, false);
@@ -62,17 +67,17 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
     onLibraryItemMouseLeave() {
         let libraryContainer = this.props.libraryContainer;
         if (this.props.data.childItems.length == 0) {
-            libraryContainer.raiseEvent(libraryContainer.props.libraryController.ItemMouseLeaveEventName,
-                { data: this.props.data.contextData });
+            let mouseLeaveEvent = libraryContainer.props.libraryController.ItemMouseLeaveEventName;
+            libraryContainer.raiseEvent(mouseLeaveEvent, { data: this.props.data.contextData });
         }
     }
 
     onLibraryItemMouseEnter() {
         let libraryContainer = this.props.libraryContainer;
         if (this.props.data.childItems.length == 0) {
-            var rec = ReactDOM.findDOMNode(this).getBoundingClientRect();
-            libraryContainer.raiseEvent(libraryContainer.props.libraryController.ItemMouseEnterEventName,
-                { data: this.props.data.contextData, rect: rec });
+            let rec = ReactDOM.findDOMNode(this).getBoundingClientRect();
+            let mouseEnterEvent = libraryContainer.props.libraryController.ItemMouseEnterEventName;
+            libraryContainer.raiseEvent(mouseEnterEvent, { data: this.props.data.contextData, rect: rec });
         }
     }
 }
