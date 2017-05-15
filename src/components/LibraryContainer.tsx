@@ -1,6 +1,7 @@
 /// <reference path="../../node_modules/@types/node/index.d.ts" />
 
 require("../resources/LibraryStyles.css");
+require("../resources/fonts/font-awesome-4.7.0/css/font-awesome.min.css");
 
 import * as React from "react";
 import { LibraryController } from "../entry-point";
@@ -60,9 +61,11 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
             }
 
             return (
-                <div>
+                <div className="LibraryContainer">
                     {searchView}
-                    {sections}
+                    <div className="LibraryItemContainer">
+                        {sections}
+                    </div>
                 </div>
             );
         } catch (exception) {

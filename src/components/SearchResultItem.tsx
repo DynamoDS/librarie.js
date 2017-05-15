@@ -27,7 +27,8 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
 
         // Category of the item is the item with type category in the array pathToItem
         let categoryText = this.props.pathToItem.find(item => item.itemType === "category").text;
-
+        
+        let parameters = this.props.data.parameters;
         let highLightedItemText = getHighlightedText(this.props.data.text, this.props.highlightedText, true);
         let highLightedParentText = getHighlightedText(parentText, this.props.highlightedText, false);
         let highLightedCategoryText = getHighlightedText(categoryText, this.props.highlightedText, false);
@@ -38,7 +39,7 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
                 onMouseOver={this.onLibraryItemMouseEnter.bind(this)} onMouseLeave={this.onLibraryItemMouseLeave.bind(this)}>
                 <img className={"ItemIcon"} src={iconPath} onError={this.onImageLoadFail.bind(this)} />
                 <div className={"ItemInfo"}>
-                    <div className={"ItemTitle"}>{highLightedItemText}</div>
+                    <div className={"ItemTitle"}>{highLightedItemText}<div className={"LibraryItemParameters"}>{parameters}</div></div>
                     <div className={"ItemDetails"}>
                         <div className={"ItemParent"} onClick={this.onGroupTextClicked.bind(this)}>
                             {highLightedParentText}

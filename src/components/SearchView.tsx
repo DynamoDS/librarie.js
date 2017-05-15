@@ -60,12 +60,11 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
         let structuredItems: JSX.Element[] = [];
         let categoryItems: ItemData[] = [];
 
-        let index = 0;
-
         this.props.sections.forEach(section =>
             categoryItems = categoryItems.concat(section.childItems)
         );
 
+        let index = 0;
         for (let item of categoryItems) {
             if (!item.visible || !_.contains(this.state.selectedCategories, item.text)) {
                 continue;
