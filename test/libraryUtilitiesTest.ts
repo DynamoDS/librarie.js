@@ -775,7 +775,7 @@ describe('buildLibraryItemsFromName function', function () {
 });
 
 describe('convertSectionToItemData function', function() {
-  it('should convert layoutElement to ItemData', function() {
+  it('should convert LayoutElement to ItemData', function() {
     let section = new LibraryUtilities.LayoutElement(new testClasses.LayoutElementData());
     section.text = "test";
     section.elementType = "section";
