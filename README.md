@@ -19,6 +19,19 @@ Installing all dependencies
 
 - Navigate to `localhost:3456` in Google Chrome browser
 
+## Test
+- Run UI test
+
+    `$ npm run testjest`
+
+    Test file is at folder `./__test__/`
+
+- Run unit test
+
+    `$ npm run test`
+
+    Test file is at folder `./test/`
+
 ## Usage
 There are few ways in which library view (i.e. `LibraryContainer` object) can be constructed. Regardless of which method is used, the caller should first call `LibraryEntryPoint.CreateLibraryController` method to create `LibraryController` before obtaining an instance of `LibraryContainer` object.
 

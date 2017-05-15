@@ -32,8 +32,14 @@ input {
     font-family: "Artifakt Element", "Open Sans";
 }
 
+.LibraryContainer {
+    max-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
 .LibraryItemContainer {
-    height: calc(100vh - 40px);
+    flex-grow: 1;
     overflow-y: scroll;
 }
 
@@ -166,6 +172,7 @@ input {
     color: #888;
     font-size: 9pt;
     margin-left: 5px;
+    display: inline-block;
 }
 
 .Arrow {
@@ -226,10 +233,7 @@ input {
 }
 
 .SearchBar .SearchBarIcon {
-    fill: #000;
-    width: 18px;
-    height: 18px;
-    margin-left: 11px;
+    margin-left: 10px;
 }
 
 .SearchBar #SearchInputText {
@@ -247,27 +251,12 @@ input {
     width: 32px;
     color: #ddd;
     border: 0px;
+    background-color: #414141;
 }
 
 .SearchBar #SearchOptionsBtn:hover {
     background-color: rgba(255, 255, 255, 0.1);
     cursor: pointer;
-}
-
-.SearchBar .ArrowBg {
-    background-color: #414141;
-    background-image: url("/src/resources/UI/arrow-upward.svg");
-    background-size: 20px 20px;
-    background-repeat: no-repeat;
-    background-position: center;
-}
-
-.SearchBar .ArrowReversedBg {
-    background-color: #414141;
-    background-image: url("/src/resources/UI/arrow-downward.svg");
-    background-size: 20px 20px;
-    background-repeat: no-repeat;
-    background-position: center;
 }
 
 .SearchBar #SearchOptionsBtn:focus {
@@ -328,10 +317,8 @@ input {
 
 .CheckboxLabel .CheckboxSymbol {
     position: absolute;
-    top: 9px;
-    left: 7px;
-    width: 10px;
-    height: 10px;
+    top: 5px;
+    left: 5px;
 }
 
 .CheckboxLabel .CheckboxLabelText {
