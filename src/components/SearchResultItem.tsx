@@ -23,8 +23,8 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
         let parameters = this.props.data.parameters;
         let highLightedItemText = getHighlightedText(this.props.data.text, this.props.highlightedText, true);
         let highLightedCategoryText = getHighlightedText(this.props.category, this.props.highlightedText, false);
-        let ItemTypeIconPath = "src/resources/icons/library-" + this.props.data.itemType + ".svg";
-        let ItemDescription: JSX.Element = null;
+        let itemTypeIconPath = "src/resources/icons/library-" + this.props.data.itemType + ".svg";
+        let itemDescription: JSX.Element = null;
 
         if (this.props.detailed) {
             let description = "No description available";
@@ -32,7 +32,7 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
                 description = this.props.data.description;
             }
 
-            ItemDescription = <div className={"ItemDescription"}>{description}</div>;
+            itemDescription = <div className={"ItemDescription"}>{description}</div>;
         }
 
         return (
@@ -42,9 +42,9 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
                     <div className={"ItemTitle"}>{highLightedItemText}
                         <div className={"LibraryItemParameters"}>{parameters}</div>
                     </div>
-                    {ItemDescription}
+                    {itemDescription}
                     <div className={"ItemDetails"}>
-                        <img className={"ItemTypeIcon"} src={ItemTypeIconPath} onError={this.onImageLoadFail.bind(this)} />
+                        <img className={"ItemTypeIcon"} src={itemTypeIconPath} onError={this.onImageLoadFail.bind(this)} />
                         <div className={"ItemCategory"}>{highLightedCategoryText}</div>
                     </div>
                 </div>
