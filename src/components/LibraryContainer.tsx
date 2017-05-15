@@ -101,10 +101,9 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
         this.setState({ selectedCategories: categories })
     }
 
-    onTextChanged(event: any) {
+    onTextChanged(text: string) {
         clearTimeout(this.timeout);
 
-        let text = event.target.value.trim().toLowerCase();
         let hasText = text.length > 0;
 
         if (hasText) {

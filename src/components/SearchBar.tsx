@@ -14,7 +14,7 @@ interface SearchCategoriesChangedFunc {
 }
 
 interface SearchTextChangedFunc {
-    (event: any): void;
+    (text: string): void;
 }
 
 export interface SearchBarProps {
