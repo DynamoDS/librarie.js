@@ -101,7 +101,8 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
                     data={item}
                     libraryContainer={this.props.libraryContainer}
                     category={category}
-                    highlightedText={this.state.searchText} />);
+                    highlightedText={this.state.searchText} 
+                    detailed={this.state.detailed}/>);
             } else {
                 this.getLeafItemsInCategory(category, item.childItems, leafItemsInCategory);
             }
