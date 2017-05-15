@@ -706,7 +706,6 @@ describe('buildLibraryItemsFromName function', function () {
         "fullyQualifiedName": "a.b.c"
       }
     }
-
     The result should have the following structure:
     - a
       |- b
@@ -740,7 +739,6 @@ describe('buildLibraryItemsFromName function', function () {
         "fullyQualifiedName": "a.e"
       }
     }
-
     The result should have the following structure:
     - a
       |- b
@@ -773,6 +771,19 @@ describe('buildLibraryItemsFromName function', function () {
     expect(aNode.childItems[0].childItems[0].text).to.equal('c');
     expect(aNode.childItems[0].childItems[1].text).to.equal('d');
     expect(aNode.childItems[1].childItems.length).to.equal(0);
+  });
+});
+
+describe('convertSectionToItemData function', function() {
+  it('should convert LayoutElement to ItemData', function() {
+    let section = new LibraryUtilities.LayoutElement(new testClasses.LayoutElementData());
+    section.text = "test";
+    section.elementType = "section";
+
+    let result = LibraryUtilities.convertSectionToItemData(section);
+    expect(result).to.be.instanceOf(LibraryUtilities.ItemData);
+    expect(result.text).to.equal(section.text);
+    expect(result.itemType).to.equal(section.elementType);
   });
 });
 
