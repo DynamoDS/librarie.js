@@ -12,20 +12,20 @@ interface SearchModeChangedFunc {
     (inSearchMode: boolean): void;
 }
 
-interface SearchViewProps {
+interface SearcherProps {
     onSearchModeChanged: SearchModeChangedFunc;
     libraryContainer: LibraryContainer;
     sections: ItemData[];
     categories: string[];
 }
 
-interface SearchViewStates {}
+interface SearcherStates {}
 
-export class Searcher extends React.Component<SearchViewProps, SearchViewStates> {
+export class Searcher extends React.Component<SearcherProps, SearcherStates> {
 
     searchResultListItems: any;
 
-    constructor(props: SearchViewProps) {
+    constructor(props: SearcherProps) {
         super(props);
         this.searchResultListItems = null;
     }

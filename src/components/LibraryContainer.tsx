@@ -143,7 +143,6 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
                 }
             }
 
-            // insert searchbar here
             return (
                 <div className="LibraryContainer">
                     {searchBar}
