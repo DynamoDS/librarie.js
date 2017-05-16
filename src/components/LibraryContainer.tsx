@@ -30,15 +30,28 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
 
     constructor(props: LibraryContainerProps) {
         super(props);
+
+        // Bind function prototypes to the object instance.
+        this.setLoadedTypesJson = this.setLoadedTypesJson.bind(this);
+        this.setLayoutSpecsJson = this.setLayoutSpecsJson.bind(this);
+        this.onSearchModeChanged = this.onSearchModeChanged.bind(this);
+
         this.state = { inSearchMode: false };
-        this.generatedSections = buildLibrarySectionsFromLayoutSpecs(this.props.loadedTypesJson, this.props.layoutSpecsJson, 
-        this.props.defaultSectionString, this.props.miscSectionString);
+        this.generatedSections = buildLibrarySectionsFromLayoutSpecs(
+            this.props.loadedTypesJson, this.props.layoutSpecsJson,
+            this.props.defaultSectionString, this.props.miscSectionString);
 
         // Obtain the categories from each section to be added into the filtering options for search
         for (let section of this.generatedSections) {
             for (let childItem of section.childItems)
                 this.searchCategories.push(childItem.text);
         }
+    }
+
+    setLoadedTypesJson(loadedTypesJson: any): void {
+    }
+
+    setLayoutSpecsJson(layoutSpecsJson: any): void {
     }
 
     raiseEvent(name: string, params?: any | any[]) {
@@ -52,8 +65,8 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
     render() {
         try {
             let sections: JSX.Element[] = null;
-            const searchView = <SearchView onSearchModeChanged={this.onSearchModeChanged.bind(this)}
-                libraryContainer={this} sections={this.generatedSections} categories={this.searchCategories}/>;
+            const searchView = <SearchView onSearchModeChanged={this.onSearchModeChanged}
+                libraryContainer={this} sections={this.generatedSections} categories={this.searchCategories} />;
 
             if (!this.state.inSearchMode) {
                 let index = 0;
