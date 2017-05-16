@@ -341,7 +341,7 @@ input {
     cursor: pointer;
 }
 
-..CheckboxLabelEnabled:hover .CheckboxLabelRightButton {
+.CheckboxLabelEnabled:hover .CheckboxLabelRightButton {
     display: block;
 }
 
