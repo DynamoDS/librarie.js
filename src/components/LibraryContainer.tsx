@@ -25,6 +25,9 @@ export interface LibraryContainerStates {
 
 export class LibraryContainer extends React.Component<LibraryContainerProps, LibraryContainerStates> {
 
+    loadedTypesJson: any = null;
+    layoutSpecsJson: any = null;
+
     generatedSections: ItemData[] = null;
     searchCategories: string[] = [];
 
@@ -48,10 +51,28 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
         }
     }
 
-    setLoadedTypesJson(loadedTypesJson: any): void {
+    setLoadedTypesJson(loadedTypesJson: any, append: boolean = true): void {
+
+        if (!loadedTypesJson) {
+            throw new Error("Parameter 'loadedTypesJson' must be supplied");
+        }
+
+        if (!loadedTypesJson.loadedTypes || (!Array.isArray(loadedTypesJson.loadedTypes))) {
+            throw new Error("'loadedTypesJson.loadedTypes' must be a valid array");
+        }
+
+        // To replace the current loadedTypesJson entirely. The same happens 
+        // when there is not already an existing loadedTypesJson object.
+        if (!append || (!this.loadedTypesJson)) {
+            this.loadedTypesJson = loadedTypesJson;
+            return;
+        }
+
+        // To append to the existing 'loadedTypesJson.loadedTypes object' (merge both arrays).
+        Array.prototype.push.apply(this.loadedTypesJson.loadedTypes, loadedTypesJson.loadedTypes);
     }
 
-    setLayoutSpecsJson(layoutSpecsJson: any): void {
+    setLayoutSpecsJson(layoutSpecsJson: any, append: boolean = true): void {
     }
 
     raiseEvent(name: string, params?: any | any[]) {
