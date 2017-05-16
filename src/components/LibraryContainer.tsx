@@ -7,7 +7,7 @@ import * as React from "react";
 import { LibraryController } from "../entry-point";
 import { LibraryItem } from "./LibraryItem";
 import { SearchView } from "./SearchView";
-import { buildLibrarySectionsFromLayoutSpecs, ItemData } from "../LibraryUtilities";
+import { buildLibrarySectionsFromLayoutSpecs, updateSections, ItemData } from "../LibraryUtilities";
 
 declare var boundContainer: any; // Object set from C# side.
 
@@ -61,9 +61,9 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
             throw new Error("'loadedTypesJson.loadedTypes' must be a valid array");
         }
 
-        // To replace the current loadedTypesJson entirely. The same happens 
-        // when there is not already an existing loadedTypesJson object.
-        if (!append || (!this.loadedTypesJson)) {
+        // If there is no existing loadedTypesJson object, or the call
+        // is meant to replace the existing one, then assign it and bail.
+        if (!this.loadedTypesJson || (!append)) {
             this.loadedTypesJson = loadedTypesJson;
             return;
         }
@@ -73,6 +73,23 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
     }
 
     setLayoutSpecsJson(layoutSpecsJson: any, append: boolean = true): void {
+
+        if (!layoutSpecsJson) {
+            throw new Error("Parameter 'layoutSpecsJson' must be supplied");
+        }
+
+        if (!layoutSpecsJson.sections || (!Array.isArray(layoutSpecsJson.sections))) {
+            throw new Error("'layoutSpecsJson.sections' must be a valid array");
+        }
+
+        // If there is no existing layoutSpecsJson, simply assign one and done.
+        if (!this.layoutSpecsJson) {
+            this.layoutSpecsJson = layoutSpecsJson;
+            return;
+        }
+
+        // Otherwise, recursively replace/append each section.
+        updateSections(this.layoutSpecsJson, layoutSpecsJson, append);
     }
 
     raiseEvent(name: string, params?: any | any[]) {

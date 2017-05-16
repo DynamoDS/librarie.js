@@ -464,6 +464,9 @@ export function convertSectionToItemData(section: LayoutElement): ItemData {
     return sectionData;
 }
 
+export function updateSections(oldElement: LayoutElement, newElement: LayoutElement, append: boolean): void {
+}
+
 /**
  * Convert an array of typeListNodes to ItemData which are not processed based on their fullyQualifiedNames, 
  * by splitting the name with '.', and put them under a specific section.
