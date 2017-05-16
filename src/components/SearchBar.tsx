@@ -57,12 +57,18 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
     clearInput() {
         let searchInput: any = document.getElementById("SearchInputText");
         searchInput.value = '';
-        this.setState({ hasText: false });
+        this.setState({
+            hasText: false,
+            expanded: false
+        });
         this.props.onTextChanged(searchInput.value);
     }
 
     onTextChanged(event: any) {
         let text = event.target.value.trim().toLowerCase();
+        if (text.length == 0) {
+            this.setState({ expanded: false });
+        }
         this.setState({ hasText: text.length > 0 });
         this.props.onTextChanged(text);
     }
