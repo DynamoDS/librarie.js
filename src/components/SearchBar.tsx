@@ -82,10 +82,7 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
     onStructuredModeChanged(event: any) {
         let value = !this.state.structured;
         this.props.onStructuredModeChanged(value);
-        this.setState({
-            structured: value,
-            detailed: false
-        });
+        this.setState({ structured: value });
     }
 
     onDetailedModeChanged(event: any) {
