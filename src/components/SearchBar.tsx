@@ -59,13 +59,15 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
         searchInput.value = '';
         this.setState({
             hasText: false,
-            expanded: false
+            expanded: false // collapse filter options menu when text is cleared
         });
         this.props.onTextChanged(searchInput.value);
     }
 
     onTextChanged(event: any) {
         let text = event.target.value.trim().toLowerCase();
+
+        // // collapse filter options menu when text is cleared
         if (text.length == 0) {
             this.setState({ expanded: false });
         }
@@ -74,6 +76,7 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
     }
 
     onExpandButtonClick() {
+        // enable expansion only when search is activated
         if (this.state.hasText) {
             this.setState({ expanded: !this.state.expanded });
         }
@@ -86,6 +89,7 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
     }
 
     onDetailedModeChanged(event: any) {
+        // disable detailed mode in structured display mode
         if (!this.state.structured) {
             let value = !this.state.detailed;
             this.props.onDetailedModeChanged(value);
