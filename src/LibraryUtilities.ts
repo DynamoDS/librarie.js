@@ -465,6 +465,47 @@ export function convertSectionToItemData(section: LayoutElement): ItemData {
 }
 
 function updateElement(oldElement: LayoutElement, newElement: LayoutElement, append: boolean): void {
+
+    // Duplicate basic properties.
+    oldElement.text = newElement.text;
+    oldElement.iconUrl = newElement.iconUrl;
+    oldElement.showHeader = newElement.showHeader;
+    oldElement.elementType = newElement.elementType;
+
+    if (!append) { // Deal with include path information.
+
+        // Replacing (not appending) existing include paths.
+        oldElement.include = []; // Reset the original array before merging with the new one.
+        Array.prototype.push.apply(oldElement.include, newElement.include);
+
+    } else {
+
+        // Find an existing IncludeInfo that matches the new IncludeInfo. 
+        // If one is found, then its contents are updated to match the new 
+        // IncludeInfo, otherwise the new IncludeInfo will be appended to
+        // the existing include list.
+        // 
+        for (let pathInfo of newElement.include) {
+            let pathToUpdate = oldElement.include.find(function (p: IncludeInfo) {
+                return p.path === pathInfo.path;
+            });
+
+            if (pathToUpdate) {
+                // An existing entry is found, update its contents.
+                pathToUpdate.path = pathInfo.path;
+                pathToUpdate.iconUrl = pathInfo.iconUrl + "Hey";
+                pathToUpdate.inclusive = pathInfo.inclusive;
+            } else {
+                // No existing entry is found, make a copy of the new IncludeInfo
+                oldElement.include.push({
+                    path: pathInfo.path,
+                    iconUrl: pathInfo.iconUrl,
+                    inclusive: pathInfo.inclusive
+                });
+            }
+        }
+
+    }
 }
 
 // See 'updateElement' method above for details.
