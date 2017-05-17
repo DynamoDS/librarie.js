@@ -464,7 +464,44 @@ export function convertSectionToItemData(section: LayoutElement): ItemData {
     return sectionData;
 }
 
-export function updateSections(oldElement: LayoutElement, newElement: LayoutElement, append: boolean): void {
+function updateElement(oldElement: LayoutElement, newElement: LayoutElement, append: boolean): void {
+}
+
+// See 'updateElement' method above for details.
+export function updateSections(oldLayoutSpecs: any, newLayoutSpecs: any, append: boolean): void {
+
+    if (!oldLayoutSpecs || (!newLayoutSpecs)) {
+        throw new Error("Both 'oldLayoutSpecs' and 'newLayoutSpecs' parameters must be supplied");
+    }
+
+    if (!oldLayoutSpecs.sections || (!Array.isArray(oldLayoutSpecs.sections))) {
+        throw new Error("'oldLayoutSpecs.sections' must be a valid array");
+    }
+
+    if (!newLayoutSpecs.sections || (!Array.isArray(newLayoutSpecs.sections))) {
+        throw new Error("'newLayoutSpecs.sections' must be a valid array");
+    }
+
+    // Go through each of the new sections...
+    for (let section of newLayoutSpecs.sections) {
+
+        // Find out the corresponding old section (with the same name) to update.
+        let sectionNameToUpdate = section.text;
+        let sectionToUpdate = oldLayoutSpecs.sections.find(
+            function (s: LayoutElement) {
+                return s.text === sectionNameToUpdate
+            });
+
+        // If section with the same name cannot be found, then this is a new section.
+        // Append the new section and then proceed to check on the next section.
+        if (!sectionToUpdate) {
+            oldLayoutSpecs.sections.push(section);
+            continue;
+        }
+
+        // Recursively update the element and its child elements.
+        updateElement(sectionToUpdate, section, append);
+    }
 }
 
 /**
