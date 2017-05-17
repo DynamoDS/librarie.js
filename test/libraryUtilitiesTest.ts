@@ -256,7 +256,12 @@ describe('constructLibraryItem function', function () {
   beforeEach(function () {
     layoutElements = [];
     typeListNodes = [];
+    console.warn = function() {};
   });
+
+  afterEach(function() {
+    delete(console.warn);
+  })
 
   it('should construct an empty LibraryItem', function () {
     let layoutElement = new LibraryUtilities.LayoutElement(new testClasses.LayoutElementData());
@@ -615,6 +620,12 @@ describe('convertToDefaultSection and convertToMiscSection functions', function 
     let miscSection = new LibraryUtilities.LayoutElement(new testClasses.LayoutElementSectionData());
     miscSection.text = "Miscellaneous";
     layoutElements.push(miscSection);
+
+    console.warn = function() {};
+  })
+
+  afterEach(function() {
+    delete(console.warn);
   })
 
   it('should correctly construct default section', function () {
