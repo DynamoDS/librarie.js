@@ -256,7 +256,15 @@ describe('constructLibraryItem function', function () {
   beforeEach(function () {
     layoutElements = [];
     typeListNodes = [];
+
+    // Suppress logging to console during test runs
+    console.warn = function () { };
   });
+
+  afterEach(function () {
+    // Reset console.warn that was suppressed
+    delete (console.warn);
+  })
 
   it('should construct an empty LibraryItem', function () {
     let layoutElement = new LibraryUtilities.LayoutElement(new testClasses.LayoutElementData());
@@ -615,6 +623,14 @@ describe('convertToDefaultSection and convertToMiscSection functions', function 
     let miscSection = new LibraryUtilities.LayoutElement(new testClasses.LayoutElementSectionData());
     miscSection.text = "Miscellaneous";
     layoutElements.push(miscSection);
+
+    // Suppress logging to console during test runs
+    console.warn = function () { };
+  })
+
+  afterEach(function () {
+    // Reset console.warn that was suppressed
+    delete (console.warn);
   })
 
   it('should correctly construct default section', function () {
@@ -655,7 +671,7 @@ describe('convertToDefaultSection and convertToMiscSection functions', function 
     expect(miscSection.childItems.length).to.equal(0);
   })
 
-  it('should construct left-over items in Miscellaneous section', function() {
+  it('should construct left-over items in Miscellaneous section', function () {
     let layoutElement = new LibraryUtilities.LayoutElement(new testClasses.LayoutElementData());
     layoutElement.text = 'x';
     layoutElement.include = [];
@@ -774,8 +790,8 @@ describe('buildLibraryItemsFromName function', function () {
   });
 });
 
-describe('convertSectionToItemData function', function() {
-  it('should convert LayoutElement to ItemData', function() {
+describe('convertSectionToItemData function', function () {
+  it('should convert LayoutElement to ItemData', function () {
     let section = new LibraryUtilities.LayoutElement(new testClasses.LayoutElementData());
     section.text = "test";
     section.elementType = "section";
