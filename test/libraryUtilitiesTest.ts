@@ -31,31 +31,31 @@ describe("updateSections function", function () {
 
   it("should throw exceptions 0", function () {
     expect(function () {
-      LibraryUtilities.updateSections(null, null, true);
+      LibraryUtilities.updateSections(null, null);
     }).to.throw("Both 'oldLayoutSpecs' and 'newLayoutSpecs' parameters must be supplied");
   });
 
   it("should throw exceptions 1", function () {
     expect(function () {
-      LibraryUtilities.updateSections({}, null, true);
+      LibraryUtilities.updateSections({}, null);
     }).to.throw("Both 'oldLayoutSpecs' and 'newLayoutSpecs' parameters must be supplied");
   });
 
   it("should throw exceptions 2", function () {
     expect(function () {
-      LibraryUtilities.updateSections(null, {}, true);
+      LibraryUtilities.updateSections(null, {});
     }).to.throw("Both 'oldLayoutSpecs' and 'newLayoutSpecs' parameters must be supplied");
   });
 
   it("should throw exceptions 3", function () {
     expect(function () {
-      LibraryUtilities.updateSections({}, {}, true);
+      LibraryUtilities.updateSections({}, {});
     }).to.throw("'oldLayoutSpecs.sections' must be a valid array");
   });
 
   it("should throw exceptions 4", function () {
     expect(function () {
-      LibraryUtilities.updateSections({ sections: [] }, {}, true);
+      LibraryUtilities.updateSections({ sections: [] }, {});
     }).to.throw("'newLayoutSpecs.sections' must be a valid array");
   });
 
@@ -117,14 +117,14 @@ describe("updateSections function", function () {
     expect(oldLayoutSpecs.sections.length).to.equal(0);
     expect(newLayoutSpecs.sections.length).to.equal(1);
 
-    LibraryUtilities.updateSections(oldLayoutSpecs, newLayoutSpecs, true);
+    LibraryUtilities.updateSections(oldLayoutSpecs, newLayoutSpecs);
     expect(oldLayoutSpecs.sections.length).to.equal(1);
 
     let rootElement: LibraryUtilities.LayoutElement = oldLayoutSpecs.sections[0];
     compareLayoutElements(rootElement, newLayoutSpecs.sections[0]);
   });
 
-  it("should replace all existing contents with new contents", function () {
+  it("should update existing contents with new contents", function () {
 
     let oldLayoutSpecs: any = {
       sections: [
@@ -183,7 +183,7 @@ describe("updateSections function", function () {
           showHeader: false,
           include: [
             {
-              path: "Direct.Child.One.New",
+              path: "Direct.Child.One",
               iconUrl: "/icons/Direct.Child.One.New.png",
               inclusive: true
             },
@@ -205,7 +205,7 @@ describe("updateSections function", function () {
                   inclusive: false
                 },
                 {
-                  path: "Nested.Child.Two.New",
+                  path: "Nested.Child.Two",
                   iconUrl: "/icons/Nested.Child.Two.New.png",
                   inclusive: true
                 },
@@ -222,16 +222,79 @@ describe("updateSections function", function () {
       ]
     };
 
+    let expectedLayoutSpecs: any = {
+      sections: [
+        {
+          text: "My Favourites",
+          iconUrl: "/icons/my-fav-new.svg",
+          elementType: "section",
+          showHeader: false,
+          include: [
+            {
+              path: "Direct.Child.One",
+              iconUrl: "/icons/Direct.Child.One.New.png",
+              inclusive: true
+            },
+            {
+              path: "Direct.Child.Two",
+              iconUrl: "/icons/Direct.Child.Two.png",
+              inclusive: true
+            },
+            {
+              path: "Direct.Child.Two.New",
+              iconUrl: "/icons/Direct.Child.Two.New.png",
+              inclusive: false
+            }
+          ],
+          "childElements": [
+            {
+              text: "First Favourite",
+              iconUrl: "/icons/first-fav-new.svg",
+              elementType: "group",
+              include: [
+                {
+                  path: "Nested.Child.One",
+                  iconUrl: "/icons/Nested.Child.One.png",
+                  inclusive: true
+                },
+                {
+                  path: "Nested.Child.Two",
+                  iconUrl: "/icons/Nested.Child.Two.New.png",
+                  inclusive: true
+                },
+                {
+                  path: "Nested.Child.Three",
+                  iconUrl: "/icons/Nested.Child.Three.png",
+                  inclusive: true
+                },
+                {
+                  path: "Nested.Child.One.New",
+                  iconUrl: "/icons/Nested.Child.One.New.png",
+                  inclusive: false
+                },
+                {
+                  path: "Nested.Child.Three.New",
+                  iconUrl: "/icons/Nested.Child.Three.New.png",
+                  inclusive: false
+                }
+              ],
+              "childElements": []
+            }
+          ]
+        }
+      ]
+    };
+
     // Precondition
     expect(oldLayoutSpecs.sections.length).to.equal(1);
     expect(newLayoutSpecs.sections.length).to.equal(1);
     expect(oldLayoutSpecs.sections[0].text).to.equal("My Favourites");
     expect(newLayoutSpecs.sections[0].text).to.equal("My Favourites");
 
-    LibraryUtilities.updateSections(oldLayoutSpecs, newLayoutSpecs, false);
+    LibraryUtilities.updateSections(oldLayoutSpecs, newLayoutSpecs);
 
     let rootElement: LibraryUtilities.LayoutElement = oldLayoutSpecs.sections[0];
-    compareLayoutElements(rootElement, newLayoutSpecs.sections[0]);
+    compareLayoutElements(rootElement, expectedLayoutSpecs.sections[0]);
   });
 
 });

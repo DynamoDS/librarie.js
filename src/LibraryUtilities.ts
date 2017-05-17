@@ -464,7 +464,7 @@ export function convertSectionToItemData(section: LayoutElement): ItemData {
     return sectionData;
 }
 
-function updateElement(oldElement: LayoutElement, newElement: LayoutElement, append: boolean): void {
+function updateElement(oldElement: LayoutElement, newElement: LayoutElement): void {
 
     // Duplicate basic properties.
     oldElement.text = newElement.text;
@@ -472,37 +472,28 @@ function updateElement(oldElement: LayoutElement, newElement: LayoutElement, app
     oldElement.showHeader = newElement.showHeader;
     oldElement.elementType = newElement.elementType;
 
-    if (!append) { // Deal with include path information.
+    // Find an existing IncludeInfo that matches the new IncludeInfo. 
+    // If one is found, then its contents are updated to match the new 
+    // IncludeInfo, otherwise the new IncludeInfo will be appended to
+    // the existing include list.
+    // 
+    for (let pathInfo of newElement.include) {
+        let pathToUpdate = oldElement.include.find(function (p: IncludeInfo) {
+            return p.path === pathInfo.path;
+        });
 
-        // Replacing (not appending) existing include paths.
-        oldElement.include = []; // Reset the original array before merging with the new one.
-        Array.prototype.push.apply(oldElement.include, newElement.include);
-
-    } else {
-
-        // Find an existing IncludeInfo that matches the new IncludeInfo. 
-        // If one is found, then its contents are updated to match the new 
-        // IncludeInfo, otherwise the new IncludeInfo will be appended to
-        // the existing include list.
-        // 
-        for (let pathInfo of newElement.include) {
-            let pathToUpdate = oldElement.include.find(function (p: IncludeInfo) {
-                return p.path === pathInfo.path;
+        if (pathToUpdate) {
+            // An existing entry is found, update its contents.
+            pathToUpdate.path = pathInfo.path;
+            pathToUpdate.iconUrl = pathInfo.iconUrl;
+            pathToUpdate.inclusive = pathInfo.inclusive;
+        } else {
+            // No existing entry is found, make a copy of the new IncludeInfo
+            oldElement.include.push({
+                path: pathInfo.path,
+                iconUrl: pathInfo.iconUrl,
+                inclusive: pathInfo.inclusive
             });
-
-            if (pathToUpdate) {
-                // An existing entry is found, update its contents.
-                pathToUpdate.path = pathInfo.path;
-                pathToUpdate.iconUrl = pathInfo.iconUrl + "Hey";
-                pathToUpdate.inclusive = pathInfo.inclusive;
-            } else {
-                // No existing entry is found, make a copy of the new IncludeInfo
-                oldElement.include.push({
-                    path: pathInfo.path,
-                    iconUrl: pathInfo.iconUrl,
-                    inclusive: pathInfo.inclusive
-                });
-            }
         }
     }
 
@@ -519,13 +510,13 @@ function updateElement(oldElement: LayoutElement, newElement: LayoutElement, app
             oldElement.childElements.push(childElement);
         } else {
             // If an existing child is found, update it recursively.
-            updateElement(childToUpdate, childElement, append);
+            updateElement(childToUpdate, childElement);
         }
     }
 }
 
 // See 'updateElement' method above for details.
-export function updateSections(oldLayoutSpecs: any, newLayoutSpecs: any, append: boolean): void {
+export function updateSections(oldLayoutSpecs: any, newLayoutSpecs: any): void {
 
     if (!oldLayoutSpecs || (!newLayoutSpecs)) {
         throw new Error("Both 'oldLayoutSpecs' and 'newLayoutSpecs' parameters must be supplied");
@@ -557,7 +548,7 @@ export function updateSections(oldLayoutSpecs: any, newLayoutSpecs: any, append:
         }
 
         // Recursively update the element and its child elements.
-        updateElement(sectionToUpdate, section, append);
+        updateElement(sectionToUpdate, section);
     }
 }
 

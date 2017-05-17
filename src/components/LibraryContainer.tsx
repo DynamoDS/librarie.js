@@ -82,14 +82,15 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
             throw new Error("'layoutSpecsJson.sections' must be a valid array");
         }
 
-        // If there is no existing layoutSpecsJson, simply assign one and done.
-        if (!this.layoutSpecsJson) {
+        // If there is no existing layoutSpecsJson object, or the call
+        // is meant to replace the existing one, then assign it and bail.
+        if (!this.layoutSpecsJson || (!append)) {
             this.layoutSpecsJson = layoutSpecsJson;
             return;
         }
 
         // Otherwise, recursively replace/append each section.
-        updateSections(this.layoutSpecsJson, layoutSpecsJson, append);
+        updateSections(this.layoutSpecsJson, layoutSpecsJson);
     }
 
     raiseEvent(name: string, params?: any | any[]) {
