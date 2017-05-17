@@ -260,6 +260,7 @@ describe('constructLibraryItem function', function () {
   });
 
   afterEach(function() {
+    // Reset console.warn that was suppressed
     delete(console.warn);
   })
 
@@ -625,6 +626,7 @@ describe('convertToDefaultSection and convertToMiscSection functions', function 
   })
 
   afterEach(function() {
+    // Reset console.warn that was suppressed
     delete(console.warn);
   })
 
