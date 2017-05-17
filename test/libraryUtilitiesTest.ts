@@ -21,10 +21,10 @@ function compareLayoutElements(actual: LibraryUtilities.LayoutElement, expected:
   }
 
   // Each nested child element should also match up.
-  // expect(actual.childElements.length).to.equal(expected.childElements.length);
-  // for (let i = 0; i < expected.childElements.length; i++) {
-  //   compareLayoutElements(actual.childElements[i], expected.childElements[i]);
-  // }
+  expect(actual.childElements.length).to.equal(expected.childElements.length);
+  for (let i = 0; i < expected.childElements.length; i++) {
+    compareLayoutElements(actual.childElements[i], expected.childElements[i]);
+  }
 }
 
 describe("updateSections function", function () {

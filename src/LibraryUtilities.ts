@@ -504,7 +504,23 @@ function updateElement(oldElement: LayoutElement, newElement: LayoutElement, app
                 });
             }
         }
+    }
 
+    // Done handling 'include' property, proceed to deal with 'childElements'
+    for (let childElement of newElement.childElements) {
+
+        let nameOfChildToUpdate = childElement.text;
+        let childToUpdate = oldElement.childElements.find(function (c) {
+            return c.text === nameOfChildToUpdate;
+        });
+
+        if (!childToUpdate) {
+            // If no existing child is found, insert the new element directly.
+            oldElement.childElements.push(childElement);
+        } else {
+            // If an existing child is found, update it recursively.
+            updateElement(childToUpdate, childElement, append);
+        }
     }
 }
 
