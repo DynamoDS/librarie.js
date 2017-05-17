@@ -297,6 +297,192 @@ describe("updateSections function", function () {
     compareLayoutElements(rootElement, expectedLayoutSpecs.sections[0]);
   });
 
+  it("should update existing contents including child elements", function () {
+
+    let oldLayoutSpecs: any = {
+      sections: [
+        {
+          text: "My Favourites",
+          iconUrl: "/icons/my-fav.svg",
+          elementType: "section",
+          showHeader: true,
+          include: [
+            {
+              path: "Direct.Child.One",
+              iconUrl: "/icons/Direct.Child.One.png",
+              inclusive: false
+            },
+            {
+              path: "Direct.Child.Two",
+              iconUrl: "/icons/Direct.Child.Two.png",
+              inclusive: true
+            }
+          ],
+          "childElements": [
+            {
+              text: "First Favourite",
+              iconUrl: "/icons/first-fav.svg",
+              elementType: "group",
+              include: [
+                {
+                  path: "Nested.Child.One",
+                  iconUrl: "/icons/Nested.Child.One.png",
+                  inclusive: true
+                },
+                {
+                  path: "Nested.Child.Two",
+                  iconUrl: "/icons/Nested.Child.Two.png",
+                  inclusive: false
+                },
+                {
+                  path: "Nested.Child.Three",
+                  iconUrl: "/icons/Nested.Child.Three.png",
+                  inclusive: true
+                }
+              ],
+              "childElements": []
+            }
+          ]
+        }
+      ]
+    };
+
+    let newLayoutSpecs: any = {
+      sections: [
+        {
+          text: "My Favourites",
+          iconUrl: "/icons/my-fav-new.svg",
+          elementType: "section",
+          showHeader: false,
+          include: [
+            {
+              path: "Direct.Child.One",
+              iconUrl: "/icons/Direct.Child.One.New.png",
+              inclusive: true
+            },
+            {
+              path: "Direct.Child.Two.New",
+              iconUrl: "/icons/Direct.Child.Two.New.png",
+              inclusive: false
+            }
+          ],
+          childElements: [
+            {
+              text: "Second Favourite",
+              iconUrl: "/icons/first-fav-new.svg",
+              elementType: "group",
+              include: [
+                {
+                  path: "Nested.Child.One.New",
+                  iconUrl: "/icons/Nested.Child.One.New.png",
+                  inclusive: false
+                },
+                {
+                  path: "Nested.Child.Two.New",
+                  iconUrl: "/icons/Nested.Child.Two.New.png",
+                  inclusive: true
+                },
+                {
+                  path: "Nested.Child.Three.New",
+                  iconUrl: "/icons/Nested.Child.Three.New.png",
+                  inclusive: false
+                }
+              ],
+              childElements: []
+            }
+          ]
+        }
+      ]
+    };
+
+    let expectedLayoutSpecs: any = {
+      sections: [
+        {
+          text: "My Favourites",
+          iconUrl: "/icons/my-fav-new.svg",
+          elementType: "section",
+          showHeader: false,
+          include: [
+            {
+              path: "Direct.Child.One",
+              iconUrl: "/icons/Direct.Child.One.New.png",
+              inclusive: true
+            },
+            {
+              path: "Direct.Child.Two",
+              iconUrl: "/icons/Direct.Child.Two.png",
+              inclusive: true
+            },
+            {
+              path: "Direct.Child.Two.New",
+              iconUrl: "/icons/Direct.Child.Two.New.png",
+              inclusive: false
+            }
+          ],
+          "childElements": [
+            {
+              text: "First Favourite",
+              iconUrl: "/icons/first-fav.svg",
+              elementType: "group",
+              include: [
+                {
+                  path: "Nested.Child.One",
+                  iconUrl: "/icons/Nested.Child.One.png",
+                  inclusive: true
+                },
+                {
+                  path: "Nested.Child.Two",
+                  iconUrl: "/icons/Nested.Child.Two.png",
+                  inclusive: false
+                },
+                {
+                  path: "Nested.Child.Three",
+                  iconUrl: "/icons/Nested.Child.Three.png",
+                  inclusive: true
+                }
+              ],
+              childElements: []
+            },
+            {
+              text: "Second Favourite",
+              iconUrl: "/icons/first-fav-new.svg",
+              elementType: "group",
+              include: [
+                {
+                  path: "Nested.Child.One.New",
+                  iconUrl: "/icons/Nested.Child.One.New.png",
+                  inclusive: false
+                },
+                {
+                  path: "Nested.Child.Two.New",
+                  iconUrl: "/icons/Nested.Child.Two.New.png",
+                  inclusive: true
+                },
+                {
+                  path: "Nested.Child.Three.New",
+                  iconUrl: "/icons/Nested.Child.Three.New.png",
+                  inclusive: false
+                }
+              ],
+              childElements: []
+            }
+          ]
+        }
+      ]
+    };
+
+    // Precondition
+    expect(oldLayoutSpecs.sections.length).to.equal(1);
+    expect(newLayoutSpecs.sections.length).to.equal(1);
+    expect(oldLayoutSpecs.sections[0].text).to.equal("My Favourites");
+    expect(newLayoutSpecs.sections[0].text).to.equal("My Favourites");
+
+    LibraryUtilities.updateSections(oldLayoutSpecs, newLayoutSpecs);
+
+    let rootElement: LibraryUtilities.LayoutElement = oldLayoutSpecs.sections[0];
+    compareLayoutElements(rootElement, expectedLayoutSpecs.sections[0]);
+  });
+
 });
 
 describe('listNode Class', function () {
