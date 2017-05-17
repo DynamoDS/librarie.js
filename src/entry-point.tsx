@@ -18,9 +18,9 @@ export class LibraryController {
     ItemClickedEventName = "itemClicked";
     ItemMouseEnterEventName = "itemMouseEnter";
     ItemMouseLeaveEventName = "itemMouseLeave";
+    ItemToolTipExpandEventName = "itemToolTipExpand";
     DefaultSectionName = "default";
     MiscSectionName = "Miscellaneous";
-
 
     reactor: Reactor = null;
 

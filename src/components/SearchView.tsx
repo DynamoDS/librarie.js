@@ -6,8 +6,6 @@ import { LibraryContainer } from "./LibraryContainer";
 import { searchItemResursive, setItemStateRecursive, ItemData } from "../LibraryUtilities";
 import { SearchBar } from "./SearchBar";
 
-type displayMode = "structure" | "list";
-
 interface SearchModeChangedFunc {
     (inSearchMode: boolean): void;
 }
@@ -21,7 +19,6 @@ interface SearchViewProps {
 
 interface SearchViewStates {
     searchText: string;
-    displayMode: displayMode;
     selectedCategories: string[];
     structured: boolean;
     detailed: boolean;
@@ -37,7 +34,6 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
 
         this.state = {
             searchText: '',
-            displayMode: "list",
             selectedCategories: this.props.categories,
             structured: false,
             detailed: false
@@ -101,8 +97,8 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
                     data={item}
                     libraryContainer={this.props.libraryContainer}
                     category={category}
-                    highlightedText={this.state.searchText} 
-                    detailed={this.state.detailed}/>);
+                    highlightedText={this.state.searchText}
+                    detailed={this.state.detailed} />);
             } else {
                 this.getLeafItemsInCategory(category, item.childItems, leafItemsInCategory);
             }
@@ -143,7 +139,7 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
     }
 
     updateSearchView(text: string) {
-        if (this.state.displayMode === "list") {
+        if (this.state.detailed) {
             this.props.libraryContainer.raiseEvent("searchTextUpdated", text);
         }
 
