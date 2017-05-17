@@ -4,6 +4,128 @@ import * as testClasses from './libraryUtilitiesTestClasses'
 import { expect } from 'chai';
 import 'mocha';
 
+function compareLayoutElements(actual: LibraryUtilities.LayoutElement, expected: LibraryUtilities.LayoutElement) {
+
+  // Basic element properties must match up.
+  expect(actual.text).to.equal(expected.text);
+  expect(actual.iconUrl).to.equal(expected.iconUrl);
+  expect(actual.showHeader).to.equal(expected.showHeader);
+  expect(actual.elementType).to.equal(expected.elementType);
+
+  // Include paths comparison.
+  expect(actual.include.length).to.equal(expected.include.length);
+  for (let i = 0; i < expected.include.length; i++) {
+    expect(actual.include[i].path).to.equal(expected.include[i].path);
+    expect(actual.include[i].inclusive).to.equal(expected.include[i].inclusive);
+    expect(actual.include[i].iconUrl).to.equal(expected.include[i].iconUrl);
+  }
+
+  // Each nested child element should also match up.
+  expect(actual.childElements.length).to.equal(expected.childElements.length);
+  for (let i = 0; i < expected.childElements.length; i++) {
+    compareLayoutElements(actual.childElements[i], expected.childElements[i]);
+  }
+}
+
+describe("updateSections function", function () {
+
+  it("should throw exceptions 0", function () {
+    expect(function () {
+      LibraryUtilities.updateSections(null, null, true);
+    }).to.throw("Both 'oldLayoutSpecs' and 'newLayoutSpecs' parameters must be supplied");
+  });
+
+  it("should throw exceptions 1", function () {
+    expect(function () {
+      LibraryUtilities.updateSections({}, null, true);
+    }).to.throw("Both 'oldLayoutSpecs' and 'newLayoutSpecs' parameters must be supplied");
+  });
+
+  it("should throw exceptions 2", function () {
+    expect(function () {
+      LibraryUtilities.updateSections(null, {}, true);
+    }).to.throw("Both 'oldLayoutSpecs' and 'newLayoutSpecs' parameters must be supplied");
+  });
+
+  it("should throw exceptions 3", function () {
+    expect(function () {
+      LibraryUtilities.updateSections({}, {}, true);
+    }).to.throw("'oldLayoutSpecs.sections' must be a valid array");
+  });
+
+  it("should throw exceptions 4", function () {
+    expect(function () {
+      LibraryUtilities.updateSections({ sections: [] }, {}, true);
+    }).to.throw("'newLayoutSpecs.sections' must be a valid array");
+  });
+
+  it("should insert a new element when there isn't an existing one", function () {
+
+    let oldLayoutSpecs: any = {
+      sections: []
+    };
+
+    let newLayoutSpecs: any = {
+      sections: [
+        {
+          text: "My Favourites",
+          iconUrl: "/icons/my-fav.svg",
+          elementType: "section",
+          showHeader: true,
+          include: [
+            {
+              path: "Direct.Child.One",
+              iconUrl: "/icons/Direct.Child.One.png",
+              inclusive: false
+            },
+            {
+              path: "Direct.Child.Two",
+              iconUrl: "/icons/Direct.Child.Two.png",
+              inclusive: true
+            }
+          ],
+          "childElements": [
+            {
+              text: "First Favourite",
+              iconUrl: "/icons/first-fav.svg",
+              elementType: "group",
+              include: [
+                {
+                  path: "Nested.Child.One",
+                  iconUrl: "/icons/Nested.Child.One.png",
+                  inclusive: true
+                },
+                {
+                  path: "Nested.Child.Two",
+                  iconUrl: "/icons/Nested.Child.Two.png",
+                  inclusive: false
+                },
+                {
+                  path: "Nested.Child.Three",
+                  iconUrl: "/icons/Nested.Child.Three.png",
+                  inclusive: true
+                }
+              ],
+              "childElements": []
+            }
+          ]
+        }
+      ]
+    };
+
+    // Precondition
+    expect(oldLayoutSpecs.sections.length).to.equal(0);
+    expect(newLayoutSpecs.sections.length).to.equal(1);
+
+    LibraryUtilities.updateSections(oldLayoutSpecs, newLayoutSpecs, true);
+    expect(oldLayoutSpecs.sections.length).to.equal(1);
+
+    let rootElement: LibraryUtilities.LayoutElement = oldLayoutSpecs.sections[0];
+    compareLayoutElements(rootElement, newLayoutSpecs.sections[0]);
+  });
+
+});
+
 describe('listNode Class', function () {
 
   var testData: any;
@@ -655,7 +777,7 @@ describe('convertToDefaultSection and convertToMiscSection functions', function 
     expect(miscSection.childItems.length).to.equal(0);
   })
 
-  it('should construct left-over items in Miscellaneous section', function() {
+  it('should construct left-over items in Miscellaneous section', function () {
     let layoutElement = new LibraryUtilities.LayoutElement(new testClasses.LayoutElementData());
     layoutElement.text = 'x';
     layoutElement.include = [];
@@ -774,8 +896,8 @@ describe('buildLibraryItemsFromName function', function () {
   });
 });
 
-describe('convertSectionToItemData function', function() {
-  it('should convert LayoutElement to ItemData', function() {
+describe('convertSectionToItemData function', function () {
+  it('should convert LayoutElement to ItemData', function () {
     let section = new LibraryUtilities.LayoutElement(new testClasses.LayoutElementData());
     section.text = "test";
     section.elementType = "section";
