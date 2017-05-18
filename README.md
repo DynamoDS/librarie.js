@@ -73,8 +73,9 @@ Constructing a library view for consumption by other React.js components (e.g. h
         aReactJsTabContainer.addTabPage(libContainer);
 
         // Supply loaded types and layout specs at a much later time.
-        libController.setLoadedTypesJson(loadedTypesJsonObject);
-        libController.setLayoutSpecsJson(layoutSpecsJsonObject);
+        let append = false; // Replace existing contents instead of appending.
+        libController.setLoadedTypesJson(loadedTypesJsonObject, append);
+        libController.setLayoutSpecsJson(layoutSpecsJsonObject, append);
         libController.refreshLibraryView(); // Refresh library view.
     </script>
 ```

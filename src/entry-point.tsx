@@ -14,11 +14,11 @@ export function CreateLibraryController() {
 }
 
 interface SetLoadedTypesJsonFunc {
-    (loadedTypesJson: any): void;
+    (loadedTypesJson: any, append: boolean): void;
 }
 
 interface SetLayoutSpecsJsonFunc {
-    (layoutSpecsJson: any): void;
+    (layoutSpecsJson: any, append: boolean): void;
 }
 
 interface RefreshLibraryViewFunc {
@@ -68,8 +68,9 @@ export class LibraryController {
         let libraryContainer = ReactDOM.render(this.createLibraryContainer(), htmlElement);
 
         if (loadedTypesJson && (layoutSpecsJson)) {
-            this.setLoadedTypesJson(loadedTypesJson);
-            this.setLayoutSpecsJson(layoutSpecsJson);
+            let append = false; // Replace existing contents instead of appending.
+            this.setLoadedTypesJson(loadedTypesJson, append);
+            this.setLayoutSpecsJson(layoutSpecsJson, append);
             this.refreshLibraryView();
         }
 
@@ -83,15 +84,15 @@ export class LibraryController {
             miscSectionString={this.MiscSectionName} />);
     }
 
-    setLoadedTypesJson(loadedTypesJson: any): void {
+    setLoadedTypesJson(loadedTypesJson: any, append: boolean): void {
         if (this.setLoadedTypesJsonHandler) {
-            this.setLoadedTypesJsonHandler(loadedTypesJson);
+            this.setLoadedTypesJsonHandler(loadedTypesJson, append);
         }
     }
 
-    setLayoutSpecsJson(layoutSpecsJson: any): void {
+    setLayoutSpecsJson(layoutSpecsJson: any, append: boolean): void {
         if (this.setLayoutSpecsJsonHandler) {
-            this.setLayoutSpecsJsonHandler(layoutSpecsJson);
+            this.setLayoutSpecsJsonHandler(layoutSpecsJson, append);
         }
     }
 
