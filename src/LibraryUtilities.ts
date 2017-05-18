@@ -573,9 +573,9 @@ export function buildLibraryItemsFromName(typeListNode: TypeListNode, parentNode
 export function pushKeywords(itemData: ItemData, typeListNode: TypeListNode) {
     let keywords = typeListNode.keywords.split(",");
     keywords.forEach(keyword => {
-        itemData.keywords.push(keyword.toLowerCase().trim())
+        itemData.keywords.push(keyword.toLowerCase().replace(/ /g, ''));
     });
-    itemData.keywords.push(typeListNode.fullyQualifiedName.toLowerCase());
+    itemData.keywords.push(typeListNode.fullyQualifiedName.toLowerCase().replace(/ /g, ''));
 }
 
 // Recursively set visible and expanded states of ItemData

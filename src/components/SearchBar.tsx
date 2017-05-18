@@ -65,12 +65,13 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
     }
 
     onTextChanged(event: any) {
-        let text = event.target.value.trim().toLowerCase();
+        let text = event.target.value.toLowerCase().replace(/ /g,'');
 
-        // // collapse filter options menu when text is cleared
+        // collapse filter options menu when text is cleared
         if (text.length == 0) {
             this.setState({ expanded: false });
         }
+
         this.setState({ hasText: text.length > 0 });
         this.props.onTextChanged(text);
     }
