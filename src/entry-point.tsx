@@ -58,25 +58,25 @@ export class LibraryController {
         this.reactor.raiseEvent(name, params);
     }
 
-    createLibraryByElementId(htmlElementId: string, layoutSpecsJson: any, loadedTypesJson: any) {
+    createLibraryByElementId(htmlElementId: string, layoutSpecsJson: any = null, loadedTypesJson: any = null) {
         let htmlElement: any;
         htmlElement = document.querySelector(htmlElementId) || document.getElementById(htmlElementId);
         if (!htmlElement) {
             throw new Error("Element " + htmlElementId + " is not defined");
         }
 
-        let libraryContainer = ReactDOM.render(<LibraryContainer
-            libraryController={this}
-            defaultSectionString={this.DefaultSectionName}
-            miscSectionString={this.MiscSectionName} />, htmlElement);
+        let libraryContainer = ReactDOM.render(this.createLibraryContainer(), htmlElement);
 
-        this.setLoadedTypesJson(loadedTypesJson);
-        this.setLayoutSpecsJson(layoutSpecsJson);
-        this.refreshLibraryView();
+        if (loadedTypesJson && (layoutSpecsJson)) {
+            this.setLoadedTypesJson(loadedTypesJson);
+            this.setLayoutSpecsJson(layoutSpecsJson);
+            this.refreshLibraryView();
+        }
+
         return libraryContainer;
     }
 
-    createLibraryContainer(layoutSpecsJson: any, loadedTypesJson: any) {
+    createLibraryContainer() {
         return (<LibraryContainer
             libraryController={this}
             defaultSectionString={this.DefaultSectionName}
