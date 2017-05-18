@@ -7,14 +7,12 @@ import * as React from "react";
 import { LibraryController } from "../entry-point";
 import { LibraryItem } from "./LibraryItem";
 import { SearchView } from "./SearchView";
-import { buildLibrarySectionsFromLayoutSpecs, updateSections, ItemData } from "../LibraryUtilities";
+import * as LibraryUtilities from "../LibraryUtilities";
 
 declare var boundContainer: any; // Object set from C# side.
 
 export interface LibraryContainerProps {
     libraryController: LibraryController,
-    loadedTypesJson: any,
-    layoutSpecsJson: any,
     defaultSectionString: string,
     miscSectionString: string
 }
@@ -28,7 +26,7 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
     loadedTypesJson: any = null;
     layoutSpecsJson: any = null;
 
-    generatedSections: ItemData[] = null;
+    generatedSections: LibraryUtilities.ItemData[] = null;
     searchCategories: string[] = [];
 
     constructor(props: LibraryContainerProps) {
@@ -37,18 +35,15 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
         // Bind function prototypes to the object instance.
         this.setLoadedTypesJson = this.setLoadedTypesJson.bind(this);
         this.setLayoutSpecsJson = this.setLayoutSpecsJson.bind(this);
+        this.refreshLibraryView = this.refreshLibraryView.bind(this);
         this.onSearchModeChanged = this.onSearchModeChanged.bind(this);
 
-        this.state = { inSearchMode: false };
-        this.generatedSections = buildLibrarySectionsFromLayoutSpecs(
-            this.props.loadedTypesJson, this.props.layoutSpecsJson,
-            this.props.defaultSectionString, this.props.miscSectionString);
+        // Set handlers after methods are bound.
+        this.props.libraryController.setLoadedTypesJsonHandler = this.setLoadedTypesJson;
+        this.props.libraryController.setLayoutSpecsJsonHandler = this.setLayoutSpecsJson;
+        this.props.libraryController.refreshLibraryViewHandler = this.refreshLibraryView;
 
-        // Obtain the categories from each section to be added into the filtering options for search
-        for (let section of this.generatedSections) {
-            for (let childItem of section.childItems)
-                this.searchCategories.push(childItem.text);
-        }
+        this.state = { inSearchMode: false };
     }
 
     setLoadedTypesJson(loadedTypesJson: any, append: boolean = true): void {
@@ -90,7 +85,23 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
         }
 
         // Otherwise, recursively replace/append each section.
-        updateSections(this.layoutSpecsJson, layoutSpecsJson);
+        LibraryUtilities.updateSections(this.layoutSpecsJson, layoutSpecsJson);
+    }
+
+    refreshLibraryView(): void {
+
+        this.generatedSections = LibraryUtilities.buildLibrarySectionsFromLayoutSpecs(
+            this.loadedTypesJson, this.layoutSpecsJson,
+            this.props.defaultSectionString, this.props.miscSectionString);
+
+        // Obtain the categories from each section to be added into the filtering options for search
+        for (let section of this.generatedSections) {
+            for (let childItem of section.childItems)
+                this.searchCategories.push(childItem.text);
+        }
+
+        // Just to force a refresh of UI.
+        this.setState({ inSearchMode: this.state.inSearchMode });
     }
 
     raiseEvent(name: string, params?: any | any[]) {
@@ -102,6 +113,10 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
     }
 
     render() {
+        if (!this.generatedSections) {
+            return (<div>This is LibraryContainer</div>);
+        }
+
         try {
             let sections: JSX.Element[] = null;
             const searchView = <SearchView onSearchModeChanged={this.onSearchModeChanged}
