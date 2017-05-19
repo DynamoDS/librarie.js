@@ -960,3 +960,36 @@ describe('Search function', function () {
   });
 
 });
+
+describe("findAndExpandItemByPath function", function () {
+  let allItems: LibraryUtilities.ItemData[];
+  let itemData1: LibraryUtilities.ItemData;
+  let itemData11: LibraryUtilities.ItemData;
+  let itemData111: LibraryUtilities.ItemData;
+  let itemData112: LibraryUtilities.ItemData;
+  let itemData113: LibraryUtilities.ItemData;
+
+  beforeEach(function () {
+    itemData1 = new LibraryUtilities.ItemData("1");
+    itemData11 = new LibraryUtilities.ItemData("11");
+    itemData111 = new LibraryUtilities.ItemData("111");
+    itemData112 = new LibraryUtilities.ItemData("112");
+
+    itemData11.appendChild(itemData111);
+    itemData11.appendChild(itemData112);
+    itemData1.appendChild(itemData11);
+
+    allItems = [itemData1];
+  });
+
+  it("should return true if an item is found", function () {
+    let pathToItem = [itemData1, itemData11, itemData111];
+    expect(LibraryUtilities.findAndExpandItemByPath(pathToItem, allItems)).to.equal(true);
+  });
+
+  it("should return false if an item is not found", function () {
+    let itemData113 = new LibraryUtilities.ItemData("113");
+    let pathToItem = [itemData1, itemData11, itemData113];
+    expect(LibraryUtilities.findAndExpandItemByPath(pathToItem, allItems)).to.equal(false);
+  });
+});

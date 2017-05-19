@@ -583,7 +583,7 @@ export function setItemStateRecursive(items: ItemData | ItemData[], visible: boo
     items = (items instanceof Array) ? items : [items];
     for (let item of items) {
         item.visible = visible;
-        item.expanded = expanded;
+        item.expanded = item.itemType === "section" ? true : expanded;
         setItemStateRecursive(item.childItems, visible, expanded);
     }
 }
@@ -643,4 +643,39 @@ export function getHighlightedText(text: string, highlightedText: string, matchD
     }
 
     return spans;
+}
+
+/**
+ * Find an item from all Items based on path to the item, and expand all Items along the path.
+ * 
+ * @param {ItemData[]} pathToItem
+ * An arry of ItemData which represents the path to an item.
+ * 
+ * For example, in the following tree, pathToItem for D would be [A, B, D]
+ * - A
+ *   |- B
+ *      |- C
+ *      |- D
+ * 
+ * @param {ItemData} allItems
+ * An array of ItemData, which contains all the items. In the example above,
+ * allItems would be [A]
+ * 
+ * @return {boolean} true if an item is found, false otherwise
+ */
+export function findAndExpandItemByPath(pathToItem: ItemData[], allItems: ItemData[]): boolean {
+    let item: ItemData;
+
+    item = allItems.find(item =>
+        item.text == pathToItem[0].text && item.iconUrl == pathToItem[0].iconUrl
+    );
+
+    if (pathToItem.length == 1) {
+        return item ? true : false;
+    } else {
+        pathToItem.shift();
+        let result = findAndExpandItemByPath(pathToItem, item.childItems);
+        item.expanded = result; // Expand only if item is found.
+        return result;
+    }
 }
