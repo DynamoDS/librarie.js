@@ -210,16 +210,16 @@ This results in library view that looks like the following image:
 ### The Miscellaneous section
 As mentioned, this layout specification works closely with `loadedTypes`. The `Miscellaneous` section only shows up if `loadedTypes` contains items that are unspecified in this layout specification, to display the left-over items.
 
-The tree view structure of this section is generated based on the `fullyQualifiedName` of the items. As an example, if there is a node called "Core.Web.Web Request" as left-over, the "Core" category is created:
+The tree view structure of this section is generated based on the `fullyQualifiedName` of the items. As an example, if there is a node called `Core.Web.Web Request` as left-over, the "Core" category is created:
 
 ![image](img/layout-miscellaneous.png?raw=true)
 
 This is how it looks when the "Core" category is fully expanded:
 ![image](img/layout-miscellaneous-expanded.png?raw=true)
-*Note: The general rule is that all items in `loadedTypes` should be specified so that this section will not appear in the library.*
+*Note: The general rule is that all items in `loadedTypes` should be specified so that `Miscellaneous` section will not appear in the library.*
 
 ### Appending new sections
-New sections can be appended at the same level as `default` and `Miscellaneous` sections. As an example, we can add a new section called `Add-ons` that displays items with names that start with "pkg://":
+New sections can be appended at the same level as `default` and `Miscellaneous` sections. As an example, we can add a new section called `Add-ons` that displays items with names that start with `pkg://`:
 ```json
 {
   "sections": [
@@ -256,7 +256,8 @@ New sections can be appended at the same level as `default` and `Miscellaneous` 
 ```
 There are two ways of appending elements into the new section. One way is to specify the items the same way we did for the `default` section. Another way is to simply include them as `path`s in `include`.
 
-If the `path` contains a "://" in its prefix, the prefix will be removed from the item name. For example, if we have an item named "pkg://DynamoText.Text.FromStringOriginAndScale", the "DynamoText" class will be created and rendered as follows:
+If the `path` contains a `://` in its prefix, the prefix will be removed from the item name. For example, if we have an item named `pkg://DynamoText.Text.FromStringOriginAndScale`, the "DynamoText" class will be created and rendered as follows:
 
 ![image](img/layout-add-ons.png?raw=true)
-Same as the other sections, the tree view is determined based on the `fullyQualifiedName` of the item if the structure is not specified.
+
+Similar to the other sections, the tree structure is determined based on the `fullyQualifiedName` of the items.
