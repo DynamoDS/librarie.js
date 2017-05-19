@@ -9,6 +9,10 @@ interface DetailedModeChangedFunc {
     (detailed: boolean): void;
 }
 
+interface ShowExpandableToolTipFunc {
+    (ShowExpandableToolTip: boolean): void;
+}
+
 interface SearchCategoriesChangedFunc {
     (categories: string[]): void;
 }
@@ -18,11 +22,12 @@ interface SearchTextChangedFunc {
 }
 
 export interface SearchBarProps {
-    onTextChanged: SearchTextChangedFunc;
+    categories: string[];
     onStructuredModeChanged: StructuredModeChangedFunc;
     onDetailedModeChanged: DetailedModeChangedFunc;
+    onShowExpandableToolTipModeChanged: ShowExpandableToolTipFunc;
     onCategoriesChanged: SearchCategoriesChangedFunc;
-    categories: string[];
+    onTextChanged: SearchTextChangedFunc;
 }
 
 export interface SearchBarState {
@@ -30,6 +35,7 @@ export interface SearchBarState {
     selectedCategories: string[];
     structured: boolean;
     detailed: boolean;
+    showExpandableToolTip: boolean;
     hasText: boolean;
 }
 
@@ -44,6 +50,7 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
             selectedCategories: this.props.categories,
             structured: false,
             detailed: false,
+            showExpandableToolTip: false,
             hasText: false
         };
 
@@ -62,7 +69,7 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
     }
 
     onTextChanged(event: any) {
-        let text = event.target.value.toLowerCase().replace(/ /g,'');
+        let text = event.target.value.toLowerCase().replace(/ /g, '');
         this.setState({ hasText: text.length > 0 });
         this.props.onTextChanged(text);
     }
@@ -81,6 +88,12 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
         let value = !this.state.detailed;
         this.props.onDetailedModeChanged(value);
         this.setState({ detailed: value });
+    }
+
+    onShowExpandableToolTipModeChanged(event: any) {
+        let value = !this.state.showExpandableToolTip;
+        this.props.onShowExpandableToolTipModeChanged(value);
+        this.setState({ showExpandableToolTip: value });
     }
 
     onCategoriesChanged() {
@@ -123,8 +136,27 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
 
         this.categoryData.forEach(category => checkboxes.push(category.createCheckbox()));
 
-        let structuredCheckbox = new CategoryData("Structured", "SearchCheckbox", this.state.structured, this.onStructuredModeChanged.bind(this), "Display as structured view");
-        let detailedCheckbox = new CategoryData("Detailed", "SearchCheckbox", this.state.detailed, this.onDetailedModeChanged.bind(this), "Display detailed info");
+        let structuredCheckbox = new CategoryData(
+            "Structured",
+            "SearchCheckbox",
+            this.state.structured,
+            this.onStructuredModeChanged.bind(this),
+            "Display as structured view"
+        );
+        let detailedCheckbox = new CategoryData(
+            "Detailed",
+            "SearchCheckbox",
+            this.state.detailed,
+            this.onDetailedModeChanged.bind(this),
+            "Display detailed info"
+        );
+        let expandableTooltipCheckbox = new CategoryData(
+            "ShowExpandedToolTip",
+            "SearchCheckbox",
+            this.state.showExpandableToolTip,
+            this.onShowExpandableToolTipModeChanged.bind(this),
+            "Show expandable tooltip"
+        )
 
         if (this.state.hasText) {
             cancelButton = (
@@ -141,6 +173,7 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
                     <div className="SearchOptionsContainer">
                         {structuredCheckbox.createCheckbox()}
                         {detailedCheckbox.createCheckbox()}
+                        {expandableTooltipCheckbox.createCheckbox()}
                     </div>
                     <div className="SearchOptionsContainer">
                         <div className="SearchOptionsHeader">

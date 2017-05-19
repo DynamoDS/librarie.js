@@ -15,6 +15,7 @@ interface SearchResultItemProps {
     onParentTextClicked: ParentTextClickedFunc;
     highlightedText: string;
     detailed: boolean;
+    showExpandableToolTip: boolean;
 }
 
 interface SearchResultItemStates {
@@ -44,19 +45,23 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
         let itemTypeIconPath = "src/resources/icons/library-" + this.props.data.itemType + ".svg";
         let itemDescription: JSX.Element = null;
         let toolTip: JSX.Element = null;
-        let expandIcon = (
-            <div className="ToolTipExpandIcon">
-                <i className="fa fa-ellipsis-h" aria-hidden="true" onClick={this.onExpandIconClicked.bind(this)} />
-            </div>
-        );
+        let expandIcon: JSX.Element = null;
 
-        if (this.state.toolTipExpanded) {
-            toolTip = <ToolTip
-                libraryContainer={this.props.libraryContainer}
-                data={this.props.data}
-                showDescription={false}
-                showIcon={false}
-            />;
+        if (this.props.showExpandableToolTip) {
+            expandIcon = (
+                <div className="ToolTipExpandIcon">
+                    <i className="fa fa-ellipsis-h" aria-hidden="true" onClick={this.onExpandIconClicked.bind(this)} />
+                </div>
+            );
+
+            if (this.state.toolTipExpanded) {
+                toolTip = <ToolTip
+                    libraryContainer={this.props.libraryContainer}
+                    data={this.props.data}
+                    showDescription={false}
+                    showIcon={false}
+                />;
+            }
         }
 
         if (this.props.detailed || this.state.toolTipExpanded) {

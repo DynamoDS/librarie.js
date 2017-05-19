@@ -26,6 +26,7 @@ import { ItemData } from "../LibraryUtilities";
 export interface LibraryItemProps {
     libraryContainer: LibraryContainer,
     data: ItemData,
+    showExpandableToolTip: boolean,
     onItemWillExpand?: Function
 }
 
@@ -67,7 +68,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
 
         // All items are collapsed by default, except for section items
         this.state = {
-            toolTipExpanded: this.props.data.childItems.length == 0 ? this.props.data.expanded : false,
+            toolTipExpanded: false,
             itemExpanded: this.props.data.itemType === "section" ? true : this.props.data.expanded
         };
     }
@@ -135,22 +136,22 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
             }
         }
 
-        if (this.props.data.childItems.length == 0) {
+        // Show tooltip only if this is a leaf item and toolTipExpanded is set to true
+        if (this.props.showExpandableToolTip && this.props.data.childItems.length == 0) {
             expandIcon = (
                 <div className="ToolTipExpandIcon">
                     <i className="fa fa-ellipsis-h" aria-hidden="true" onClick={this.onExpandIconClicked.bind(this)} />
                 </div>
             );
-        }
 
-        // Show tooltip only if this is a leaf item and toolTipExpanded is set to true
-        if (this.props.data.childItems.length == 0 && this.state.toolTipExpanded) {
-            toolTip = <ToolTip
-                libraryContainer={this.props.libraryContainer}
-                data={this.props.data}
-                showDescription={true}
-                showIcon={true}
-            />;
+            if (this.state.toolTipExpanded) {
+                toolTip = <ToolTip
+                    libraryContainer={this.props.libraryContainer}
+                    data={this.props.data}
+                    showDescription={true}
+                    showIcon={true}
+                />;
+            }
         }
 
         if (this.props.data.parameters && (this.props.data.parameters.length > 0)) {
@@ -233,6 +234,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
                             key={index++}
                             libraryContainer={this.props.libraryContainer}
                             data={item}
+                            showExpandableToolTip={this.props.showExpandableToolTip}
                             onItemWillExpand={this.onSingleChildItemWillExpand.bind(this)}
                         />);
                     })
@@ -253,6 +255,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
                 libraryContainer={this.props.libraryContainer}
                 icon={require("../resources/icons/library-create.svg")}
                 borderColor="#62895b" /* green */
+                showExpandableToolTip={this.props.showExpandableToolTip}
                 childItems={createMethods} />);
         }
 
@@ -262,6 +265,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
                 libraryContainer={this.props.libraryContainer}
                 icon={require("../resources/icons/library-action.svg")}
                 borderColor="#ad5446" /* red */
+                showExpandableToolTip={this.props.showExpandableToolTip}
                 childItems={actionMethods} />);
         }
 
@@ -271,6 +275,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
                 libraryContainer={this.props.libraryContainer}
                 icon={require("../resources/icons/library-query.svg")}
                 borderColor="#4b9dbf" /* blue */
+                showExpandableToolTip={this.props.showExpandableToolTip}
                 childItems={queryMethods} />);
         }
 

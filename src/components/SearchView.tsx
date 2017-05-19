@@ -22,6 +22,7 @@ interface SearchViewStates {
     selectedCategories: string[];
     structured: boolean;
     detailed: boolean;
+    showExpandableToolTip: boolean;
 }
 
 export class SearchView extends React.Component<SearchViewProps, SearchViewStates> {
@@ -35,7 +36,8 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
             searchText: '',
             selectedCategories: this.props.categories,
             structured: false,
-            detailed: false
+            detailed: false,
+            showExpandableToolTip: false
         };
         this.searchResultListItems = null;
     }
@@ -60,6 +62,7 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
             structuredItems.push(<LibraryItem
                 key={index++}
                 libraryContainer={this.props.libraryContainer}
+                showExpandableToolTip={this.state.showExpandableToolTip}
                 data={item} />
             );
         }
@@ -91,6 +94,7 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
                     pathToItem={pathToThisItem}
                     onParentTextClicked={this.directToLibrary.bind(this)}
                     detailed={this.state.detailed}
+                    showExpandableToolTip={this.state.showExpandableToolTip}
                 />);
             } else {
                 this.generateListItems(item.childItems, pathToThisItem, leafItems);
@@ -136,6 +140,10 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
         this.setState({ detailed: value });
     }
 
+    onShowExpandableToolTipModeChanged(value: boolean) {
+        this.setState({ showExpandableToolTip: value });
+    }
+
     onCategoriesChanged(categories: string[]) {
         this.setState({ selectedCategories: categories });
     }
@@ -165,9 +173,10 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
         return (
             <div className="searchView">
                 <SearchBar
+                    categories={this.props.categories}
                     onStructuredModeChanged={this.onStructuredModeChanged.bind(this)}
                     onDetailedModeChanged={this.onDetailedModeChanged.bind(this)}
-                    categories={this.props.categories}
+                    onShowExpandableToolTipModeChanged={this.onShowExpandableToolTipModeChanged.bind(this)}
                     onCategoriesChanged={this.onCategoriesChanged.bind(this)}
                     onTextChanged={this.onTextChanged.bind(this)}>
                 </SearchBar>

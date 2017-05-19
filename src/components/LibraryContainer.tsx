@@ -124,7 +124,9 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
 
             if (!this.state.inSearchMode) {
                 let index = 0;
-                sections = this.generatedSections.map(data => <LibraryItem key={index++} libraryContainer={this} data={data} />)
+                sections = this.generatedSections.map(data =>
+                    <LibraryItem key={index++} libraryContainer={this} showExpandableToolTip={false} data={data} />
+                );
             }
 
             return (
