@@ -79,9 +79,11 @@ input {
     overflow-y: hidden;
 }
 
-.LibraryItemContainerNone:hover,
-.LibraryItemHeader:hover,
-.LibrarySectionHeader:hover {
+.LibraryHeaderContainer {
+    transition: 0.1s;
+}
+
+.LibraryHeaderContainer:hover {
     color: white;
     background: #555;
 }

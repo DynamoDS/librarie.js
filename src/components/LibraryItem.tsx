@@ -159,15 +159,18 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
 
         if (this.props.data.showHeader) {
             header = (
-                <div className={this.getLibraryItemHeaderStyle()}
-                    onClick={this.onLibraryItemClicked.bind(this)}
-                    onMouseOver={this.onLibraryItemMouseEnter.bind(this)}
-                    onMouseLeave={this.onLibraryItemMouseLeave.bind(this)}>
-                    {arrow}
-                    {iconElement}
-                    <div className={libraryItemTextStyle}>{this.props.data.text}</div>
-                    {parameters}
-                    {expandIcon}
+                <div className="LibraryHeaderContainer">
+                    <div className={this.getLibraryItemHeaderStyle()}
+                        onClick={this.onLibraryItemClicked.bind(this)}
+                        onMouseOver={this.onLibraryItemMouseEnter.bind(this)}
+                        onMouseLeave={this.onLibraryItemMouseLeave.bind(this)}>
+                        {arrow}
+                        {iconElement}
+                        <div className={libraryItemTextStyle}>{this.props.data.text}</div>
+                        {parameters}
+                        {expandIcon}
+                    </div>
+                    {toolTip}
                 </div>
             );
         }
@@ -175,7 +178,6 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         return (
             <div className={this.getLibraryItemContainerStyle()}>
                 {header}
-                {toolTip}
                 <div className={"LibraryItemBodyContainer"}>
                     {bodyIndentation}
                     <div className={"LibraryItemBodyElements"}>
