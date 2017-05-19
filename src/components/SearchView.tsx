@@ -3,8 +3,8 @@ import * as _ from "underscore";
 import { LibraryItem } from "./LibraryItem";
 import { SearchResultItem } from "./SearchResultItem";
 import { LibraryContainer } from "./LibraryContainer";
-import { searchItemResursive, setItemStateRecursive, findAndExpandItemByPath, ItemData } from "../LibraryUtilities";
 import { SearchBar } from "./SearchBar";
+import * as LibraryUtilities from "../LibraryUtilities";
 
 interface SearchModeChangedFunc {
     (inSearchMode: boolean): void;
@@ -13,7 +13,7 @@ interface SearchModeChangedFunc {
 interface SearchViewProps {
     onSearchModeChanged: SearchModeChangedFunc;
     libraryContainer: LibraryContainer;
-    sections: ItemData[];
+    sections: LibraryUtilities.ItemData[];
     categories: string[];
 }
 
@@ -46,7 +46,7 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
 
     generateStructuredItems(): JSX.Element[] {
         let structuredItems: JSX.Element[] = [];
-        let categoryItems: ItemData[] = [];
+        let categoryItems: LibraryUtilities.ItemData[] = [];
 
         this.props.sections.forEach(section =>
             categoryItems = categoryItems.concat(section.childItems)
@@ -67,8 +67,8 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
     }
 
     generateListItems(
-        items: ItemData[] = this.props.sections,
-        pathToItem: ItemData[] = [],
+        items: LibraryUtilities.ItemData[] = this.props.sections,
+        pathToItem: LibraryUtilities.ItemData[] = [],
         leafItems: JSX.Element[] = []): JSX.Element[] {
 
         for (let item of items) {
@@ -110,20 +110,20 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
             // but only show change on ui after 300ms
 
             this.timeout = setTimeout(function () {
-                searchItemResursive(this.props.sections, text);
+                LibraryUtilities.searchItemResursive(this.props.sections, text);
                 this.updateSearchViewDelayed(text);
             }.bind(this), 300);
         } else {
             // Show change on ui immediately if search text is cleared
-            setItemStateRecursive(this.props.sections, true, false);
+            LibraryUtilities.setItemStateRecursive(this.props.sections, true, false);
             this.updateSearchViewDelayed(text);
         }
     }
 
     // Direct back to library and expand items based on pathToItem. 
-    directToLibrary(pathToItem: ItemData[]) {
-        setItemStateRecursive(this.props.sections, true, false);
-        if (findAndExpandItemByPath(pathToItem.slice(0), this.props.sections)) {
+    directToLibrary(pathToItem: LibraryUtilities.ItemData[]) {
+        LibraryUtilities.setItemStateRecursive(this.props.sections, true, false);
+        if (LibraryUtilities.findAndExpandItemByPath(pathToItem.slice(0), this.props.sections)) {
             this.clearSearch();
         }
     }

@@ -1,14 +1,18 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import { ItemData, getHighlightedText } from "../LibraryUtilities";
 import { LibraryContainer } from "./LibraryContainer";
+import * as LibraryUtilities from "../LibraryUtilities";
+
+interface ParentTextClickedFunc {
+    (pathToItem: LibraryUtilities.ItemData[]): void;
+}
 
 interface SearchResultItemProps {
-    data: ItemData;
+    data: LibraryUtilities.ItemData;
     libraryContainer: LibraryContainer;
     highlightedText: string;
-    pathToItem: ItemData[];
-    onParentTextClicked: Function;
+    pathToItem: LibraryUtilities.ItemData[];
+    onParentTextClicked: ParentTextClickedFunc;
     detailed: boolean;
 }
 
@@ -30,9 +34,9 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
         let categoryText = this.props.pathToItem.find(item => item.itemType === "category").text;
 
         let parameters = this.props.data.parameters;
-        let highLightedItemText = getHighlightedText(this.props.data.text, this.props.highlightedText, true);
-        let highLightedParentText = getHighlightedText(parentText, this.props.highlightedText, false);
-        let highLightedCategoryText = getHighlightedText(categoryText, this.props.highlightedText, false);
+        let highLightedItemText = LibraryUtilities.getHighlightedText(this.props.data.text, this.props.highlightedText, true);
+        let highLightedParentText = LibraryUtilities.getHighlightedText(parentText, this.props.highlightedText, false);
+        let highLightedCategoryText = LibraryUtilities.getHighlightedText(categoryText, this.props.highlightedText, false);
         let itemTypeIconPath = "src/resources/icons/library-" + this.props.data.itemType + ".svg";
         let itemDescription: JSX.Element = null;
 
