@@ -224,10 +224,14 @@ input {
 .SearchBar #SearchInputText {
     width: 100%;
     font-size: 15px;
-    padding: 5px 5px 0px 10px;
+    padding: 2px 5px 0px 10px;
     background: none;
     outline: none;
     border: none;
+}
+
+.SearchBar #SearchInputText:focus::-webkit-input-placeholder {
+    opacity: 0;
 }
 
 .SearchBar #SearchOptionsBtnEnabled,
@@ -351,7 +355,7 @@ input {
 }
 
 .SearchBar .CancelButton button {
-    font-size: 20px;
+    font-size: 14px;
     color: #ccc;
     background: transparent;
     border: 0px;

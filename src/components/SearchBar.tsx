@@ -65,14 +65,18 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
     }
 
     onTextChanged(event: any) {
-        let text = event.target.value.toLowerCase().replace(/ /g,'');
+        let text = event.target.value.toLowerCase().replace(/ /g, '');
 
         // collapse filter options menu when text is cleared
         if (text.length == 0) {
-            this.setState({ expanded: false });
+            this.setState({
+                expanded: false,
+                hasText: false
+            });
+        } else {
+            this.setState({ hasText: true });
         }
 
-        this.setState({ hasText: text.length > 0 });
         this.props.onTextChanged(text);
     }
 
@@ -145,7 +149,9 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
         if (this.state.hasText) {
             cancelButton = (
                 <div className="CancelButton">
-                    <button onClick={this.clearInput.bind(this)} >&times;</button>
+                    <button onClick={this.clearInput.bind(this)} >
+                        <i className="fa fa-times" aria-hidden="true"></i>
+                    </button>
                 </div>
             );
         }
