@@ -6,8 +6,9 @@ require("../resources/fonts/font-awesome-4.7.0/css/font-awesome.min.css");
 import * as React from "react";
 import { LibraryController } from "../entry-point";
 import { LibraryItem } from "./LibraryItem";
-import { SearchView } from "./SearchView";
 import * as LibraryUtilities from "../LibraryUtilities";
+import { Searcher } from "../Searcher";
+import { SearchBar } from "./SearchBar";
 
 declare var boundContainer: any; // Object set from C# side.
 
@@ -18,7 +19,11 @@ export interface LibraryContainerProps {
 }
 
 export interface LibraryContainerStates {
-    inSearchMode: boolean
+    inSearchMode: boolean,
+    searchText: string,
+    selectedCategories: string[],
+    structured: boolean,
+    detailed: boolean
 }
 
 export class LibraryContainer extends React.Component<LibraryContainerProps, LibraryContainerStates> {
@@ -29,6 +34,9 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
     generatedSections: LibraryUtilities.ItemData[] = null;
     searchCategories: string[] = [];
 
+    timeout: number;
+    searcher: Searcher = null;
+
     constructor(props: LibraryContainerProps) {
         super(props);
 
@@ -37,13 +45,27 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
         this.setLayoutSpecsJson = this.setLayoutSpecsJson.bind(this);
         this.refreshLibraryView = this.refreshLibraryView.bind(this);
         this.onSearchModeChanged = this.onSearchModeChanged.bind(this);
+        this.onStructuredModeChanged = this.onStructuredModeChanged.bind(this);
+        this.onDetailedModeChanged = this.onDetailedModeChanged.bind(this);
+        this.onCategoriesChanged = this.onCategoriesChanged.bind(this);
+        this.onTextChanged = this.onTextChanged.bind(this);
+        this.clearSearch = this.clearSearch.bind(this);
 
         // Set handlers after methods are bound.
         this.props.libraryController.setLoadedTypesJsonHandler = this.setLoadedTypesJson;
         this.props.libraryController.setLayoutSpecsJsonHandler = this.setLayoutSpecsJson;
         this.props.libraryController.refreshLibraryViewHandler = this.refreshLibraryView;
 
-        this.state = { inSearchMode: false };
+        // Initialize the search utilities with empty data
+        this.searcher = new Searcher(this.onSearchModeChanged, this.clearSearch, this, [], []);
+
+        this.state = { 
+            inSearchMode: false,
+            searchText: '',
+            selectedCategories: [],
+            structured: false,
+            detailed: false 
+        };
     }
 
     setLoadedTypesJson(loadedTypesJson: any, append: boolean = true): void {
@@ -100,6 +122,10 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
                 this.searchCategories.push(childItem.text);
         }
 
+        // Update the properties in searcher
+        this.searcher.sections = this.generatedSections;
+        this.searcher.categories = this.searchCategories;
+
         // Just to force a refresh of UI.
         this.setState({ inSearchMode: this.state.inSearchMode });
     }
@@ -112,6 +138,55 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
         this.setState({ inSearchMode: inSearchMode });
     }
 
+    onStructuredModeChanged(value: boolean) {
+        this.setState({ structured: value });
+    }
+
+    onDetailedModeChanged(value: boolean) {
+        this.setState({ detailed: value });
+    }
+
+    onCategoriesChanged(categories: string[]) {
+        this.setState({ selectedCategories: categories });
+        this.searcher.categories = categories;
+    }
+
+    onTextChanged(text: string) {
+        if (!this.generatedSections) return;
+
+        clearTimeout(this.timeout);
+
+        let hasText = text.length > 0;
+
+        if (hasText) {
+            // Starting searching immediately after user input, 
+            // but only show change on ui after 300ms
+
+            this.timeout = setTimeout(function () {
+                LibraryUtilities.searchItemResursive(this.generatedSections, text);
+                this.updateSearchViewDelayed(text);
+            }.bind(this), 300);
+        } else {
+            // Show change on ui immediately if search text is cleared
+            LibraryUtilities.setItemStateRecursive(this.generatedSections, true, false);
+            this.updateSearchViewDelayed(text);
+        }
+    }
+
+    updateSearchViewDelayed(text: string) {
+        if (text.length > 0 && !this.state.structured) {
+            this.raiseEvent("searchTextUpdated", text);
+        }
+
+        this.setState({ searchText: text });
+        this.onSearchModeChanged(text.length > 0);
+    }
+
+    clearSearch(text: string) {
+        this.setState({ searchText: text })
+        this.onSearchModeChanged(false);        
+    }
+
     render() {
         if (!this.generatedSections) {
             return (<div>This is LibraryContainer</div>);
@@ -119,17 +194,27 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
 
         try {
             let sections: JSX.Element[] = null;
-            const searchView = <SearchView onSearchModeChanged={this.onSearchModeChanged}
-                libraryContainer={this} sections={this.generatedSections} categories={this.searchCategories} />;
+
+            const searchBar = <SearchBar onCategoriesChanged={this.onCategoriesChanged} onDetailedModeChanged={this.onDetailedModeChanged} 
+                onStructuredModeChanged={this.onStructuredModeChanged} onTextChanged={this.onTextChanged} 
+                categories={this.searchCategories} />
 
             if (!this.state.inSearchMode) {
                 let index = 0;
                 sections = this.generatedSections.map(data => <LibraryItem key={index++} libraryContainer={this} data={data} />)
             }
+            else {
+                if (this.state.structured) {
+                    sections = this.searcher.generateStructuredItems();
+                }
+                else {
+                    sections = this.searcher.generateListItems(this.generatedSections, this.state.searchText, this.state.detailed);
+                }
+            }
 
             return (
                 <div className="LibraryContainer">
-                    {searchView}
+                    {searchBar}
                     <div className="LibraryItemContainer">
                         {sections}
                     </div>
