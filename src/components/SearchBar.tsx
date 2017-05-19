@@ -62,7 +62,7 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
     }
 
     onTextChanged(event: any) {
-        let text = event.target.value.trim().toLowerCase();
+        let text = event.target.value.toLowerCase().replace(/ /g,'');
         this.setState({ hasText: text.length > 0 });
         this.props.onTextChanged(text);
     }
