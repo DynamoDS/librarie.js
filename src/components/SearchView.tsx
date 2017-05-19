@@ -108,15 +108,15 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
         if (hasText) {
             // Starting searching immediately after user input, 
             // but only show change on ui after 300ms
-            searchItemResursive(this.props.sections, text);
 
             this.timeout = setTimeout(function () {
-                this.updateSearchView(text);
+                searchItemResursive(this.props.sections, text);
+                this.updateSearchViewDelayed(text);
             }.bind(this), 300);
         } else {
             // Show change on ui immediately if search text is cleared
             setItemStateRecursive(this.props.sections, true, false);
-            this.updateSearchView(text);
+            this.updateSearchViewDelayed(text);
         }
     }
 
@@ -140,7 +140,7 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
         this.setState({ selectedCategories: categories });
     }
 
-    updateSearchView(text: string) {
+    updateSearchViewDelayed(text: string) {
         if (text.length > 0 && !this.state.structured) {
             this.props.libraryContainer.raiseEvent("searchTextUpdated", text);
         }

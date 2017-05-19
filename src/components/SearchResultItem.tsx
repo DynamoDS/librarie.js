@@ -23,7 +23,7 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
     render() {
         let iconPath = this.props.data.iconUrl;
 
-        // Parent of the item is the last but one item in the array pathToItem
+        // The parent of a search result item is the second last entry in 'pathToItem'
         let parentText = this.props.pathToItem[this.props.pathToItem.length - 2].text;
 
         // Category of the item is the item with type category in the array pathToItem
@@ -33,7 +33,7 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
         let highLightedItemText = getHighlightedText(this.props.data.text, this.props.highlightedText, true);
         let highLightedParentText = getHighlightedText(parentText, this.props.highlightedText, false);
         let highLightedCategoryText = getHighlightedText(categoryText, this.props.highlightedText, false);
-        let ItemTypeIconPath = "src/resources/icons/library-" + this.props.data.itemType + ".svg";
+        let itemTypeIconPath = "src/resources/icons/library-" + this.props.data.itemType + ".svg";
         let itemDescription: JSX.Element = null;
 
         if (this.props.detailed) {
@@ -58,7 +58,7 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
                         <div className={"ItemParent"} onClick={this.onParentTextClicked.bind(this)}>
                             {highLightedParentText}
                         </div>
-                        <img className={"ItemTypeIcon"} src={ItemTypeIconPath} onError={this.onImageLoadFail.bind(this)} />
+                        <img className={"ItemTypeIcon"} src={itemTypeIconPath} onError={this.onImageLoadFail.bind(this)} />
                         <div className={"ItemCategory"}>{highLightedCategoryText}</div>
                     </div>
                 </div>
