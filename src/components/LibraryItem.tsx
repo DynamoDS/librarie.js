@@ -264,7 +264,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         if (this.props.data.childItems.length > 0 && !currentlyExpanded && this.props.onItemWillExpand) {
             this.props.onItemWillExpand();
         }
-        
+
         this.setState({ expanded: !currentlyExpanded });
 
         let libraryContainer = this.props.libraryContainer;
@@ -285,17 +285,17 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
     onLibraryItemMouseLeave() {
         let libraryContainer = this.props.libraryContainer;
         if (this.props.data.childItems.length == 0) {
-            libraryContainer.raiseEvent(libraryContainer.props.libraryController.ItemMouseLeaveEventName,
-                { data: this.props.data.contextData });
+            let mouseLeaveEvent = libraryContainer.props.libraryController.ItemMouseLeaveEventName;
+            libraryContainer.raiseEvent(mouseLeaveEvent, { data: this.props.data.contextData });
         }
     }
 
     onLibraryItemMouseEnter() {
         let libraryContainer = this.props.libraryContainer;
         if (this.props.data.childItems.length == 0) {
-            var rec = ReactDOM.findDOMNode(this).getBoundingClientRect();
-            libraryContainer.raiseEvent(libraryContainer.props.libraryController.ItemMouseEnterEventName,
-                { data: this.props.data.contextData, rect: rec });
+            let rec = ReactDOM.findDOMNode(this).getBoundingClientRect();
+            let mouseEnterEvent = libraryContainer.props.libraryController.ItemMouseEnterEventName;
+            libraryContainer.raiseEvent(mouseEnterEvent, { data: this.props.data.contextData, rect: rec });
         }
     }
 }
