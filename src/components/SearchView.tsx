@@ -10,8 +10,13 @@ interface SearchModeChangedFunc {
     (inSearchMode: boolean): void;
 }
 
+interface ShowExpandableToolTipModeChangedFunc {
+    (showExpandableToolTip: boolean): void;
+}
+
 interface SearchViewProps {
     onSearchModeChanged: SearchModeChangedFunc;
+    onShowExpandableToolTipChanged: ShowExpandableToolTipModeChangedFunc;
     libraryContainer: LibraryContainer;
     sections: LibraryUtilities.ItemData[];
     categories: string[];
@@ -59,6 +64,7 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
             if (!item.visible || !_.contains(this.state.selectedCategories, item.text)) {
                 continue;
             }
+
             structuredItems.push(<LibraryItem
                 key={index++}
                 libraryContainer={this.props.libraryContainer}
@@ -142,6 +148,7 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
 
     onShowExpandableToolTipModeChanged(value: boolean) {
         this.setState({ showExpandableToolTip: value });
+        this.props.onShowExpandableToolTipChanged(value);
     }
 
     onCategoriesChanged(categories: string[]) {

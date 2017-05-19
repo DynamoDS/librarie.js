@@ -78,7 +78,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
     // expansion state. This will make sure that the expansion state of an item
     // in search view will not be affected by the previous user click.
     componentWillReceiveProps(nextProps: LibraryItemProps) {
-        if (nextProps.data.expanded !== this.state.itemExpanded) {
+        if (nextProps.data.expanded && !this.state.itemExpanded) {
             this.setState({ itemExpanded: nextProps.data.expanded });
         }
     }
