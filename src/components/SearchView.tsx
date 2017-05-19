@@ -3,8 +3,8 @@ import * as _ from "underscore";
 import { LibraryItem } from "./LibraryItem";
 import { SearchResultItem } from "./SearchResultItem";
 import { LibraryContainer } from "./LibraryContainer";
-import { searchItemResursive, setItemStateRecursive, ItemData } from "../LibraryUtilities";
 import { SearchBar } from "./SearchBar";
+import * as LibraryUtilities from "../LibraryUtilities";
 
 interface SearchModeChangedFunc {
     (inSearchMode: boolean): void;
@@ -13,7 +13,7 @@ interface SearchModeChangedFunc {
 interface SearchViewProps {
     onSearchModeChanged: SearchModeChangedFunc;
     libraryContainer: LibraryContainer;
-    sections: ItemData[];
+    sections: LibraryUtilities.ItemData[];
     categories: string[];
 }
 
@@ -26,7 +26,6 @@ interface SearchViewStates {
 
 export class SearchView extends React.Component<SearchViewProps, SearchViewStates> {
     timeout: number;
-
     searchResultListItems: any;
 
     constructor(props: SearchViewProps) {
@@ -47,7 +46,7 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
 
     generateStructuredItems(): JSX.Element[] {
         let structuredItems: JSX.Element[] = [];
-        let categoryItems: ItemData[] = [];
+        let categoryItems: LibraryUtilities.ItemData[] = [];
 
         this.props.sections.forEach(section =>
             categoryItems = categoryItems.concat(section.childItems)
@@ -58,53 +57,47 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
             if (!item.visible || !_.contains(this.state.selectedCategories, item.text)) {
                 continue;
             }
-            structuredItems = structuredItems.concat([<LibraryItem key={index++} libraryContainer={this.props.libraryContainer} data={item} />])
+            structuredItems.push(<LibraryItem
+                key={index++}
+                libraryContainer={this.props.libraryContainer}
+                data={item} />
+            );
         }
         return structuredItems;
     }
 
-    generateListItems(): JSX.Element[] {
-        let leafItems: JSX.Element[] = [];
-        let categoryItems: ItemData[] = [];
+    generateListItems(
+        items: LibraryUtilities.ItemData[] = this.props.sections,
+        pathToItem: LibraryUtilities.ItemData[] = [],
+        leafItems: JSX.Element[] = []): JSX.Element[] {
 
-        this.props.sections.forEach(section =>
-            categoryItems = categoryItems.concat(section.childItems)
-        );
-
-        for (let item of categoryItems) {
-            if (!item.visible || !_.contains(this.state.selectedCategories, item.text)) {
-                continue;
-            }
-
-            if (item.childItems.length > 0) {
-                leafItems = leafItems.concat(this.getLeafItemsInCategory(item.text, item.childItems));
-            } else {
-                leafItems = leafItems.concat(this.getLeafItemsInCategory(item.text, [item]));
-            }
-        }
-
-        return leafItems;
-    }
-
-    getLeafItemsInCategory(category: string, items: ItemData[], leafItemsInCategory: JSX.Element[] = []): JSX.Element[] {
         for (let item of items) {
             if (!item.visible) {
                 continue;
             }
 
+            if (item.itemType === "category" && !_.contains(this.state.selectedCategories, item.text)) {
+                continue;
+            }
+
+            let pathToThisItem = pathToItem.slice(0);
+            pathToThisItem.push(item);
+
             if (item.childItems.length == 0) {
-                leafItemsInCategory.push(<SearchResultItem
+                leafItems.push(<SearchResultItem
                     data={item}
                     libraryContainer={this.props.libraryContainer}
-                    category={category}
                     highlightedText={this.state.searchText}
-                    detailed={this.state.detailed} />);
+                    pathToItem={pathToThisItem}
+                    onParentTextClicked={this.directToLibrary.bind(this)}
+                    detailed={this.state.detailed}
+                />);
             } else {
-                this.getLeafItemsInCategory(category, item.childItems, leafItemsInCategory);
+                this.generateListItems(item.childItems, pathToThisItem, leafItems);
             }
         }
 
-        return leafItemsInCategory;
+        return leafItems;
     }
 
     onTextChanged(text: string) {
@@ -115,14 +108,23 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
         if (hasText) {
             // Starting searching immediately after user input, 
             // but only show change on ui after 300ms
-            searchItemResursive(this.props.sections, text);
 
             this.timeout = setTimeout(function () {
-                this.updateSearchView(text);
+                LibraryUtilities.searchItemResursive(this.props.sections, text);
+                this.updateSearchViewDelayed(text);
             }.bind(this), 300);
         } else {
             // Show change on ui immediately if search text is cleared
-            this.updateSearchView(text);
+            LibraryUtilities.setItemStateRecursive(this.props.sections, true, false);
+            this.updateSearchViewDelayed(text);
+        }
+    }
+
+    // Direct back to library and expand items based on pathToItem. 
+    directToLibrary(pathToItem: LibraryUtilities.ItemData[]) {
+        LibraryUtilities.setItemStateRecursive(this.props.sections, true, false);
+        if (LibraryUtilities.findAndExpandItemByPath(pathToItem.slice(0), this.props.sections)) {
+            this.clearSearch();
         }
     }
 
@@ -135,32 +137,40 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
     }
 
     onCategoriesChanged(categories: string[]) {
-        this.setState({ selectedCategories: categories })
+        this.setState({ selectedCategories: categories });
     }
 
-    updateSearchView(text: string) {
-        if (this.state.detailed) {
+    updateSearchViewDelayed(text: string) {
+        if (text.length > 0 && !this.state.structured) {
             this.props.libraryContainer.raiseEvent("searchTextUpdated", text);
         }
 
         this.setState({ searchText: text });
-
-        // Update library container of current search
         this.props.onSearchModeChanged(text.length > 0);
+    }
+
+    clearSearch() {
+        let searchInput: any = document.getElementById("SearchInputText");
+        searchInput.value = "";
+        this.setState({ searchText: searchInput.value })
+        this.props.onSearchModeChanged(false);
     }
 
     render() {
         let listItems: JSX.Element[] = null;
-
         if (this.state.searchText.length > 0) {
             listItems = (this.state.structured) ? this.generateStructuredItems() : this.generateListItems();
-        } else {  // Reset ItemData when search text is cleared
-            setItemStateRecursive(this.props.sections, true, false);
         }
 
         return (
             <div className="searchView">
-                <SearchBar onStructuredModeChanged={this.onStructuredModeChanged.bind(this)} onDetailedModeChanged={this.onDetailedModeChanged.bind(this)} categories={this.props.categories} onCategoriesChanged={this.onCategoriesChanged.bind(this)} onTextChanged={this.onTextChanged.bind(this)}></SearchBar>
+                <SearchBar
+                    onStructuredModeChanged={this.onStructuredModeChanged.bind(this)}
+                    onDetailedModeChanged={this.onDetailedModeChanged.bind(this)}
+                    categories={this.props.categories}
+                    onCategoriesChanged={this.onCategoriesChanged.bind(this)}
+                    onTextChanged={this.onTextChanged.bind(this)}>
+                </SearchBar>
                 <div>{listItems}</div>
             </div>
         );

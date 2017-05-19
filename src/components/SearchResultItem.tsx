@@ -1,12 +1,18 @@
 import * as React from "react";
-import { ItemData, getHighlightedText } from "../LibraryUtilities";
+import * as ReactDOM from "react-dom";
 import { LibraryContainer } from "./LibraryContainer";
 import { ToolTip } from "./ToolTip";
+import * as LibraryUtilities from "../LibraryUtilities";
+
+interface ParentTextClickedFunc {
+    (pathToItem: LibraryUtilities.ItemData[]): void;
+}
 
 interface SearchResultItemProps {
-    data: ItemData;
     libraryContainer: LibraryContainer;
-    category: string;
+    data: LibraryUtilities.ItemData;
+    pathToItem: LibraryUtilities.ItemData[];
+    onParentTextClicked: ParentTextClickedFunc;
     highlightedText: string;
     detailed: boolean;
 }
@@ -24,9 +30,17 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
 
     render() {
         let iconPath = this.props.data.iconUrl;
+
+        // The parent of a search result item is the second last entry in 'pathToItem'
+        let parentText = this.props.pathToItem[this.props.pathToItem.length - 2].text;
+
+        // Category of the item is the item with type category in the array pathToItem
+        let categoryText = this.props.pathToItem.find(item => item.itemType === "category").text;
+
         let parameters = this.props.data.parameters;
-        let highLightedItemText = getHighlightedText(this.props.data.text, this.props.highlightedText, true);
-        let highLightedCategoryText = getHighlightedText(this.props.category, this.props.highlightedText, false);
+        let highLightedItemText = LibraryUtilities.getHighlightedText(this.props.data.text, this.props.highlightedText, true);
+        let highLightedParentText = LibraryUtilities.getHighlightedText(parentText, this.props.highlightedText, false);
+        let highLightedCategoryText = LibraryUtilities.getHighlightedText(categoryText, this.props.highlightedText, false);
         let itemTypeIconPath = "src/resources/icons/library-" + this.props.data.itemType + ".svg";
         let itemDescription: JSX.Element = null;
         let toolTip: JSX.Element = null;
@@ -55,7 +69,8 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
         }
 
         return (
-            <div className={"SearchResultItemContainer"} onClick={this.onItemClicked.bind(this)}>
+            <div className={"SearchResultItemContainer"} onClick={this.onItemClicked.bind(this)}
+                onMouseOver={this.onLibraryItemMouseEnter.bind(this)} onMouseLeave={this.onLibraryItemMouseLeave.bind(this)}>
                 <img className={"ItemIcon"} src={iconPath} onError={this.onImageLoadFail.bind(this)} />
                 <div className={"ItemInfo"}>
                     <div className={"ItemTitle"}>{highLightedItemText}
@@ -64,6 +79,9 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
                     </div>
                     {itemDescription}
                     <div className={"ItemDetails"}>
+                        <div className={"ItemParent"} onClick={this.onParentTextClicked.bind(this)}>
+                            {highLightedParentText}
+                        </div>
                         <img className={"ItemTypeIcon"} src={itemTypeIconPath} onError={this.onImageLoadFail.bind(this)} />
                         <div className={"ItemCategory"}>{highLightedCategoryText}</div>
                     </div>
@@ -77,6 +95,11 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
         event.target.src = require("../resources/icons/Dynamo.svg");
     }
 
+    onParentTextClicked(event: any) {
+        event.stopPropagation();
+        this.props.onParentTextClicked(this.props.pathToItem);
+    }
+
     onItemClicked() {
         this.props.libraryContainer.raiseEvent("itemClicked", this.props.data.contextData);
     };
@@ -84,5 +107,22 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
     onExpandIconClicked(event: any) {
         event.stopPropagation();
         this.setState({ toolTipExpanded: !this.state.toolTipExpanded });
+    }
+
+    onLibraryItemMouseLeave() {
+        let libraryContainer = this.props.libraryContainer;
+        if (this.props.data.childItems.length == 0) {
+            let mouseLeaveEvent = libraryContainer.props.libraryController.ItemMouseLeaveEventName;
+            libraryContainer.raiseEvent(mouseLeaveEvent, { data: this.props.data.contextData });
+        }
+    }
+
+    onLibraryItemMouseEnter() {
+        let libraryContainer = this.props.libraryContainer;
+        if (this.props.data.childItems.length == 0) {
+            let rec = ReactDOM.findDOMNode(this).getBoundingClientRect();
+            let mouseEnterEvent = libraryContainer.props.libraryController.ItemMouseEnterEventName;
+            libraryContainer.raiseEvent(mouseEnterEvent, { data: this.props.data.contextData, rect: rec });
+        }
     }
 }

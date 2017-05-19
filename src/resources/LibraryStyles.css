@@ -415,7 +415,7 @@ input {
     align-items: center;
     padding: 10px 2px;
     color: white;
-    transition: 0.1s;
+    transition: 0.15s;
 }
 
 .SearchResultItemContainer:hover {
@@ -450,6 +450,20 @@ input {
     display: flex;
     align-items: center;
     padding: 7px 0px 0px 10px;
+    font-size: 12px;
+    color: #aaaaaa;
+}
+
+.SearchResultItemContainer .ItemParent {
+    display: inline-block;
+    padding-right: 5px;
+    transition: 0.1s;
+    text-decoration: underline;
+}
+
+.SearchResultItemContainer .ItemParent:hover {
+    cursor: pointer;
+    color: white;
 }
 
 .SearchResultItemContainer .ItemCategory {
@@ -468,6 +482,10 @@ input {
 .HighlightedText {
     font-weight: 700;
     color: #4ac8ef;
+}
+
+.SearchResultItemContainer .ItemParent:hover .HighlightedText {
+    color: white;
 }
 
 ::-webkit-input-placeholder {

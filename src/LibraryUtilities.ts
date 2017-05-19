@@ -464,6 +464,94 @@ export function convertSectionToItemData(section: LayoutElement): ItemData {
     return sectionData;
 }
 
+function updateElement(oldElement: LayoutElement, newElement: LayoutElement): void {
+
+    // Duplicate basic properties.
+    oldElement.text = newElement.text;
+    oldElement.iconUrl = newElement.iconUrl;
+    oldElement.showHeader = newElement.showHeader;
+    oldElement.elementType = newElement.elementType;
+
+    // Find an existing IncludeInfo that matches the new IncludeInfo. 
+    // If one is found, then its contents are updated to match the new 
+    // IncludeInfo, otherwise the new IncludeInfo will be appended to
+    // the existing include list.
+    // 
+    for (let pathInfo of newElement.include) {
+        let pathToUpdate = oldElement.include.find(function (p: IncludeInfo) {
+            return p.path === pathInfo.path;
+        });
+
+        if (pathToUpdate) {
+            // An existing entry is found, update its contents.
+            pathToUpdate.path = pathInfo.path;
+            pathToUpdate.iconUrl = pathInfo.iconUrl;
+            pathToUpdate.inclusive = pathInfo.inclusive;
+        } else {
+            // No existing entry is found, make a copy of the new IncludeInfo
+            oldElement.include.push({
+                path: pathInfo.path,
+                iconUrl: pathInfo.iconUrl,
+                inclusive: pathInfo.inclusive
+            });
+        }
+    }
+
+    // Done handling 'include' property, proceed to deal with 'childElements'
+    for (let childElement of newElement.childElements) {
+
+        let nameOfChildToUpdate = childElement.text;
+        let childToUpdate = oldElement.childElements.find(function (c) {
+            return c.text === nameOfChildToUpdate;
+        });
+
+        if (!childToUpdate) {
+            // If no existing child is found, insert the new element directly.
+            oldElement.childElements.push(childElement);
+        } else {
+            // If an existing child is found, update it recursively.
+            updateElement(childToUpdate, childElement);
+        }
+    }
+}
+
+// See 'updateElement' method above for details.
+export function updateSections(oldLayoutSpecs: any, newLayoutSpecs: any): void {
+
+    if (!oldLayoutSpecs || (!newLayoutSpecs)) {
+        throw new Error("Both 'oldLayoutSpecs' and 'newLayoutSpecs' parameters must be supplied");
+    }
+
+    if (!oldLayoutSpecs.sections || (!Array.isArray(oldLayoutSpecs.sections))) {
+        throw new Error("'oldLayoutSpecs.sections' must be a valid array");
+    }
+
+    if (!newLayoutSpecs.sections || (!Array.isArray(newLayoutSpecs.sections))) {
+        throw new Error("'newLayoutSpecs.sections' must be a valid array");
+    }
+
+    // Go through each of the new sections...
+    for (let section of newLayoutSpecs.sections) {
+
+        // Find out the corresponding old section (with the same name) to update.
+        let sectionNameToUpdate = section.text;
+        let sectionToUpdate = oldLayoutSpecs.sections.find(
+            function (s: LayoutElement) {
+                return s.text === sectionNameToUpdate
+            });
+
+        // If section with the same name cannot be found, then this is a new section.
+        // Append the new section and then proceed to check on the next section.
+        if (!sectionToUpdate) {
+            oldLayoutSpecs.sections.push(section);
+            continue;
+        }
+
+        // Recursively update the element and its child elements.
+        updateElement(sectionToUpdate, section);
+    }
+}
+
 /**
  * Convert an array of typeListNodes to ItemData which are not processed based on their fullyQualifiedNames, 
  * by splitting the name with '.', and put them under a specific section.
@@ -583,7 +671,7 @@ export function setItemStateRecursive(items: ItemData | ItemData[], visible: boo
     items = (items instanceof Array) ? items : [items];
     for (let item of items) {
         item.visible = visible;
-        item.expanded = expanded;
+        item.expanded = item.itemType === "section" ? true : expanded;
         setItemStateRecursive(item.childItems, visible, expanded);
     }
 }
@@ -643,4 +731,39 @@ export function getHighlightedText(text: string, highlightedText: string, matchD
     }
 
     return spans;
+}
+
+/**
+ * Find an item from all Items based on path to the item, and expand all Items along the path.
+ * 
+ * @param {ItemData[]} pathToItem
+ * An arry of ItemData which represents the path to an item.
+ * 
+ * For example, in the following tree, pathToItem for D would be [A, B, D]
+ * - A
+ *   |- B
+ *      |- C
+ *      |- D
+ * 
+ * @param {ItemData} allItems
+ * An array of ItemData, which contains all the items. In the example above,
+ * allItems would be [A]
+ * 
+ * @return {boolean} true if an item is found, false otherwise
+ */
+export function findAndExpandItemByPath(pathToItem: ItemData[], allItems: ItemData[]): boolean {
+    let item: ItemData;
+
+    item = allItems.find(item =>
+        item.text == pathToItem[0].text && item.iconUrl == pathToItem[0].iconUrl
+    );
+
+    if (pathToItem.length == 1) {
+        return item ? true : false;
+    } else {
+        pathToItem.shift();
+        let result = findAndExpandItemByPath(pathToItem, item.childItems);
+        item.expanded = result; // Expand only if item is found.
+        return result;
+    }
 }
