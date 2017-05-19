@@ -208,9 +208,9 @@ This results in library view that looks like the following image:
 ![image](img/layout-leaf-items.png?raw=true)
 
 ### The Miscellaneous section
-As mentioned, this layout specification works closely with `loadedTypes`. The `Miscellaneous` section only shows up if `loadedTypes` contains items that are unspecified in this layout specification, to display the left-over items.
+As mentioned, this layout specification works closely with `loadedTypes`. The `Miscellaneous` section, which displays left-over items, only shows up if `loadedTypes` contains items that are unspecified in this layout specification.
 
-The tree view structure of this section is generated based on the `fullyQualifiedName` of the items. As an example, if there is a node called `Core.Web.Web Request` as left-over, the "Core" category is created:
+The tree structure of this section is generated based on the `fullyQualifiedName` of the items. As an example, if there is a node called `Core.Web.Web Request` as left-over, the "Core" category is created:
 
 ![image](img/layout-miscellaneous.png?raw=true)
 
