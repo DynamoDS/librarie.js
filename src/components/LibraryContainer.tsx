@@ -18,7 +18,8 @@ export interface LibraryContainerProps {
 }
 
 export interface LibraryContainerStates {
-    inSearchMode: boolean
+    inSearchMode: boolean,
+    showExpandableToolTip: boolean
 }
 
 export class LibraryContainer extends React.Component<LibraryContainerProps, LibraryContainerStates> {
@@ -37,13 +38,17 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
         this.setLayoutSpecsJson = this.setLayoutSpecsJson.bind(this);
         this.refreshLibraryView = this.refreshLibraryView.bind(this);
         this.onSearchModeChanged = this.onSearchModeChanged.bind(this);
+        this.onShowExpandableToolTipChanged = this.onShowExpandableToolTipChanged.bind(this);
 
         // Set handlers after methods are bound.
         this.props.libraryController.setLoadedTypesJsonHandler = this.setLoadedTypesJson;
         this.props.libraryController.setLayoutSpecsJsonHandler = this.setLayoutSpecsJson;
         this.props.libraryController.refreshLibraryViewHandler = this.refreshLibraryView;
 
-        this.state = { inSearchMode: false };
+        this.state = {
+            inSearchMode: false,
+            showExpandableToolTip: false
+        };
     }
 
     setLoadedTypesJson(loadedTypesJson: any, append: boolean = true): void {
@@ -112,6 +117,10 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
         this.setState({ inSearchMode: inSearchMode });
     }
 
+    onShowExpandableToolTipChanged(showExpandableToolTip: boolean) {
+        this.setState({ showExpandableToolTip: showExpandableToolTip });
+    }
+
     render() {
         if (!this.generatedSections) {
             return (<div>This is LibraryContainer</div>);
@@ -119,13 +128,23 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
 
         try {
             let sections: JSX.Element[] = null;
-            const searchView = <SearchView onSearchModeChanged={this.onSearchModeChanged}
-                libraryContainer={this} sections={this.generatedSections} categories={this.searchCategories} />;
+            const searchView = <SearchView
+                onSearchModeChanged={this.onSearchModeChanged}
+                onShowExpandableToolTipChanged={this.onShowExpandableToolTipChanged}
+                libraryContainer={this}
+                sections={this.generatedSections}
+                categories={this.searchCategories}
+            />;
 
             if (!this.state.inSearchMode) {
                 let index = 0;
                 sections = this.generatedSections.map(data =>
-                    <LibraryItem key={index++} libraryContainer={this} showExpandableToolTip={false} data={data} />
+                    <LibraryItem
+                        key={index++}
+                        libraryContainer={this}
+                        data={data}
+                        showExpandableToolTip={this.state.showExpandableToolTip}
+                    />
                 );
             }
 
