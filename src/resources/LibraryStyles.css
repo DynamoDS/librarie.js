@@ -241,11 +241,12 @@ input {
     border: none;
     outline: none;
     background-color: #414141;
+    transition: 0.15s;
 }
 
 .SearchBar #SearchOptionsBtnEnabled {
     color: #ddd;
-    transition: 0.1s;
+    transition: 0.15s;
 }
 
 .SearchBar #SearchOptionsBtnDisabled {
@@ -302,6 +303,7 @@ input {
     width: 100%;
     display: block;
     padding: 5px;
+    transition: 0.15s;
 }
 
 .CheckboxLabelDisabled {
@@ -367,10 +369,6 @@ input {
     cursor: pointer;
 }
 
-#SearchInput::-webkit-search-cancel-button {
-    -webkit-appearance: none;
-}
-
 .SearchResultItemContainer {
     display: flex;
     flex-direction: row;
@@ -418,7 +416,7 @@ input {
 .SearchResultItemContainer .ItemParent {
     display: inline-block;
     padding-right: 5px;
-    transition: 0.1s;
+    transition: 0.15s;
     text-decoration: underline;
 }
 
