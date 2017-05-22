@@ -22,21 +22,21 @@ interface SearchTextChangedFunc {
 }
 
 export interface SearchBarProps {
-    categories: string[];
     onStructuredModeChanged: StructuredModeChangedFunc;
     onDetailedModeChanged: DetailedModeChangedFunc;
     onShowExpandableToolTipModeChanged: ShowExpandableToolTipFunc;
     onCategoriesChanged: SearchCategoriesChangedFunc;
     onTextChanged: SearchTextChangedFunc;
+    categories: string[];
 }
 
 export interface SearchBarState {
     expanded: boolean;
-    selectedCategories: string[];
     structured: boolean;
     detailed: boolean;
     showExpandableToolTip: boolean;
     hasText: boolean;
+    selectedCategories: string[];
 }
 
 export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
@@ -47,18 +47,18 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
         super(props);
         this.state = {
             expanded: false,
-            selectedCategories: this.props.categories,
             structured: false,
             detailed: false,
             showExpandableToolTip: false,
-            hasText: false
+            hasText: false,
+            selectedCategories: this.props.categories
         };
 
         _.each(this.props.categories, function (c: string) {
             let data = new CategoryData(c, "CategoryCheckbox", true, this.onCategoriesChanged.bind(this));
             data.onOnlyButtonClicked = this.onOnlyButtonClicked.bind(this);
             this.categoryData.push(data);
-        }.bind(this))
+        }.bind(this));
     }
 
     clearInput() {
@@ -130,7 +130,11 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
 
     render() {
         let options = null;
-        let searchOptionsBtn = <button id="SearchOptionsBtn" onClick={this.onExpandButtonClick.bind(this)}><i className="fa fa-filter"></i></button>;
+        let searchOptionsBtn = (
+            <button id="SearchOptionsBtn" onClick={this.onExpandButtonClick.bind(this)}>
+                <i className="fa fa-filter"></i>
+            </button>
+        );
         let checkboxes: JSX.Element[] = [];
         let cancelButton: JSX.Element = null;
 
@@ -156,7 +160,7 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
             this.state.showExpandableToolTip,
             this.onShowExpandableToolTipModeChanged.bind(this),
             "Show expandable tooltip"
-        )
+        );
 
         if (this.state.hasText) {
             cancelButton = (
@@ -190,7 +194,12 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
                 <div className="SearchInput">
                     <div className="SearchInputContainer">
                         <i className="fa fa-search SearchBarIcon"></i>
-                        <input id="SearchInputText" type="input" placeholder="Search..." onChange={this.onTextChanged.bind(this)}></input>
+                        <input
+                            id="SearchInputText"
+                            type="input"
+                            placeholder="Search..."
+                            onChange={this.onTextChanged.bind(this)}>
+                        </input>
                         {cancelButton}
                     </div>
                     {searchOptionsBtn}
@@ -226,13 +235,29 @@ class CategoryData {
         let only = null;
         if (this.onOnlyButtonClicked) {
             // Show the "only" option if there is a callback function provided
-            only = <label><input type="button" name={this.name} className="CheckboxLabelRightButton" onClick={this.onOnlyButtonClicked} value={"only"} /></label>
+            only = (
+                <label>
+                    <input
+                        type="button"
+                        name={this.name}
+                        className="CheckboxLabelRightButton"
+                        onClick={this.onOnlyButtonClicked}
+                        value={"only"}
+                    />
+                </label>
+            );
         }
 
         let checkbox: JSX.Element =
             <label className="CheckboxLabel">
                 {checkSymbol}
-                <input type="checkbox" name={this.name} className={this.className} onChange={this.onCheckboxChanged.bind(this)} checked={this.checked} />
+                <input
+                    type="checkbox"
+                    name={this.name}
+                    className={this.className}
+                    onChange={this.onCheckboxChanged.bind(this)}
+                    checked={this.checked}
+                />
                 <div className="CheckboxLabelText">{this.displayText}</div>
                 {only}
             </label>;
