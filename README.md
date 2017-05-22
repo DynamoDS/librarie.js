@@ -11,7 +11,7 @@ Installing all dependencies
 
     `$ npm run build`
     
-    Both `librarie.js` (development script) and `librarie.min.js` (production script) will be output in `./dist/v0.0.1/` folder. By default `librarie.min.js` will be referenced in index.html.
+    Both `librarie.js` (development script) and `librarie.min.js` (production script) will be output in `./dist/` folder. By default `librarie.min.js` will be referenced in index.html.
 
 - Serve up the new library view
 
@@ -100,7 +100,7 @@ The following simple HTML code illustrates the way to embed library view into an
         <div id="libraryContainerPlaceholder"></div>
 
         <!-- The main library view compoment -->
-        <script src = './dist/v0.0.1/librarie.min.js'></script>
+        <script src = './dist/librarie.min.js'></script>
 
         <!-- Initialize the library view component -->
         <script>
@@ -140,7 +140,7 @@ libController.on("someEventName", function(data) {
 
 This event is raised when a library item is clicked. The registered event handler will be called with the following argument:
 
-- `contextData`: This is the value of `contextData` passed through [Loaded Data Types](./docs/v0.0.1/loaded-data-types.md) JSON data for the corresponding item.
+- `contextData`: This is the value of `contextData` passed through [Loaded Data Types](./docs/loaded-data-types.md) JSON data for the corresponding item.
 
 ```js
 libController.on("itemClicked", function(contextData) {
@@ -150,7 +150,7 @@ libController.on("itemClicked", function(contextData) {
 
 ### Event 'searchTextUpdated'
 
-This event is raised when user starts typing on the search bar, and the display mode of SearchView is `list`. In this event, it should call a search algorithm from some other components, and return a list of [Search Result Items](./docs/v0.0.1/search-items.md) in JSON format to the caller.
+This event is raised when user starts typing on the search bar, and the display mode of SearchView is `list`. In this event, it should call a search algorithm from some other components, and return a list of [Search Result Items](./docs/search-items.md) in JSON format to the caller.
 
 - `searchText`: This is the value of state `searchText` in `SearchView` component, which is a string value that user has entered in the search bar.
 
