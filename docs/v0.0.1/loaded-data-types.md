@@ -14,7 +14,7 @@ This flat list of loaded data types takes the following form: it must contain ex
 
 - `itemType` - This value can either be `create`, `action` or `query`. For more details of these values, please refer to [Layout Specification](./layout-specs.md) document.
 
-- `keywords` - Hints to be used by the searching algorithm.
+- `keywords` - Keywords to be used by the search algorithm, in addition to the item's text.
 
 - `description` - Detailed information of the methods. This is shown on the UI if "Display detailed info" is checked.
 
