@@ -117,6 +117,7 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
             this.loadedTypesJson, this.layoutSpecsJson,
             this.props.defaultSectionString, this.props.miscSectionString);
 
+        // Render the default view of the library
         let index = 0;
         this.renderedSections = this.generatedSections.map(data => <LibraryItem key={index++} libraryContainer={this} data={data} />);
 
