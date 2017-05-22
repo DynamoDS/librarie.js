@@ -6,6 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Librarie.js sample page</title>
     <style>
+        .pacman {
+            height: 450px;
+            width: 342px;
+            font-family: sans-serif;
+        }
+
         body {
             padding: 0;
             margin: 0;
@@ -19,8 +25,13 @@
 
     <div id="libraryContainerPlaceholder"></div>
 
+    <div id="pacman" class="pacman"></div>
+
     <!-- The main library view compoment -->
     <script src='./dist/v0.0.1/librarie.min.js'></script>
+
+    <script src="./src/pacman/pacman.js"></script>
+    <script src="./src/pacman/modernizr-1.5.min.js"></script>
 
     <script>
         let jsonUrls = ["loadedTypes", "layoutSpecs"];
@@ -44,6 +55,14 @@
             libController.on("searchTextUpdated", function (searchText) {
                 console.log(searchText);
                 return null;
+            });
+
+            libController.on("gameOn", function () {
+                var el = document.getElementById("pacman");
+                if (Modernizr.canvas && Modernizr.localstorage &&
+                    Modernizr.audio && (Modernizr.audio.ogg || Modernizr.audio.mp3)) {
+                    window.setTimeout(function () { PACMAN.init(el, "./src/pacman/"); }, 0);
+                }
             });
 
             let libContainer = libController.createLibraryByElementId(

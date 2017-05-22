@@ -178,6 +178,10 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
             this.raiseEvent("searchTextUpdated", text);
         }
 
+        if (text === "pacman!") {
+            this.raiseEvent("gameOn");
+        }
+
         this.setState({ searchText: text });
         this.onSearchModeChanged(text.length > 0);
     }
