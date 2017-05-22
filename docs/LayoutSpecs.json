@@ -1045,8 +1045,8 @@
           ]
         },
         {
-          "text": "String",
-          "iconUrl": "/src/resources/icons/Category.String.svg",
+          "text": "Animal",
+          "iconUrl": "/src/resources/icons/dance-devant.gif",
           "elementType": "category",
           "include": [],
           "childElements": [
