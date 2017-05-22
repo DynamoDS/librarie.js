@@ -19,7 +19,10 @@ Installing all dependencies
 
 - Navigate to `localhost:3456` in Google Chrome browser
 
-## Test
+## Setup Testframework
+- Step by step instructions to setup JEST is found at https://github.com/DynamoDS/librarie.js/wiki/Setting-up-test-frameworks-for-librarie.js
+
+## Run Tests
 - Run UI test
 
     `$ npm run testjest`
@@ -155,3 +158,16 @@ libView.on("searchTextUpdated", function (searchText) {
     return null;
 });
 ```
+## Structure of test 
+- Import libraries required for creating the item tested
+     import { LibraryItem } from '../src/components/LibraryItem';
+- Define a test and verify the results.e.g. for test 
+
+```typescript
+  describe("sample test", function () {
+  it("should add two numbers", function () {
+    expect(1 + 2).to.equal(3);
+  });
+  });
+```
+- Step by step instruction to write a UI test is found at https://github.com/DynamoDS/librarie.js/wiki/Setting-up-test-frameworks-for-librarie.js
