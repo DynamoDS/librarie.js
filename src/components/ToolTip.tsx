@@ -80,7 +80,10 @@ export class ToolTip extends React.Component<ToolTipProps, ToolTipState> {
         if (!this.state.ioParameters) {
             let libraryContainer = this.props.libraryContainer;
             let tooltipExpandEvent = libraryContainer.props.libraryController.ItemToolTipExpandEventName;
-            libraryContainer.raiseEvent(tooltipExpandEvent, { item: this, data: this.props.data.contextData });
+            libraryContainer.raiseEvent(
+                tooltipExpandEvent,
+                { dataReceiver: this.onReceiveIOParametersFromDynamo.bind(this), data: this.props.data.contextData }
+            );
         }
     }
 
