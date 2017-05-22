@@ -10,39 +10,23 @@ interface ToolTipProps {
 }
 
 interface ToolTipState {
-    ioParameters: any;
+    toolTipData: any;
 }
 
 export class ToolTip extends React.Component<ToolTipProps, ToolTipState> {
     constructor(props: ToolTipProps) {
         super(props);
-        this.state = ({ ioParameters: null });
+        this.state = ({ toolTipData: null });
     }
 
     render() {
         this.onLibraryItemTooltipExpand();
 
-        let descriptionText = this.props.data.description;
-
-        if (!descriptionText) {
-            descriptionText = "No description available";
-        }
-
-        let description: JSX.Element = null;
-        if (this.props.showDescription) {
-            description = <div className={"Description"}>{descriptionText}</div>;
-        }
-
-        let icon: JSX.Element = null;
-        if (this.props.showIcon) {
-            icon = <img className={"Icon"} src={this.props.data.iconUrl} onError={this.onImageLoadFail} />;
-        }
-
         let input: JSX.Element[] = [];
         let output: JSX.Element = null;
 
-        if (this.state.ioParameters && this.state.ioParameters.Item1) {
-            let inputParameters = this.state.ioParameters.Item1;
+        if (this.state.toolTipData && this.state.toolTipData.Item1) {
+            let inputParameters = this.state.toolTipData.Item1;
             for (let inputParameter of inputParameters) {
                 let inputParameterName = inputParameter.Item1
                 if (inputParameterName.length > 0) {
@@ -53,9 +37,29 @@ export class ToolTip extends React.Component<ToolTipProps, ToolTipState> {
             }
         }
 
-        if (this.state.ioParameters && this.state.ioParameters.Item2) {
-            let outputParameters = this.state.ioParameters.Item2;
+        if (this.state.toolTipData && this.state.toolTipData.Item2) {
+            let outputParameters = this.state.toolTipData.Item2;
             output = <div className={"IOName"}>{outputParameters}</div>;
+        }
+
+        let descriptionText = this.props.data.description;
+        let description: JSX.Element = null;
+
+        if (this.state.toolTipData && this.state.toolTipData.Item3 && this.state.toolTipData.Item3.length > 0) {
+            descriptionText = this.state.toolTipData.Item3;
+        }
+
+        if (this.props.showDescription) {
+            description = <div className={"Description"}>{descriptionText}</div>;
+        }
+
+        if (!descriptionText) {
+            descriptionText = "No description available";
+        }
+
+        let icon: JSX.Element = null;
+        if (this.props.showIcon) {
+            icon = <img className={"Icon"} src={this.props.data.iconUrl} onError={this.onImageLoadFail} />;
         }
 
         return (
@@ -77,7 +81,7 @@ export class ToolTip extends React.Component<ToolTipProps, ToolTipState> {
     }
 
     onLibraryItemTooltipExpand() {
-        if (!this.state.ioParameters) {
+        if (!this.state.toolTipData) {
             let libraryContainer = this.props.libraryContainer;
             let tooltipExpandEvent = libraryContainer.props.libraryController.ItemToolTipExpandEventName;
             libraryContainer.raiseEvent(
@@ -88,6 +92,6 @@ export class ToolTip extends React.Component<ToolTipProps, ToolTipState> {
     }
 
     onReceiveIOParametersFromDynamo(data: any) {
-        this.setState({ ioParameters: JSON.parse(data) });
+        this.setState({ toolTipData: JSON.parse(data) });
     }
 }
