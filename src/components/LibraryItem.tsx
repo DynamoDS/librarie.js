@@ -20,7 +20,7 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { ClusterView } from "./ClusterView";
 import { LibraryContainer } from "./LibraryContainer";
-import { ItemData, getSortedItems } from "../LibraryUtilities";
+import { ItemData, sortItemsByText } from "../LibraryUtilities";
 
 export interface LibraryItemProps {
     libraryContainer: LibraryContainer,
@@ -51,10 +51,10 @@ class GroupedItems {
             }
         }
 
-        this.creates = getSortedItems(this.creates);
-        this.actions = getSortedItems(this.actions);
-        this.queries = getSortedItems(this.queries);
-        this.others = getSortedItems(this.others);
+        this.creates = sortItemsByText(this.creates);
+        this.actions = sortItemsByText(this.actions);
+        this.queries = sortItemsByText(this.queries);
+        this.others = sortItemsByText(this.others);
     }
 
     getCreateItems(): ItemData[] { return this.creates; }
@@ -105,7 +105,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         if (this.state.expanded && this.props.data.childItems.length > 0) {
 
             // Break item list down into sub-lists based on the type of each item.
-            let groupedItems = new GroupedItems(getSortedItems(this.props.data.childItems));
+            let groupedItems = new GroupedItems(sortItemsByText(this.props.data.childItems));
 
             // There are some leaf nodes (e.g. methods).
             clusteredElements = this.getClusteredElements(groupedItems);

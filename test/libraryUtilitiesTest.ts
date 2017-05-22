@@ -1475,7 +1475,7 @@ describe("findAndExpandItemByPath function", function () {
   });
 });
 
-describe("getSortedItems function", function () {
+describe("sortItemsByText function", function () {
   let allItems: LibraryUtilities.ItemData[];
   let itemData1: LibraryUtilities.ItemData;
   let itemData2: LibraryUtilities.ItemData;
@@ -1494,7 +1494,7 @@ describe("getSortedItems function", function () {
   it("should sort items in alphabetical order", function () {
     allItems = [itemData5, itemData2, itemData1, itemData4, itemData3];
 
-    let result = LibraryUtilities.getSortedItems(allItems);
+    let result = LibraryUtilities.sortItemsByText(allItems);
     expect(result.length).to.equal(5);
     expect(result[0]).to.equal(itemData1);
     expect(result[1]).to.equal(itemData2);
@@ -1508,7 +1508,7 @@ describe("getSortedItems function", function () {
     itemData3.text = "Ctest";
     allItems = [itemData5, itemData2, itemData1, itemData4, itemData3];
 
-    let result = LibraryUtilities.getSortedItems(allItems);
+    let result = LibraryUtilities.sortItemsByText(allItems);
     expect(result.length).to.equal(5);
     expect(result[0]).to.equal(itemData1);
     expect(result[1]).to.equal(itemData2);

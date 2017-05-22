@@ -768,7 +768,7 @@ export function findAndExpandItemByPath(pathToItem: ItemData[], allItems: ItemDa
     }
 }
 
-export function getSortedItems(items: ItemData[]): ItemData[] {
+export function sortItemsByText(items: ItemData[]): ItemData[] {
     let sortedItems = items.sort(function (item1: ItemData, item2: ItemData) {
         return item1.text.localeCompare(item2.text);
     })
