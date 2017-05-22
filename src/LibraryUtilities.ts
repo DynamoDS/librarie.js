@@ -767,3 +767,11 @@ export function findAndExpandItemByPath(pathToItem: ItemData[], allItems: ItemDa
         return result;
     }
 }
+
+export function getSortedItems(items: ItemData[]): ItemData[] {
+    let sortedItems = items.sort(function (item1: ItemData, item2: ItemData) {
+        return item1.text.localeCompare(item2.text);
+    })
+
+    return sortedItems;
+}
