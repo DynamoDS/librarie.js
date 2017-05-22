@@ -20,10 +20,10 @@ export interface LibraryContainerProps {
 
 export interface LibraryContainerStates {
     inSearchMode: boolean,
-    searchText: string,
     structured: boolean,
     detailed: boolean,
     showExpandableToolTip: boolean,
+    searchText: string,
     selectedCategories: string[],
 }
 
@@ -46,11 +46,11 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
         this.setLayoutSpecsJson = this.setLayoutSpecsJson.bind(this);
         this.refreshLibraryView = this.refreshLibraryView.bind(this);
         this.onSearchModeChanged = this.onSearchModeChanged.bind(this);
-        this.onShowExpandableToolTipChanged = this.onShowExpandableToolTipChanged.bind(this);
         this.onStructuredModeChanged = this.onStructuredModeChanged.bind(this);
         this.onDetailedModeChanged = this.onDetailedModeChanged.bind(this);
-        this.onCategoriesChanged = this.onCategoriesChanged.bind(this);
+        this.onShowExpandableToolTipChanged = this.onShowExpandableToolTipChanged.bind(this);
         this.onTextChanged = this.onTextChanged.bind(this);
+        this.onCategoriesChanged = this.onCategoriesChanged.bind(this);
         this.clearSearch = this.clearSearch.bind(this);
 
         // Set handlers after methods are bound.
@@ -59,14 +59,14 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
         this.props.libraryController.refreshLibraryViewHandler = this.refreshLibraryView;
 
         // Initialize the search utilities with empty data
-        this.searcher = new Searcher(this.onSearchModeChanged, this.clearSearch, this, [], []);
+        this.searcher = new Searcher(this.onSearchModeChanged, this.clearSearch, this);
 
         this.state = {
             inSearchMode: false,
-            searchText: '',
             structured: false,
             detailed: false,
             showExpandableToolTip: false,
+            searchText: '',
             selectedCategories: []
         };
     }
@@ -141,16 +141,16 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
         this.setState({ inSearchMode: inSearchMode });
     }
 
-    onShowExpandableToolTipChanged(showExpandableToolTip: boolean) {
-        this.setState({ showExpandableToolTip: showExpandableToolTip });
-    }
-
     onStructuredModeChanged(value: boolean) {
         this.setState({ structured: value });
     }
 
     onDetailedModeChanged(value: boolean) {
         this.setState({ detailed: value });
+    }
+
+    onShowExpandableToolTipChanged(showExpandableToolTip: boolean) {
+        this.setState({ showExpandableToolTip: showExpandableToolTip });
     }
 
     onCategoriesChanged(categories: string[]) {

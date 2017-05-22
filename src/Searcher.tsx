@@ -25,8 +25,8 @@ export class Searcher {
         searchModeChangedFunc: SearchModeChangedFunc,
         clearSearchFunc: ClearSearchFunc,
         libraryContainer: LibraryContainer,
-        sections: LibraryUtilities.ItemData[],
-        categories: string[]) {
+        sections: LibraryUtilities.ItemData[] = [],
+        categories: string[] = []) {
         this.onSearchModeChanged = searchModeChangedFunc;
         this.clearSearchFunc = clearSearchFunc;
         this.libraryContainer = libraryContainer;

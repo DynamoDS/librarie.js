@@ -102,6 +102,7 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
 
     onParentTextClicked(event: any) {
         event.stopPropagation();
+        this.onLibraryItemMouseLeave(); // Floating toolTip should be dismissed when clicking on parent text
         this.props.onParentTextClicked(this.props.pathToItem);
     }
 
