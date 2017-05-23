@@ -386,6 +386,9 @@ export function convertToDefaultSection(typeListNodes: TypeListNode[], section: 
         }
     }
 
+    // Default section is expanded by default.
+    sectionData.expanded = true;
+
     return sectionData;
 }
 
@@ -454,6 +457,9 @@ function convertToOtherSection(typeListNodes: TypeListNode[], section: LayoutEle
             }
         })
     })
+
+    // Sections other than default section are collapsed by default.
+    sectionData.expanded = false;
 
     return sectionData;
 }
@@ -586,7 +592,10 @@ export function convertToMiscSection(allNodes: TypeListNode[], section: LayoutEl
 
     _.each(unprocessedNodes, function (node) {
         buildLibraryItemsFromName(node, sectionData)
-    })
+    });
+
+    // Sections other than default section are collapsed by default.
+    sectionData.expanded = false;
 
     return sectionData;
 }
