@@ -680,7 +680,15 @@ export function setItemStateRecursive(items: ItemData | ItemData[], visible: boo
     items = (items instanceof Array) ? items : [items];
     for (let item of items) {
         item.visible = visible;
-        item.expanded = item.itemType === "section" ? true : expanded;
+        if (item.itemType !== "section") {
+            item.expanded = expanded;
+        }
+
+        // All sections other than default section are collapsed by default.
+        if(item.itemType === "section" && item.text !== "default") {
+            item.expanded = false;
+        }
+
         setItemStateRecursive(item.childItems, visible, expanded);
     }
 }
