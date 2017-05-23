@@ -1474,3 +1474,46 @@ describe("findAndExpandItemByPath function", function () {
     expect(LibraryUtilities.findAndExpandItemByPath(pathToItem, allItems)).to.equal(false);
   });
 });
+
+describe("sortItemsByText function", function () {
+  let allItems: LibraryUtilities.ItemData[];
+  let itemData1: LibraryUtilities.ItemData;
+  let itemData2: LibraryUtilities.ItemData;
+  let itemData3: LibraryUtilities.ItemData;
+  let itemData4: LibraryUtilities.ItemData;
+  let itemData5: LibraryUtilities.ItemData;
+
+  beforeEach(function () {
+    itemData1 = new LibraryUtilities.ItemData("atest");
+    itemData2 = new LibraryUtilities.ItemData("btest");
+    itemData3 = new LibraryUtilities.ItemData("ctest");
+    itemData4 = new LibraryUtilities.ItemData("dtest");
+    itemData5 = new LibraryUtilities.ItemData("etest");
+  });
+
+  it("should sort items in alphabetical order", function () {
+    allItems = [itemData5, itemData2, itemData1, itemData4, itemData3];
+
+    let result = LibraryUtilities.sortItemsByText(allItems);
+    expect(result.length).to.equal(5);
+    expect(result[0]).to.equal(itemData1);
+    expect(result[1]).to.equal(itemData2);
+    expect(result[2]).to.equal(itemData3);
+    expect(result[3]).to.equal(itemData4);
+    expect(result[4]).to.equal(itemData5);
+  });
+
+  it("should sort items ignoring cases", function () {
+    itemData1.text = "Atest";
+    itemData3.text = "Ctest";
+    allItems = [itemData5, itemData2, itemData1, itemData4, itemData3];
+
+    let result = LibraryUtilities.sortItemsByText(allItems);
+    expect(result.length).to.equal(5);
+    expect(result[0]).to.equal(itemData1);
+    expect(result[1]).to.equal(itemData2);
+    expect(result[2]).to.equal(itemData3);
+    expect(result[3]).to.equal(itemData4);
+    expect(result[4]).to.equal(itemData5);
+  });
+});
