@@ -117,7 +117,7 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
 
     render() {
         let options = null;
-        let searchOptionsBtn = <button id="SearchOptionsBtn" onClick={this.onExpandButtonClick.bind(this)}><i className="fa fa-filter"></i></button>;
+        let searchOptionsBtn = <button className="SearchOptionsBtn" onClick={this.onExpandButtonClick.bind(this)}><i className="fa fa-filter"></i></button>;
         let checkboxes: JSX.Element[] = [];
         let cancelButton: JSX.Element = null;
 
