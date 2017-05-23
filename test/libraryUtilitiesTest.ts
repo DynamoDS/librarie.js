@@ -1463,15 +1463,34 @@ describe("findAndExpandItemByPath function", function () {
     allItems = [itemData1];
   });
 
-  it("should return true if an item is found", function () {
+  it("should return true if an leaf item is found", function () {
     let pathToItem = [itemData1, itemData11, itemData111];
     expect(LibraryUtilities.findAndExpandItemByPath(pathToItem, allItems)).to.equal(true);
+    expect(itemData1.expanded).to.equal(true);
+    expect(itemData11.expanded).to.equal(true);
   });
 
-  it("should return false if an item is not found", function () {
+  it("should return false if an leaf item is not found", function () {
     let itemData113 = new LibraryUtilities.ItemData("113");
     let pathToItem = [itemData1, itemData11, itemData113];
     expect(LibraryUtilities.findAndExpandItemByPath(pathToItem, allItems)).to.equal(false);
+    expect(itemData1.expanded).to.equal(false);
+    expect(itemData11.expanded).to.equal(false);
+  });
+
+  it("should return true if an non-leaf item is found", function () {
+    let pathToItem = [itemData1, itemData11];
+    expect(LibraryUtilities.findAndExpandItemByPath(pathToItem, allItems)).to.equal(true);
+    expect(itemData1.expanded).to.equal(true);
+    expect(itemData11.expanded).to.equal(false);
+  });
+
+  it("should return false if an non-leaf item is not found", function () {
+    let itemData13 = new LibraryUtilities.ItemData("13");
+    let pathToItem = [itemData1, itemData13];
+    expect(LibraryUtilities.findAndExpandItemByPath(pathToItem, allItems)).to.equal(false);
+    expect(itemData1.expanded).to.equal(false);
+    expect(itemData11.expanded).to.equal(false);
   });
 });
 
@@ -1516,4 +1535,47 @@ describe("sortItemsByText function", function () {
     expect(result[3]).to.equal(itemData4);
     expect(result[4]).to.equal(itemData5);
   });
+});
+
+describe("getPathToExpandedItemFromRootItem function", function () {
+  let itemData1: LibraryUtilities.ItemData;
+  let itemData11: LibraryUtilities.ItemData;
+  let itemData111: LibraryUtilities.ItemData;
+  let itemData112: LibraryUtilities.ItemData;
+  let itemData113: LibraryUtilities.ItemData;
+
+  beforeEach(function () {
+    itemData1 = new LibraryUtilities.ItemData("1");
+    itemData11 = new LibraryUtilities.ItemData("11");
+    itemData111 = new LibraryUtilities.ItemData("111");
+    itemData112 = new LibraryUtilities.ItemData("112");
+
+    itemData11.appendChild(itemData111);
+    itemData11.appendChild(itemData112);
+    itemData1.appendChild(itemData11);
+  });
+
+  it("should return the path to item when non-leaf items are expanded", function () {
+    itemData1.expanded = true;
+    itemData11.expanded = true;
+    itemData111.expanded = false;
+    let result = LibraryUtilities.getPathToExpandedItemFromRootItem(itemData1);
+
+    expect(result.length).to.equal(2);
+    expect(result[0]).to.equal(itemData1);
+    expect(result[1]).to.equal(itemData11);
+  });
+  
+  it("should return the path to item when leaf items are expanded", function () {
+    itemData1.expanded = true;
+    itemData11.expanded = true;
+    itemData111.expanded = true;
+    let result = LibraryUtilities.getPathToExpandedItemFromRootItem(itemData1);
+
+    expect(result.length).to.equal(3);
+    expect(result[0]).to.equal(itemData1);
+    expect(result[1]).to.equal(itemData11);
+    expect(result[2]).to.equal(itemData111);
+  });
+
 });

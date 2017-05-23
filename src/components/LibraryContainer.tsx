@@ -6,9 +6,9 @@ require("../resources/fonts/font-awesome-4.7.0/css/font-awesome.min.css");
 import * as React from "react";
 import { LibraryController } from "../entry-point";
 import { LibraryItem } from "./LibraryItem";
-import * as LibraryUtilities from "../LibraryUtilities";
 import { Searcher } from "../Searcher";
 import { SearchBar } from "./SearchBar";
+import * as LibraryUtilities from "../LibraryUtilities";
 
 declare var boundContainer: any; // Object set from C# side.
 
@@ -60,12 +60,12 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
         // Initialize the search utilities with empty data
         this.searcher = new Searcher(this.onSearchModeChanged, this.clearSearch, this, [], []);
 
-        this.state = { 
+        this.state = {
             inSearchMode: false,
             searchText: '',
             selectedCategories: [],
             structured: false,
-            detailed: false 
+            detailed: false
         };
     }
 
@@ -112,10 +112,24 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
     }
 
     refreshLibraryView(): void {
-
-        this.generatedSections = LibraryUtilities.buildLibrarySectionsFromLayoutSpecs(
+        let newSections = LibraryUtilities.buildLibrarySectionsFromLayoutSpecs(
             this.loadedTypesJson, this.layoutSpecsJson,
             this.props.defaultSectionString, this.props.miscSectionString);
+
+        // Restore item expansion
+        if (this.generatedSections) {
+            console.log(this.layoutSpecsJson.sections[0].childElements[1].childElements.pop());
+
+            for (let previousSection of this.generatedSections) {
+                if (previousSection.expanded) {
+                    let pathToExpandedItem = LibraryUtilities.getPathToExpandedItemFromRootItem(previousSection);
+                    let newSection = newSections.find(section => section.text == previousSection.text);
+                    LibraryUtilities.findAndExpandItemByPath(pathToExpandedItem, [newSection]);
+                }
+            }
+        }
+
+        this.generatedSections = newSections;
 
         // Render the default view of the library
         let index = 0;
@@ -189,7 +203,7 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
 
     clearSearch(text: string) {
         this.setState({ searchText: text })
-        this.onSearchModeChanged(false);        
+        this.onSearchModeChanged(false);
     }
 
     render() {
@@ -200,8 +214,8 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
         try {
             let sections: JSX.Element[] = null;
 
-            const searchBar = <SearchBar onCategoriesChanged={this.onCategoriesChanged} onDetailedModeChanged={this.onDetailedModeChanged} 
-                onStructuredModeChanged={this.onStructuredModeChanged} onTextChanged={this.onTextChanged} 
+            const searchBar = <SearchBar onCategoriesChanged={this.onCategoriesChanged} onDetailedModeChanged={this.onDetailedModeChanged}
+                onStructuredModeChanged={this.onStructuredModeChanged} onTextChanged={this.onTextChanged}
                 categories={this.searchCategories} />
 
             if (!this.state.inSearchMode) {

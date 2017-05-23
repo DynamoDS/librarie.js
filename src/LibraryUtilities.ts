@@ -685,7 +685,7 @@ export function setItemStateRecursive(items: ItemData | ItemData[], visible: boo
         }
 
         // All sections other than default section are collapsed by default.
-        if(item.itemType === "section" && item.text !== "default") {
+        if (item.itemType === "section" && item.text !== "default") {
             item.expanded = false;
         }
 
@@ -788,7 +788,18 @@ export function findAndExpandItemByPath(pathToItem: ItemData[], allItems: ItemDa
 export function sortItemsByText(items: ItemData[]): ItemData[] {
     let sortedItems = items.sort(function (item1: ItemData, item2: ItemData) {
         return item1.text.localeCompare(item2.text);
-    })
+    });
 
     return sortedItems;
+}
+
+export function getPathToExpandedItemFromRootItem(rootItem: ItemData, itemPath: ItemData[] = []): ItemData[] {
+    itemPath.push(rootItem);
+    let expandedItem = rootItem.childItems.find(item => item.expanded == true);
+
+    if (expandedItem) {
+        return getPathToExpandedItemFromRootItem(expandedItem, itemPath);
+    } else {
+        return itemPath;
+    }
 }

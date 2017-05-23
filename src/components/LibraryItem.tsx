@@ -269,8 +269,9 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         if (this.props.data.childItems.length > 0 && !currentlyExpanded && this.props.onItemWillExpand) {
             this.props.onItemWillExpand();
         }
-
-        this.setState({ expanded: !currentlyExpanded });
+        
+        this.props.data.expanded = !currentlyExpanded;
+        this.setState({ expanded: this.props.data.expanded });
 
         let libraryContainer = this.props.libraryContainer;
         if (this.props.data.childItems.length == 0) {
