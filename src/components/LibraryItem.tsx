@@ -65,7 +65,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
 
         // All items are collapsed by default, except for section items
         this.state = {
-            expanded: this.props.data.itemType === "section" ? true : this.props.data.expanded
+            expanded: this.props.data.expanded
         };
     }
 

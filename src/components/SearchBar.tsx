@@ -51,7 +51,7 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
             let data = new CategoryData(c, "CategoryCheckbox", true, this.onCategoriesChanged.bind(this));
             data.onOnlyButtonClicked = this.onOnlyButtonClicked.bind(this);
             this.categoryData.push(data);
-        }.bind(this))
+        }.bind(this));
     }
 
     clearInput() {
@@ -62,9 +62,12 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
     }
 
     onTextChanged(event: any) {
-        let text = event.target.value.toLowerCase().replace(/ /g,'');
-        this.setState({ hasText: text.length > 0 });
-        this.props.onTextChanged(text);
+        let text = event.target.value.toLowerCase().replace(/ /g, '');
+        let hasText = text.length > 0;
+        if (hasText) {
+            this.setState({ hasText: hasText });
+            this.props.onTextChanged(text);
+        }
     }
 
     onExpandButtonClick() {
