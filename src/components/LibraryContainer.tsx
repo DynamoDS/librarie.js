@@ -60,12 +60,12 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
         // Initialize the search utilities with empty data
         this.searcher = new Searcher(this.onSearchModeChanged, this.clearSearch, this, [], []);
 
-        this.state = { 
+        this.state = {
             inSearchMode: false,
             searchText: '',
             selectedCategories: [],
             structured: false,
-            detailed: false 
+            detailed: false
         };
     }
 
@@ -129,7 +129,7 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
 
         // Update the properties in searcher
         this.searcher.sections = this.generatedSections;
-        this.searcher.categories = this.searchCategories;
+        this.searcher.initializeCategories(this.searchCategories);
 
         // Just to force a refresh of UI.
         this.setState({ inSearchMode: this.state.inSearchMode });
@@ -189,7 +189,7 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
 
     clearSearch(text: string) {
         this.setState({ searchText: text })
-        this.onSearchModeChanged(false);        
+        this.onSearchModeChanged(false);
     }
 
     render() {
@@ -199,10 +199,6 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
 
         try {
             let sections: JSX.Element[] = null;
-
-            const searchBar = <SearchBar onCategoriesChanged={this.onCategoriesChanged} onDetailedModeChanged={this.onDetailedModeChanged} 
-                onStructuredModeChanged={this.onStructuredModeChanged} onTextChanged={this.onTextChanged} 
-                categories={this.searchCategories} />
 
             if (!this.state.inSearchMode) {
                 let index = 0;
@@ -216,6 +212,10 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
                     sections = this.searcher.generateListItems(this.generatedSections, this.state.searchText, this.state.detailed);
                 }
             }
+
+            const searchBar = <SearchBar onCategoriesChanged={this.onCategoriesChanged} onDetailedModeChanged={this.onDetailedModeChanged}
+                onStructuredModeChanged={this.onStructuredModeChanged} onTextChanged={this.onTextChanged}
+                categories={this.searcher.getDisplayedCategories()} />
 
             return (
                 <div className="LibraryContainer">
