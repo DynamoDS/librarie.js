@@ -144,6 +144,7 @@ input {
     font-size: 11px;
     margin-left: 5px;
     display: inline-block;
+    white-space: nowrap;
 }
 
 .Arrow {
