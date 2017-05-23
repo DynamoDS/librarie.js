@@ -793,6 +793,23 @@ export function sortItemsByText(items: ItemData[]): ItemData[] {
     return sortedItems;
 }
 
+/**
+ * Get the path to expanded items.
+ *
+ * @param {ItemData} rootItem 
+ * The root item that is the parent of all the expanded/collapsed items.
+ * 
+ * For example, in the following tree, Item A, B are expanded, and A is the root item.
+ * This function will return [A, B, C] as the result, which represents a path to all expanded items.
+ * 
+ * - A
+ *   |- B
+ *      |- C
+ *      |- D
+ *   |- E
+ *   |- F
+ * 
+ */
 export function getPathToExpandedItemFromRootItem(rootItem: ItemData, itemPath: ItemData[] = []): ItemData[] {
     itemPath.push(rootItem);
     let expandedItem = rootItem.childItems.find(item => item.expanded == true);
