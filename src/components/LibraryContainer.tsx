@@ -32,6 +32,7 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
     layoutSpecsJson: any = null;
 
     generatedSections: LibraryUtilities.ItemData[] = null;
+    renderedSections: JSX.Element[] = null;
     searchCategories: string[] = [];
 
     timeout: number;
@@ -115,6 +116,10 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
         this.generatedSections = LibraryUtilities.buildLibrarySectionsFromLayoutSpecs(
             this.loadedTypesJson, this.layoutSpecsJson,
             this.props.defaultSectionString, this.props.miscSectionString);
+
+        // Render the default view of the library
+        let index = 0;
+        this.renderedSections = this.generatedSections.map(data => <LibraryItem key={index++} libraryContainer={this} data={data} />);
 
         // Obtain the categories from each section to be added into the filtering options for search
         for (let section of this.generatedSections) {
@@ -201,7 +206,7 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
 
             if (!this.state.inSearchMode) {
                 let index = 0;
-                sections = this.generatedSections.map(data => <LibraryItem key={index++} libraryContainer={this} data={data} />)
+                sections = this.renderedSections;
             }
             else {
                 if (this.state.structured) {
