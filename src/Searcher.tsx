@@ -6,28 +6,21 @@ import { LibraryContainer } from "./components/LibraryContainer";
 import * as LibraryUtilities from "./LibraryUtilities";
 import { SearchBar } from "./components/SearchBar";
 
-interface SearchModeChangedFunc {
-    (inSearchMode: boolean): void;
-}
-
 interface ClearSearchFunc {
     (searchText: string): void;
 }
 
 export class Searcher {
-    onSearchModeChanged: SearchModeChangedFunc = null;
     clearSearchFunc: ClearSearchFunc = null;
     libraryContainer: LibraryContainer = null;
     sections: LibraryUtilities.ItemData[] = [];
     categories: string[] = [];
 
     constructor(
-        searchModeChangedFunc: SearchModeChangedFunc,
-        clearSearchFunc: ClearSearchFunc,
         libraryContainer: LibraryContainer,
+        clearSearchFunc: ClearSearchFunc,
         sections: LibraryUtilities.ItemData[] = [],
         categories: string[] = []) {
-        this.onSearchModeChanged = searchModeChangedFunc;
         this.clearSearchFunc = clearSearchFunc;
         this.libraryContainer = libraryContainer;
         this.sections = sections;

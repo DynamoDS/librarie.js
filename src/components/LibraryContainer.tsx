@@ -59,7 +59,7 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
         this.props.libraryController.refreshLibraryViewHandler = this.refreshLibraryView;
 
         // Initialize the search utilities with empty data
-        this.searcher = new Searcher(this.onSearchModeChanged, this.clearSearch, this);
+        this.searcher = new Searcher(this, this.clearSearch);
 
         this.state = {
             inSearchMode: false,
