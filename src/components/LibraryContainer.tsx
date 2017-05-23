@@ -118,8 +118,6 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
 
         // Restore item expansion
         if (this.generatedSections) {
-            console.log(this.layoutSpecsJson.sections[0].childElements[1].childElements.pop());
-
             for (let previousSection of this.generatedSections) {
                 if (previousSection.expanded) {
                     let pathToExpandedItem = LibraryUtilities.getPathToExpandedItemFromRootItem(previousSection);
