@@ -51,7 +51,7 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
             let data = new CategoryData(c, "CategoryCheckbox", true, this.onCategoriesChanged.bind(this));
             data.onOnlyButtonClicked = this.onOnlyButtonClicked.bind(this);
             this.categoryData.push(data);
-        }.bind(this))
+        }.bind(this));
     }
 
     clearInput() {
@@ -66,18 +66,11 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
 
     onTextChanged(event: any) {
         let text = event.target.value.toLowerCase().replace(/ /g, '');
-
-        // collapse filter options menu when text is cleared
-        if (text.length == 0) {
-            this.setState({
-                expanded: false,
-                hasText: false
-            });
-        } else {
-            this.setState({ hasText: true });
+        let expanded = text.length == 0 ? false : this.state.expanded;
+        this.setState({ expanded: expanded, hasText: text.length > 0 });
+        if (text.length > 0) {
+            this.props.onTextChanged(text);
         }
-
-        this.props.onTextChanged(text);
     }
 
     onExpandButtonClick() {
