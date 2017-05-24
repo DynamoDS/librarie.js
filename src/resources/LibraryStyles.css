@@ -28,7 +28,7 @@ input {
 
 .LibraryItemContainer {
     flex-grow: 1;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 .LibraryItemContainerSection {
