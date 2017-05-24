@@ -78,29 +78,26 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
     }
 
     clearInput() {
-        let searchInput: any = document.getElementById("SearchInputText");
-        searchInput.value = '';
+        let searchInput: any = document.getElementsByClassName("SearchInputText");
+        if (searchInput && searchInput.length > 0) {
+            searchInput[0].value = '';
+            this.props.onTextChanged(searchInput[0].value);
+        }
         this.setState({
             hasText: false,
             expanded: false // collapse filter options menu when text is cleared
         });
-        this.props.onTextChanged(searchInput.value);
     }
 
     onTextChanged(event: any) {
         let text = event.target.value.toLowerCase().replace(/ /g, '');
         let expanded = text.length == 0 ? false : this.state.expanded;
         this.setState({ expanded: expanded, hasText: text.length > 0 });
-        if (text.length > 0) {
-            this.props.onTextChanged(text);
-        }
+        this.props.onTextChanged(text);
     }
 
     onExpandButtonClick() {
-        // enable expansion only when search is activated
-        if (this.state.hasText) {
-            this.setState({ expanded: !this.state.expanded });
-        }
+        this.setState({ expanded: !this.state.expanded });
     }
 
     onStructuredModeChanged(event: any) {
@@ -110,12 +107,9 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
     }
 
     onDetailedModeChanged(event: any) {
-        // disable detailed mode in structured display mode
-        if (!this.state.structured) {
-            let value = !this.state.detailed;
-            this.props.onDetailedModeChanged(value);
-            this.setState({ detailed: value });
-        }
+        let value = !this.state.detailed;
+        this.props.onDetailedModeChanged(value);
+        this.setState({ detailed: value });
     }
 
     onCategoriesChanged() {
@@ -152,15 +146,25 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
 
     render() {
         let options = null;
-        let searchOptionsBtnText = this.state.hasText ? "SearchOptionsBtnEnabled" : "SearchOptionsBtnDisabled";
-        let searchOptionsBtn = <button className={searchOptionsBtnText} onClick={this.onExpandButtonClick.bind(this)}><i className="fa fa-filter"></i></button>;
         let checkboxes: JSX.Element[] = [];
         let cancelButton: JSX.Element = null;
 
-        this.categoryData.forEach(category => checkboxes.push(category.createCheckbox(true)));
+        let searchOptionsBtnClass = this.state.hasText ? "SearchOptionsBtnEnabled" : "SearchOptionsBtnDisabled";
+        let searchOptionsDisabled = this.state.hasText ? false : true; // Enable the button only when user is doing search
+        let structuredBtnClass = this.state.structured ? "fa fa-dedent" : "fa fa-indent";
 
-        let structuredCheckbox = new CategoryData("Structured", "SearchCheckbox", this.state.structured, this.onStructuredModeChanged.bind(this), "Display as structured view");
-        let detailedCheckbox = new CategoryData("Detailed", "SearchCheckbox", this.state.detailed, this.onDetailedModeChanged.bind(this), "Display detailed info");
+        // Create the filter button
+        let filterBtn = <button className={searchOptionsBtnClass} onClick={this.onExpandButtonClick.bind(this)} disabled={searchOptionsDisabled}><i className="fa fa-filter"></i></button>;
+
+        // Create the button to toggle structured state
+        let structuredBtn = <button className={searchOptionsBtnClass} onClick={this.onStructuredModeChanged.bind(this)} disabled={searchOptionsDisabled}><i className={structuredBtnClass}></i></button>;
+
+        // Create the button to toggle detailed state
+        let detailedBtnClass = this.state.hasText && !this.state.structured ? "SearchOptionsBtnEnabled" : "SearchOptionsBtnDisabled";
+        let detailedBtnDisabled = this.state.hasText && !this.state.structured ? false : true; // Enable the button only when user is searching and structured view is not selected
+        let detailedBtn = <button className={detailedBtnClass} onClick={this.onDetailedModeChanged.bind(this)} disabled={detailedBtnDisabled}><i className="fa fa-align-justify"></i></button>;
+
+        this.categoryData.forEach(category => checkboxes.push(category.createCheckbox(true)));
 
         if (this.state.hasText) {
             cancelButton = (
@@ -176,10 +180,6 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
             options =
                 <div className="SearchOptions">
                     <div className="SearchOptionsContainer">
-                        {structuredCheckbox.createCheckbox(true)}
-                        {detailedCheckbox.createCheckbox(!this.state.structured)}
-                    </div>
-                    <div className="SearchOptionsContainer">
                         <div className="SearchOptionsHeader">
                             <span>Filter by category:</span>
                             <div className="SelectAllBtn" onClick={this.onAllButtonClicked.bind(this)}>Select All</div>
@@ -192,13 +192,18 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
 
         return (
             <div className="SearchBar">
-                <div className="SearchInput">
-                    <div className="SearchInputContainer">
-                        <i className="fa fa-search SearchBarIcon"></i>
-                        <input id="SearchInputText" type="input" placeholder="Search..." onChange={this.onTextChanged.bind(this)}></input>
-                        {cancelButton}
+                <div className="LibraryHeader">
+                    Library
+                    <div>
+                        |{filterBtn}|{structuredBtn}|{detailedBtn}
                     </div>
-                    {searchOptionsBtn}
+                </div>
+                <div className="SearchInput">
+                    <div>
+                        <i className="fa fa-search SearchBarIcon"></i>
+                        <input className="SearchInputText" type="input" placeholder="Search..." onChange={this.onTextChanged.bind(this)}></input>
+                    </div>
+                    {cancelButton}
                 </div>
                 {options}
             </div>

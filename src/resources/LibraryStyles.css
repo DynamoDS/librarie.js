@@ -188,29 +188,32 @@ input {
 }
 
 .SearchInput {
-    display: flex;
-    justify-content: space-around;
     padding: 5px 0px;
+    margin: 5px 0px;
+    background-color: #fff;
+    width: 100%;
+    position: relative;
 }
 
-.SearchInputContainer {
-    width: 100%;
-    background-color: #fff;
+.LibraryHeader {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
+    padding: 3px 3px 3px 5px;
+    background-color: #414141;
+    color: #aaa;
 }
 
 .SearchBar .SearchBarIcon {
     padding-left: 10px;
 }
 
-.SearchBar #SearchInputText {
-    width: 100%;
+.SearchBar .SearchInputText {
     padding: 2px 5px 0px 10px;
     background: none;
     outline: none;
     border: none;
+    width: 280px;
 }
 
 .SearchBar .SearchInputText:focus::-webkit-input-placeholder {
@@ -219,8 +222,6 @@ input {
 
 .SearchBar .SearchOptionsBtnEnabled,
 .SearchBar .SearchOptionsBtnDisabled {
-    height: 30px;
-    width: 30px;
     border: none;
     outline: none;
     background-color: #414141;
@@ -344,8 +345,10 @@ input {
     color: #ccc;
     background: transparent;
     border: 0px;
-    padding: 5px 10px 0px 0px;
     outline: 0px;
+    position: absolute;
+    top: 5px;
+    right: 5px;
 }
 
 .SearchBar .CancelButton button:hover {
