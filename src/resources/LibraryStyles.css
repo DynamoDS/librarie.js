@@ -12,6 +12,7 @@
 body {
     font-family: "Artifakt Element", "Open Sans";
     -webkit-user-select: none;
+    font-size: 13px;
     cursor: default;
 }
 
@@ -66,6 +67,7 @@ input {
 
 .LibraryHeaderContainer {
     transition: 0.15s;
+    font-size: 14px;
 }
 
 .LibrarySectionHeader .LibraryItemIcon {
@@ -76,7 +78,6 @@ input {
     display: flex;
     flex-direction: row;
     align-items: center;
-    padding: 3;
     color: white;
     overflow-y: hidden;
 }
@@ -149,23 +150,23 @@ input {
 }
 
 .LibraryItemContainerSection .LibraryItemIcon {
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
     padding-right: 10px;
     -webkit-user-drag: none;
 }
 
 .LibraryItemContainerCategory .LibraryItemIcon {
-    padding: 10px;
-    width: 20px;
-    height: 20px;
+    padding: 7px 10px;
+    width: 18px;
+    height: 18px;
     -webkit-user-drag: none;
 }
 
 .LibraryItemContainerNone .LibraryItemIcon {
     padding: 2px 8px;
-    width: 32px;
-    height: 32px;
+    width: 28px;
+    height: 28px;
     -webkit-user-drag: none;
 }
 
@@ -173,44 +174,25 @@ input {
     padding: 2px 8px 2px 4px;
 }
 
-.LibraryItemContainerCategory .LibraryItemText {
-    font-size: 15px;
-}
+.LibraryItemContainerCategory .LibraryItemText {}
 
-.LibraryItemContainerNone .LibraryItemText {
-    font-size: 13px;
-    padding: 10px 0px;
-}
+.LibraryItemContainerNone .LibraryItemText {}
 
 .LibraryItemGroupText {
-    padding: 10px 0px 10px 5px;
-    font-size: 15px;
-    color: #a9a9a9;
-}
-
-.LibraryItemMiscHeader {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    padding: 3;
-    color: white;
-}
-
-.LibraryItemMiscText {
-    padding: 10px 0px 10px 10px;
-    font-size: 15px;
+    padding: 7px 0px 7px 5px;
     color: #a9a9a9;
 }
 
 .LibraryItemParameters {
     color: #888;
-    font-size: 9pt;
+    font-size: 11px;
     margin-left: 5px;
     display: inline-block;
+    white-space: nowrap;
 }
 
 .Arrow {
-    padding: 10px 10px 10px 15px;
+    padding: 3px 6px 6px 12px;
     height: 11px;
     width: 11px;
 }
@@ -226,7 +208,7 @@ input {
 
 .ClusterLeftPane {
     display: flex;
-    padding-left: 20px;
+    padding-left: 13px;
     margin: 2px 0px;
     border-right: 2px;
     border-right-style: solid;
@@ -269,18 +251,17 @@ input {
 
 .SearchBar #SearchInputText {
     width: 100%;
-    font-size: 15px;
     padding: 2px 5px 0px 10px;
     background: none;
     outline: none;
     border: none;
 }
 
-.SearchBar #SearchInputText:focus::-webkit-input-placeholder {
+.SearchBar .SearchInputText:focus::-webkit-input-placeholder {
     opacity: 0;
 }
 
-.SearchBar #SearchOptionsBtn {
+.SearchBar .SearchOptionsBtn {
     height: 30px;
     width: 30px;
     border: none;
@@ -290,7 +271,8 @@ input {
     transition: 0.15s;
 }
 
-.SearchBar #SearchOptionsBtn:hover {
+.SearchBar .SearchOptionsBtn:hover {
+    color: #888;
     background-color: rgba(255, 255, 255, 0.1);
     cursor: pointer;
 }
@@ -300,7 +282,7 @@ input {
 }
 
 .SearchBar .SearchOptionsContainer {
-    font-size: 13px;
+    font-size: 12px;
     color: #fff;
     margin-bottom: 2px;
     background-color: #414141;
@@ -339,7 +321,7 @@ input {
     background-color: #414141;
     width: 100%;
     display: block;
-    padding: 5px;
+    padding: 3px;
     transition: 0.15s;
 }
 
@@ -355,7 +337,6 @@ input {
 .CheckboxLabelEnabled .CheckboxSymbol,
 .CheckboxLabelDisabled .CheckboxSymbol {
     position: absolute;
-    top: 5px;
     left: 5px;
 }
 
@@ -377,6 +358,7 @@ input {
     display: none;
     margin: 0px;
     padding: 0px;
+    font-size: 12px;
 }
 
 .CheckboxLabelEnabled .CheckboxLabelRightButton:hover {
@@ -410,7 +392,7 @@ input {
     display: flex;
     flex-direction: row;
     align-items: center;
-    padding: 10px 2px;
+    padding: 8px 2px;
     color: white;
     transition: 0.15s;
 }
@@ -435,6 +417,7 @@ input {
     font-size: 14px;
     display: flex;
     padding-left: 10px;
+    margin-bottom: 2px;
 }
 
 .SearchResultItemContainer .ItemDescription {
@@ -465,15 +448,14 @@ input {
 
 .SearchResultItemContainer .ItemCategory {
     display: inline-block;
-    font-size: 12px;
     color: #ddd;
     padding-left: 5px;
 }
 
 .SearchResultItemContainer .ItemTypeIcon {
-    display: inline-block;
     width: 14px;
     height: 14px;
+    padding-bottom: 3px;
 }
 
 .HighlightedText {

@@ -21,6 +21,10 @@ interface SearchTextChangedFunc {
     (event: any): void;
 }
 
+interface SearchBarExpandedFunc {
+    (event: any): void;
+}
+
 export interface SearchBarProps {
     onStructuredModeChanged: StructuredModeChangedFunc;
     onDetailedModeChanged: DetailedModeChangedFunc;
@@ -41,7 +45,7 @@ export interface SearchBarState {
 
 export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
 
-    categoryData: CategoryData[] = []
+    categoryData: CategoryData[] = [];
 
     constructor(props: SearchBarProps) {
         super(props);
@@ -57,6 +61,25 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
         _.each(this.props.categories, function (c: string) {
             let data = new CategoryData(c, "CategoryCheckbox", true, this.onCategoriesChanged.bind(this));
             data.onOnlyButtonClicked = this.onOnlyButtonClicked.bind(this);
+            this.categoryData.push(data);
+        }.bind(this));
+    }
+
+    componentWillReceiveProps(newProps: SearchBarProps) {
+        let oldState = this.state;
+        this.setState({ selectedCategories: newProps.categories });
+
+        let oldCategoryData = this.categoryData;
+        this.categoryData = [];
+        _.each(newProps.categories, function (c: string) {
+            let oldCategory = oldCategoryData.find((x) => {
+                return x.name === c;
+            });
+            let data = new CategoryData(c, "CategoryCheckbox", true, this.onCategoriesChanged.bind(this));
+            data.onOnlyButtonClicked = this.onOnlyButtonClicked.bind(this);
+            if (oldCategory) {
+                data.checked = oldCategory.checked;
+            }
             this.categoryData.push(data);
         }.bind(this));
     }
@@ -144,7 +167,7 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
         let cancelButton: JSX.Element = null;
         let filterOptionHeader: JSX.Element = null;
         let searchOptionsBtn = (
-            <button id={"SearchOptionsBtn"} onClick={this.onSearchOptionButtonClick.bind(this)}>
+            <button className={"SearchOptionsBtn"} onClick={this.onSearchOptionButtonClick.bind(this)}>
                 <i className="fa fa-filter"></i>
             </button>
         );

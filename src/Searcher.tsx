@@ -16,15 +16,27 @@ export class Searcher {
     sections: LibraryUtilities.ItemData[] = [];
     categories: string[] = [];
 
+    // This list represents the actual categories beind displayed on the search bar 
+    // at the time search is performed. It will be a subset of 'props.categories', 
+    // that are most relevant to the current search results.
+    displayedCategories: string[];
+
     constructor(
         libraryContainer: LibraryContainer,
         clearSearchFunc: ClearSearchFunc,
         sections: LibraryUtilities.ItemData[] = [],
         categories: string[] = []) {
+
         this.clearSearchFunc = clearSearchFunc;
         this.libraryContainer = libraryContainer;
         this.sections = sections;
+        this.initializeCategories(categories);
+    }
+
+    // To set the categories and displayedCategories
+    initializeCategories(categories: string[]) {
         this.categories = categories;
+        this.displayedCategories = categories;
     }
 
     generateStructuredItems(showExpandableToolTip: boolean): JSX.Element[] {
@@ -36,8 +48,15 @@ export class Searcher {
         );
 
         let index = 0;
+        this.displayedCategories = [];
         for (let item of categoryItems) {
-            if (!item.visible || !_.contains(this.categories, item.text)) {
+            if (!item.visible) {
+                continue;
+            }
+
+            this.displayedCategories.push(item.text);
+
+            if (!_.contains(this.categories, item.text)) {
                 continue;
             }
 
@@ -57,15 +76,25 @@ export class Searcher {
         detailed: boolean,
         showExpandableToolTip: boolean,
         pathToItem: LibraryUtilities.ItemData[] = [],
-        leafItems: JSX.Element[] = []): JSX.Element[] {
+        leafItems: JSX.Element[] = [],
+        top: boolean = true): JSX.Element[] {
+
+        if (top) {
+            this.displayedCategories = [];
+        }
 
         for (let item of items) {
             if (!item.visible) {
                 continue;
             }
 
-            if (item.itemType === "category" && !_.contains(this.categories, item.text)) {
-                continue;
+            if (item.itemType === "category") {
+
+                this.displayedCategories.push(item.text);
+
+                if (!_.contains(this.categories, item.text)) {
+                    continue;
+                }
             }
 
             let pathToThisItem = pathToItem.slice(0);
@@ -88,7 +117,8 @@ export class Searcher {
                     detailed,
                     showExpandableToolTip,
                     pathToThisItem,
-                    leafItems
+                    leafItems,
+                    false
                 );
             }
         }
@@ -102,6 +132,12 @@ export class Searcher {
         if (LibraryUtilities.findAndExpandItemByPath(pathToItem.slice(0), this.sections)) {
             this.clearSearch();
         }
+    }
+
+    // After generated items based on the search text, the categories will be updated as well.
+    // This function will be called to the the updated categories.
+    getDisplayedCategories(): string[] {
+        return this.displayedCategories;
     }
 
     clearSearch() {
