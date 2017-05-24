@@ -82,6 +82,7 @@ input {
     overflow-y: hidden;
 }
 
+.LibrarySectionHeader:hover,
 .LibraryHeaderContainer:hover {
     color: white;
     background: #555;
