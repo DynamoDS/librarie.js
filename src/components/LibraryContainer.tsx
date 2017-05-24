@@ -86,6 +86,10 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
             return;
         }
 
+        for (let loadedType of loadedTypesJson.loadedTypes) {
+            loadedType.isNew = true;
+        }
+
         // To append to the existing 'loadedTypesJson.loadedTypes object' (merge both arrays).
         Array.prototype.push.apply(this.loadedTypesJson.loadedTypes, loadedTypesJson.loadedTypes);
     }
@@ -112,19 +116,54 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
     }
 
     refreshLibraryView(): void {
+        if (this.generatedSections) {
+            let lahalaha =
+                {
+                    "loadedTypes": [
+                        {
+                            "fullyQualifiedName": "Core.Evaluate.Function.New Item 1",
+                            "iconUrl": "/src/resources/icons/Dynamo.Graph.Nodes.CodeBlockNodeModel.png",
+                            "contextData": "Code Block",
+                            "parameters": "",
+                            "itemType": "action",
+                            "keywords": "Dynamo.Nodes.CodeBlockNodeModel, Code Block, codeblock",
+                            "description": "Allows for DesignScript code to be authored directly"
+                        },
+                        {
+                            "fullyQualifiedName": "DSCore.String.New Item 2",
+                            "iconUrl": "/src/resources/icons/Dynamo.Graph.Nodes.CodeBlockNodeModel.png",
+                            "contextData": "Code Block",
+                            "parameters": "",
+                            "itemType": "action",
+                            "keywords": "Dynamo.Nodes.CodeBlockNodeModel, Code Block, codeblock",
+                            "description": "Allows for DesignScript code to be authored directly"
+                        },
+                        {
+                            "fullyQualifiedName": "List.New Item 3",
+                            "iconUrl": "/src/resources/icons/Dynamo.Graph.Nodes.CodeBlockNodeModel.png",
+                            "contextData": "Code Block",
+                            "parameters": "",
+                            "itemType": "action",
+                            "keywords": "Dynamo.Nodes.CodeBlockNodeModel, Code Block, codeblock",
+                            "description": "Allows for DesignScript code to be authored directly"
+                        },
+                    ]
+                };
+            this.setLoadedTypesJson(lahalaha, true);
+        }
+
         let newSections = LibraryUtilities.buildLibrarySectionsFromLayoutSpecs(
             this.loadedTypesJson, this.layoutSpecsJson,
             this.props.defaultSectionString, this.props.miscSectionString);
 
         // Restore item expansion
+        // if (this.generatedSections) {
+        //     LibraryUtilities.restoreExpansionState(this.generatedSections, newSections);
+        // }
+
+        // Expand newly added items
         if (this.generatedSections) {
-            for (let previousSection of this.generatedSections) {
-                if (previousSection.expanded) {
-                    let pathToExpandedItem = LibraryUtilities.getPathToExpandedItemFromRootItem(previousSection);
-                    let newSection = newSections.find(section => section.text == previousSection.text);
-                    LibraryUtilities.findAndExpandItemByPath(pathToExpandedItem, [newSection]);
-                }
-            }
+            LibraryUtilities.expandNewItems(newSections);
         }
 
         this.generatedSections = newSections;

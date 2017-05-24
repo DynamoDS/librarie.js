@@ -117,7 +117,7 @@ input {
 }
 
 .LibraryItemContainerNone .LibraryItemIcon {
-    padding: 2px 8px;
+    padding: 4px 8px;
     width: 32px;
     height: 32px;
     -webkit-user-drag: none;
@@ -140,6 +140,15 @@ input {
     padding: 10px 0px 10px 5px;
     font-size: 15px;
     color: #a9a9a9;
+}
+
+.LibraryItemTextNew,
+.LibraryItemGroupTextNew {
+    color: white;
+    background: #777;
+    border-radius: 5px;
+    padding: 0px 5px;
+    font-size: 15px;
 }
 
 .LibraryItemMiscHeader {
@@ -165,8 +174,9 @@ input {
 
 .Arrow {
     padding: 10px 10px 10px 15px;
-    height: 11px;
-    width: 11px;
+    width: 12px;
+    font-size: 15px;
+    color: #999;
 }
 
 .BodyIndentation {

@@ -17,6 +17,7 @@ export class TypeListNode {
     keywords: string = "";
     parameters: string = "";
     description: string = "";
+    isNew: boolean = false;
     processed: boolean = false;
 
     constructor(data: any) {
@@ -27,6 +28,7 @@ export class TypeListNode {
         this.keywords = data.keywords;
         this.parameters = data.parameters;
         this.description = data.description;
+        this.isNew = data.isNew ? true : false;
     }
 }
 
@@ -75,6 +77,7 @@ export class ItemData {
     visible: boolean = true;
     expanded: boolean = false;
     showHeader: boolean = true;
+    isNew: boolean = false;
     keywords: string[] = [];
     parameters: string = "";
     description: string = "";
@@ -97,6 +100,7 @@ export class ItemData {
         this.itemType = typeListNode.memberType;
         this.parameters = typeListNode.parameters;
         this.description = typeListNode.description;
+        this.isNew = typeListNode.isNew;
     }
 
     appendChild(childItem: ItemData) {
@@ -810,13 +814,53 @@ export function sortItemsByText(items: ItemData[]): ItemData[] {
  *   |- F
  * 
  */
-export function getPathToExpandedItemFromRootItem(rootItem: ItemData, itemPath: ItemData[] = []): ItemData[] {
+export function getPathToExpandedItem(rootItem: ItemData, itemPath: ItemData[] = []): ItemData[] {
     itemPath.push(rootItem);
     let expandedItem = rootItem.childItems.find(item => item.expanded == true);
 
     if (expandedItem) {
-        return getPathToExpandedItemFromRootItem(expandedItem, itemPath);
+        return getPathToExpandedItem(expandedItem, itemPath);
     } else {
         return itemPath;
     }
+}
+
+export function restoreExpansionState(oldSections: ItemData[], newSections: ItemData[]) {
+    for (let oldSection of oldSections) {
+        if (oldSection.expanded) {
+            let pathToExpandedItem = getPathToExpandedItem(oldSection);
+            let newSection = newSections.find(section => section.text == oldSection.text);
+            findAndExpandItemByPath(pathToExpandedItem, [newSection]);
+            break;
+        }
+    }
+}
+
+export function expandNewItems(allItems: ItemData | ItemData[]): boolean {
+    if (!(allItems instanceof Array)) {
+        allItems = allItems.childItems;
+    }
+
+    if (allItems.length == 0) {
+        return false;
+    }
+
+    let hasNewItem = false;
+    let newItem = allItems.find(item => item.isNew);
+
+    // Expand all child items if a new item is found
+    if (newItem) {
+        setItemStateRecursive(newItem, true, true);
+        hasNewItem = true;
+    } else { // Expand recursively if this is not a leaf item
+        for (let item of allItems) {
+            if (expandNewItems(item)) {
+                item.expanded = true;
+                item.isNew = true;
+                hasNewItem = true;
+            }
+        }
+    }
+
+    return hasNewItem;
 }

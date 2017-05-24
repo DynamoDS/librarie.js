@@ -29,7 +29,8 @@ export interface LibraryItemProps {
 }
 
 export interface LibraryItemState {
-    expanded: boolean
+    expanded: boolean,
+    isNew: boolean
 }
 
 class GroupedItems {
@@ -70,7 +71,8 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
 
         // All items are collapsed by default, except for section items
         this.state = {
-            expanded: this.props.data.expanded
+            expanded: this.props.data.expanded,
+            isNew: this.props.data.isNew
         };
     }
 
@@ -82,6 +84,10 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         if (nextProps.data.expanded !== this.state.expanded) {
             this.setState({ expanded: nextProps.data.expanded });
         }
+
+        if (nextProps.data.isNew !== this.props.data.isNew) {
+            this.setState({ isNew: nextProps.data.isNew });
+        }
     }
 
     render() {
@@ -90,18 +96,13 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         }
 
         let iconElement = null;
-        let libraryItemTextStyle = "LibraryItemGroupText";
-
-        // Group displays only text without icon.
-        if (this.props.data.itemType !== "group") {
-            libraryItemTextStyle = "LibraryItemText";
-            iconElement = (<img className={"LibraryItemIcon"} src={this.props.data.iconUrl} onError={this.onImageLoadFail} />);
-        }
-
+        let arrow: JSX.Element = null;
+        let bodyIndentation: JSX.Element = null;
+        let header: JSX.Element = null;
+        let parameters: JSX.Element = null;
         let nestedElements: JSX.Element = null;
         let clusteredElements: JSX.Element = null;
 
-        // visible only nested elements when expanded.
         if (this.state.expanded && this.props.data.childItems.length > 0) {
 
             // Break item list down into sub-lists based on the type of each item.
@@ -114,11 +115,15 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
             nestedElements = this.getNestedElements(groupedItems);
         }
 
+        // Group displays only text without icon.
+        if (this.props.data.itemType !== "group") {
+            iconElement = (<img className={"LibraryItemIcon"} src={this.props.data.iconUrl} onError={this.onImageLoadFail} />);
+        }
 
-        let arrow: JSX.Element = null;
-        let bodyIndentation: JSX.Element = null;
-        let header: JSX.Element = null;
-        let parameters: JSX.Element = null;
+        // visible only nested elements when expanded.
+        if (this.props.data.parameters && (this.props.data.parameters.length > 0)) {
+            parameters = <div className="LibraryItemParameters">{this.props.data.parameters}</div>;
+        }
 
         // Indentation and arrow are only added for non-category and non-section items
         if (this.props.data.itemType !== "category" && this.props.data.itemType !== "section") {
@@ -130,13 +135,13 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
 
             // Show arrow for non-leaf items
             if (this.props.data.childItems.length > 0) {
-                let arrowIcon = this.state.expanded ? require("../resources/ui/indent-arrow-down.svg") : require("../resources/ui/indent-arrow-right.svg");
-                arrow = <img className={"Arrow"} src={arrowIcon} onError={this.onImageLoadFail} />;
+                let arrowName = this.state.expanded ? "fa fa-caret-down" : "fa fa-caret-right";
+                arrow = (
+                    <div className="Arrow">
+                        <i className={arrowName} aria-hidden="true"></i>
+                    </div>
+                );
             }
-        }
-
-        if (this.props.data.parameters && (this.props.data.parameters.length > 0)) {
-            parameters = <div className="LibraryItemParameters">{this.props.data.parameters}</div>;
         }
 
         if (this.props.data.showHeader) {
@@ -145,11 +150,12 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
                     onMouseOver={this.onLibraryItemMouseEnter.bind(this)} onMouseLeave={this.onLibraryItemMouseLeave.bind(this)}>
                     {arrow}
                     {iconElement}
-                    <div className={libraryItemTextStyle}>{this.props.data.text}</div>
+                    <div className={this.getLibraryItemTextStyle()}>{this.props.data.text}</div>
                     {parameters}
                 </div>
             );
         }
+
 
         return (
             <div className={this.getLibraryItemContainerStyle()}>
@@ -189,6 +195,23 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
             default:
                 return "LibraryItemHeader";
         }
+    }
+
+    getLibraryItemTextStyle(): string {
+        let result: string;
+        switch (this.props.data.itemType) {
+            case "group":
+                result = "LibraryItemGroupText";
+                break;
+            default:
+                result = "LibraryItemText";
+        }
+
+        if (this.state.isNew) {
+            result += "New";
+        }
+
+        return result;
     }
 
     getNestedElements(groupedItems: GroupedItems): JSX.Element {
@@ -269,9 +292,18 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         if (this.props.data.childItems.length > 0 && !currentlyExpanded && this.props.onItemWillExpand) {
             this.props.onItemWillExpand();
         }
-        
+
         this.props.data.expanded = !currentlyExpanded;
-        this.setState({ expanded: this.props.data.expanded });
+        if (this.state.isNew) {
+            this.setState({
+                isNew: false,
+                expanded: this.props.data.expanded
+            })
+        } else {
+            this.setState({
+                expanded: this.props.data.expanded
+            });
+        }
 
         let libraryContainer = this.props.libraryContainer;
         if (this.props.data.childItems.length == 0) {

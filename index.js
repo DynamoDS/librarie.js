@@ -26,7 +26,8 @@ app.get("/loadedTypes", function(req, res) {
 });
 
 app.get("/layoutSpecs", function(req, res) {
-  loadJsonFromFile("./docs/LayoutSpecs.json", req, res);
+  // loadJsonFromFile("./docs/LayoutSpecs.json", req, res);
+  loadJsonFromFile("./docs/new-layoutSpecs.json", req, res);
 });
 
 app.listen(3456, function () {

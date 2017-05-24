@@ -38,6 +38,7 @@
 
             libController.on("itemClicked", function (item) {
                 console.log(item);
+                libController.refreshLibraryView();
             });
 
             libController.on("searchTextUpdated", function (searchText) {
