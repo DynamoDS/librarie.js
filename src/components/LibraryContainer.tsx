@@ -166,9 +166,7 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
         let hasText = text.length > 0;
 
         if (hasText) {
-            // Starting searching immediately after user input,
-            // but only show change on ui after 300ms
-
+            // Starting searching after user stops typing for 300ms
             this.timeout = setTimeout(function () {
                 LibraryUtilities.searchItemResursive(this.generatedSections, text);
                 this.updateSearchViewDelayed(text);

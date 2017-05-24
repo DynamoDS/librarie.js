@@ -386,6 +386,9 @@ export function convertToDefaultSection(typeListNodes: TypeListNode[], section: 
         }
     }
 
+    // Default section is expanded by default.
+    sectionData.expanded = true;
+
     return sectionData;
 }
 
@@ -454,6 +457,9 @@ function convertToOtherSection(typeListNodes: TypeListNode[], section: LayoutEle
             }
         })
     })
+
+    // Sections other than default section are collapsed by default.
+    sectionData.expanded = false;
 
     return sectionData;
 }
@@ -586,7 +592,10 @@ export function convertToMiscSection(allNodes: TypeListNode[], section: LayoutEl
 
     _.each(unprocessedNodes, function (node) {
         buildLibraryItemsFromName(node, sectionData)
-    })
+    });
+
+    // Sections other than default section are collapsed by default.
+    sectionData.expanded = false;
 
     return sectionData;
 }
@@ -671,7 +680,15 @@ export function setItemStateRecursive(items: ItemData | ItemData[], visible: boo
     items = (items instanceof Array) ? items : [items];
     for (let item of items) {
         item.visible = visible;
-        item.expanded = item.itemType === "section" ? true : expanded;
+        if (item.itemType !== "section") {
+            item.expanded = expanded;
+        }
+
+        // All sections other than default section are collapsed by default.
+        if(item.itemType === "section" && item.text !== "default") {
+            item.expanded = false;
+        }
+
         setItemStateRecursive(item.childItems, visible, expanded);
     }
 }
@@ -766,4 +783,12 @@ export function findAndExpandItemByPath(pathToItem: ItemData[], allItems: ItemDa
         item.expanded = result; // Expand only if item is found.
         return result;
     }
+}
+
+export function sortItemsByText(items: ItemData[]): ItemData[] {
+    let sortedItems = items.sort(function (item1: ItemData, item2: ItemData) {
+        return item1.text.localeCompare(item2.text);
+    })
+
+    return sortedItems;
 }

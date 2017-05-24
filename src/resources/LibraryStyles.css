@@ -59,10 +59,13 @@ input {
 .LibrarySectionHeader {
     display: flex;
     padding: 10px;
-    color: white;
-    transition: 0.15s;
-    background-color: #464646;
     color: #888;
+    background-color: #464646;
+    transition: 0.15s;
+}
+
+.LibraryHeaderContainer {
+    transition: 0.15s;
 }
 
 .LibrarySectionHeader .LibraryItemIcon {
@@ -75,12 +78,7 @@ input {
     align-items: center;
     padding: 3;
     color: white;
-    transition: 0.15s;
     overflow-y: hidden;
-}
-
-.LibraryHeaderContainer {
-    transition: 0.1s;
 }
 
 .LibraryHeaderContainer:hover {
@@ -247,21 +245,18 @@ input {
 }
 
 .SearchBar {
-    background: #5b5a5a;
     width: 100%;
+    background: #5b5a5a;
 }
 
 .SearchInput {
-    width: 100%;
-    height: 40px;
     display: flex;
     justify-content: space-around;
-    align-items: center;
+    padding: 5px 0px;
 }
 
 .SearchInputContainer {
     width: 100%;
-    height: 30px;
     background-color: #fff;
     display: flex;
     justify-content: space-around;
@@ -269,38 +264,35 @@ input {
 }
 
 .SearchBar .SearchBarIcon {
-    margin-left: 10px;
+    padding-left: 10px;
 }
 
 .SearchBar #SearchInputText {
-    height: 18px;
     width: 100%;
     font-size: 15px;
-    padding: 15px 10px 10px 10px;
+    padding: 2px 5px 0px 10px;
     background: none;
     outline: none;
     border: none;
 }
 
-#SearchInputText:focus::-webkit-input-placeholder {
-    color: transparent!important;
+.SearchBar #SearchInputText:focus::-webkit-input-placeholder {
+    opacity: 0;
 }
 
 .SearchBar #SearchOptionsBtn {
-    height: 32px;
-    width: 32px;
+    height: 30px;
+    width: 30px;
+    border: none;
+    outline: none;
     color: #ddd;
-    border: 0px;
     background-color: #414141;
+    transition: 0.15s;
 }
 
 .SearchBar #SearchOptionsBtn:hover {
     background-color: rgba(255, 255, 255, 0.1);
     cursor: pointer;
-}
-
-.SearchBar #SearchOptionsBtn:focus {
-    outline: 0;
 }
 
 .SearchBar .SearchOptions {
@@ -310,7 +302,7 @@ input {
 .SearchBar .SearchOptionsContainer {
     font-size: 13px;
     color: #fff;
-    margin: 0px 0px 5px 0px;
+    margin-bottom: 2px;
     background-color: #414141;
     overflow-x: hidden;
     overflow-y: hidden;
@@ -341,30 +333,39 @@ input {
     overflow-x: hidden;
 }
 
-.CheckboxLabel {
+.CheckboxLabelEnabled,
+.CheckboxLabelDisabled {
     position: relative;
     background-color: #414141;
     width: 100%;
     display: block;
     padding: 5px;
+    transition: 0.15s;
 }
 
-.CheckboxLabel:hover {
+.CheckboxLabelDisabled {
+    color: #aaa;
+}
+
+.CheckboxLabelEnabled:hover {
     background-color: #555;
     cursor: pointer;
 }
 
-.CheckboxLabel .CheckboxSymbol {
+.CheckboxLabelEnabled .CheckboxSymbol,
+.CheckboxLabelDisabled .CheckboxSymbol {
     position: absolute;
     top: 5px;
     left: 5px;
 }
 
-.CheckboxLabel .CheckboxLabelText {
-    margin-left: 20px;
+.CheckboxLabelEnabled .CheckboxLabelText,
+.CheckboxLabelDisabled .CheckboxLabelText {
+    padding-left: 20px;
 }
 
-.CheckboxLabel .CheckboxLabelRightButton {
+.CheckboxLabelEnabled .CheckboxLabelRightButton,
+.CheckboxLabelDisabled .CheckboxLabelRightButton {
     position: absolute;
     transform: translate(-70%, 25%);
     top: 0px;
@@ -378,12 +379,12 @@ input {
     padding: 0px;
 }
 
-.CheckboxLabelRightButton:hover {
+.CheckboxLabelEnabled .CheckboxLabelRightButton:hover {
     color: white;
     cursor: pointer;
 }
 
-.CheckboxLabel:hover .CheckboxLabelRightButton {
+.CheckboxLabelEnabled:hover .CheckboxLabelRightButton {
     display: block;
 }
 
@@ -393,7 +394,7 @@ input {
 }
 
 .SearchBar .CancelButton button {
-    font-size: 20px;
+    font-size: 14px;
     color: #ccc;
     background: transparent;
     border: 0px;
@@ -403,10 +404,6 @@ input {
 
 .SearchBar .CancelButton button:hover {
     cursor: pointer;
-}
-
-#SearchInput::-webkit-search-cancel-button {
-    -webkit-appearance: none;
 }
 
 .SearchResultItemContainer {
@@ -457,7 +454,7 @@ input {
 .SearchResultItemContainer .ItemParent {
     display: inline-block;
     padding-right: 5px;
-    transition: 0.1s;
+    transition: 0.15s;
     text-decoration: underline;
 }
 

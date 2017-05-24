@@ -21,11 +21,11 @@ import * as ReactDOM from "react-dom";
 import { ClusterView } from "./ClusterView";
 import { LibraryContainer } from "./LibraryContainer";
 import { ToolTip } from "./ToolTip";
-import { ItemData } from "../LibraryUtilities";
+import * as LibraryUtilities from "../LibraryUtilities";
 
 export interface LibraryItemProps {
     libraryContainer: LibraryContainer,
-    data: ItemData,
+    data: LibraryUtilities.ItemData,
     showExpandableToolTip: boolean,
     onItemWillExpand?: Function
 }
@@ -37,12 +37,12 @@ export interface LibraryItemState {
 
 class GroupedItems {
 
-    creates: ItemData[] = [];
-    actions: ItemData[] = [];
-    queries: ItemData[] = [];
-    others: ItemData[] = [];
+    creates: LibraryUtilities.ItemData[] = [];
+    actions: LibraryUtilities.ItemData[] = [];
+    queries: LibraryUtilities.ItemData[] = [];
+    others: LibraryUtilities.ItemData[] = [];
 
-    constructor(items: ItemData[]) {
+    constructor(items: LibraryUtilities.ItemData[]) {
 
         for (let i = 0; i < items.length; i++) {
 
@@ -53,12 +53,17 @@ class GroupedItems {
                 default: this.others.push(items[i]); break;
             }
         }
+
+        this.creates = LibraryUtilities.sortItemsByText(this.creates);
+        this.actions = LibraryUtilities.sortItemsByText(this.actions);
+        this.queries = LibraryUtilities.sortItemsByText(this.queries);
+        this.others = LibraryUtilities.sortItemsByText(this.others);
     }
 
-    getCreateItems(): ItemData[] { return this.creates; }
-    getActionItems(): ItemData[] { return this.actions; }
-    getQueryItems(): ItemData[] { return this.queries; }
-    getOtherItems(): ItemData[] { return this.others; }
+    getCreateItems(): LibraryUtilities.ItemData[] { return this.creates; }
+    getActionItems(): LibraryUtilities.ItemData[] { return this.actions; }
+    getQueryItems(): LibraryUtilities.ItemData[] { return this.queries; }
+    getOtherItems(): LibraryUtilities.ItemData[] { return this.others; }
 }
 
 export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemState> {
@@ -69,7 +74,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         // All items are collapsed by default, except for section items
         this.state = {
             toolTipExpanded: false,
-            itemExpanded: this.props.data.itemType === "section" ? true : this.props.data.expanded
+            itemExpanded: this.props.data.expanded
         };
     }
 
@@ -78,7 +83,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
     // expansion state. This will make sure that the expansion state of an item
     // in search view will not be affected by the previous user click.
     componentWillReceiveProps(nextProps: LibraryItemProps) {
-        if (nextProps.data.expanded && !this.state.itemExpanded) {
+        if (nextProps.data.expanded != this.state.itemExpanded) {
             this.setState({ itemExpanded: nextProps.data.expanded });
         }
     }
@@ -104,7 +109,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         if (this.state.itemExpanded && this.props.data.childItems.length > 0) {
 
             // Break item list down into sub-lists based on the type of each item.
-            let groupedItems = new GroupedItems(this.props.data.childItems);
+            let groupedItems = new GroupedItems(LibraryUtilities.sortItemsByText(this.props.data.childItems));
 
             // There are some leaf nodes (e.g. methods).
             clusteredElements = this.getClusteredElements(groupedItems);
@@ -229,7 +234,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
                 {
                     // 'getNestedElements' method is meant to render all other 
                     // types of items except ones of type create/action/query.
-                    regularItems.map((item: ItemData) => {
+                    regularItems.map((item: LibraryUtilities.ItemData) => {
                         return (<LibraryItem
                             key={index++}
                             libraryContainer={this.props.libraryContainer}
@@ -305,6 +310,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
             this.props.onItemWillExpand();
         }
 
+        this.props.data.expanded = !currentlyExpanded;
         this.setState({ itemExpanded: !currentlyExpanded });
 
         let libraryContainer = this.props.libraryContainer;
