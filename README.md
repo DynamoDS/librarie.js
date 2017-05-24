@@ -150,7 +150,7 @@ libController.on("itemClicked", function(contextData) {
 })
 ```
 
-The string property for the event name is: ItemClickedEventName. So the following achieves the samee:
+The string property for the event name is: ItemClickedEventName. So the following achieves the same:
 
 ```js
 libController.on(libController.ItemClickedEventName, function(contextData) {
@@ -171,7 +171,7 @@ libController.on("searchTextUpdated", function (searchText) {
 });
 ```
 
-The string property for the event name is: SearchTextUpdatedEventName. So the following achieves the samee:
+The string property for the event name is: SearchTextUpdatedEventName. So the following achieves the same:
 
 ```js
 libController.on(libController.SearchTextUpdatedEventName, function(contextData) {
@@ -190,7 +190,7 @@ libController.on("itemMouseEnter", function (arg) {
 });
 ```
 
-The string property for the event name is: ItemMouseEnterEventName. So the following achieves the samee:
+The string property for the event name is: ItemMouseEnterEventName. So the following achieves the same:
 
 ```js
 libController.on(libController.ItemMouseEnterEventName, function(arg) {
@@ -210,7 +210,7 @@ libController.on("itemMouseLeave", function (searchText) {
 });
 ```
 
-The string property for the event name is: ItemMouseLeaveEventName. So the following achieves the samee:
+The string property for the event name is: ItemMouseLeaveEventName. So the following achieves the same:
 
 ```js
 libController.on(libController.ItemMouseLeaveEventName, function(contextData) {
