@@ -116,42 +116,6 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
     }
 
     refreshLibraryView(): void {
-        if (this.generatedSections) {
-            let lahalaha =
-                {
-                    "loadedTypes": [
-                        {
-                            "fullyQualifiedName": "Core.Evaluate.Function.New Item 1",
-                            "iconUrl": "/src/resources/icons/Dynamo.Graph.Nodes.CodeBlockNodeModel.png",
-                            "contextData": "Code Block",
-                            "parameters": "",
-                            "itemType": "action",
-                            "keywords": "Dynamo.Nodes.CodeBlockNodeModel, Code Block, codeblock",
-                            "description": "Allows for DesignScript code to be authored directly"
-                        },
-                        {
-                            "fullyQualifiedName": "DSCore.String.New Item 2",
-                            "iconUrl": "/src/resources/icons/Dynamo.Graph.Nodes.CodeBlockNodeModel.png",
-                            "contextData": "Code Block",
-                            "parameters": "",
-                            "itemType": "action",
-                            "keywords": "Dynamo.Nodes.CodeBlockNodeModel, Code Block, codeblock",
-                            "description": "Allows for DesignScript code to be authored directly"
-                        },
-                        {
-                            "fullyQualifiedName": "List.New Item 3",
-                            "iconUrl": "/src/resources/icons/Dynamo.Graph.Nodes.CodeBlockNodeModel.png",
-                            "contextData": "Code Block",
-                            "parameters": "",
-                            "itemType": "action",
-                            "keywords": "Dynamo.Nodes.CodeBlockNodeModel, Code Block, codeblock",
-                            "description": "Allows for DesignScript code to be authored directly"
-                        },
-                    ]
-                };
-            this.setLoadedTypesJson(lahalaha, true);
-        }
-
         let newSections = LibraryUtilities.buildLibrarySectionsFromLayoutSpecs(
             this.loadedTypesJson, this.layoutSpecsJson,
             this.props.defaultSectionString, this.props.miscSectionString);
@@ -180,7 +144,7 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
 
         // Update the properties in searcher
         this.searcher.sections = this.generatedSections;
-        this.searcher.categories = this.searchCategories;
+        this.searcher.initializeCategories(this.searchCategories);
 
         // Just to force a refresh of UI.
         this.setState({ inSearchMode: this.state.inSearchMode });
@@ -251,10 +215,6 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
         try {
             let sections: JSX.Element[] = null;
 
-            const searchBar = <SearchBar onCategoriesChanged={this.onCategoriesChanged} onDetailedModeChanged={this.onDetailedModeChanged}
-                onStructuredModeChanged={this.onStructuredModeChanged} onTextChanged={this.onTextChanged}
-                categories={this.searchCategories} />
-
             if (!this.state.inSearchMode) {
                 let index = 0;
                 sections = this.renderedSections;
@@ -267,6 +227,10 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
                     sections = this.searcher.generateListItems(this.generatedSections, this.state.searchText, this.state.detailed);
                 }
             }
+
+            const searchBar = <SearchBar onCategoriesChanged={this.onCategoriesChanged} onDetailedModeChanged={this.onDetailedModeChanged}
+                onStructuredModeChanged={this.onStructuredModeChanged} onTextChanged={this.onTextChanged}
+                categories={this.searcher.getDisplayedCategories()} />
 
             return (
                 <div className="LibraryContainer">
