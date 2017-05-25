@@ -91,9 +91,7 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
         let text = event.target.value.toLowerCase().replace(/ /g, '');
         let expanded = text.length == 0 ? false : this.state.expanded;
         this.setState({ expanded: expanded, hasText: text.length > 0 });
-        if (text.length > 0) {
-            this.props.onTextChanged(text);
-        }
+        this.props.onTextChanged(text);
     }
 
     onExpandButtonClick() {
