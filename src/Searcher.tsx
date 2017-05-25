@@ -107,6 +107,7 @@ export class Searcher {
                     pathToItem={pathToThisItem}
                     onParentTextClicked={this.directToLibrary.bind(this)}
                     detailed={detailed}
+                    showExpandableToolTip={showExpandableToolTip}
                 />);
             } else {
                 this.generateListItems(

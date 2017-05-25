@@ -14,6 +14,7 @@ interface SearchResultItemProps {
     pathToItem: LibraryUtilities.ItemData[];
     onParentTextClicked: ParentTextClickedFunc;
     detailed: boolean;
+    showExpandableToolTip: boolean;
 }
 
 interface SearchResultItemStates {
