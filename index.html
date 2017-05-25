@@ -46,6 +46,11 @@
                 return null;
             });
 
+            libController.on("addOnsIconClicked", function () {
+                console.log("Add-ons icon clicked");
+                return null;
+            });
+
             let libContainer = libController.createLibraryByElementId(
                 "libraryContainerPlaceholder", layoutSpecsJson, loadedTypesJson);
 

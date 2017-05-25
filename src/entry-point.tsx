@@ -30,6 +30,7 @@ export class LibraryController {
     ItemClickedEventName = "itemClicked";
     ItemMouseEnterEventName = "itemMouseEnter";
     ItemMouseLeaveEventName = "itemMouseLeave";
+    AddOnsIconClickedEventName = "addOnsIconClicked";
     DefaultSectionName = "default";
     MiscSectionName = "Miscellaneous";
 

@@ -67,7 +67,12 @@ input {
 }
 
 .LibrarySectionHeader .LibraryItemIcon {
-    display: none;
+    position: absolute;
+    right: 0px;
+}
+
+.LibrarySectionHeader .LibraryItemIcon:hover {
+    cursor: pointer;
 }
 
 .LibraryItemHeader {
@@ -113,7 +118,6 @@ input {
     width: 18px;
     height: 18px;
     -webkit-user-drag: none;
-    fill: #aaa;
 }
 
 .LibraryItemContainerNone .LibraryItemIcon {
