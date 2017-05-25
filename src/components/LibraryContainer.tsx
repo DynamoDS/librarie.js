@@ -67,7 +67,7 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
             selectedCategories: [],
             structured: false,
             detailed: false,
-            showExpandableToolTip: true // disable expandable tool tip by default
+            showExpandableToolTip: false // disable expandable tool tip by default
         };
     }
 
