@@ -26,6 +26,7 @@ export interface ClusterViewProps {
     libraryContainer: LibraryContainer,
     icon: any,
     borderColor: string,
+    showExpandableToolTip: boolean,
     childItems: ItemData[]
 }
 
@@ -53,7 +54,12 @@ export class ClusterView extends React.Component<ClusterViewProps, undefined> {
 
         let index = 0;
         return this.props.childItems.map((item: ItemData) => {
-            return (<LibraryItem key={index++} libraryContainer={this.props.libraryContainer} data={item} />);
+            return (<LibraryItem
+                key={index++}
+                libraryContainer={this.props.libraryContainer}
+                showExpandableToolTip={this.props.showExpandableToolTip}
+                data={item}
+            />);
         });
     }
 

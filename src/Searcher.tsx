@@ -6,18 +6,11 @@ import { LibraryContainer } from "./components/LibraryContainer";
 import * as LibraryUtilities from "./LibraryUtilities";
 import { SearchBar } from "./components/SearchBar";
 
-type displayMode = "structure" | "list";
-
-interface SearchModeChangedFunc {
-    (inSearchMode: boolean): void;
-}
-
 interface ClearSearchFunc {
     (searchText: string): void;
 }
 
 export class Searcher {
-    onSearchModeChanged: SearchModeChangedFunc = null;
     clearSearchFunc: ClearSearchFunc = null;
     libraryContainer: LibraryContainer = null;
     sections: LibraryUtilities.ItemData[] = [];
@@ -28,8 +21,11 @@ export class Searcher {
     // that are most relevant to the current search results.
     displayedCategories: string[];
 
-    constructor(searchModeChangedFunc: SearchModeChangedFunc, clearSearchFunc: ClearSearchFunc, libraryContainer: LibraryContainer, sections: LibraryUtilities.ItemData[], categories: string[]) {
-        this.onSearchModeChanged = searchModeChangedFunc;
+    constructor(
+        clearSearchFunc: ClearSearchFunc,
+        libraryContainer: LibraryContainer,
+        sections: LibraryUtilities.ItemData[] = [],
+        categories: string[] = []) {
         this.clearSearchFunc = clearSearchFunc;
         this.libraryContainer = libraryContainer;
         this.sections = sections;
@@ -42,7 +38,7 @@ export class Searcher {
         this.displayedCategories = categories;
     }
 
-    generateStructuredItems(): JSX.Element[] {
+    generateStructuredItems(showExpandableToolTip: boolean): JSX.Element[] {
         let structuredItems: JSX.Element[] = [];
         let categoryItems: LibraryUtilities.ItemData[] = [];
 
@@ -66,8 +62,9 @@ export class Searcher {
             structuredItems.push(<LibraryItem
                 key={index++}
                 libraryContainer={this.libraryContainer}
-                data={item} />
-            );
+                data={item}
+                showExpandableToolTip={showExpandableToolTip}
+            />);
         }
         return structuredItems;
     }
@@ -76,10 +73,11 @@ export class Searcher {
         items: LibraryUtilities.ItemData[] = this.sections,
         searchText: string,
         detailed: boolean,
+        showExpandableToolTip: boolean,
         pathToItem: LibraryUtilities.ItemData[] = [],
         leafItems: JSX.Element[] = [],
         top: boolean = true): JSX.Element[] {
-        
+
         if (top) {
             this.displayedCategories = [];
         }
@@ -109,9 +107,17 @@ export class Searcher {
                     pathToItem={pathToThisItem}
                     onParentTextClicked={this.directToLibrary.bind(this)}
                     detailed={detailed}
-                    />);
+                />);
             } else {
-                this.generateListItems(item.childItems, searchText, detailed, pathToThisItem, leafItems, false);
+                this.generateListItems(
+                    item.childItems,
+                    searchText,
+                    detailed,
+                    showExpandableToolTip,
+                    pathToThisItem,
+                    leafItems,
+                    false
+                );
             }
         }
 
