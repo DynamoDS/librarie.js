@@ -22,19 +22,19 @@ interface SearchBarExpandedFunc {
 }
 
 export interface SearchBarProps {
-    onTextChanged: SearchTextChangedFunc;
     onStructuredModeChanged: StructuredModeChangedFunc;
     onDetailedModeChanged: DetailedModeChangedFunc;
     onCategoriesChanged: SearchCategoriesChangedFunc;
+    onTextChanged: SearchTextChangedFunc;
     categories: string[];
 }
 
 export interface SearchBarState {
     expanded: boolean;
-    selectedCategories: string[];
     structured: boolean;
     detailed: boolean;
     hasText: boolean;
+    selectedCategories: string[];
 }
 
 export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
@@ -45,10 +45,10 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
         super(props);
         this.state = {
             expanded: false,
-            selectedCategories: this.props.categories,
             structured: false,
             detailed: false,
-            hasText: false
+            hasText: false,
+            selectedCategories: this.props.categories
         };
 
         _.each(this.props.categories, function (c: string) {
@@ -90,13 +90,12 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
     onTextChanged(event: any) {
         let text = event.target.value.toLowerCase().replace(/ /g, '');
         let expanded = text.length == 0 ? false : this.state.expanded;
+
         this.setState({ expanded: expanded, hasText: text.length > 0 });
-        if (text.length > 0) {
-            this.props.onTextChanged(text);
-        }
+        this.props.onTextChanged(text);
     }
 
-    onExpandButtonClick() {
+    onSearchOptionButtonClick() {
         // enable expansion only when search is activated
         if (this.state.hasText) {
             this.setState({ expanded: !this.state.expanded });
@@ -151,16 +150,33 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
     }
 
     render() {
-        let options = null;
-        let searchOptionsBtnText = this.state.hasText ? "SearchOptionsBtnEnabled" : "SearchOptionsBtnDisabled";
-        let searchOptionsBtn = <button className={searchOptionsBtnText} onClick={this.onExpandButtonClick.bind(this)}><i className="fa fa-filter"></i></button>;
-        let checkboxes: JSX.Element[] = [];
+        let options: JSX.Element = null;
+        let categoryCheckboxes: JSX.Element[] = [];
+        let categoryCheckboxContainer: JSX.Element = null;
         let cancelButton: JSX.Element = null;
+        let filterOptionHeader: JSX.Element = null;
+        let searchOptionsBtnText = this.state.hasText ? "SearchOptionsBtnEnabled" : "SearchOptionsBtnDisabled";
+        let optionCheckboxes = this.categoryData.map(category => category.createCheckbox(true));
+        let searchOptionsBtn = (
+            <button className={searchOptionsBtnText} onClick={this.onSearchOptionButtonClick.bind(this)}>
+                <i className="fa fa-filter"></i>
+            </button>
+        );
 
-        this.categoryData.forEach(category => checkboxes.push(category.createCheckbox(true)));
-
-        let structuredCheckbox = new CategoryData("Structured", "SearchCheckbox", this.state.structured, this.onStructuredModeChanged.bind(this), "Display as structured view");
-        let detailedCheckbox = new CategoryData("Detailed", "SearchCheckbox", this.state.detailed, this.onDetailedModeChanged.bind(this), "Display detailed info");
+        let structuredCheckbox = new CategoryData(
+            "Structured",
+            "SearchCheckbox",
+            this.state.structured,
+            this.onStructuredModeChanged.bind(this),
+            "Display as structured view"
+        );
+        let detailedCheckbox = new CategoryData(
+            "Detailed",
+            "SearchCheckbox",
+            this.state.detailed,
+            this.onDetailedModeChanged.bind(this),
+            "Display detailed info"
+        );
 
         if (this.state.hasText) {
             cancelButton = (
@@ -185,7 +201,7 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
                             <div className="SelectAllBtn" onClick={this.onAllButtonClicked.bind(this)}>Select All</div>
                         </div>
                         <div className="CategoryCheckboxContainer">
-                            {checkboxes}
+                            {optionCheckboxes}
                         </div>
                     </div></div>;
         }
@@ -195,7 +211,12 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
                 <div className="SearchInput">
                     <div className="SearchInputContainer">
                         <i className="fa fa-search SearchBarIcon"></i>
-                        <input id="SearchInputText" type="input" placeholder="Search..." onChange={this.onTextChanged.bind(this)}></input>
+                        <input
+                            id="SearchInputText"
+                            type="input"
+                            placeholder="Search..."
+                            onChange={this.onTextChanged.bind(this)}>
+                        </input>
                         {cancelButton}
                     </div>
                     {searchOptionsBtn}
@@ -231,14 +252,30 @@ class CategoryData {
         let only = null;
         if (this.onOnlyButtonClicked) {
             // Show the "only" option if there is a callback function provided
-            only = <label><input type="button" name={this.name} className="CheckboxLabelRightButton" onClick={this.onOnlyButtonClicked} value={"only"} /></label>
+            only = (
+                <label>
+                    <input
+                        type="button"
+                        name={this.name}
+                        className="CheckboxLabelRightButton"
+                        onClick={this.onOnlyButtonClicked}
+                        value={"only"}
+                    />
+                </label>
+            );
         }
 
         let checkboxLabelText = enabled ? "CheckboxLabelEnabled" : "CheckboxLabelDisabled";
         let checkbox: JSX.Element =
             <label className={checkboxLabelText}>
                 {checkSymbol}
-                <input type="checkbox" name={this.name} className={this.className} onChange={this.onCheckboxChanged.bind(this)} checked={this.checked} />
+                <input
+                    type="checkbox"
+                    name={this.name}
+                    className={this.className}
+                    onChange={this.onCheckboxChanged.bind(this)}
+                    checked={this.checked}
+                />
                 <div className="CheckboxLabelText">{this.displayText}</div>
                 {only}
             </label>;

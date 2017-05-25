@@ -12,7 +12,7 @@
 body {
     font-family: "Artifakt Element", "Open Sans";
     -webkit-user-select: none;
-    font-size:13px;
+    font-size: 13px;
     cursor: default;
 }
 
@@ -60,10 +60,14 @@ input {
 .LibrarySectionHeader {
     display: flex;
     padding: 10px;
-    transition: 0.15s;
-    background-color: #464646;
     color: #888;
-    font-size:14px;
+    background-color: #464646;
+    transition: 0.15s;
+}
+
+.LibraryHeaderContainer {
+    transition: 0.15s;
+    font-size: 14px;
 }
 
 .LibrarySectionHeader .LibraryItemIcon {
@@ -74,14 +78,60 @@ input {
     display: flex;
     flex-direction: row;
     align-items: center;
+    color: white;
     transition: 0.15s;
     overflow-y: hidden;
 }
 
-.LibraryItemHeader:hover,
-.LibrarySectionHeader:hover {
+.LibrarySectionHeader:hover,
+.LibraryHeaderContainer:hover {
     color: white;
-    background: rgba(255, 255, 255, 0.1);
+    background: #555;
+}
+
+.ToolTipExpandIcon {
+    margin-left: auto;
+    cursor: pointer;
+    padding: 0px 10px;
+    font-size: 14px;
+    color: #aaa;
+    transition: 0.1s;
+}
+
+.ToolTipExpandIcon:hover {
+    color: white;
+}
+
+.LibraryItemToolTip {
+    display: flex;
+    font-size: 12px;
+    padding: 0px 10px 5px 10px;
+    background: transparent;
+    color: #ededed;
+    justify-content: space-between;
+}
+
+.LibraryItemToolTip .LeftPane {
+    width: 60%;
+}
+
+.LibraryItemToolTip .Icon {
+    height: 80px;
+    padding-right: 20px;
+}
+
+.LibraryItemToolTip .Description {
+    padding-top: 5px;
+}
+
+.LibraryItemToolTip .Input,
+.LibraryItemToolTip .Output {
+    color: #60d7ff;
+    padding-top: 10px;
+}
+
+.LibraryItemToolTip .IOName {
+    color: #999;
 }
 
 .LibraryItemBodyElements {
@@ -214,7 +264,7 @@ input {
     border: none;
 }
 
-.SearchBar .SearchInputText:focus::-webkit-input-placeholder {
+.SearchBar #SearchInputText:focus::-webkit-input-placeholder {
     opacity: 0;
 }
 
@@ -224,20 +274,17 @@ input {
     width: 30px;
     border: none;
     outline: none;
-    background-color: #414141;
     transition: 0.15s;
+    color: #aaa;
+    background-color: #414141;
 }
 
 .SearchBar .SearchOptionsBtnEnabled {
     color: #ddd;
-    transition: 0.15s;
-}
-
-.SearchBar .SearchOptionsBtnDisabled {
-    color: #888;
 }
 
 .SearchBar .SearchOptionsBtnEnabled:hover {
+    color: #888;
     background-color: rgba(255, 255, 255, 0.1);
     cursor: pointer;
 }
@@ -249,7 +296,7 @@ input {
 .SearchBar .SearchOptionsContainer {
     font-size: 12px;
     color: #fff;
-    margin: 0px 0px 5px 0px;
+    margin-bottom: 2px;
     background-color: #414141;
     overflow-x: hidden;
     overflow-y: hidden;
@@ -357,7 +404,7 @@ input {
     display: flex;
     flex-direction: row;
     align-items: center;
-    padding: 3px;
+    padding: 8px 2px;
     color: white;
     transition: 0.15s;
 }
@@ -368,29 +415,33 @@ input {
 }
 
 .SearchResultItemContainer .ItemInfo {
-    padding: 5px 0px 5px 0px;
     width: 100%;
 }
 
 .SearchResultItemContainer .ItemIcon {
-    padding: 2px 8px;
+    padding-left: 5px;
     width: 40px;
     height: 40px;
+    margin-bottom: auto;
 }
 
 .SearchResultItemContainer .ItemTitle {
+    font-size: 14px;
+    display: flex;
+    padding-left: 10px;
     margin-bottom: 2px;
 }
 
 .SearchResultItemContainer .ItemDescription {
-    font-size: 11px;
-    padding: 2px 0px;
+    font-size: 12px;
+    padding: 5px 0px 0px 10px;
     color: #aaa;
 }
 
 .SearchResultItemContainer .ItemDetails {
     display: flex;
     align-items: center;
+    padding: 7px 0px 0px 10px;
     font-size: 12px;
     color: #aaaaaa;
 }
@@ -416,7 +467,7 @@ input {
 .SearchResultItemContainer .ItemTypeIcon {
     width: 14px;
     height: 14px;
-    padding-bottom:3px;
+    padding-bottom: 3px;
 }
 
 .HighlightedText {

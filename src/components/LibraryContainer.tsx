@@ -20,10 +20,11 @@ export interface LibraryContainerProps {
 
 export interface LibraryContainerStates {
     inSearchMode: boolean,
+    structured: boolean,
+    detailed: boolean,
+    showExpandableToolTip: boolean,
     searchText: string,
     selectedCategories: string[],
-    structured: boolean,
-    detailed: boolean
 }
 
 export class LibraryContainer extends React.Component<LibraryContainerProps, LibraryContainerStates> {
@@ -32,7 +33,6 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
     layoutSpecsJson: any = null;
 
     generatedSections: LibraryUtilities.ItemData[] = null;
-    renderedSections: JSX.Element[] = null;
     searchCategories: string[] = [];
 
     timeout: number;
@@ -48,8 +48,9 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
         this.onSearchModeChanged = this.onSearchModeChanged.bind(this);
         this.onStructuredModeChanged = this.onStructuredModeChanged.bind(this);
         this.onDetailedModeChanged = this.onDetailedModeChanged.bind(this);
-        this.onCategoriesChanged = this.onCategoriesChanged.bind(this);
+        this.onShowExpandableToolTipChanged = this.onShowExpandableToolTipChanged.bind(this);
         this.onTextChanged = this.onTextChanged.bind(this);
+        this.onCategoriesChanged = this.onCategoriesChanged.bind(this);
         this.clearSearch = this.clearSearch.bind(this);
 
         // Set handlers after methods are bound.
@@ -58,14 +59,15 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
         this.props.libraryController.refreshLibraryViewHandler = this.refreshLibraryView;
 
         // Initialize the search utilities with empty data
-        this.searcher = new Searcher(this.onSearchModeChanged, this.clearSearch, this, [], []);
+        this.searcher = new Searcher(this, this.clearSearch);
 
         this.state = {
             inSearchMode: false,
-            searchText: '',
-            selectedCategories: [],
             structured: false,
-            detailed: false
+            detailed: false,
+            showExpandableToolTip: true, // disable expandable tool tip by default
+            searchText: '',
+            selectedCategories: []
         };
     }
 
@@ -117,10 +119,6 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
             this.loadedTypesJson, this.layoutSpecsJson,
             this.props.defaultSectionString, this.props.miscSectionString);
 
-        // Render the default view of the library
-        let index = 0;
-        this.renderedSections = this.generatedSections.map(data => <LibraryItem key={index++} libraryContainer={this} data={data} />);
-
         // Obtain the categories from each section to be added into the filtering options for search
         for (let section of this.generatedSections) {
             for (let childItem of section.childItems)
@@ -151,6 +149,10 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
         this.setState({ detailed: value });
     }
 
+    onShowExpandableToolTipChanged(showExpandableToolTip: boolean) {
+        this.setState({ showExpandableToolTip: showExpandableToolTip });
+    }
+
     onCategoriesChanged(categories: string[]) {
         this.setState({ selectedCategories: categories });
         this.searcher.categories = categories;
@@ -164,9 +166,7 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
         let hasText = text.length > 0;
 
         if (hasText) {
-            // Starting searching immediately after user input, 
-            // but only show change on ui after 300ms
-
+            // Starting searching after user stops typing for 300ms
             this.timeout = setTimeout(function () {
                 LibraryUtilities.searchItemResursive(this.generatedSections, text);
                 this.updateSearchViewDelayed(text);
@@ -202,20 +202,32 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
 
             if (!this.state.inSearchMode) {
                 let index = 0;
-                sections = this.renderedSections;
-            }
-            else {
-                if (this.state.structured) {
-                    sections = this.searcher.generateStructuredItems();
-                }
-                else {
-                    sections = this.searcher.generateListItems(this.generatedSections, this.state.searchText, this.state.detailed);
-                }
+                sections = this.generatedSections.map(data =>
+                    <LibraryItem
+                        key={index++}
+                        libraryContainer={this}
+                        data={data}
+                        showExpandableToolTip={this.state.showExpandableToolTip}
+                    />
+                );
+            } else if (this.state.structured) {
+                sections = this.searcher.generateStructuredItems(this.state.showExpandableToolTip);
+            } else {
+                sections = this.searcher.generateListItems(
+                    this.generatedSections,
+                    this.state.searchText,
+                    this.state.detailed,
+                    this.state.showExpandableToolTip
+                );
             }
 
-            const searchBar = <SearchBar onCategoriesChanged={this.onCategoriesChanged} onDetailedModeChanged={this.onDetailedModeChanged}
-                onStructuredModeChanged={this.onStructuredModeChanged} onTextChanged={this.onTextChanged}
-                categories={this.searcher.getDisplayedCategories()} />
+            const searchBar = <SearchBar
+                onCategoriesChanged={this.onCategoriesChanged}
+                onDetailedModeChanged={this.onDetailedModeChanged}
+                onStructuredModeChanged={this.onStructuredModeChanged}
+                onTextChanged={this.onTextChanged}
+                categories={this.searcher.getDisplayedCategories()}
+            />
 
             return (
                 <div className="LibraryContainer">

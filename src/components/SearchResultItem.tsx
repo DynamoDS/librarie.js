@@ -1,6 +1,7 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { LibraryContainer } from "./LibraryContainer";
+import { ToolTip } from "./ToolTip";
 import * as LibraryUtilities from "../LibraryUtilities";
 
 interface ParentTextClickedFunc {
@@ -8,20 +9,31 @@ interface ParentTextClickedFunc {
 }
 
 interface SearchResultItemProps {
-    data: LibraryUtilities.ItemData;
     libraryContainer: LibraryContainer;
-    highlightedText: string;
+    data: LibraryUtilities.ItemData;
     pathToItem: LibraryUtilities.ItemData[];
     onParentTextClicked: ParentTextClickedFunc;
+    highlightedText: string;
     detailed: boolean;
+    showExpandableToolTip: boolean;
 }
 
-interface SearchResultItemStates { }
+interface SearchResultItemStates {
+    toolTipExpanded: boolean;
+}
 
 export class SearchResultItem extends React.Component<SearchResultItemProps, SearchResultItemStates> {
 
     constructor(props: SearchResultItemProps) {
         super(props);
+        this.state = ({ toolTipExpanded: false });
+    }
+
+    // Collapse all expanded tooltips when unselect "show expandable tooltip" option
+    componentWillReceiveProps(nextProps: SearchResultItemProps) {
+        if (this.state.toolTipExpanded && !nextProps.showExpandableToolTip) {
+            this.setState({ toolTipExpanded: false });
+        }
     }
 
     render() {
@@ -39,8 +51,27 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
         let highLightedCategoryText = LibraryUtilities.getHighlightedText(categoryText, this.props.highlightedText, false);
         let itemTypeIconPath = "src/resources/icons/library-" + this.props.data.itemType + ".svg";
         let itemDescription: JSX.Element = null;
+        let toolTip: JSX.Element = null;
+        let expandIcon: JSX.Element = null;
 
-        if (this.props.detailed) {
+        if (this.props.showExpandableToolTip) {
+            expandIcon = (
+                <div className="ToolTipExpandIcon">
+                    <i className="fa fa-ellipsis-h" aria-hidden="true" onClick={this.onExpandIconClicked.bind(this)} />
+                </div>
+            );
+
+            if (this.state.toolTipExpanded) {
+                toolTip = <ToolTip
+                    libraryContainer={this.props.libraryContainer}
+                    data={this.props.data}
+                    showDescription={false}
+                    showIcon={false}
+                />;
+            }
+        }
+
+        if (this.props.detailed || this.state.toolTipExpanded) {
             let description = "No description available";
             if (this.props.data.description && this.props.data.description.length > 0) {
                 description = this.props.data.description;
@@ -56,6 +87,7 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
                 <div className={"ItemInfo"}>
                     <div className={"ItemTitle"}>{highLightedItemText}
                         <div className={"LibraryItemParameters"}>{parameters}</div>
+                        {expandIcon}
                     </div>
                     {itemDescription}
                     <div className={"ItemDetails"}>
@@ -65,6 +97,7 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
                         <img className={"ItemTypeIcon"} src={itemTypeIconPath} onError={this.onImageLoadFail.bind(this)} />
                         <div className={"ItemCategory"}>{highLightedCategoryText}</div>
                     </div>
+                    {toolTip}
                 </div>
             </div>
         );
@@ -76,12 +109,18 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
 
     onParentTextClicked(event: any) {
         event.stopPropagation();
+        this.onLibraryItemMouseLeave(); // Floating toolTip should be dismissed when clicking on parent text
         this.props.onParentTextClicked(this.props.pathToItem);
     }
 
     onItemClicked() {
         this.props.libraryContainer.raiseEvent("itemClicked", this.props.data.contextData);
     };
+
+    onExpandIconClicked(event: any) {
+        event.stopPropagation();
+        this.setState({ toolTipExpanded: !this.state.toolTipExpanded });
+    }
 
     onLibraryItemMouseLeave() {
         let libraryContainer = this.props.libraryContainer;
