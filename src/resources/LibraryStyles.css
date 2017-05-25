@@ -175,10 +175,6 @@ input {
     padding: 2px 8px 2px 4px;
 }
 
-.LibraryItemContainerCategory .LibraryItemText {}
-
-.LibraryItemContainerNone .LibraryItemText {}
-
 .LibraryItemGroupText {
     padding: 7px 0px 7px 5px;
     color: #a9a9a9;
@@ -262,17 +258,22 @@ input {
     opacity: 0;
 }
 
-.SearchBar .SearchOptionsBtn {
+.SearchBar .SearchOptionsBtnEnabled,
+.SearchBar .SearchOptionsBtnDisabled {
     height: 30px;
     width: 30px;
     border: none;
     outline: none;
-    color: #ddd;
-    background-color: #414141;
     transition: 0.15s;
+    color: #aaa;
+    background-color: #414141;
 }
 
-.SearchBar .SearchOptionsBtn:hover {
+.SearchBar .SearchOptionsBtnEnabled {
+    color: #ddd;
+}
+
+.SearchBar .SearchOptionsBtnEnabled:hover {
     color: #888;
     background-color: rgba(255, 255, 255, 0.1);
     cursor: pointer;

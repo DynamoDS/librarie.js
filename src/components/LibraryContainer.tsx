@@ -65,7 +65,7 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
             inSearchMode: false,
             structured: false,
             detailed: false,
-            showExpandableToolTip: false,
+            showExpandableToolTip: true, // disable expandable tool tip by default
             searchText: '',
             selectedCategories: []
         };
@@ -224,7 +224,6 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
             const searchBar = <SearchBar
                 onCategoriesChanged={this.onCategoriesChanged}
                 onDetailedModeChanged={this.onDetailedModeChanged}
-                onShowExpandableToolTipModeChanged={this.onShowExpandableToolTipChanged}
                 onStructuredModeChanged={this.onStructuredModeChanged}
                 onTextChanged={this.onTextChanged}
                 categories={this.searcher.getDisplayedCategories()}
