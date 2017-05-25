@@ -48,7 +48,6 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
         this.onSearchModeChanged = this.onSearchModeChanged.bind(this);
         this.onStructuredModeChanged = this.onStructuredModeChanged.bind(this);
         this.onDetailedModeChanged = this.onDetailedModeChanged.bind(this);
-        this.onShowExpandableToolTipChanged = this.onShowExpandableToolTipChanged.bind(this);
         this.onCategoriesChanged = this.onCategoriesChanged.bind(this);
         this.onTextChanged = this.onTextChanged.bind(this);
         this.clearSearch = this.clearSearch.bind(this);
@@ -147,10 +146,6 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
 
     onDetailedModeChanged(value: boolean) {
         this.setState({ detailed: value });
-    }
-
-    onShowExpandableToolTipChanged(showExpandableToolTip: boolean) {
-        this.setState({ showExpandableToolTip: showExpandableToolTip });
     }
 
     onCategoriesChanged(categories: string[]) {

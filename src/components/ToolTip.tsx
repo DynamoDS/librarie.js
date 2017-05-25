@@ -6,7 +6,6 @@ interface ToolTipProps {
     libraryContainer: LibraryContainer,
     data: ItemData;
     showDescription: boolean;
-    showIcon: boolean;
 }
 
 interface ToolTipState {
@@ -61,10 +60,6 @@ export class ToolTip extends React.Component<ToolTipProps, ToolTipState> {
             description = <div className={"Description"}>{descriptionText}</div>;
         }
 
-        if (this.props.showIcon) {
-            icon = <img className={"Icon"} src={this.props.data.iconUrl} onError={this.onImageLoadFail} />;
-        }
-
         return (
             <div className={"LibraryItemToolTip"}>
                 <div className={"LeftPane"}>
@@ -74,7 +69,7 @@ export class ToolTip extends React.Component<ToolTipProps, ToolTipState> {
                     <div className={"Output"}>OUTPUT</div>
                     {output}
                 </div>
-                {icon}
+                <img className={"Icon"} src={this.props.data.iconUrl} onError={this.onImageLoadFail} />;
             </div>
         );
     }
