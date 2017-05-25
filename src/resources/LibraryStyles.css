@@ -237,7 +237,7 @@ input {
 }
 
 .SearchBar .SearchOptionsBtnDisabled {
-    color: #888;
+    color: #555;
 }
 
 .SearchBar .SearchOptionsBtnEnabled:hover {
