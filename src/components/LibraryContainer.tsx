@@ -32,6 +32,7 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
     layoutSpecsJson: any = null;
 
     generatedSections: LibraryUtilities.ItemData[] = null;
+    renderedSections: JSX.Element[] = null;
     searchCategories: string[] = [];
 
     timeout: number;
@@ -59,12 +60,12 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
         // Initialize the search utilities with empty data
         this.searcher = new Searcher(this.onSearchModeChanged, this.clearSearch, this, [], []);
 
-        this.state = { 
+        this.state = {
             inSearchMode: false,
             searchText: '',
             selectedCategories: [],
             structured: false,
-            detailed: false 
+            detailed: false
         };
     }
 
@@ -116,6 +117,10 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
             this.loadedTypesJson, this.layoutSpecsJson,
             this.props.defaultSectionString, this.props.miscSectionString);
 
+        // Render the default view of the library
+        let index = 0;
+        this.renderedSections = this.generatedSections.map(data => <LibraryItem key={index++} libraryContainer={this} data={data} />);
+
         // Obtain the categories from each section to be added into the filtering options for search
         for (let section of this.generatedSections) {
             for (let childItem of section.childItems)
@@ -124,7 +129,7 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
 
         // Update the properties in searcher
         this.searcher.sections = this.generatedSections;
-        this.searcher.categories = this.searchCategories;
+        this.searcher.initializeCategories(this.searchCategories);
 
         // Just to force a refresh of UI.
         this.setState({ inSearchMode: this.state.inSearchMode });
@@ -184,7 +189,7 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
 
     clearSearch(text: string) {
         this.setState({ searchText: text })
-        this.onSearchModeChanged(false);        
+        this.onSearchModeChanged(false);
     }
 
     render() {
@@ -195,13 +200,9 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
         try {
             let sections: JSX.Element[] = null;
 
-            const searchBar = <SearchBar onCategoriesChanged={this.onCategoriesChanged} onDetailedModeChanged={this.onDetailedModeChanged} 
-                onStructuredModeChanged={this.onStructuredModeChanged} onTextChanged={this.onTextChanged} 
-                categories={this.searchCategories} />
-
             if (!this.state.inSearchMode) {
                 let index = 0;
-                sections = this.generatedSections.map(data => <LibraryItem key={index++} libraryContainer={this} data={data} />)
+                sections = this.renderedSections;
             }
             else {
                 if (this.state.structured) {
@@ -211,6 +212,10 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
                     sections = this.searcher.generateListItems(this.generatedSections, this.state.searchText, this.state.detailed);
                 }
             }
+
+            const searchBar = <SearchBar onCategoriesChanged={this.onCategoriesChanged} onDetailedModeChanged={this.onDetailedModeChanged}
+                onStructuredModeChanged={this.onStructuredModeChanged} onTextChanged={this.onTextChanged}
+                categories={this.searcher.getDisplayedCategories()} />
 
             return (
                 <div className="LibraryContainer">
