@@ -28,7 +28,7 @@ input {
 
 .LibraryItemContainer {
     flex-grow: 1;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 .LibraryItemContainerSection {
@@ -60,7 +60,6 @@ input {
 .LibrarySectionHeader {
     display: flex;
     padding: 10px;
-    color: white;
     transition: 0.15s;
     background-color: #464646;
     color: #888;
@@ -75,7 +74,6 @@ input {
     display: flex;
     flex-direction: row;
     align-items: center;
-    color: white;
     transition: 0.15s;
     overflow-y: hidden;
 }
@@ -115,6 +113,7 @@ input {
     width: 18px;
     height: 18px;
     -webkit-user-drag: none;
+    fill: #aaa;
 }
 
 .LibraryItemContainerNone .LibraryItemIcon {
@@ -129,9 +128,11 @@ input {
 }
 
 .LibraryItemContainerCategory .LibraryItemText {
+    color: #aaa;
 }
 
 .LibraryItemContainerNone .LibraryItemText {
+    color: #eee;
 }
 
 .LibraryItemGroupText {
