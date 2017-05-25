@@ -179,9 +179,10 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
         if (this.state.expanded) {
             options =
                 <div className="SearchOptions">
+                    <div className="SearchOptionsContainerArrow"></div>
                     <div className="SearchOptionsContainer">
                         <div className="SearchOptionsHeader">
-                            <span>Filter by category:</span>
+                            <span>Filter:</span>
                             <div className="SelectAllBtn" onClick={this.onAllButtonClicked.bind(this)}>Select All</div>
                         </div>
                         <div className="CategoryCheckboxContainer">
