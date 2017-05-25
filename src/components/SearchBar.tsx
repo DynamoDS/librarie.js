@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as ReactDOM from 'react-dom';
 import * as _ from 'underscore';
 
 interface StructuredModeChangedFunc {
@@ -89,6 +90,26 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
         });
     }
 
+    handleGlobalClick(event: any) {
+        let container = ReactDOM.findDOMNode(this).getElementsByClassName('SearchOptionsContainer');
+        let filterBtn = ReactDOM.findDOMNode(this).getElementsByClassName('FilterBtn');
+
+        if (container.length > 0 && filterBtn.length > 0) {
+            // Check if the user is clicking on the search options container or the filter button.
+            // If they are clicking outside of them, collapse the search options container
+            if (!ReactDOM.findDOMNode(container[0]).contains(event.target) && 
+            !ReactDOM.findDOMNode(filterBtn[0]).contains(event.target)) {
+                this.setExpandedState(false);
+            }
+        }
+    }
+
+    setExpandedState(value: boolean) {
+        if (value) window.addEventListener('click', this.handleGlobalClick.bind(this));
+        else window.removeEventListener('click', this.handleGlobalClick.bind(this));
+        this.setState({ expanded: value });
+    }
+
     onTextChanged(event: any) {
         let text = event.target.value.toLowerCase().replace(/ /g, '');
         let expanded = text.length == 0 ? false : this.state.expanded;
@@ -97,7 +118,7 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
     }
 
     onExpandButtonClick() {
-        this.setState({ expanded: !this.state.expanded });
+        this.setExpandedState(!this.state.expanded);
     }
 
     onStructuredModeChanged(event: any) {
@@ -154,7 +175,8 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
         let structuredBtnClass = this.state.structured ? "fa fa-dedent" : "fa fa-indent";
 
         // Create the filter button
-        let filterBtn = <button className={searchOptionsBtnClass} onClick={this.onExpandButtonClick.bind(this)} disabled={searchOptionsDisabled}><i className="fa fa-filter"></i></button>;
+        let filterBtnClass = "FilterBtn " + searchOptionsBtnClass;
+        let filterBtn = <button className={filterBtnClass} onClick={this.onExpandButtonClick.bind(this)} disabled={searchOptionsDisabled}><i className="fa fa-filter"></i></button>;
 
         // Create the button to toggle structured state
         let structuredBtn = <button className={searchOptionsBtnClass} onClick={this.onStructuredModeChanged.bind(this)} disabled={searchOptionsDisabled}><i className={structuredBtnClass}></i></button>;
