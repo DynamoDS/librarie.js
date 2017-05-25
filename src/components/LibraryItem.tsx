@@ -30,7 +30,8 @@ export interface LibraryItemProps {
 }
 
 export interface LibraryItemState {
-    expanded: boolean
+    itemExpanded: boolean,
+    toolTipExpanded: boolean
 }
 
 class GroupedItems {
@@ -71,7 +72,8 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
 
         // All items are collapsed by default, except for section items
         this.state = {
-            expanded: this.props.data.expanded
+            itemExpanded: this.props.data.expanded,
+            toolTipExpanded: false
         };
     }
 
@@ -80,8 +82,8 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
     // expansion state. This will make sure that the expansion state of an item
     // in search view will not be affected by the previous user click.
     componentWillReceiveProps(nextProps: LibraryItemProps) {
-        if (nextProps.data.expanded !== this.state.expanded) {
-            this.setState({ expanded: nextProps.data.expanded });
+        if (nextProps.data.expanded !== this.state.itemExpanded) {
+            this.setState({ itemExpanded: nextProps.data.expanded });
         }
     }
 
@@ -103,7 +105,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         let clusteredElements: JSX.Element = null;
 
         // visible only nested elements when expanded.
-        if (this.state.expanded && this.props.data.childItems.length > 0) {
+        if (this.state.itemExpanded && this.props.data.childItems.length > 0) {
 
             // Break item list down into sub-lists based on the type of each item.
             let groupedItems = new GroupedItems(LibraryUtilities.sortItemsByText(this.props.data.childItems));
@@ -131,7 +133,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
 
             // Show arrow for non-leaf items
             if (this.props.data.childItems.length > 0) {
-                let arrowIcon = this.state.expanded ? require("../resources/ui/indent-arrow-down.svg") : require("../resources/ui/indent-arrow-right.svg");
+                let arrowIcon = this.state.itemExpanded ? require("../resources/ui/indent-arrow-down.svg") : require("../resources/ui/indent-arrow-right.svg");
                 arrow = <img className={"Arrow"} src={arrowIcon} onError={this.onImageLoadFail} />;
             }
         }
@@ -270,12 +272,12 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
 
     onLibraryItemClicked() {
         // Toggle expansion state.
-        let currentlyExpanded = this.state.expanded;
+        let currentlyExpanded = this.state.itemExpanded;
         if (this.props.data.childItems.length > 0 && !currentlyExpanded && this.props.onItemWillExpand) {
             this.props.onItemWillExpand();
         }
 
-        this.setState({ expanded: !currentlyExpanded });
+        this.setState({ itemExpanded: !currentlyExpanded });
 
         let libraryContainer = this.props.libraryContainer;
         if (this.props.data.childItems.length == 0) {
@@ -289,7 +291,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         for (let item of this.props.data.childItems) {
             item.expanded = false;
         }
-        this.setState({ expanded: true }); // Make the current item (parent) expanded.
+        this.setState({ itemExpanded: true }); // Make the current item (parent) expanded.
     }
 
     onLibraryItemMouseLeave() {
