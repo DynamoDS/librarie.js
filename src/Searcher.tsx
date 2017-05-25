@@ -79,7 +79,7 @@ export class Searcher {
         pathToItem: LibraryUtilities.ItemData[] = [],
         leafItems: JSX.Element[] = [],
         top: boolean = true): JSX.Element[] {
-        
+
         if (top) {
             this.displayedCategories = [];
         }
@@ -109,7 +109,7 @@ export class Searcher {
                     pathToItem={pathToThisItem}
                     onParentTextClicked={this.directToLibrary.bind(this)}
                     detailed={detailed}
-                    />);
+                />);
             } else {
                 this.generateListItems(item.childItems, searchText, detailed, pathToThisItem, leafItems, false);
             }
@@ -133,8 +133,10 @@ export class Searcher {
     }
 
     clearSearch() {
-        let searchInput: any = document.getElementById("SearchInputText");
-        searchInput.value = "";
-        this.clearSearchFunc(searchInput.value);
+        let searchInput: any = document.getElementsByClassName("SearchInputText");
+        if (searchInput && searchInput.length > 0) {
+            searchInput[0].value = "";
+            this.clearSearchFunc(searchInput[0].value);
+        }
     }
 }
