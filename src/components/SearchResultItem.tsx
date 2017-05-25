@@ -16,12 +16,15 @@ interface SearchResultItemProps {
     detailed: boolean;
 }
 
-interface SearchResultItemStates { }
+interface SearchResultItemStates {
+    toolTipExpanded: boolean
+}
 
 export class SearchResultItem extends React.Component<SearchResultItemProps, SearchResultItemStates> {
 
     constructor(props: SearchResultItemProps) {
         super(props);
+        this.state = ({ toolTipExpanded: false });
     }
 
     render() {
@@ -76,6 +79,7 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
 
     onParentTextClicked(event: any) {
         event.stopPropagation();
+        this.onLibraryItemMouseLeave(); // Floating toolTip should be dismissed when clicking on parent text
         this.props.onParentTextClicked(this.props.pathToItem);
     }
 
