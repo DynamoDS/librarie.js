@@ -96,11 +96,7 @@ describe("LibraryContainer", function () {
   });
    describe("Test mouse click event and change in expand state", function () {
         it("Must recognise mouse event and change state", function () {
-          // test data to create LibraryItem 
-          let loadedTypesJson: any;
-          let layoutSpecsJson: any;
-          let libController: LibraryEntryPoint.LibraryController;
-          
+          // test data to create LibraryItem  
           // parent item that will hold the child items
           let data = new ItemData("");
           data.text = "TestItem";
@@ -114,17 +110,9 @@ describe("LibraryContainer", function () {
             data.appendChild(item);
           }
 
-          // crate "LibraryContainer"" to pass as an argument for creation of "LibraryItem"
-          libController = LibraryEntryPoint.CreateLibraryController();
-          libController.on("itemClicked", function (item) {
-            console.log(item);
-          })
-
-          libController.on("searchTextUpdated", function (searchText) {
-            console.log(searchText);
-            return null;
-          });
-          let libContainer = libController.createLibraryContainer(layoutSpecsJson, loadedTypesJson);
+          // create "LibraryContainer" to pass as an argument for creation of "LibraryItem"
+          let libContainer = LibraryEntryPoint.CreateLibraryController();
+         
 
           // Mount is "real" rendering that will actually render your component into a browser environment. 
           // If you are testing full React components, 
