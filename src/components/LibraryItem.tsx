@@ -20,7 +20,7 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { ClusterView } from "./ClusterView";
 import { LibraryContainer } from "./LibraryContainer";
-import { ItemData } from "../LibraryUtilities";
+import { ItemData, sortItemsByText } from "../LibraryUtilities";
 
 export interface LibraryItemProps {
     libraryContainer: any,
@@ -50,6 +50,11 @@ class GroupedItems {
                 default: this.others.push(items[i]); break;
             }
         }
+
+        this.creates = sortItemsByText(this.creates);
+        this.actions = sortItemsByText(this.actions);
+        this.queries = sortItemsByText(this.queries);
+        this.others = sortItemsByText(this.others);
     }
 
     getCreateItems(): ItemData[] { return this.creates; }
@@ -65,7 +70,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
 
         // All items are collapsed by default, except for section items
         this.state = {
-            expanded: this.props.data.itemType === "section" ? true : this.props.data.expanded
+            expanded: this.props.data.expanded
         };
     }
 
@@ -100,7 +105,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         if (this.state.expanded && this.props.data.childItems.length > 0) {
 
             // Break item list down into sub-lists based on the type of each item.
-            let groupedItems = new GroupedItems(this.props.data.childItems);
+            let groupedItems = new GroupedItems(sortItemsByText(this.props.data.childItems));
 
             // There are some leaf nodes (e.g. methods).
             clusteredElements = this.getClusteredElements(groupedItems);
@@ -264,7 +269,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         if (this.props.data.childItems.length > 0 && !currentlyExpanded && this.props.onItemWillExpand) {
             this.props.onItemWillExpand();
         }
-        
+
         this.setState({ expanded: !currentlyExpanded });
 
         let libraryContainer = this.props.libraryContainer;
@@ -285,17 +290,17 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
     onLibraryItemMouseLeave() {
         let libraryContainer = this.props.libraryContainer;
         if (this.props.data.childItems.length == 0) {
-            libraryContainer.raiseEvent(libraryContainer.props.libraryController.ItemMouseLeaveEventName,
-                { data: this.props.data.contextData });
+            let mouseLeaveEvent = libraryContainer.props.libraryController.ItemMouseLeaveEventName;
+            libraryContainer.raiseEvent(mouseLeaveEvent, { data: this.props.data.contextData });
         }
     }
 
     onLibraryItemMouseEnter() {
         let libraryContainer = this.props.libraryContainer;
         if (this.props.data.childItems.length == 0) {
-            var rec = ReactDOM.findDOMNode(this).getBoundingClientRect();
-            libraryContainer.raiseEvent(libraryContainer.props.libraryController.ItemMouseEnterEventName,
-                { data: this.props.data.contextData, rect: rec });
+            let rec = ReactDOM.findDOMNode(this).getBoundingClientRect();
+            let mouseEnterEvent = libraryContainer.props.libraryController.ItemMouseEnterEventName;
+            libraryContainer.raiseEvent(mouseEnterEvent, { data: this.props.data.contextData, rect: rec });
         }
     }
 }
