@@ -19,7 +19,10 @@ Installing all dependencies
 
 - Navigate to `localhost:3456` in Google Chrome browser
 
-## Test
+## Setup Testframework
+- Step by step instructions to setup JEST is found at https://github.com/DynamoDS/librarie.js/wiki/Setting-up-test-frameworks-for-librarie.js
+
+## Run Tests
 - Run UI test
 
     `$ npm run testjest`
@@ -218,3 +221,4 @@ libController.on(libController.ItemMouseLeaveEventName, function(contextData) {
     console.log("Rect(top, left, bottom, right): " + arg.rect.top + "," + arg.rect.left + "," + arg.rect.bottom + "," + arg.rect.right);
 })
 ```
+
