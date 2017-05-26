@@ -56,8 +56,8 @@
                 return null;
             });
 
-            libController.on("sectionIconClicked", function (text) {
-                console.log(text, "icon clicked");
+            libController.on(libController.SectionIconClickedEventName, function (sectionText) {
+                console.log(sectionText, "icon clicked");
                 return null;
             });
 
