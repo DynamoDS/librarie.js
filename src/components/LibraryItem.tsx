@@ -287,9 +287,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
 
     onSectionIconClicked(event: any) {
         let libraryContainer = this.props.libraryContainer;
-        if (this.props.data.text === "Add-ons") {
-            libraryContainer.raiseEvent(libraryContainer.props.libraryController.AddOnsIconClickedEventName);
-        }
+        libraryContainer.raiseEvent(libraryContainer.props.libraryController.SectionIconClickedEventName, this.props.data.text);
         event.stopPropagation(); // Prevent the onClick event of its parent item from being called.
     }
 
