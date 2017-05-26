@@ -174,21 +174,6 @@ libController.on("searchTextUpdated", function (searchText) {
 });
 ```
 
-## Structure of test 
-- Import libraries required for creating the item tested
-     import { LibraryItem } from '../src/components/LibraryItem';
-- Define a test and verify the results.e.g. for test 
-
-```typescript
-  describe("sample test", function () {
-  it("should add two numbers", function () {
-    expect(1 + 2).to.equal(3);
-  });
-  });
-```
-- Step by step instruction to write a UI test is found at https://github.com/DynamoDS/librarie.js/wiki/Setting-up-test-frameworks-for-librarie.js
-
-
 The string property for the event name is: SearchTextUpdatedEventName. So the following achieves the same:
 
 ```js
@@ -236,4 +221,20 @@ libController.on(libController.ItemMouseLeaveEventName, function(contextData) {
     console.log("Rect(top, left, bottom, right): " + arg.rect.top + "," + arg.rect.left + "," + arg.rect.bottom + "," + arg.rect.right);
 })
 ```
+## Jest test structure 
+
+```typescript
+  // Importing the object to be tested
+import { LibraryItem } from '../src/components/LibraryItem';
+
+// A test case that tests object properties against their intended value 
+it("should create a libraryItem", function () {
+          let libContainer = libController.createLibraryContainer(layoutSpecsJson, loadedTypesJson);
+
+          let libraryItem = mount(<LibraryItem libraryContainer={libContainer} data={data} />); 
+          expect(libraryItem.props().data.childItems[0].text).to.equal("Child0"); 
+
+}
+```
+- Instructions to write a tests are found at https://github.com/DynamoDS/librarie.js/wiki/Setting-up-test-frameworks-for-librarie.js
 
