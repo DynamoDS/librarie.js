@@ -258,7 +258,7 @@ input {
 }
 
 .SearchBar .SearchOptionsContainer {
-    font-size: 12px;
+    font-size: 13px;
     color: #fff;
     margin: 0px 0px 5px 0px;
     background-color: #606060;
@@ -300,7 +300,7 @@ input {
     position: relative;
     width: 100%;
     display: block;
-    padding: 3px;
+    padding: 4px 3px;
     transition: 0.15s;
 }
 

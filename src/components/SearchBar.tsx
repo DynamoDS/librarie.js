@@ -22,11 +22,16 @@ interface SearchBarExpandedFunc {
     (event: any): void;
 }
 
+interface SetSearchInputFieldFunc {
+    (field: HTMLInputElement): void
+}
+
 export interface SearchBarProps {
     onTextChanged: SearchTextChangedFunc;
     onStructuredModeChanged: StructuredModeChangedFunc;
     onDetailedModeChanged: DetailedModeChangedFunc;
     onCategoriesChanged: SearchCategoriesChangedFunc;
+    setSearchInputField: SetSearchInputFieldFunc;
     categories: string[];
 }
 
@@ -41,6 +46,9 @@ export interface SearchBarState {
 export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
 
     categoryData: CategoryData[] = [];
+    searchOptionsContainer: HTMLDivElement = null;
+    searchInputField: HTMLInputElement = null;
+    filterBtn: HTMLButtonElement = null;
 
     constructor(props: SearchBarProps) {
         super(props);
@@ -79,10 +87,9 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
     }
 
     clearInput() {
-        let searchInput: any = document.getElementsByClassName("SearchInputText");
-        if (searchInput && searchInput.length > 0) {
-            searchInput[0].value = '';
-            this.props.onTextChanged(searchInput[0].value);
+        if (this.searchInputField) {
+            this.searchInputField.value = '';
+            this.props.onTextChanged(this.searchInputField.value);
         }
         this.setState({
             hasText: false,
@@ -91,14 +98,11 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
     }
 
     handleGlobalClick(event: any) {
-        let container = ReactDOM.findDOMNode(this).getElementsByClassName('SearchOptionsContainer');
-        let filterBtn = ReactDOM.findDOMNode(this).getElementsByClassName('FilterBtn');
-
-        if (container.length > 0 && filterBtn.length > 0) {
+        if (this.searchOptionsContainer && this.filterBtn) {
             // Check if the user is clicking on the search options container or the filter button.
             // If they are clicking outside of them, collapse the search options container
-            if (!ReactDOM.findDOMNode(container[0]).contains(event.target) && 
-            !ReactDOM.findDOMNode(filterBtn[0]).contains(event.target)) {
+            if (!ReactDOM.findDOMNode(this.searchOptionsContainer).contains(event.target) &&
+                !ReactDOM.findDOMNode(this.filterBtn).contains(event.target)) {
                 this.setExpandedState(false);
             }
         }
@@ -165,26 +169,44 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
         this.props.onCategoriesChanged(categories);
     }
 
+    getSearchOptionsBtnClass() {
+        let searchOptionsBtnClass = this.state.hasText ? "SearchOptionsBtnEnabled" : "SearchOptionsBtnDisabled";
+        return searchOptionsBtnClass;
+    }
+
+    getSearchOptionsDisabled() {
+        let searchOptionsDisabled = this.state.hasText ? false : true; // Enable the button only when user is doing search
+        return searchOptionsDisabled;
+    }
+
+    createFilterButton() {
+        // Create the filter button
+        let filterBtn = <button className={this.getSearchOptionsBtnClass()} onClick={this.onExpandButtonClick.bind(this)} disabled={this.getSearchOptionsDisabled()} ref={(button) => { this.filterBtn = button }} title="Filter results"><i className="fa fa-filter"></i></button>;
+        return filterBtn;
+    }
+
+    createStructuredButton() {
+        let structuredBtnClass = this.state.structured ? "fa fa-dedent" : "fa fa-indent";
+
+        // Create the button to toggle structured state
+        let structuredBtn = <button className={this.getSearchOptionsBtnClass()} onClick={this.onStructuredModeChanged.bind(this)} disabled={this.getSearchOptionsDisabled()} title="Structured view"><i className={structuredBtnClass}></i></button>;
+        return structuredBtn;
+    }
+
+    createDetailedButton() {
+        // Create the button to toggle between compact/detailed
+        // This button is only enabled when the user is doing search and structured view is not enabled
+        let detailedBtnClass = this.state.hasText && !this.state.structured ? "SearchOptionsBtnEnabled" : "SearchOptionsBtnDisabled";
+        let detailedBtnDisabled = this.state.hasText && !this.state.structured ? false : true;
+        let detailedBtn = <button className={detailedBtnClass} onClick={this.onDetailedModeChanged.bind(this)} disabled={detailedBtnDisabled} title="Compact/Detailed View"><i className="fa fa-align-justify"></i></button>;
+        return detailedBtn;
+    }
+
     render() {
         let options = null;
         let checkboxes: JSX.Element[] = [];
         let cancelButton: JSX.Element = null;
 
-        let searchOptionsBtnClass = this.state.hasText ? "SearchOptionsBtnEnabled" : "SearchOptionsBtnDisabled";
-        let searchOptionsDisabled = this.state.hasText ? false : true; // Enable the button only when user is doing search
-        let structuredBtnClass = this.state.structured ? "fa fa-dedent" : "fa fa-indent";
-
-        // Create the filter button
-        let filterBtnClass = "FilterBtn " + searchOptionsBtnClass;
-        let filterBtn = <button className={filterBtnClass} onClick={this.onExpandButtonClick.bind(this)} disabled={searchOptionsDisabled}><i className="fa fa-filter"></i></button>;
-
-        // Create the button to toggle structured state
-        let structuredBtn = <button className={searchOptionsBtnClass} onClick={this.onStructuredModeChanged.bind(this)} disabled={searchOptionsDisabled}><i className={structuredBtnClass}></i></button>;
-
-        // Create the button to toggle detailed state
-        let detailedBtnClass = this.state.hasText && !this.state.structured ? "SearchOptionsBtnEnabled" : "SearchOptionsBtnDisabled";
-        let detailedBtnDisabled = this.state.hasText && !this.state.structured ? false : true; // Enable the button only when user is searching and structured view is not selected
-        let detailedBtn = <button className={detailedBtnClass} onClick={this.onDetailedModeChanged.bind(this)} disabled={detailedBtnDisabled}><i className="fa fa-align-justify"></i></button>;
 
         this.categoryData.forEach(category => checkboxes.push(category.createCheckbox(true)));
 
@@ -202,7 +224,7 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
             options =
                 <div className="SearchOptions">
                     <div className="SearchOptionsContainerArrow"></div>
-                    <div className="SearchOptionsContainer">
+                    <div className="SearchOptionsContainer" ref={(container) => this.searchOptionsContainer = container}>
                         <div className="SearchOptionsHeader">
                             <span>Filter:</span>
                             <div className="SelectAllBtn" onClick={this.onAllButtonClicked.bind(this)}>Select All</div>
@@ -218,13 +240,13 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
                 <div className="LibraryHeader">
                     Library
                     <div>
-                        |{filterBtn}|{structuredBtn}|{detailedBtn}
+                        |{this.createFilterButton()}|{this.createStructuredButton()}|{this.createDetailedButton()}
                     </div>
                 </div>
                 <div className="SearchInput">
                     <div>
                         <i className="fa fa-search SearchBarIcon"></i>
-                        <input className="SearchInputText" type="input" placeholder="Search..." onChange={this.onTextChanged.bind(this)}></input>
+                        <input className="SearchInputText" type="input" placeholder="Search..." onChange={this.onTextChanged.bind(this)} ref={(field) => { this.searchInputField = field; this.props.setSearchInputField(field) }}></input>
                     </div>
                     {cancelButton}
                 </div>
