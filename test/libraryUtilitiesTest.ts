@@ -4,6 +4,487 @@ import * as testClasses from './libraryUtilitiesTestClasses'
 import { expect } from 'chai';
 import 'mocha';
 
+function compareLayoutElements(actual: LibraryUtilities.LayoutElement, expected: LibraryUtilities.LayoutElement) {
+
+  // Basic element properties must match up.
+  expect(actual.text).to.equal(expected.text);
+  expect(actual.iconUrl).to.equal(expected.iconUrl);
+  expect(actual.showHeader).to.equal(expected.showHeader);
+  expect(actual.elementType).to.equal(expected.elementType);
+
+  // Include paths comparison.
+  expect(actual.include.length).to.equal(expected.include.length);
+  for (let i = 0; i < expected.include.length; i++) {
+    expect(actual.include[i].path).to.equal(expected.include[i].path);
+    expect(actual.include[i].inclusive).to.equal(expected.include[i].inclusive);
+    expect(actual.include[i].iconUrl).to.equal(expected.include[i].iconUrl);
+  }
+
+  // Each nested child element should also match up.
+  expect(actual.childElements.length).to.equal(expected.childElements.length);
+  for (let i = 0; i < expected.childElements.length; i++) {
+    compareLayoutElements(actual.childElements[i], expected.childElements[i]);
+  }
+}
+
+describe("updateSections function", function () {
+
+  it("should throw exceptions 0", function () {
+    expect(function () {
+      LibraryUtilities.updateSections(null, null);
+    }).to.throw("Both 'oldLayoutSpecs' and 'newLayoutSpecs' parameters must be supplied");
+  });
+
+  it("should throw exceptions 1", function () {
+    expect(function () {
+      LibraryUtilities.updateSections({}, null);
+    }).to.throw("Both 'oldLayoutSpecs' and 'newLayoutSpecs' parameters must be supplied");
+  });
+
+  it("should throw exceptions 2", function () {
+    expect(function () {
+      LibraryUtilities.updateSections(null, {});
+    }).to.throw("Both 'oldLayoutSpecs' and 'newLayoutSpecs' parameters must be supplied");
+  });
+
+  it("should throw exceptions 3", function () {
+    expect(function () {
+      LibraryUtilities.updateSections({}, {});
+    }).to.throw("'oldLayoutSpecs.sections' must be a valid array");
+  });
+
+  it("should throw exceptions 4", function () {
+    expect(function () {
+      LibraryUtilities.updateSections({ sections: [] }, {});
+    }).to.throw("'newLayoutSpecs.sections' must be a valid array");
+  });
+
+  it("should insert a new element when there isn't an existing one", function () {
+
+    let oldLayoutSpecs: any = {
+      sections: []
+    };
+
+    let newLayoutSpecs: any = {
+      sections: [
+        {
+          text: "My Favourites",
+          iconUrl: "/icons/my-fav.svg",
+          elementType: "section",
+          showHeader: true,
+          include: [
+            {
+              path: "Direct.Child.One",
+              iconUrl: "/icons/Direct.Child.One.png",
+              inclusive: false
+            },
+            {
+              path: "Direct.Child.Two",
+              iconUrl: "/icons/Direct.Child.Two.png",
+              inclusive: true
+            }
+          ],
+          childElements: [
+            {
+              text: "First Favourite",
+              iconUrl: "/icons/first-fav.svg",
+              elementType: "group",
+              include: [
+                {
+                  path: "Nested.Child.One",
+                  iconUrl: "/icons/Nested.Child.One.png",
+                  inclusive: true
+                },
+                {
+                  path: "Nested.Child.Two",
+                  iconUrl: "/icons/Nested.Child.Two.png",
+                  inclusive: false
+                },
+                {
+                  path: "Nested.Child.Three",
+                  iconUrl: "/icons/Nested.Child.Three.png",
+                  inclusive: true
+                }
+              ],
+              childElements: []
+            }
+          ]
+        }
+      ]
+    };
+
+    // Precondition
+    expect(oldLayoutSpecs.sections.length).to.equal(0);
+    expect(newLayoutSpecs.sections.length).to.equal(1);
+
+    LibraryUtilities.updateSections(oldLayoutSpecs, newLayoutSpecs);
+    expect(oldLayoutSpecs.sections.length).to.equal(1);
+
+    let rootElement: LibraryUtilities.LayoutElement = oldLayoutSpecs.sections[0];
+    compareLayoutElements(rootElement, newLayoutSpecs.sections[0]);
+  });
+
+  it("should update existing contents with new contents", function () {
+
+    let oldLayoutSpecs: any = {
+      sections: [
+        {
+          text: "My Favourites",
+          iconUrl: "/icons/my-fav.svg",
+          elementType: "section",
+          showHeader: true,
+          include: [
+            {
+              path: "Direct.Child.One",
+              iconUrl: "/icons/Direct.Child.One.png",
+              inclusive: false
+            },
+            {
+              path: "Direct.Child.Two",
+              iconUrl: "/icons/Direct.Child.Two.png",
+              inclusive: true
+            }
+          ],
+          "childElements": [
+            {
+              text: "First Favourite",
+              iconUrl: "/icons/first-fav.svg",
+              elementType: "group",
+              include: [
+                {
+                  path: "Nested.Child.One",
+                  iconUrl: "/icons/Nested.Child.One.png",
+                  inclusive: true
+                },
+                {
+                  path: "Nested.Child.Two",
+                  iconUrl: "/icons/Nested.Child.Two.png",
+                  inclusive: false
+                },
+                {
+                  path: "Nested.Child.Three",
+                  iconUrl: "/icons/Nested.Child.Three.png",
+                  inclusive: true
+                }
+              ],
+              "childElements": []
+            }
+          ]
+        }
+      ]
+    };
+
+    let newLayoutSpecs: any = {
+      sections: [
+        {
+          text: "My Favourites",
+          iconUrl: "/icons/my-fav-new.svg",
+          elementType: "section",
+          showHeader: false,
+          include: [
+            {
+              path: "Direct.Child.One",
+              iconUrl: "/icons/Direct.Child.One.New.png",
+              inclusive: true
+            },
+            {
+              path: "Direct.Child.Two.New",
+              iconUrl: "/icons/Direct.Child.Two.New.png",
+              inclusive: false
+            }
+          ],
+          childElements: [
+            {
+              text: "First Favourite",
+              iconUrl: "/icons/first-fav-new.svg",
+              elementType: "group",
+              include: [
+                {
+                  path: "Nested.Child.One.New",
+                  iconUrl: "/icons/Nested.Child.One.New.png",
+                  inclusive: false
+                },
+                {
+                  path: "Nested.Child.Two",
+                  iconUrl: "/icons/Nested.Child.Two.New.png",
+                  inclusive: true
+                },
+                {
+                  path: "Nested.Child.Three.New",
+                  iconUrl: "/icons/Nested.Child.Three.New.png",
+                  inclusive: false
+                }
+              ],
+              childElements: []
+            }
+          ]
+        }
+      ]
+    };
+
+    let expectedLayoutSpecs: any = {
+      sections: [
+        {
+          text: "My Favourites",
+          iconUrl: "/icons/my-fav-new.svg",
+          elementType: "section",
+          showHeader: false,
+          include: [
+            {
+              path: "Direct.Child.One",
+              iconUrl: "/icons/Direct.Child.One.New.png",
+              inclusive: true
+            },
+            {
+              path: "Direct.Child.Two",
+              iconUrl: "/icons/Direct.Child.Two.png",
+              inclusive: true
+            },
+            {
+              path: "Direct.Child.Two.New",
+              iconUrl: "/icons/Direct.Child.Two.New.png",
+              inclusive: false
+            }
+          ],
+          "childElements": [
+            {
+              text: "First Favourite",
+              iconUrl: "/icons/first-fav-new.svg",
+              elementType: "group",
+              include: [
+                {
+                  path: "Nested.Child.One",
+                  iconUrl: "/icons/Nested.Child.One.png",
+                  inclusive: true
+                },
+                {
+                  path: "Nested.Child.Two",
+                  iconUrl: "/icons/Nested.Child.Two.New.png",
+                  inclusive: true
+                },
+                {
+                  path: "Nested.Child.Three",
+                  iconUrl: "/icons/Nested.Child.Three.png",
+                  inclusive: true
+                },
+                {
+                  path: "Nested.Child.One.New",
+                  iconUrl: "/icons/Nested.Child.One.New.png",
+                  inclusive: false
+                },
+                {
+                  path: "Nested.Child.Three.New",
+                  iconUrl: "/icons/Nested.Child.Three.New.png",
+                  inclusive: false
+                }
+              ],
+              "childElements": []
+            }
+          ]
+        }
+      ]
+    };
+
+    // Precondition
+    expect(oldLayoutSpecs.sections.length).to.equal(1);
+    expect(newLayoutSpecs.sections.length).to.equal(1);
+    expect(oldLayoutSpecs.sections[0].text).to.equal("My Favourites");
+    expect(newLayoutSpecs.sections[0].text).to.equal("My Favourites");
+
+    LibraryUtilities.updateSections(oldLayoutSpecs, newLayoutSpecs);
+
+    let rootElement: LibraryUtilities.LayoutElement = oldLayoutSpecs.sections[0];
+    compareLayoutElements(rootElement, expectedLayoutSpecs.sections[0]);
+  });
+
+  it("should update existing contents including child elements", function () {
+
+    let oldLayoutSpecs: any = {
+      sections: [
+        {
+          text: "My Favourites",
+          iconUrl: "/icons/my-fav.svg",
+          elementType: "section",
+          showHeader: true,
+          include: [
+            {
+              path: "Direct.Child.One",
+              iconUrl: "/icons/Direct.Child.One.png",
+              inclusive: false
+            },
+            {
+              path: "Direct.Child.Two",
+              iconUrl: "/icons/Direct.Child.Two.png",
+              inclusive: true
+            }
+          ],
+          "childElements": [
+            {
+              text: "First Favourite",
+              iconUrl: "/icons/first-fav.svg",
+              elementType: "group",
+              include: [
+                {
+                  path: "Nested.Child.One",
+                  iconUrl: "/icons/Nested.Child.One.png",
+                  inclusive: true
+                },
+                {
+                  path: "Nested.Child.Two",
+                  iconUrl: "/icons/Nested.Child.Two.png",
+                  inclusive: false
+                },
+                {
+                  path: "Nested.Child.Three",
+                  iconUrl: "/icons/Nested.Child.Three.png",
+                  inclusive: true
+                }
+              ],
+              "childElements": []
+            }
+          ]
+        }
+      ]
+    };
+
+    let newLayoutSpecs: any = {
+      sections: [
+        {
+          text: "My Favourites",
+          iconUrl: "/icons/my-fav-new.svg",
+          elementType: "section",
+          showHeader: false,
+          include: [
+            {
+              path: "Direct.Child.One",
+              iconUrl: "/icons/Direct.Child.One.New.png",
+              inclusive: true
+            },
+            {
+              path: "Direct.Child.Two.New",
+              iconUrl: "/icons/Direct.Child.Two.New.png",
+              inclusive: false
+            }
+          ],
+          childElements: [
+            {
+              text: "Second Favourite",
+              iconUrl: "/icons/first-fav-new.svg",
+              elementType: "group",
+              include: [
+                {
+                  path: "Nested.Child.One.New",
+                  iconUrl: "/icons/Nested.Child.One.New.png",
+                  inclusive: false
+                },
+                {
+                  path: "Nested.Child.Two.New",
+                  iconUrl: "/icons/Nested.Child.Two.New.png",
+                  inclusive: true
+                },
+                {
+                  path: "Nested.Child.Three.New",
+                  iconUrl: "/icons/Nested.Child.Three.New.png",
+                  inclusive: false
+                }
+              ],
+              childElements: []
+            }
+          ]
+        }
+      ]
+    };
+
+    let expectedLayoutSpecs: any = {
+      sections: [
+        {
+          text: "My Favourites",
+          iconUrl: "/icons/my-fav-new.svg",
+          elementType: "section",
+          showHeader: false,
+          include: [
+            {
+              path: "Direct.Child.One",
+              iconUrl: "/icons/Direct.Child.One.New.png",
+              inclusive: true
+            },
+            {
+              path: "Direct.Child.Two",
+              iconUrl: "/icons/Direct.Child.Two.png",
+              inclusive: true
+            },
+            {
+              path: "Direct.Child.Two.New",
+              iconUrl: "/icons/Direct.Child.Two.New.png",
+              inclusive: false
+            }
+          ],
+          "childElements": [
+            {
+              text: "First Favourite",
+              iconUrl: "/icons/first-fav.svg",
+              elementType: "group",
+              include: [
+                {
+                  path: "Nested.Child.One",
+                  iconUrl: "/icons/Nested.Child.One.png",
+                  inclusive: true
+                },
+                {
+                  path: "Nested.Child.Two",
+                  iconUrl: "/icons/Nested.Child.Two.png",
+                  inclusive: false
+                },
+                {
+                  path: "Nested.Child.Three",
+                  iconUrl: "/icons/Nested.Child.Three.png",
+                  inclusive: true
+                }
+              ],
+              childElements: []
+            },
+            {
+              text: "Second Favourite",
+              iconUrl: "/icons/first-fav-new.svg",
+              elementType: "group",
+              include: [
+                {
+                  path: "Nested.Child.One.New",
+                  iconUrl: "/icons/Nested.Child.One.New.png",
+                  inclusive: false
+                },
+                {
+                  path: "Nested.Child.Two.New",
+                  iconUrl: "/icons/Nested.Child.Two.New.png",
+                  inclusive: true
+                },
+                {
+                  path: "Nested.Child.Three.New",
+                  iconUrl: "/icons/Nested.Child.Three.New.png",
+                  inclusive: false
+                }
+              ],
+              childElements: []
+            }
+          ]
+        }
+      ]
+    };
+
+    // Precondition
+    expect(oldLayoutSpecs.sections.length).to.equal(1);
+    expect(newLayoutSpecs.sections.length).to.equal(1);
+    expect(oldLayoutSpecs.sections[0].text).to.equal("My Favourites");
+    expect(newLayoutSpecs.sections[0].text).to.equal("My Favourites");
+
+    LibraryUtilities.updateSections(oldLayoutSpecs, newLayoutSpecs);
+
+    let rootElement: LibraryUtilities.LayoutElement = oldLayoutSpecs.sections[0];
+    compareLayoutElements(rootElement, expectedLayoutSpecs.sections[0]);
+  });
+
+});
+
 describe('listNode Class', function () {
 
   var testData: any;
@@ -959,4 +1440,80 @@ describe('Search function', function () {
     expect(itemData111.expanded).to.equal(false);
   });
 
+});
+
+describe("findAndExpandItemByPath function", function () {
+  let allItems: LibraryUtilities.ItemData[];
+  let itemData1: LibraryUtilities.ItemData;
+  let itemData11: LibraryUtilities.ItemData;
+  let itemData111: LibraryUtilities.ItemData;
+  let itemData112: LibraryUtilities.ItemData;
+  let itemData113: LibraryUtilities.ItemData;
+
+  beforeEach(function () {
+    itemData1 = new LibraryUtilities.ItemData("1");
+    itemData11 = new LibraryUtilities.ItemData("11");
+    itemData111 = new LibraryUtilities.ItemData("111");
+    itemData112 = new LibraryUtilities.ItemData("112");
+
+    itemData11.appendChild(itemData111);
+    itemData11.appendChild(itemData112);
+    itemData1.appendChild(itemData11);
+
+    allItems = [itemData1];
+  });
+
+  it("should return true if an item is found", function () {
+    let pathToItem = [itemData1, itemData11, itemData111];
+    expect(LibraryUtilities.findAndExpandItemByPath(pathToItem, allItems)).to.equal(true);
+  });
+
+  it("should return false if an item is not found", function () {
+    let itemData113 = new LibraryUtilities.ItemData("113");
+    let pathToItem = [itemData1, itemData11, itemData113];
+    expect(LibraryUtilities.findAndExpandItemByPath(pathToItem, allItems)).to.equal(false);
+  });
+});
+
+describe("sortItemsByText function", function () {
+  let allItems: LibraryUtilities.ItemData[];
+  let itemData1: LibraryUtilities.ItemData;
+  let itemData2: LibraryUtilities.ItemData;
+  let itemData3: LibraryUtilities.ItemData;
+  let itemData4: LibraryUtilities.ItemData;
+  let itemData5: LibraryUtilities.ItemData;
+
+  beforeEach(function () {
+    itemData1 = new LibraryUtilities.ItemData("atest");
+    itemData2 = new LibraryUtilities.ItemData("btest");
+    itemData3 = new LibraryUtilities.ItemData("ctest");
+    itemData4 = new LibraryUtilities.ItemData("dtest");
+    itemData5 = new LibraryUtilities.ItemData("etest");
+  });
+
+  it("should sort items in alphabetical order", function () {
+    allItems = [itemData5, itemData2, itemData1, itemData4, itemData3];
+
+    let result = LibraryUtilities.sortItemsByText(allItems);
+    expect(result.length).to.equal(5);
+    expect(result[0]).to.equal(itemData1);
+    expect(result[1]).to.equal(itemData2);
+    expect(result[2]).to.equal(itemData3);
+    expect(result[3]).to.equal(itemData4);
+    expect(result[4]).to.equal(itemData5);
+  });
+
+  it("should sort items ignoring cases", function () {
+    itemData1.text = "Atest";
+    itemData3.text = "Ctest";
+    allItems = [itemData5, itemData2, itemData1, itemData4, itemData3];
+
+    let result = LibraryUtilities.sortItemsByText(allItems);
+    expect(result.length).to.equal(5);
+    expect(result[0]).to.equal(itemData1);
+    expect(result[1]).to.equal(itemData2);
+    expect(result[2]).to.equal(itemData3);
+    expect(result[3]).to.equal(itemData4);
+    expect(result[4]).to.equal(itemData5);
+  });
 });

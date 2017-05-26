@@ -60,9 +60,9 @@ Constructing library view given the ID of an existing HTML element:
 
 - `htmlElementId` - The ID of an HTML whose content is to be replaced with `LibraryContainer`.
 
-- `loadedTypesJsonObject` - The JSON object to be used by library view as Loaded Data Types. This argument is mandatory.
+- `loadedTypesJsonObject` - The JSON object to be used by library view as [Loaded Data Types](./docs/v0.0.1/loaded-data-types.md). This argument is optional, but if it is supplied, the corresponding `layoutSpecsJsonObject` must also be supplied. If this argument is not supplied, see *Method 2* below for details on how it can be supplied at a later time.
 
-- `layoutSpecsJsonObject` - The JSON object to be used by library view as Layout Specification. This argument is mandatory.
+- `layoutSpecsJsonObject` - The JSON object to be used by library view as [Layout Specification](./docs/v0.0.1/layout-specs.md). This argument is optional, but if it is supplied, the corresponding `loadedTypesJsonObject` must also be supplied. If this argument is not supplied, see *Method 2* below for details on how it can be supplied at a later time.
 
 ### Method 2
 Constructing a library view for consumption by other React.js components (e.g. hosting the library within a React.js tab control). This method creates a valid `JSX.Element` object so that it can be directly embedded under another React.js element. For details of `loadedTypesJsonObject` and `layoutSpecsJsonObject`, please refer to the above section.
@@ -70,11 +70,16 @@ Constructing a library view for consumption by other React.js components (e.g. h
 ```html
     <script>
         let libController = LibraryEntryPoint.CreateLibraryController();
-        let libContainer = libController.createLibraryContainer(,
-            loadedTypesJsonObject, layoutSpecsJsonObject);
+        let libContainer = libController.createLibraryContainer();
 
         let aReactJsTabContainer = ...;
         aReactJsTabContainer.addTabPage(libContainer);
+
+        // Supply loaded types and layout specs at a much later time.
+        let append = false; // Replace existing contents instead of appending.
+        libController.setLoadedTypesJson(loadedTypesJsonObject, append);
+        libController.setLayoutSpecsJson(layoutSpecsJsonObject, append);
+        libController.refreshLibraryView(); // Refresh library view.
     </script>
 ```
 
@@ -134,6 +139,8 @@ libController.on("someEventName", function(data) {
 });
 ```
 
+The event names are also defined as string properties in the controller.
+
 ### Event 'itemClicked'
 
 This event is raised when a library item is clicked. The registered event handler will be called with the following argument:
@@ -146,6 +153,14 @@ libController.on("itemClicked", function(contextData) {
 })
 ```
 
+The string property for the event name is: ItemClickedEventName. So the following achieves the same:
+
+```js
+libController.on(libController.ItemClickedEventName, function(contextData) {
+    console.log(contextData);
+})
+```
+
 ### Event 'searchTextUpdated'
 
 This event is raised when user starts typing on the search bar, and the display mode of SearchView is `list`. In this event, it should call a search algorithm from some other components, and return a list of [Search Result Items](./docs/v0.0.1/search-items.md) in JSON format to the caller.
@@ -153,11 +168,12 @@ This event is raised when user starts typing on the search bar, and the display 
 - `searchText`: This is the value of state `searchText` in `SearchView` component, which is a string value that user has entered in the search bar.
 
  ```js
-libView.on("searchTextUpdated", function (searchText) {
+libController.on("searchTextUpdated", function (searchText) {
     console.log(searchText);
     return null;
 });
 ```
+
 ## Structure of test 
 - Import libraries required for creating the item tested
      import { LibraryItem } from '../src/components/LibraryItem';
@@ -171,3 +187,53 @@ libView.on("searchTextUpdated", function (searchText) {
   });
 ```
 - Step by step instruction to write a UI test is found at https://github.com/DynamoDS/librarie.js/wiki/Setting-up-test-frameworks-for-librarie.js
+
+
+The string property for the event name is: SearchTextUpdatedEventName. So the following achieves the same:
+
+```js
+libController.on(libController.SearchTextUpdatedEventName, function(contextData) {
+    console.log(contextData);
+})
+```
+
+### Event 'itemMouseEnter'
+
+This event is raised when the mouse enters the range of one library item.
+
+ ```js
+libController.on("itemMouseEnter", function (arg) {
+    console.log("Data: " + arg.data);
+    console.log("Rect(top, left, bottom, right): " + arg.rect.top + "," + arg.rect.left + "," + arg.rect.bottom + "," + arg.rect.right);
+});
+```
+
+The string property for the event name is: ItemMouseEnterEventName. So the following achieves the same:
+
+```js
+libController.on(libController.ItemMouseEnterEventName, function(arg) {
+    console.log("Data: " + arg.data);
+    console.log("Rect(top, left, bottom, right): " + arg.rect.top + "," + arg.rect.left + "," + arg.rect.bottom + "," + arg.rect.right);
+})
+```
+
+### Event 'itemMouseLeave'
+
+This event is raised when the mouse leaves the range of one library item.
+
+ ```js
+libController.on("itemMouseLeave", function (searchText) {
+    console.log("Data: " + arg.data);
+    console.log("Rect(top, left, bottom, right): " + arg.rect.top + "," + arg.rect.left + "," + arg.rect.bottom + "," + arg.rect.right);
+});
+```
+
+The string property for the event name is: ItemMouseLeaveEventName. So the following achieves the same:
+
+```js
+libController.on(libController.ItemMouseLeaveEventName, function(contextData) {
+    console.log("Data: " + arg.data);
+    console.log("Rect(top, left, bottom, right): " + arg.rect.top + "," + arg.rect.left + "," + arg.rect.bottom + "," + arg.rect.right);
+})
+```
+
