@@ -94,7 +94,7 @@ describe("LibraryContainer", function () {
     expect(libraryItem.prop('data').childItems[0].childItems[0].text).to.equal("Child1");
     expect(libraryItem.prop('data').childItems[0].childItems[1].text).to.equal("Child2");
   });
-   describe("Test event on libraryitem", function () {
+   describe("Test mouse click event and change in expand state", function () {
         it("Must recognise mouse event and change state", function () {
           // test data to create LibraryItem 
           let loadedTypesJson: any;
