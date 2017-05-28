@@ -98,6 +98,12 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
             iconElement = (<img className={"LibraryItemIcon"} src={this.props.data.iconUrl} onError={this.onImageLoadFail} />);
         }
 
+        // If it is a section, display the icon (if given) and provide a click interaction.
+        if (this.props.data.itemType === "section") {
+            iconElement = this.props.data.iconUrl ? (<img className={"LibraryItemIcon"} src={this.props.data.iconUrl} onError={this.onImageLoadFail}
+                onClick={this.onSectionIconClicked.bind(this)} />) : null;
+        }
+
         let nestedElements: JSX.Element = null;
         let clusteredElements: JSX.Element = null;
 
@@ -277,6 +283,12 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
             libraryContainer.raiseEvent(libraryContainer.props.libraryController.ItemClickedEventName,
                 this.props.data.contextData);
         }
+    }
+
+    onSectionIconClicked(event: any) {
+        let libraryContainer = this.props.libraryContainer;
+        libraryContainer.raiseEvent(libraryContainer.props.libraryController.SectionIconClickedEventName, this.props.data.text);
+        event.stopPropagation(); // Prevent the onClick event of its parent item from being called.
     }
 
     // Collapse all child items when one of the child items is expanded

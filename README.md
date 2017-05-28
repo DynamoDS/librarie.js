@@ -218,3 +218,16 @@ libController.on(libController.ItemMouseLeaveEventName, function(contextData) {
     console.log("Rect(top, left, bottom, right): " + arg.rect.top + "," + arg.rect.left + "," + arg.rect.bottom + "," + arg.rect.right);
 })
 ```
+
+### Event 'sectionIconClicked'
+
+This event is raised when used clicks on the icon displayed on the right of a section header.
+
+- `sectionText`: This is the `text` property of the section that is clicked, which is defined in the [Layout Specification](./docs/v0.0.1/layout-specs.md).
+
+```js
+libController.on(libController.SectionIconClickedEventName, function (sectionText) {
+     console.log(sectionText, "icon clicked");
+     return null;
+});
+```

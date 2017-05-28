@@ -59,6 +59,7 @@ input {
 
 .LibrarySectionHeader {
     display: flex;
+    align-items: center;
     padding: 10px;
     transition: 0.15s;
     background-color: #464646;
@@ -67,7 +68,12 @@ input {
 }
 
 .LibrarySectionHeader .LibraryItemIcon {
-    display: none;
+    position: absolute;
+    right: 0px;
+}
+
+.LibrarySectionHeader .LibraryItemIcon:hover {
+    cursor: pointer;
 }
 
 .LibraryItemHeader {
@@ -102,8 +108,8 @@ input {
 }
 
 .LibraryItemContainerSection .LibraryItemIcon {
-    width: 18px;
-    height: 18px;
+    width: 14px;
+    height: 14px;
     padding-right: 10px;
     -webkit-user-drag: none;
 }
@@ -113,7 +119,6 @@ input {
     width: 18px;
     height: 18px;
     -webkit-user-drag: none;
-    fill: #aaa;
 }
 
 .LibraryItemContainerNone .LibraryItemIcon {

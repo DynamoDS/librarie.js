@@ -56,6 +56,11 @@
                 return null;
             });
 
+            libController.on(libController.SectionIconClickedEventName, function (sectionText) {
+                console.log(sectionText, "icon clicked");
+                return null;
+            });
+
             let libContainer = libController.createLibraryByElementId(
                 "libraryContainerPlaceholder", layoutSpecsJson, loadedTypesJson);
 
