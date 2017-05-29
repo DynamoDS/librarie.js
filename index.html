@@ -37,12 +37,27 @@
 
             let libController = LibraryEntryPoint.CreateLibraryController();
 
-            libController.on("itemClicked", function (item) {
+            libController.on(libController.ItemClickedEventName, function (item) {
                 console.log(item);
             })
 
-            libController.on("searchTextUpdated", function (searchText) {
+            libController.on(libController.ItemMouseEnterEventName, function (arg) {
+                console.log("Data: " + arg.data);
+                console.log("Rect(top, left, bottom, right): " + arg.rect.top + "," + arg.rect.left + "," + arg.rect.bottom + "," + arg.rect.right);
+            })
+
+            libController.on(libController.ItemMouseLeaveEventName, function (arg) {
+                console.log("Data: " + arg.data);
+                console.log("Rect(top, left, bottom, right): " + arg.rect.top + "," + arg.rect.left + "," + arg.rect.bottom + "," + arg.rect.right);
+            })
+
+            libController.on(libController.SearchTextUpdatedEventName, function (searchText) {
                 console.log(searchText);
+                return null;
+            });
+
+            libController.on(libController.SectionIconClickedEventName, function (sectionText) {
+                console.log(sectionText, "icon clicked");
                 return null;
             });
 

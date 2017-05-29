@@ -136,6 +136,8 @@ libController.on("someEventName", function(data) {
 });
 ```
 
+The event names are also defined as string properties in the controller.
+
 ### Event 'itemClicked'
 
 This event is raised when a library item is clicked. The registered event handler will be called with the following argument:
@@ -148,6 +150,14 @@ libController.on("itemClicked", function(contextData) {
 })
 ```
 
+The string property for the event name is: ItemClickedEventName. So the following achieves the same:
+
+```js
+libController.on(libController.ItemClickedEventName, function(contextData) {
+    console.log(contextData);
+})
+```
+
 ### Event 'searchTextUpdated'
 
 This event is raised when user starts typing on the search bar, and the display mode of SearchView is `list`. In this event, it should call a search algorithm from some other components, and return a list of [Search Result Items](./docs/v0.0.1/search-items.md) in JSON format to the caller.
@@ -155,8 +165,69 @@ This event is raised when user starts typing on the search bar, and the display 
 - `searchText`: This is the value of state `searchText` in `SearchView` component, which is a string value that user has entered in the search bar.
 
  ```js
-libView.on("searchTextUpdated", function (searchText) {
+libController.on("searchTextUpdated", function (searchText) {
     console.log(searchText);
     return null;
+});
+```
+
+The string property for the event name is: SearchTextUpdatedEventName. So the following achieves the same:
+
+```js
+libController.on(libController.SearchTextUpdatedEventName, function(contextData) {
+    console.log(contextData);
+})
+```
+
+### Event 'itemMouseEnter'
+
+This event is raised when the mouse enters the range of one library item.
+
+ ```js
+libController.on("itemMouseEnter", function (arg) {
+    console.log("Data: " + arg.data);
+    console.log("Rect(top, left, bottom, right): " + arg.rect.top + "," + arg.rect.left + "," + arg.rect.bottom + "," + arg.rect.right);
+});
+```
+
+The string property for the event name is: ItemMouseEnterEventName. So the following achieves the same:
+
+```js
+libController.on(libController.ItemMouseEnterEventName, function(arg) {
+    console.log("Data: " + arg.data);
+    console.log("Rect(top, left, bottom, right): " + arg.rect.top + "," + arg.rect.left + "," + arg.rect.bottom + "," + arg.rect.right);
+})
+```
+
+### Event 'itemMouseLeave'
+
+This event is raised when the mouse leaves the range of one library item.
+
+ ```js
+libController.on("itemMouseLeave", function (searchText) {
+    console.log("Data: " + arg.data);
+    console.log("Rect(top, left, bottom, right): " + arg.rect.top + "," + arg.rect.left + "," + arg.rect.bottom + "," + arg.rect.right);
+});
+```
+
+The string property for the event name is: ItemMouseLeaveEventName. So the following achieves the same:
+
+```js
+libController.on(libController.ItemMouseLeaveEventName, function(contextData) {
+    console.log("Data: " + arg.data);
+    console.log("Rect(top, left, bottom, right): " + arg.rect.top + "," + arg.rect.left + "," + arg.rect.bottom + "," + arg.rect.right);
+})
+```
+
+### Event 'sectionIconClicked'
+
+This event is raised when used clicks on the icon displayed on the right of a section header.
+
+- `sectionText`: This is the `text` property of the section that is clicked, which is defined in the [Layout Specification](./docs/v0.0.1/layout-specs.md).
+
+```js
+libController.on(libController.SectionIconClickedEventName, function (sectionText) {
+     console.log(sectionText, "icon clicked");
+     return null;
 });
 ```

@@ -31,6 +31,8 @@ export class LibraryController {
     ItemMouseEnterEventName = "itemMouseEnter";
     ItemMouseLeaveEventName = "itemMouseLeave";
     ItemToolTipExpandEventName = "itemToolTipExpand";
+    SectionIconClickedEventName = "sectionIconClicked";
+    SearchTextUpdatedEventName = "searchTextUpdated";
     DefaultSectionName = "default";
     MiscSectionName = "Miscellaneous";
 

@@ -177,7 +177,7 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
 
     updateSearchViewDelayed(text: string) {
         if (text.length > 0 && !this.state.structured) {
-            this.raiseEvent("searchTextUpdated", text);
+            this.raiseEvent(this.props.libraryController.SearchTextUpdatedEventName, text);
         }
 
         this.setState({ searchText: text });
