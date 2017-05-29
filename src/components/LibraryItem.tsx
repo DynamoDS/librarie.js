@@ -89,19 +89,27 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
             return null;
         }
 
-        let iconElement = null;
+        let iconElement: JSX.Element = null;
         let libraryItemTextStyle = "LibraryItemGroupText";
 
         // Group displays only text without icon.
-        if (this.props.data.itemType !== "group") {
+        if (this.props.data.itemType !== "group" && this.props.data.itemType !== "section") {
             libraryItemTextStyle = "LibraryItemText";
-            iconElement = (<img className={"LibraryItemIcon"} src={this.props.data.iconUrl} onError={this.onImageLoadFail} />);
+            iconElement = <img
+                className={"LibraryItemIcon"}
+                src={this.props.data.iconUrl}
+                onError={this.onImageLoadFail}
+            />;
         }
 
         // If it is a section, display the icon (if given) and provide a click interaction.
-        if (this.props.data.itemType === "section") {
-            iconElement = this.props.data.iconUrl ? (<img className={"LibraryItemIcon"} src={this.props.data.iconUrl} onError={this.onImageLoadFail}
-                onClick={this.onSectionIconClicked.bind(this)} />) : null;
+        if (this.props.data.itemType === "section" && this.props.data.iconUrl) {
+            iconElement = <img
+                className={"LibraryItemIcon"}
+                src={this.props.data.iconUrl}
+                onError={this.onImageLoadFail}
+                onClick={this.onSectionIconClicked.bind(this)}
+            />;
         }
 
         let nestedElements: JSX.Element = null;
@@ -119,7 +127,6 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
             // There are intermediate child items.
             nestedElements = this.getNestedElements(groupedItems);
         }
-
 
         let arrow: JSX.Element = null;
         let bodyIndentation: JSX.Element = null;
@@ -150,9 +157,10 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
                 <div className={this.getLibraryItemHeaderStyle()} onClick={this.onLibraryItemClicked.bind(this)}
                     onMouseOver={this.onLibraryItemMouseEnter.bind(this)} onMouseLeave={this.onLibraryItemMouseLeave.bind(this)}>
                     {arrow}
-                    {iconElement}
+                    {this.props.data.itemType === "section" ? null : iconElement}
                     <div className={libraryItemTextStyle}>{this.props.data.text}</div>
                     {parameters}
+                    {this.props.data.itemType === "section" ? iconElement : null}
                 </div>
             );
         }

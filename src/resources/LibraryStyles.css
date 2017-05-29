@@ -12,7 +12,7 @@
 body {
     font-family: "Artifakt Element", "Open Sans";
     -webkit-user-select: none;
-    font-size:13px;
+    font-size: 13px;
     cursor: default;
 }
 
@@ -59,17 +59,13 @@ input {
 
 .LibrarySectionHeader {
     display: flex;
-    align-items: center;
-    padding: 10px;
-    transition: 0.15s;
+    padding: 5px;
+    font-size: 14px;
     background-color: #464646;
     color: #888;
-    font-size:14px;
-}
-
-.LibrarySectionHeader .LibraryItemIcon {
-    position: absolute;
-    right: 0px;
+    align-items: center;
+    justify-content: space-between;
+    transition: 0.15s;
 }
 
 .LibrarySectionHeader .LibraryItemIcon:hover {
@@ -140,8 +136,12 @@ input {
     color: #eee;
 }
 
-.LibraryItemGroupText {
+.LibraryItemHeader .LibraryItemGroupText,
+.LibrarySectionHeader .LibraryItemGroupText {
     padding: 7px 0px 7px 5px;
+}
+
+.LibraryItemHeader .LibraryItemGroupText {
     color: #a9a9a9;
 }
 
@@ -249,6 +249,7 @@ input {
     background-color: rgba(255, 255, 255, 0.1);
     cursor: pointer;
 }
+
 .SearchBar .SearchOptionsContainerArrow {
     position: absolute;
     top: 10px;
@@ -397,7 +398,6 @@ input {
 .SearchResultItemContainer .ItemIcon {
     padding: 2px 8px;
     width: 40px;
-    height: 40px;
 }
 
 .SearchResultItemContainer .ItemTitle {
@@ -438,7 +438,7 @@ input {
 .SearchResultItemContainer .ItemTypeIcon {
     width: 14px;
     height: 14px;
-    padding-bottom:3px;
+    padding-bottom: 3px;
 }
 
 .HighlightedText {
