@@ -215,7 +215,7 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
 
             const searchBar = <SearchBar onCategoriesChanged={this.onCategoriesChanged} onDetailedModeChanged={this.onDetailedModeChanged}
                 onStructuredModeChanged={this.onStructuredModeChanged} onTextChanged={this.onTextChanged}
-                categories={this.searcher.getDisplayedCategories()} />
+                categories={this.searcher.getDisplayedCategories()} setSearchInputField={this.searcher.setSearchInputField}/>
 
             return (
                 <div className="LibraryContainer">

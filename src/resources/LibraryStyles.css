@@ -194,29 +194,34 @@ input {
 }
 
 .SearchInput {
-    display: flex;
-    justify-content: space-around;
     padding: 5px 0px;
+    margin: 5px 0px;
+    background-color: #fff;
+    width: 100%;
+    position: relative;
+    white-space: nowrap;
+    overflow-x: hidden;
 }
 
-.SearchInputContainer {
-    width: 100%;
-    background-color: #fff;
+.LibraryHeader {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
+    padding: 3px 3px 3px 5px;
+    background-color: #414141;
+    color: #aaa;
 }
 
 .SearchBar .SearchBarIcon {
     padding-left: 10px;
 }
 
-.SearchBar #SearchInputText {
-    width: 100%;
+.SearchBar .SearchInputText {
     padding: 2px 5px 0px 10px;
     background: none;
     outline: none;
     border: none;
+    width: 100%;
 }
 
 .SearchBar .SearchInputText:focus::-webkit-input-placeholder {
@@ -225,8 +230,6 @@ input {
 
 .SearchBar .SearchOptionsBtnEnabled,
 .SearchBar .SearchOptionsBtnDisabled {
-    height: 30px;
-    width: 30px;
     border: none;
     outline: none;
     background-color: #414141;
@@ -239,25 +242,37 @@ input {
 }
 
 .SearchBar .SearchOptionsBtnDisabled {
-    color: #888;
+    color: #555;
 }
 
 .SearchBar .SearchOptionsBtnEnabled:hover {
     background-color: rgba(255, 255, 255, 0.1);
     cursor: pointer;
 }
-
-.SearchBar .SearchOptions {
-    padding-bottom: 1px;
+.SearchBar .SearchOptionsContainerArrow {
+    position: absolute;
+    top: 10px;
+    right: 65px;
+    width: 0px;
+    height: 0px;
+    border-bottom: 10px solid #aaa;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 10px solid transparent;
+    pointer-events: none;
 }
 
 .SearchBar .SearchOptionsContainer {
-    font-size: 12px;
+    font-size: 13px;
     color: #fff;
     margin: 0px 0px 5px 0px;
-    background-color: #414141;
+    background-color: #606060;
     overflow-x: hidden;
     overflow-y: hidden;
+    position: absolute;
+    top: 26px;
+    right: 10px;
+    border: 1px solid #aaa;
 }
 
 .SearchBar .SearchOptionsHeader {
@@ -288,10 +303,9 @@ input {
 .CheckboxLabelEnabled,
 .CheckboxLabelDisabled {
     position: relative;
-    background-color: #414141;
     width: 100%;
     display: block;
-    padding: 3px;
+    padding: 4px 3px;
     transition: 0.15s;
 }
 
@@ -313,12 +327,13 @@ input {
 .CheckboxLabelEnabled .CheckboxLabelText,
 .CheckboxLabelDisabled .CheckboxLabelText {
     padding-left: 20px;
+    padding-right: 40px; /* for the "only" text */
 }
 
 .CheckboxLabelEnabled .CheckboxLabelRightButton,
 .CheckboxLabelDisabled .CheckboxLabelRightButton {
     position: absolute;
-    transform: translate(-70%, 25%);
+    transform: translate(-50%, 20%);
     top: 0px;
     right: 0px;
     color: #aaa;
@@ -350,8 +365,10 @@ input {
     color: #ccc;
     background: transparent;
     border: 0px;
-    padding: 5px 10px 0px 0px;
     outline: 0px;
+    position: absolute;
+    top: 5px;
+    right: 5px;
 }
 
 .SearchBar .CancelButton button:hover {
