@@ -94,7 +94,7 @@ describe("LibraryContainer", function () {
     expect(libraryItem.prop('data').childItems[0].childItems[0].text).to.equal("Child1");
     expect(libraryItem.prop('data').childItems[0].childItems[1].text).to.equal("Child2");
   });
-  it("Must recognise mouse event and change state", function () {
+  it("Must recognise mouse click event and change expand state", function () {
     // test data to create LibraryItem  
     // parent item that will hold the child items
     let data = new ItemData("");
