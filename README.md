@@ -19,8 +19,6 @@ Installing all dependencies
 
 - Navigate to `localhost:3456` in Google Chrome browser
 
-## Setup Testframework
-- Step by step instructions to setup JEST is found at https://github.com/DynamoDS/librarie.js/wiki/Setting-up-test-frameworks-for-librarie.js
 
 ## Run Tests
 - Run UI test
@@ -221,7 +219,6 @@ libController.on(libController.ItemMouseLeaveEventName, function(contextData) {
     console.log("Rect(top, left, bottom, right): " + arg.rect.top + "," + arg.rect.left + "," + arg.rect.bottom + "," + arg.rect.right);
 })
 ```
-<<<<<<< HEAD
 ## Jest test structure 
 
 ```typescript
@@ -238,6 +235,6 @@ it("should create a libraryItem", function () {
 }
 ```
 - Instructions to write a tests are found at https://github.com/DynamoDS/librarie.js/wiki/Setting-up-test-frameworks-for-librarie.js
-=======
->>>>>>> 01720f91359bd611afbf71db335a7538bb5c4ece
+
+
 
