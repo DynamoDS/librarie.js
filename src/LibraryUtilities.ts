@@ -18,6 +18,7 @@ export class TypeListNode {
     parameters: string = "";
     description: string = "";
     processed: boolean = false;
+    priority: Number = 0;
 
     constructor(data: any) {
         this.fullyQualifiedName = data.fullyQualifiedName;
@@ -27,6 +28,7 @@ export class TypeListNode {
         this.keywords = data.keywords;
         this.parameters = data.parameters;
         this.description = data.description;
+        this.priority = data.priority;
     }
 }
 
@@ -79,6 +81,7 @@ export class ItemData {
     parameters: string = "";
     description: string = "";
     childItems: ItemData[] = [];
+    priority: Number = 0;
 
     constructor(public text: string) {
         this.keywords.push(text ? text.toLowerCase() : text);
@@ -97,6 +100,7 @@ export class ItemData {
         this.itemType = typeListNode.memberType;
         this.parameters = typeListNode.parameters;
         this.description = typeListNode.description;
+        this.priority = typeListNode.priority;
     }
 
     appendChild(childItem: ItemData) {
@@ -393,6 +397,7 @@ export function convertToDefaultSection(typeListNodes: TypeListNode[], section: 
 }
 
 export function buildLibrarySectionsFromLayoutSpecs(loadedTypes: any, layoutSpecs: any, defaultSectionStr: string, miscSectionStr: string): ItemData[] {
+
     let typeListNodes: TypeListNode[] = [];
     let sections: LayoutElement[] = [];
 
@@ -685,7 +690,7 @@ export function setItemStateRecursive(items: ItemData | ItemData[], visible: boo
         }
 
         // All sections other than default section are collapsed by default.
-        if(item.itemType === "section" && item.text !== "default") {
+        if (item.itemType === "section" && item.text !== "default") {
             item.expanded = false;
         }
 
