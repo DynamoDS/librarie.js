@@ -9,6 +9,7 @@ import { SearchBar } from "./components/SearchBar";
 export class Searcher {
     libraryContainer: LibraryContainer = null;
     sections: LibraryUtilities.ItemData[] = [];
+    searchInputField: HTMLInputElement = null;
     categories: string[] = [];
 
     // This list represents the actual categories beind displayed on the search bar 
@@ -22,6 +23,7 @@ export class Searcher {
         categories: string[] = []) {
         this.libraryContainer = libraryContainer;
         this.sections = sections;
+        this.setSearchInputField = this.setSearchInputField.bind(this);
         this.initializeCategories(categories);
     }
 
@@ -132,9 +134,15 @@ export class Searcher {
         return this.displayedCategories;
     }
 
+    // Obtain the search input field from SearchBar.
+    setSearchInputField(field: HTMLInputElement) {
+        this.searchInputField = field;
+    }
+
     clearSearch() {
-        let searchInput: any = document.getElementById("SearchInputText");
-        searchInput.value = "";
-        this.libraryContainer.clearSearch();
+        if (this.searchInputField) {
+            this.searchInputField.value = "";
+            this.libraryContainer.clearSearch();
+        }
     }
 }

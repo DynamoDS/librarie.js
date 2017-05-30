@@ -176,7 +176,7 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
     }
 
     updateSearchViewDelayed(text: string) {
-        if(text.length ==0) {
+        if (text.length == 0) {
             this.clearSearch();
             return;
         }
@@ -232,6 +232,7 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
                 onStructuredModeChanged={this.onStructuredModeChanged}
                 onTextChanged={this.onTextChanged}
                 categories={this.searcher.getDisplayedCategories()}
+                setSearchInputField={this.searcher.setSearchInputField}
             />
 
             return (
