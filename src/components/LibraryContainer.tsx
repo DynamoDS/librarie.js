@@ -34,6 +34,7 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
 
     generatedSections: LibraryUtilities.ItemData[] = null;
     renderedSections: JSX.Element[] = null;
+    searchResultItems: JSX.Element[] = null;
     searchCategories: string[] = [];
 
     timeout: number;
@@ -82,9 +83,11 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
     handleKeyDown(event: any) {
         switch (event.code) {
             case "ArrowUp":
+                event.preventDefault(); // Prevent arrow key from navigating around search input
                 this.onSelectionChanged(false);
                 break;
             case "ArrowDown":
+                event.preventDefault();
                 this.onSelectionChanged(true);
                 break;
             default:
@@ -169,11 +172,16 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
 
         let currentIndex = this.state.selectionIndex;
         let nextIndex = incremented ? currentIndex + 1 : currentIndex - 1;
-        if (nextIndex < -1) {
-            nextIndex = -1;
+        if (nextIndex < 0) {
+            nextIndex = 0;
         }
 
-        this.setState({ selectionIndex: nextIndex });
+        this.setSelectionIndex(nextIndex);
+    }
+
+    // Selection index will be set when arrow up/down key is pressed, or an item is clicked 
+    setSelectionIndex(selectionIndex: number) {
+        this.setState({ selectionIndex: selectionIndex });
     }
 
     onSearchModeChanged(inSearchMode: boolean) {
@@ -238,20 +246,20 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
             let sections: JSX.Element[] = null;
 
             if (!this.state.inSearchMode) {
-                let index = 0;
                 sections = this.renderedSections;
-            }
-            else {
-                if (this.state.structured) {
-                    sections = this.searcher.generateStructuredItems();
-                }
-                else {
-                    sections = this.searcher.generateListItems(
-                        this.generatedSections,
-                        this.state.searchText,
-                        this.state.detailed,
-                        this.state.selectionIndex
-                    );
+            } else if (this.state.structured) {
+                sections = this.searcher.generateStructuredItems();
+            } else {
+                sections = this.searcher.generateListItems(
+                    this.generatedSections,
+                    this.state.searchText,
+                    this.state.detailed,
+                    this.state.selectionIndex
+                );
+
+                // Make sure that selectionIndex doesn't go beyond the number of search result items
+                if (this.state.selectionIndex >= sections.length) {
+                    this.setState({ selectionIndex: sections.length - 1 });
                 }
             }
 

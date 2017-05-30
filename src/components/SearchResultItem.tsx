@@ -14,7 +14,8 @@ interface SearchResultItemProps {
     pathToItem: LibraryUtilities.ItemData[],
     onParentTextClicked: ParentTextClickedFunc,
     detailed: boolean,
-    selected: boolean
+    selected: boolean,
+    index: number
 }
 
 interface SearchResultItemStates { }
@@ -25,7 +26,45 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
         super(props);
     }
 
+    componentWillMount() {
+        window.addEventListener("keydown", this.handleKeyDown.bind(this));
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener("keydown", this.handleKeyDown.bind(this));
+    }
+
+    // Scroll current item to top/bottom selection changed
+    componentDidUpdate() {
+        if (this.props.selected) {
+            let container = ReactDOM.findDOMNode(this.props.libraryContainer);
+            let currentItem = ReactDOM.findDOMNode(this);
+            let containerRect = container.getBoundingClientRect();
+            let currentRect = currentItem.getBoundingClientRect();
+
+            if (currentRect.top < currentRect.height) {
+                currentItem.scrollIntoView();
+            }
+
+            if (currentRect.bottom > containerRect.bottom) {
+                currentItem.scrollIntoView(false);
+            }
+        }
+    }
+
+    handleKeyDown(event: any) {
+        switch (event.code) {
+            case "Enter":
+                if (this.props.selected) {
+                    this.onItemClicked();
+                }
+            default:
+                break;
+        }
+    }
+
     render() {
+        let ItemContainerStyle = this.props.selected ? "SearchResultItemContainerSelected" : "SearchResultItemContainer";
         let iconPath = this.props.data.iconUrl;
 
         // The parent of a search result item is the second last entry in 'pathToItem'
@@ -51,7 +90,7 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
         }
 
         return (
-            <div className={"SearchResultItemContainer"} onClick={this.onItemClicked.bind(this)}
+            <div className={ItemContainerStyle} onClick={this.onItemClicked.bind(this)}
                 onMouseOver={this.onLibraryItemMouseEnter.bind(this)} onMouseLeave={this.onLibraryItemMouseLeave.bind(this)}>
                 <img className={"ItemIcon"} src={iconPath} onError={this.onImageLoadFail.bind(this)} />
                 <div className={"ItemInfo"}>
@@ -81,6 +120,8 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
     }
 
     onItemClicked() {
+        // Update selection index when an item is clicked
+        this.props.libraryContainer.setSelectionIndex(this.props.index);
         this.props.libraryContainer.raiseEvent("itemClicked", this.props.data.contextData);
     };
 

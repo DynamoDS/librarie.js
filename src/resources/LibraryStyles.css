@@ -12,7 +12,7 @@
 body {
     font-family: "Artifakt Element", "Open Sans";
     -webkit-user-select: none;
-    font-size:13px;
+    font-size: 13px;
     cursor: default;
 }
 
@@ -64,7 +64,7 @@ input {
     transition: 0.15s;
     background-color: #464646;
     color: #888;
-    font-size:14px;
+    font-size: 14px;
 }
 
 .LibrarySectionHeader .LibraryItemIcon {
@@ -249,6 +249,7 @@ input {
     background-color: rgba(255, 255, 255, 0.1);
     cursor: pointer;
 }
+
 .SearchBar .SearchOptionsContainerArrow {
     position: absolute;
     top: 10px;
@@ -327,7 +328,8 @@ input {
 .CheckboxLabelEnabled .CheckboxLabelText,
 .CheckboxLabelDisabled .CheckboxLabelText {
     padding-left: 20px;
-    padding-right: 40px; /* for the "only" text */
+    padding-right: 40px;
+    /* for the "only" text */
 }
 
 .CheckboxLabelEnabled .CheckboxLabelRightButton,
@@ -375,7 +377,8 @@ input {
     cursor: pointer;
 }
 
-.SearchResultItemContainer {
+.SearchResultItemContainer,
+.SearchResultItemContainerSelected {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -384,61 +387,75 @@ input {
     transition: 0.15s;
 }
 
-.SearchResultItemContainer:hover {
+.SearchResultItemContainerSelected {
+    background-color: #444;
+}
+
+.SearchResultItemContainer:hover,
+.SearchResultItemContainerSelected:hover {
     color: white;
     background: rgba(255, 255, 255, 0.1);
 }
 
-.SearchResultItemContainer .ItemInfo {
+.SearchResultItemContainer .ItemInfo,
+.SearchResultItemContainerSelected .ItemInfo {
     padding: 5px 0px 5px 0px;
     width: 100%;
 }
 
-.SearchResultItemContainer .ItemIcon {
+.SearchResultItemContainer .ItemIcon,
+.SearchResultItemContainerSelected .ItemIcon {
     padding: 2px 8px;
     width: 40px;
     height: 40px;
 }
 
-.SearchResultItemContainer .ItemTitle {
+.SearchResultItemContainer .ItemTitle,
+.SearchResultItemContainerSelected .ItemTitle {
     margin-bottom: 2px;
 }
 
-.SearchResultItemContainer .ItemDescription {
+.SearchResultItemContainer .ItemDescription,
+.SearchResultItemContainerSelected .ItemDescription {
     font-size: 11px;
     padding: 2px 0px;
     color: #aaa;
 }
 
-.SearchResultItemContainer .ItemDetails {
+.SearchResultItemContainer .ItemDetails,
+.SearchResultItemContainerSelected .ItemDetails {
     display: flex;
     align-items: center;
     font-size: 12px;
     color: #aaaaaa;
 }
 
-.SearchResultItemContainer .ItemParent {
+.SearchResultItemContainer .ItemParent,
+.SearchResultItemContainerSelected .ItemParent {
     display: inline-block;
     padding-right: 5px;
     transition: 0.15s;
     text-decoration: underline;
 }
 
-.SearchResultItemContainer .ItemParent:hover {
+.SearchResultItemContainer .ItemParent:hover,
+.SearchResultItemContainerSelected .ItemParent:hover {
     cursor: pointer;
     color: white;
 }
 
-.SearchResultItemContainer .ItemCategory {
+.SearchResultItemContainer .ItemCategory,
+.SearchResultItemContainerSelected .ItemCategory {
     display: inline-block;
     color: #ddd;
     padding-left: 5px;
 }
 
-.SearchResultItemContainer .ItemTypeIcon {
+.SearchResultItemContainer .ItemTypeIcon,
+.SearchResultItemContainerSelected .ItemTypeIcon {
     width: 14px;
     height: 14px;
-    padding-bottom:3px;
+    padding-bottom: 3px;
 }
 
 .HighlightedText {

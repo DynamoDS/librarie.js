@@ -113,6 +113,7 @@ export class Searcher {
                     onParentTextClicked={this.directToLibrary.bind(this)}
                     detailed={detailed}
                     selected={leafItems.length == selectionIndex}
+                    index={leafItems.length}
                 />);
             } else {
                 this.generateListItems(item.childItems, searchText, detailed, selectionIndex, pathToThisItem, leafItems, false);
