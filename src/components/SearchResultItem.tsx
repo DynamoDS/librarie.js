@@ -8,12 +8,13 @@ interface ParentTextClickedFunc {
 }
 
 interface SearchResultItemProps {
-    data: LibraryUtilities.ItemData;
-    libraryContainer: LibraryContainer;
-    highlightedText: string;
-    pathToItem: LibraryUtilities.ItemData[];
-    onParentTextClicked: ParentTextClickedFunc;
-    detailed: boolean;
+    data: LibraryUtilities.ItemData,
+    libraryContainer: LibraryContainer,
+    highlightedText: string,
+    pathToItem: LibraryUtilities.ItemData[],
+    onParentTextClicked: ParentTextClickedFunc,
+    detailed: boolean,
+    selected: boolean
 }
 
 interface SearchResultItemStates { }

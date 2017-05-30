@@ -23,7 +23,8 @@ export interface LibraryContainerStates {
     searchText: string,
     selectedCategories: string[],
     structured: boolean,
-    detailed: boolean
+    detailed: boolean,
+    selectionIndex: number
 }
 
 export class LibraryContainer extends React.Component<LibraryContainerProps, LibraryContainerStates> {
@@ -65,8 +66,30 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
             searchText: '',
             selectedCategories: [],
             structured: false,
-            detailed: false
+            detailed: false,
+            selectionIndex: -1
         };
+    }
+
+    componentWillMount() {
+        window.addEventListener("keydown", this.handleKeyDown.bind(this));
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener("keydown", this.handleKeyDown.bind(this));
+    }
+
+    handleKeyDown(event: any) {
+        switch (event.code) {
+            case "ArrowUp":
+                this.onSelectionChanged(false);
+                break;
+            case "ArrowDown":
+                this.onSelectionChanged(true);
+                break;
+            default:
+                break;
+        }
     }
 
     setLoadedTypesJson(loadedTypesJson: any, append: boolean = true): void {
@@ -139,6 +162,20 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
         this.props.libraryController.raiseEvent(name, params);
     }
 
+    onSelectionChanged(incremented: boolean) {
+        if (!this.state.inSearchMode) {
+            return;
+        }
+
+        let currentIndex = this.state.selectionIndex;
+        let nextIndex = incremented ? currentIndex + 1 : currentIndex - 1;
+        if (nextIndex < -1) {
+            nextIndex = -1;
+        }
+
+        this.setState({ selectionIndex: nextIndex });
+    }
+
     onSearchModeChanged(inSearchMode: boolean) {
         this.setState({ inSearchMode: inSearchMode });
     }
@@ -209,13 +246,18 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
                     sections = this.searcher.generateStructuredItems();
                 }
                 else {
-                    sections = this.searcher.generateListItems(this.generatedSections, this.state.searchText, this.state.detailed);
+                    sections = this.searcher.generateListItems(
+                        this.generatedSections,
+                        this.state.searchText,
+                        this.state.detailed,
+                        this.state.selectionIndex
+                    );
                 }
             }
 
             const searchBar = <SearchBar onCategoriesChanged={this.onCategoriesChanged} onDetailedModeChanged={this.onDetailedModeChanged}
                 onStructuredModeChanged={this.onStructuredModeChanged} onTextChanged={this.onTextChanged}
-                categories={this.searcher.getDisplayedCategories()} setSearchInputField={this.searcher.setSearchInputField}/>
+                categories={this.searcher.getDisplayedCategories()} setSearchInputField={this.searcher.setSearchInputField} />
 
             return (
                 <div className="LibraryContainer">

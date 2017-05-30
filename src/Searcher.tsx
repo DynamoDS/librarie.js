@@ -78,6 +78,7 @@ export class Searcher {
         items: LibraryUtilities.ItemData[] = this.sections,
         searchText: string,
         detailed: boolean,
+        selectionIndex: number,
         pathToItem: LibraryUtilities.ItemData[] = [],
         leafItems: JSX.Element[] = [],
         top: boolean = true): JSX.Element[] {
@@ -111,9 +112,10 @@ export class Searcher {
                     pathToItem={pathToThisItem}
                     onParentTextClicked={this.directToLibrary.bind(this)}
                     detailed={detailed}
+                    selected={leafItems.length == selectionIndex}
                 />);
             } else {
-                this.generateListItems(item.childItems, searchText, detailed, pathToThisItem, leafItems, false);
+                this.generateListItems(item.childItems, searchText, detailed, selectionIndex, pathToThisItem, leafItems, false);
             }
         }
 
