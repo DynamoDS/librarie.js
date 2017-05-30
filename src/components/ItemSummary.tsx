@@ -9,21 +9,21 @@ interface ToolTipProps {
 }
 
 interface ToolTipState {
-    hasToolTipData: boolean;
+    hasItemSummaryData: boolean;
 }
 
-export class ToolTip extends React.Component<ToolTipProps, ToolTipState> {
-    toolTipData: any;
+export class ItemSummary extends React.Component<ToolTipProps, ToolTipState> {
+    itemSummaryData: any;
 
     constructor(props: ToolTipProps) {
         super(props);
-        this.state = ({ hasToolTipData: false });
-        this.toolTipData = null;
+        this.state = ({ hasItemSummaryData: false });
+        this.itemSummaryData = null;
         this.onReceiveDataFromDynamo = this.onReceiveDataFromDynamo.bind(this);
     }
 
     render() {
-        this.onLibraryItemTooltipExpand();
+        this.onLibraryItemSummaryExpand();
 
         let descriptionText = this.props.data.description;
         let input: JSX.Element[] = [];
@@ -31,10 +31,10 @@ export class ToolTip extends React.Component<ToolTipProps, ToolTipState> {
         let description: JSX.Element = null;
         let icon: JSX.Element = null;
 
-        if (this.state.hasToolTipData) {
-            let inputParameters = this.toolTipData.Item1;
-            let outputParameters = this.toolTipData.Item2;
-            let descriptionTextFromDynamo = this.toolTipData.Item3;
+        if (this.state.hasItemSummaryData) {
+            let inputParameters = this.itemSummaryData.Item1;
+            let outputParameters = this.itemSummaryData.Item2;
+            let descriptionTextFromDynamo = this.itemSummaryData.Item3;
 
             for (let inputParameter of inputParameters) {
                 let inputParameterName = inputParameter.Item1
@@ -79,10 +79,10 @@ export class ToolTip extends React.Component<ToolTipProps, ToolTipState> {
     }
 
     // Raise event to get data from Dynamo side if there is no data yet.
-    onLibraryItemTooltipExpand() {
-        if (!this.state.hasToolTipData) {
+    onLibraryItemSummaryExpand() {
+        if (!this.state.hasItemSummaryData) {
             let libraryContainer = this.props.libraryContainer;
-            let tooltipExpandEvent = libraryContainer.props.libraryController.ItemToolTipExpandEventName;
+            let tooltipExpandEvent = libraryContainer.props.libraryController.ItemSummaryExpandEventName;
             libraryContainer.raiseEvent(
                 tooltipExpandEvent,
                 { dataReceiver: this.onReceiveDataFromDynamo, data: this.props.data.contextData }
@@ -93,10 +93,10 @@ export class ToolTip extends React.Component<ToolTipProps, ToolTipState> {
     // Data received from Dynamo side will be a tuple with Item1 being input parameters, 
     // Item2 being output parameters, Item3 being description text.
     onReceiveDataFromDynamo(data: any) {
-        let toolTipData = JSON.parse(data);
-        if (toolTipData && toolTipData.Item1 && toolTipData.Item2 && toolTipData.Item3) {
-            this.toolTipData = toolTipData;
-            this.setState({ hasToolTipData: true });
+        let itemSummaryData = JSON.parse(data);
+        if (itemSummaryData && itemSummaryData.Item1 && itemSummaryData.Item2 && itemSummaryData.Item3) {
+            this.itemSummaryData = itemSummaryData;
+            this.setState({ hasItemSummaryData: true });
         }
     }
 }

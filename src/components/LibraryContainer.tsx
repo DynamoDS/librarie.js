@@ -24,7 +24,7 @@ export interface LibraryContainerStates {
     selectedCategories: string[],
     structured: boolean,
     detailed: boolean,
-    showExpandableToolTip: boolean,
+    showItemSummary: boolean,
 }
 
 export class LibraryContainer extends React.Component<LibraryContainerProps, LibraryContainerStates> {
@@ -58,7 +58,7 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
         this.props.libraryController.refreshLibraryViewHandler = this.refreshLibraryView;
 
         // Initialize the search utilities with empty data
-        this.searcher = new Searcher(this.clearSearch, this);
+        this.searcher = new Searcher(this);
 
         this.state = {
             inSearchMode: false,
@@ -66,7 +66,7 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
             selectedCategories: [],
             structured: false,
             detailed: false,
-            showExpandableToolTip: false // disable expandable tool tip by default
+            showItemSummary: false // disable expandable tool tip by default
         };
     }
 
@@ -176,17 +176,22 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
     }
 
     updateSearchViewDelayed(text: string) {
-        if (text.length > 0 && !this.state.structured) {
+        if(text.length ==0) {
+            this.clearSearch();
+            return;
+        }
+
+        if (!this.state.structured) {
             this.raiseEvent(this.props.libraryController.SearchTextUpdatedEventName, text);
         }
 
+        this.onSearchModeChanged(true);
         this.setState({ searchText: text });
-        this.onSearchModeChanged(text.length > 0);
     }
 
-    clearSearch(text: string) {
-        this.setState({ searchText: text })
+    clearSearch() {
         this.onSearchModeChanged(false);
+        this.setState({ searchText: "" })
     }
 
     render() {
@@ -204,20 +209,20 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
                         key={index++}
                         libraryContainer={this}
                         data={data}
-                        showExpandableToolTip={this.state.showExpandableToolTip}
+                        showItemSummary={this.state.showItemSummary}
                     />
                 );
             }
             else {
                 if (this.state.structured) {
-                    sections = this.searcher.generateStructuredItems(this.state.showExpandableToolTip);
+                    sections = this.searcher.generateStructuredItems(this.state.showItemSummary);
                 }
                 else {
                     sections = this.searcher.generateListItems(
                         this.generatedSections,
                         this.state.searchText,
                         this.state.detailed,
-                        this.state.showExpandableToolTip);
+                        this.state.showItemSummary);
                 }
             }
 

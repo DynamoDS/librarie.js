@@ -25,13 +25,13 @@ import * as LibraryUtilities from "../LibraryUtilities";
 export interface LibraryItemProps {
     libraryContainer: LibraryContainer,
     data: LibraryUtilities.ItemData,
-    showExpandableToolTip: boolean,
+    showItemSummary: boolean,
     onItemWillExpand?: Function
 }
 
 export interface LibraryItemState {
-    itemExpanded: boolean,
-    toolTipExpanded: boolean
+    itemSummaryExpanded: boolean,
+    expanded: boolean
 }
 
 class GroupedItems {
@@ -72,8 +72,8 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
 
         // All items are collapsed by default, except for section items
         this.state = {
-            itemExpanded: this.props.data.expanded,
-            toolTipExpanded: false
+            expanded: this.props.data.expanded,
+            itemSummaryExpanded: false
         };
     }
 
@@ -82,8 +82,8 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
     // expansion state. This will make sure that the expansion state of an item
     // in search view will not be affected by the previous user click.
     componentWillReceiveProps(nextProps: LibraryItemProps) {
-        if (nextProps.data.expanded !== this.state.itemExpanded) {
-            this.setState({ itemExpanded: nextProps.data.expanded });
+        if (nextProps.data.expanded !== this.state.expanded) {
+            this.setState({ expanded: nextProps.data.expanded });
         }
     }
 
@@ -111,7 +111,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         let clusteredElements: JSX.Element = null;
 
         // visible only nested elements when expanded.
-        if (this.state.itemExpanded && this.props.data.childItems.length > 0) {
+        if (this.state.expanded && this.props.data.childItems.length > 0) {
 
             // Break item list down into sub-lists based on the type of each item.
             let groupedItems = new GroupedItems(LibraryUtilities.sortItemsByText(this.props.data.childItems));
@@ -139,7 +139,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
 
             // Show arrow for non-leaf items
             if (this.props.data.childItems.length > 0) {
-                let arrowIcon = this.state.itemExpanded ? require("../resources/ui/indent-arrow-down.svg") : require("../resources/ui/indent-arrow-right.svg");
+                let arrowIcon = this.state.expanded ? require("../resources/ui/indent-arrow-down.svg") : require("../resources/ui/indent-arrow-right.svg");
                 arrow = <img className={"Arrow"} src={arrowIcon} onError={this.onImageLoadFail} />;
             }
         }
@@ -218,7 +218,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
                             key={index++}
                             libraryContainer={this.props.libraryContainer}
                             data={item}
-                            showExpandableToolTip={this.props.showExpandableToolTip}
+                            showItemSummary={this.props.showItemSummary}
                             onItemWillExpand={this.onSingleChildItemWillExpand.bind(this)}
                         />);
                     })
@@ -239,7 +239,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
                 libraryContainer={this.props.libraryContainer}
                 icon={require("../resources/icons/library-create.svg")}
                 borderColor="#62895b" /* green */
-                showExpandableToolTip={this.props.showExpandableToolTip}
+                showItemSummary={this.props.showItemSummary}
                 childItems={createMethods} />);
         }
 
@@ -249,7 +249,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
                 libraryContainer={this.props.libraryContainer}
                 icon={require("../resources/icons/library-action.svg")}
                 borderColor="#ad5446" /* red */
-                showExpandableToolTip={this.props.showExpandableToolTip}
+                showItemSummary={this.props.showItemSummary}
                 childItems={actionMethods} />);
         }
 
@@ -259,7 +259,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
                 libraryContainer={this.props.libraryContainer}
                 icon={require("../resources/icons/library-query.svg")}
                 borderColor="#4b9dbf" /* blue */
-                showExpandableToolTip={this.props.showExpandableToolTip}
+                showItemSummary={this.props.showItemSummary}
                 childItems={queryMethods} />);
         }
 
@@ -278,12 +278,12 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
 
     onLibraryItemClicked() {
         // Toggle expansion state.
-        let currentlyExpanded = this.state.itemExpanded;
+        let currentlyExpanded = this.state.expanded;
         if (this.props.data.childItems.length > 0 && !currentlyExpanded && this.props.onItemWillExpand) {
             this.props.onItemWillExpand();
         }
 
-        this.setState({ itemExpanded: !currentlyExpanded });
+        this.setState({ expanded: !currentlyExpanded });
 
         let libraryContainer = this.props.libraryContainer;
         if (this.props.data.childItems.length == 0) {
@@ -303,7 +303,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         for (let item of this.props.data.childItems) {
             item.expanded = false;
         }
-        this.setState({ itemExpanded: true }); // Make the current item (parent) expanded.
+        this.setState({ itemSummaryExpanded: true }); // Make the current item (parent) expanded.
     }
 
     onLibraryItemMouseLeave() {

@@ -14,18 +14,18 @@ interface SearchResultItemProps {
     pathToItem: LibraryUtilities.ItemData[];
     onParentTextClicked: ParentTextClickedFunc;
     detailed: boolean;
-    showExpandableToolTip: boolean;
+    showItemSummary: boolean;
 }
 
 interface SearchResultItemStates {
-    toolTipExpanded: boolean
+    itemSumamryExpanded: boolean
 }
 
 export class SearchResultItem extends React.Component<SearchResultItemProps, SearchResultItemStates> {
 
     constructor(props: SearchResultItemProps) {
         super(props);
-        this.state = ({ toolTipExpanded: false });
+        this.state = ({ itemSumamryExpanded: false });
     }
 
     render() {

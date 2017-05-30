@@ -6,12 +6,7 @@ import { LibraryContainer } from "./components/LibraryContainer";
 import * as LibraryUtilities from "./LibraryUtilities";
 import { SearchBar } from "./components/SearchBar";
 
-interface ClearSearchFunc {
-    (searchText: string): void;
-}
-
 export class Searcher {
-    clearSearchFunc: ClearSearchFunc = null;
     libraryContainer: LibraryContainer = null;
     sections: LibraryUtilities.ItemData[] = [];
     categories: string[] = [];
@@ -22,11 +17,9 @@ export class Searcher {
     displayedCategories: string[];
 
     constructor(
-        clearSearchFunc: ClearSearchFunc,
         libraryContainer: LibraryContainer,
         sections: LibraryUtilities.ItemData[] = [],
         categories: string[] = []) {
-        this.clearSearchFunc = clearSearchFunc;
         this.libraryContainer = libraryContainer;
         this.sections = sections;
         this.initializeCategories(categories);
@@ -38,7 +31,7 @@ export class Searcher {
         this.displayedCategories = categories;
     }
 
-    generateStructuredItems(showExpandableToolTip: boolean): JSX.Element[] {
+    generateStructuredItems(showItemSummary: boolean): JSX.Element[] {
         let structuredItems: JSX.Element[] = [];
         let categoryItems: LibraryUtilities.ItemData[] = [];
 
@@ -63,7 +56,7 @@ export class Searcher {
                 key={index++}
                 libraryContainer={this.libraryContainer}
                 data={item}
-                showExpandableToolTip={showExpandableToolTip}
+                showItemSummary={showItemSummary}
             />);
         }
         return structuredItems;
@@ -73,7 +66,7 @@ export class Searcher {
         items: LibraryUtilities.ItemData[] = this.sections,
         searchText: string,
         detailed: boolean,
-        showExpandableToolTip: boolean,
+        showItemSummary: boolean,
         pathToItem: LibraryUtilities.ItemData[] = [],
         leafItems: JSX.Element[] = [],
         top: boolean = true): JSX.Element[] {
@@ -107,14 +100,14 @@ export class Searcher {
                     pathToItem={pathToThisItem}
                     onParentTextClicked={this.directToLibrary.bind(this)}
                     detailed={detailed}
-                    showExpandableToolTip={showExpandableToolTip}
+                    showItemSummary={showItemSummary}
                 />);
             } else {
                 this.generateListItems(
                     item.childItems,
                     searchText,
                     detailed,
-                    showExpandableToolTip,
+                    showItemSummary,
                     pathToThisItem,
                     leafItems,
                     false
@@ -142,6 +135,6 @@ export class Searcher {
     clearSearch() {
         let searchInput: any = document.getElementById("SearchInputText");
         searchInput.value = "";
-        this.clearSearchFunc(searchInput.value);
+        this.libraryContainer.clearSearch();
     }
 }
