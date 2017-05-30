@@ -34,7 +34,6 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
 
     generatedSections: LibraryUtilities.ItemData[] = null;
     renderedSections: JSX.Element[] = null;
-    searchResultItems: JSX.Element[] = null;
     searchCategories: string[] = [];
 
     timeout: number;
@@ -179,7 +178,8 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
         this.setSelectionIndex(nextIndex);
     }
 
-    // Selection index will be set when arrow up/down key is pressed, or an item is clicked 
+    // Selection index will be set when arrow up/down key is pressed, 
+    // or when an item is clicked 
     setSelectionIndex(selectionIndex: number) {
         this.setState({ selectionIndex: selectionIndex });
     }

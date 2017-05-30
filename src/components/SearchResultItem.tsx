@@ -34,7 +34,7 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
         window.removeEventListener("keydown", this.handleKeyDown.bind(this));
     }
 
-    // Scroll current item to top/bottom selection changed
+    // Scroll current item to top/bottom when selection changed
     componentDidUpdate() {
         if (this.props.selected) {
             let container = ReactDOM.findDOMNode(this.props.libraryContainer);
@@ -54,6 +54,7 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
 
     handleKeyDown(event: any) {
         switch (event.code) {
+            // Allow node creation by enter key
             case "Enter":
                 if (this.props.selected) {
                     this.onItemClicked();
