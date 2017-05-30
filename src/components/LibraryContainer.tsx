@@ -179,12 +179,16 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
     }
 
     // Selection index will be set when arrow up/down key is pressed, 
-    // or when an item is clicked 
+    // or when an item is clicked, and it will be reset when qutting from search mode
     setSelectionIndex(selectionIndex: number) {
         this.setState({ selectionIndex: selectionIndex });
     }
 
     onSearchModeChanged(inSearchMode: boolean) {
+        if (this.state.inSearchMode && !inSearchMode) {
+            this.setSelectionIndex(-1);
+        }
+
         this.setState({ inSearchMode: inSearchMode });
     }
 
