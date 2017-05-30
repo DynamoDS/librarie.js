@@ -2,20 +2,20 @@ import * as React from 'react';
 import { ItemData } from "../LibraryUtilities";
 import { LibraryContainer } from "./LibraryContainer";
 
-interface ToolTipProps {
+interface ItemSummaryProps {
     libraryContainer: LibraryContainer,
     data: ItemData;
     showDescription: boolean;
 }
 
-interface ToolTipState {
+interface ItemSummaryStates {
     hasItemSummaryData: boolean;
 }
 
-export class ItemSummary extends React.Component<ToolTipProps, ToolTipState> {
+export class ItemSummary extends React.Component<ItemSummaryProps, ItemSummaryStates> {
     itemSummaryData: any;
 
-    constructor(props: ToolTipProps) {
+    constructor(props: ItemSummaryProps) {
         super(props);
         this.state = ({ hasItemSummaryData: false });
         this.itemSummaryData = null;
@@ -61,7 +61,7 @@ export class ItemSummary extends React.Component<ToolTipProps, ToolTipState> {
         }
 
         return (
-            <div className={"LibraryItemToolTip"}>
+            <div className={"LibraryItemSummary"}>
                 <div className={"LeftPane"}>
                     {description}
                     <div className={"Input"}>INPUT</div>
@@ -82,9 +82,9 @@ export class ItemSummary extends React.Component<ToolTipProps, ToolTipState> {
     onLibraryItemSummaryExpand() {
         if (!this.state.hasItemSummaryData) {
             let libraryContainer = this.props.libraryContainer;
-            let tooltipExpandEvent = libraryContainer.props.libraryController.ItemSummaryExpandEventName;
+            let itemSummaryExpandEvent = libraryContainer.props.libraryController.ItemSummaryExpandEventName;
             libraryContainer.raiseEvent(
-                tooltipExpandEvent,
+                itemSummaryExpandEvent,
                 { dataReceiver: this.onReceiveDataFromDynamo, data: this.props.data.contextData }
             );
         }
