@@ -224,7 +224,7 @@ input {
     width: 100%;
 }
 
-.SearchBar .SearchInputText:focus::-webkit-input-placeholder {
+.SearchBar #SearchInputText:focus::-webkit-input-placeholder {
     opacity: 0;
 }
 
