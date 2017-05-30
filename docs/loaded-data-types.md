@@ -16,6 +16,8 @@ This flat list of loaded data types takes the following form: it must contain ex
 
 - `keywords` - Keywords to be used by the search algorithm, in addition to the item's text.
 
+- `priority` - Priority to identify whether the item is more important. The smaller the value means it is more important.
+
 - `description` - Detailed information of the methods. This is shown on the UI if "Display detailed info" is checked.
 
 ```json
@@ -28,6 +30,7 @@ This flat list of loaded data types takes the following form: it must contain ex
       "parameters": null,
       "itemType": "action",
       "keywords": "Dynamo.Nodes.CodeBlockNodeModel, Code Block, codeblock",
+	  "priority": 0,
       "description": "Allows for DesignScript code to be authored directly"
     },
     {
@@ -37,6 +40,7 @@ This flat list of loaded data types takes the following form: it must contain ex
       "parameters": null,
       "itemType": "action",
       "keywords": "Dynamo.Nodes.Symbol, Input, variable, argument, parameter",
+	  "priority": 0,
       "description": "A function parameter, use with custom nodes.\n\nYou can specify the type and default value for parameter. E.g.,\n\ninput : var[]..[]\nvalue : bool = false"
     },
 
