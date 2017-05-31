@@ -204,7 +204,7 @@ libController.on(libController.ItemMouseEnterEventName, function(arg) {
 This event is raised when the mouse leaves the range of one library item.
 
  ```js
-libController.on("itemMouseLeave", function (searchText) {
+libController.on("itemMouseLeave", function (arg) {
     console.log("Data: " + arg.data);
     console.log("Rect(top, left, bottom, right): " + arg.rect.top + "," + arg.rect.left + "," + arg.rect.bottom + "," + arg.rect.right);
 });
@@ -213,10 +213,22 @@ libController.on("itemMouseLeave", function (searchText) {
 The string property for the event name is: ItemMouseLeaveEventName. So the following achieves the same:
 
 ```js
-libController.on(libController.ItemMouseLeaveEventName, function(contextData) {
+libController.on(libController.ItemMouseLeaveEventName, function(arg) {
     console.log("Data: " + arg.data);
     console.log("Rect(top, left, bottom, right): " + arg.rect.top + "," + arg.rect.left + "," + arg.rect.bottom + "," + arg.rect.right);
 })
+```
+
+### Event 'itemSummaryExpand'
+
+This event is raised when used clicks on the expand icon displayed on the right of a leaf library item or search result item. This event should return data for showing summary, including `InputParameters`, `OutputParameters` and `Description`.
+
+- `arg`: This contains a callback function `onDataReceivedHandler` and `data` of the item.
+
+```js
+libController.on(libController.ItemSummaryExpandEventName, function (arg) {
+    console.log(arg.data);
+});
 ```
 
 ### Event 'sectionIconClicked'
