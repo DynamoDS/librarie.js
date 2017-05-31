@@ -3,7 +3,7 @@
   "description": "Project that contains all hosted contents of Dynamo Windows client",
   "main": "index.js",
   "scripts": {
-    "test": "mocha -r ts-node/register test/libraryUtilitiesTest.ts",
+    "test": "mocha -r ts-node/register __tests__/mochatest/libraryUtilitiesTest.ts",
     "testjest": "jest",
     "testcover": "jest --coverage",
     "build": "npm run dev & npm run prod",
@@ -36,6 +36,7 @@
     "cross-env": "^3.2.4",
     "css-loader": "^0.27.3",
     "enzyme": "^2.8.2",
+    "enzyme-to-json": "^1.5.1",
     "file-loader": "^0.10.1",
     "jest": "^19.0.2",
     "mocha": "^3.3.0",
@@ -51,7 +52,7 @@
     "transform": {
       ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
     },
-    "testRegex": "(/__tests__/.*|/*|\\.(test|spec))\\.(ts|tsx|js)$",
+    "testRegex": "(/__tests__/*/.*|\\.(test|spec))\\.(ts|tsx|js)$",
     "moduleFileExtensions": [
       "ts",
       "tsx",
@@ -62,6 +63,11 @@
       "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/__mocks__/fileMock.ts",
       "\\.(css|less)$": "<rootDir>/__mocks__/styleMock.ts"
     },
-    "collectCoverageFrom": ["src/**/*.{ts,tsx}"]
+    "collectCoverageFrom": [
+      "src/**/*.{ts,tsx}"
+    ],
+    "testPathIgnorePatterns": [
+      "__tests__/data/"
+    ]
   }
 }
