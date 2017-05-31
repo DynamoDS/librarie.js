@@ -25,8 +25,12 @@ interface RefreshLibraryViewFunc {
     (): void;
 }
 
+interface SearchLibraryItemsCallbackFunc {
+    (loadedTypesJsonOnSearch: any): void;
+}
+
 interface SearchLibraryItemsFunc {
-    (text: string, callback: Function): void;
+    (text: string, callback: SearchLibraryItemsCallbackFunc): void;
 }
 
 export class LibraryController {

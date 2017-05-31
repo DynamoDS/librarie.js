@@ -117,12 +117,12 @@ export class Searcher {
             }
         }
 
-        // Sort the result based on priority
+        // Sort the result based on weight
         leafItems = leafItems.sort((a, b) => {
-            if (a.props.data.Priority > b.props.data.Priority) {
+            if (a.props.data.weight > b.props.data.weight) {
                 return 1;
             }
-            if (a.props.data.Priority < b.props.data.Priority) {
+            if (a.props.data.weight < b.props.data.weight) {
                 return -1;
             }
             return 0;
