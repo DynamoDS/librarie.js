@@ -11,7 +11,7 @@ Installing all dependencies
 
     `$ npm run build`
     
-    Both `librarie.js` (development script) and `librarie.min.js` (production script) will be output in `./dist/v0.0.1/` folder. By default `librarie.min.js` will be referenced in index.html.
+    Both `librarie.js` (development script) and `librarie.min.js` (production script) will be output in `./dist/` folder. By default `librarie.min.js` will be referenced in index.html.
 
 - Serve up the new library view
 
@@ -72,9 +72,9 @@ Constructing library view given the ID of an existing HTML element:
 
 - `htmlElementId` - The ID of an HTML whose content is to be replaced with `LibraryContainer`.
 
-- `loadedTypesJsonObject` - The JSON object to be used by library view as [Loaded Data Types](./docs/v0.0.1/loaded-data-types.md). This argument is optional, but if it is supplied, the corresponding `layoutSpecsJsonObject` must also be supplied. If this argument is not supplied, see *Method 2* below for details on how it can be supplied at a later time.
+- `loadedTypesJsonObject` - The JSON object to be used by library view as [Loaded Data Types](./docs/loaded-data-types.md). This argument is optional, but if it is supplied, the corresponding `layoutSpecsJsonObject` must also be supplied. If this argument is not supplied, see *Method 2* below for details on how it can be supplied at a later time.
 
-- `layoutSpecsJsonObject` - The JSON object to be used by library view as [Layout Specification](./docs/v0.0.1/layout-specs.md). This argument is optional, but if it is supplied, the corresponding `loadedTypesJsonObject` must also be supplied. If this argument is not supplied, see *Method 2* below for details on how it can be supplied at a later time.
+- `layoutSpecsJsonObject` - The JSON object to be used by library view as [Layout Specification](./docs/layout-specs.md). This argument is optional, but if it is supplied, the corresponding `loadedTypesJsonObject` must also be supplied. If this argument is not supplied, see *Method 2* below for details on how it can be supplied at a later time.
 
 ### Method 2
 Constructing a library view for consumption by other React.js components (e.g. hosting the library within a React.js tab control). This method creates a valid `JSX.Element` object so that it can be directly embedded under another React.js element. For details of `loadedTypesJsonObject` and `layoutSpecsJsonObject`, please refer to the above section.
@@ -115,7 +115,7 @@ The following simple HTML code illustrates the way to embed library view into an
         <div id="libraryContainerPlaceholder"></div>
 
         <!-- The main library view compoment -->
-        <script src = './dist/v0.0.1/librarie.min.js'></script>
+        <script src = './dist/librarie.min.js'></script>
 
         <!-- Initialize the library view component -->
         <script>
@@ -157,7 +157,7 @@ The event names are also defined as string properties in the controller.
 
 This event is raised when a library item is clicked. The registered event handler will be called with the following argument:
 
-- `contextData`: This is the value of `contextData` passed through [Loaded Data Types](./docs/v0.0.1/loaded-data-types.md) JSON data for the corresponding item.
+- `contextData`: This is the value of `contextData` passed through [Loaded Data Types](./docs/loaded-data-types.md) JSON data for the corresponding item.
 
 ```js
 libController.on("itemClicked", function(contextData) {
@@ -175,7 +175,7 @@ libController.on(libController.ItemClickedEventName, function(contextData) {
 
 ### Event 'searchTextUpdated'
 
-This event is raised when user starts typing on the search bar, and the display mode of SearchView is `list`. In this event, it should call a search algorithm from some other components, and return a list of [Search Result Items](./docs/v0.0.1/search-items.md) in JSON format to the caller.
+This event is raised when user starts typing on the search bar, and the display mode of SearchView is `list`. In this event, it should call a search algorithm from some other components, and return a list of [Search Result Items](./docs/search-items.md) in JSON format to the caller.
 
 - `searchText`: This is the value of state `searchText` in `SearchView` component, which is a string value that user has entered in the search bar.
 
@@ -234,6 +234,16 @@ libController.on(libController.ItemMouseLeaveEventName, function(contextData) {
 })
 ```
 
+### Event 'sectionIconClicked'
 
+This event is raised when used clicks on the icon displayed on the right of a section header.
 
+- `sectionText`: This is the `text` property of the section that is clicked, which is defined in the [Layout Specification](./docs/v0.0.1/layout-specs.md).
+
+```js
+libController.on(libController.SectionIconClickedEventName, function (sectionText) {
+     console.log(sectionText, "icon clicked");
+     return null;
+});
+```
 

@@ -21,6 +21,7 @@ export class Searcher {
     clearSearchFunc: ClearSearchFunc = null;
     libraryContainer: LibraryContainer = null;
     sections: LibraryUtilities.ItemData[] = [];
+    searchInputField: HTMLInputElement = null;
     categories: string[] = [];
 
     // This list represents the actual categories beind displayed on the search bar 
@@ -33,6 +34,7 @@ export class Searcher {
         this.clearSearchFunc = clearSearchFunc;
         this.libraryContainer = libraryContainer;
         this.sections = sections;
+        this.setSearchInputField = this.setSearchInputField.bind(this);
         this.initializeCategories(categories);
     }
 
@@ -79,7 +81,7 @@ export class Searcher {
         pathToItem: LibraryUtilities.ItemData[] = [],
         leafItems: JSX.Element[] = [],
         top: boolean = true): JSX.Element[] {
-        
+
         if (top) {
             this.displayedCategories = [];
         }
@@ -109,7 +111,7 @@ export class Searcher {
                     pathToItem={pathToThisItem}
                     onParentTextClicked={this.directToLibrary.bind(this)}
                     detailed={detailed}
-                    />);
+                />);
             } else {
                 this.generateListItems(item.childItems, searchText, detailed, pathToThisItem, leafItems, false);
             }
@@ -132,9 +134,15 @@ export class Searcher {
         return this.displayedCategories;
     }
 
+    // Obtain the search input field from SearchBar.
+    setSearchInputField(field: HTMLInputElement) {
+        this.searchInputField = field;
+    }
+
     clearSearch() {
-        let searchInput: any = document.getElementById("SearchInputText");
-        searchInput.value = "";
-        this.clearSearchFunc(searchInput.value);
+        if (this.searchInputField) {
+            this.searchInputField.value = "";
+            this.clearSearchFunc(this.searchInputField.value);
+        }
     }
 }
