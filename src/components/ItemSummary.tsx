@@ -9,17 +9,17 @@ interface ItemSummaryProps {
 }
 
 interface ItemSummaryStates {
-    hasItemSummaryData: boolean;
+    hasSummaryData: boolean;
 }
 
 export class ItemSummary extends React.Component<ItemSummaryProps, ItemSummaryStates> {
-    itemSummaryData: any;
+    summaryData: any;
 
     constructor(props: ItemSummaryProps) {
         super(props);
-        this.state = ({ hasItemSummaryData: false });
-        this.itemSummaryData = null;
-        this.onReceiveDataFromDynamo = this.onReceiveDataFromDynamo.bind(this);
+        this.state = ({ hasSummaryData: false });
+        this.summaryData = null;
+        this.onDataReceived = this.onDataReceived.bind(this);
     }
 
     render() {
@@ -31,24 +31,24 @@ export class ItemSummary extends React.Component<ItemSummaryProps, ItemSummarySt
         let description: JSX.Element = null;
         let icon: JSX.Element = null;
 
-        if (this.state.hasItemSummaryData) {
-            let inputParameters = this.itemSummaryData.Item1;
-            let outputParameters = this.itemSummaryData.Item2;
-            let descriptionTextFromDynamo = this.itemSummaryData.Item3;
+        if (this.state.hasSummaryData) {
+            let inputParameters = this.summaryData.InputParameters;
+            let outputParameters = this.summaryData.OutputParameters;
+            let descriptionTextReceived = this.summaryData.Description;
 
             for (let inputParameter of inputParameters) {
                 let inputParameterName = inputParameter.Item1
                 if (inputParameterName.length > 0) {
-                    inputParameterName.concat(": ");
+                    inputParameterName += ": ";
                 }
 
-                input.push(<div className={"IOName"}>{inputParameterName}: {inputParameter.Item2}</div>);
+                input.push(<div className={"IOParameter"}>{inputParameterName}{inputParameter.Item2}</div>);
             }
 
-            output = <div className={"IOName"}>{outputParameters}</div>;
+            output = <div className={"IOParameter"}>{outputParameters}</div>;
 
-            if (descriptionTextFromDynamo.length > 0) {
-                descriptionText = descriptionTextFromDynamo;
+            if (descriptionTextReceived.length > 0) {
+                descriptionText = descriptionTextReceived;
             }
         }
 
@@ -75,28 +75,27 @@ export class ItemSummary extends React.Component<ItemSummaryProps, ItemSummarySt
     }
 
     onImageLoadFail(event: any) {
-        event.target.src = require("../resources/icons/Dynamo.svg");
+        event.target.src = require("../resources/icons/default-icon.svg");
     }
 
     // Raise event to get data from Dynamo side if there is no data yet.
     onLibraryItemSummaryExpand() {
-        if (!this.state.hasItemSummaryData) {
+        if (!this.state.hasSummaryData) {
             let libraryContainer = this.props.libraryContainer;
             let itemSummaryExpandEvent = libraryContainer.props.libraryController.ItemSummaryExpandEventName;
             libraryContainer.raiseEvent(
                 itemSummaryExpandEvent,
-                { dataReceiver: this.onReceiveDataFromDynamo, data: this.props.data.contextData }
+                { onDataReceivedHandler: this.onDataReceived, data: this.props.data.contextData }
             );
         }
     }
 
-    // Data received from Dynamo side will be a tuple with Item1 being input parameters, 
-    // Item2 being output parameters, Item3 being description text.
-    onReceiveDataFromDynamo(data: any) {
-        let itemSummaryData = JSON.parse(data);
-        if (itemSummaryData && itemSummaryData.Item1 && itemSummaryData.Item2 && itemSummaryData.Item3) {
-            this.itemSummaryData = itemSummaryData;
-            this.setState({ hasItemSummaryData: true });
+    // Data received should have three attributes, InputParameters, OutputParameters and Description.
+    onDataReceived(data: any) {
+        let summaryData = JSON.parse(data);
+        if (summaryData && summaryData.InputParameters && summaryData.OutputParameters && summaryData.Description) {
+            this.summaryData = summaryData;
+            this.setState({ hasSummaryData: true });
         }
     }
 }

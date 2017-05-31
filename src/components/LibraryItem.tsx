@@ -175,7 +175,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
     }
 
     onImageLoadFail(event: any) {
-        event.target.src = require("../resources/icons/Dynamo.svg");
+        event.target.src = require("../resources/icons/default-icon.svg");
     }
 
     getLibraryItemContainerStyle(): string {
@@ -303,7 +303,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         for (let item of this.props.data.childItems) {
             item.expanded = false;
         }
-        this.setState({ itemSummaryExpanded: true }); // Make the current item (parent) expanded.
+        this.setState({ expanded: true }); // Make the current item (parent) expanded.
     }
 
     onLibraryItemMouseLeave() {
