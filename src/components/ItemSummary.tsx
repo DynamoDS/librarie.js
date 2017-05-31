@@ -78,7 +78,7 @@ export class ItemSummary extends React.Component<ItemSummaryProps, ItemSummarySt
         event.target.src = require("../resources/icons/default-icon.svg");
     }
 
-    // Raise event to get data from Dynamo side if there is no data yet.
+    // Raise event to get data if there is no data yet.
     onLibraryItemSummaryExpand() {
         if (!this.state.hasSummaryData) {
             let libraryContainer = this.props.libraryContainer;
