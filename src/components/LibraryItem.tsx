@@ -144,12 +144,8 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
 
             // Show arrow for non-leaf items
             if (this.props.data.childItems.length > 0) {
-                let arrowName = this.state.expanded ? "fa fa-caret-down" : "fa fa-caret-right";
-                arrow = (
-                    <div className="Arrow">
-                        <i className={arrowName} aria-hidden="true"></i>
-                    </div>
-                );
+                let arrowIcon = this.state.expanded ? require("../resources/ui/indent-arrow-down.svg") : require("../resources/ui/indent-arrow-right.svg");
+                arrow = <img className={"Arrow"} src={arrowIcon} onError={this.onImageLoadFail} />;
             }
         }
 
