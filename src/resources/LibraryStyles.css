@@ -12,7 +12,7 @@
 body {
     font-family: "Artifakt Element", "Open Sans";
     -webkit-user-select: none;
-    font-size:13px;
+    font-size: 13px;
     cursor: default;
 }
 
@@ -64,7 +64,7 @@ input {
     transition: 0.15s;
     background-color: #464646;
     color: #888;
-    font-size:14px;
+    font-size: 14px;
 }
 
 .LibrarySectionHeader .LibraryItemIcon {
@@ -102,8 +102,7 @@ input {
 
 .LibraryItemBodyContainer {
     display: flex;
-    flex-direction: row;
-    align-items: center;
+    align-items: stretch;
     background: #414141;
 }
 
@@ -154,13 +153,18 @@ input {
 }
 
 .Arrow {
-    padding: 3px 6px 6px 12px;
-    height: 11px;
-    width: 11px;
+    height: 35px;
+    width: 35px;
 }
 
-.BodyIndentation {
-    padding: 8px;
+.BodyIndentationWithLine,
+.BodyIndentationWithoutLine {
+    margin-bottom: 18px;
+    padding-left: 18px;
+}
+
+.BodyIndentationWithLine {
+    border-right: 1px solid gray;
 }
 
 .ClusterViewContainer {
@@ -249,6 +253,7 @@ input {
     background-color: rgba(255, 255, 255, 0.1);
     cursor: pointer;
 }
+
 .SearchBar .SearchOptionsContainerArrow {
     position: absolute;
     top: 10px;
@@ -327,7 +332,8 @@ input {
 .CheckboxLabelEnabled .CheckboxLabelText,
 .CheckboxLabelDisabled .CheckboxLabelText {
     padding-left: 20px;
-    padding-right: 40px; /* for the "only" text */
+    padding-right: 40px;
+    /* for the "only" text */
 }
 
 .CheckboxLabelEnabled .CheckboxLabelRightButton,
@@ -438,7 +444,7 @@ input {
 .SearchResultItemContainer .ItemTypeIcon {
     width: 14px;
     height: 14px;
-    padding-bottom:3px;
+    padding-bottom: 3px;
 }
 
 .HighlightedText {

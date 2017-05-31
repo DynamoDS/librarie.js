@@ -3,6 +3,6 @@
     <defs></defs>
     <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <path d="M0.5,17.5 L18.5,17.5" id="Line" stroke="#808080" stroke-linecap="square"></path>
-        <polygon id="Triangle" fill="#808080" transform="translate(22.000000, 18.000000) rotate(90.000000) translate(-22.000000, -18.000000) " points="22 13 28 23 16 23"></polygon>
+        <polygon id="Triangle" fill="#808080" transform="translate(21.000000, 18.000000) scale(1, -1) translate(-21.000000, -18.000000) " points="21 13 27 23 15 23"></polygon>
     </g>
 </svg>

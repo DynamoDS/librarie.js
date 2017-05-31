@@ -126,17 +126,31 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         let header: JSX.Element = null;
         let parameters: JSX.Element = null;
 
-        // Indentation and arrow are only added for non-category and non-section items
-        if (this.props.data.itemType !== "category" && this.props.data.itemType !== "section") {
+        // Indentation and arrow are only added for non-section items
+        if (this.props.data.itemType !== "section") {
 
-            // Indent one level for clustered and nested elements
-            if (clusteredElements || nestedElements) {
-                bodyIndentation = (<div className={"BodyIndentation"} />);
+            // Indent one level for clustered and nested elements, 
+            // indentation line is only added to nested elements
+            if (nestedElements) {
+                bodyIndentation = <div className={"BodyIndentationWithLine"} />;
             }
 
-            // Show arrow for non-leaf items
-            if (this.props.data.childItems.length > 0) {
-                let arrowIcon = this.state.expanded ? require("../resources/ui/indent-arrow-down.svg") : require("../resources/ui/indent-arrow-right.svg");
+            if (clusteredElements) {
+                bodyIndentation = <div className={"BodyIndentationWithoutLine"} />;
+            }
+
+            // Show arrow for non-section, non-category and non-leaf items
+            if (this.props.data.itemType !== "category" && this.props.data.childItems.length > 0) {
+                let arrowIcon: any = null;
+                
+                if (!this.state.expanded) {
+                    arrowIcon = require("../resources/ui/indent-arrow-right.svg");
+                } else if (clusteredElements) {
+                    arrowIcon = require("../resources/ui/indent-arrow-down-without-line.svg");
+                } else {
+                    arrowIcon = require("../resources/ui/indent-arrow-down.svg");
+                }
+                
                 arrow = <img className={"Arrow"} src={arrowIcon} onError={this.onImageLoadFail} />;
             }
         }
