@@ -72,6 +72,12 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         this.state = {
             expanded: this.props.data.expanded
         };
+
+        this.onLibraryItemClicked = this.onLibraryItemClicked.bind(this);
+        this.onLibraryItemMouseEnter = this.onLibraryItemMouseEnter.bind(this);
+        this.onLibraryItemMouseLeave = this.onLibraryItemMouseLeave.bind(this);
+        this.onSectionIconClicked = this.onSectionIconClicked.bind(this);
+        this.onSingleChildItemWillExpand = this.onSingleChildItemWillExpand.bind(this);
     }
 
     // By default all items in search view will be expanded. In search view, 
@@ -108,7 +114,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
                 className={"LibraryItemIcon"}
                 src={this.props.data.iconUrl}
                 onError={this.onImageLoadFail}
-                onClick={this.onSectionIconClicked.bind(this)}
+                onClick={this.onSectionIconClicked}
             />;
         }
 
@@ -154,8 +160,8 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
 
         if (this.props.data.showHeader) {
             header = (
-                <div className={this.getLibraryItemHeaderStyle()} onClick={this.onLibraryItemClicked.bind(this)}
-                    onMouseOver={this.onLibraryItemMouseEnter.bind(this)} onMouseLeave={this.onLibraryItemMouseLeave.bind(this)}>
+                <div className={this.getLibraryItemHeaderStyle()} onClick={this.onLibraryItemClicked}
+                    onMouseOver={this.onLibraryItemMouseEnter} onMouseLeave={this.onLibraryItemMouseLeave}>
                     {arrow}
                     {this.props.data.itemType === "section" ? null : iconElement}
                     <div className={libraryItemTextStyle}>{this.props.data.text}</div>
@@ -223,7 +229,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
                             key={index++}
                             libraryContainer={this.props.libraryContainer}
                             data={item}
-                            onItemWillExpand={this.onSingleChildItemWillExpand.bind(this)}
+                            onItemWillExpand={this.onSingleChildItemWillExpand}
                         />);
                     })
                 }
