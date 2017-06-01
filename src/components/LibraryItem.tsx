@@ -23,7 +23,7 @@ import { LibraryContainer } from "./LibraryContainer";
 import { ItemData, sortItemsByText } from "../LibraryUtilities";
 
 export interface LibraryItemProps {
-    libraryContainer: LibraryContainer,
+    libraryContainer: any,
     data: ItemData,
     onItemWillExpand?: Function
 }
