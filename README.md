@@ -19,7 +19,8 @@ Installing all dependencies
 
 - Navigate to `localhost:3456` in Google Chrome browser
 
-## Test
+
+## Run Tests
 - Run UI test
 
     `$ npm run testjest`
@@ -31,6 +32,20 @@ Installing all dependencies
     `$ npm run test`
 
     Test file is at folder `./test/`
+- Example test  
+
+ ```typescript
+    // Importing the object to be tested
+     import { LibraryItem } from '../src/components/LibraryItem';
+
+    // A test case that tests object properties against their intended value 
+     it("should create a libraryItem", function () {
+     let libContainer = libController.createLibraryContainer(layoutSpecsJson, loadedTypesJson);
+     let libraryItem = mount(<LibraryItem libraryContainer={libContainer} data={data} />); 
+     expect(libraryItem.props().data.childItems[0].text).to.equal("Child0"); 
+    }
+ ```
+- Instructions to write a tests are found at https://github.com/DynamoDS/librarie.js/wiki/Setting-up-test-frameworks-for-librarie.js
 
 ## Usage
 There are few ways in which library view (i.e. `LibraryContainer` object) can be constructed. Regardless of which method is used, the caller should first call `LibraryEntryPoint.CreateLibraryController` method to create `LibraryController` before obtaining an instance of `LibraryContainer` object.
@@ -203,7 +218,7 @@ libController.on(libController.ItemMouseEnterEventName, function(arg) {
 
 This event is raised when the mouse leaves the range of one library item.
 
- ```js
+```js
 libController.on("itemMouseLeave", function (searchText) {
     console.log("Data: " + arg.data);
     console.log("Rect(top, left, bottom, right): " + arg.rect.top + "," + arg.rect.left + "," + arg.rect.bottom + "," + arg.rect.right);
@@ -231,3 +246,4 @@ libController.on(libController.SectionIconClickedEventName, function (sectionTex
      return null;
 });
 ```
+
