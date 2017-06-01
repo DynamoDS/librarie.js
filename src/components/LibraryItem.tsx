@@ -130,7 +130,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         if (this.props.data.itemType !== "section") {
 
             // Indent one level for clustered and nested elements, 
-            // indentation line is only added to nested elements
+            // indentation line is only added for nested elements
             if (nestedElements) {
                 bodyIndentation = <div className={"BodyIndentationWithLine"} />;
             }
