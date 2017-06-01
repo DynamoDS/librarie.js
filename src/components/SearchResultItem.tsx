@@ -18,14 +18,14 @@ interface SearchResultItemProps {
 }
 
 interface SearchResultItemStates {
-    itemSumamryExpanded: boolean
+    itemSummaryExpanded: boolean
 }
 
 export class SearchResultItem extends React.Component<SearchResultItemProps, SearchResultItemStates> {
 
     constructor(props: SearchResultItemProps) {
         super(props);
-        this.state = ({ itemSumamryExpanded: false });
+        this.state = ({ itemSummaryExpanded: false });
     }
 
     render() {
