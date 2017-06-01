@@ -219,14 +219,14 @@ libController.on(libController.ItemMouseLeaveEventName, function(arg) {
 })
 ```
 
-### Event 'itemSummaryExpand'
+### Event 'itemSummaryExpanded'
 
-This event is raised when used clicks on the expand icon displayed on the right of a leaf library item or search result item. This event should return data for showing summary, including `InputParameters`, `OutputParameters` and `Description`.
+This event is raised when user clicks on the expand icon displayed on the right of a leaf library item or search result item. This event should return data for showing summary, including `InputParameters`, `OutputParameters` and `Description`.
 
 - `arg`: This contains a callback function `onDataReceivedHandler` and `data` of the item.
 
 ```js
-libController.on(libController.ItemSummaryExpandEventName, function (arg) {
+libController.on(libController.ItemSummaryExpandedEventName, function (arg) {
     console.log(arg.data);
 });
 ```
