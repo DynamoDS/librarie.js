@@ -140,7 +140,7 @@ input {
 }
 
 .LibraryItemGroupText {
-    padding: 7px 0px 7px 5px;
+    padding: 7px 0px;
     color: #a9a9a9;
 }
 
@@ -164,7 +164,7 @@ input {
 }
 
 .BodyIndentationWithLine {
-    border-right: 1px solid gray;
+    border-right: 1px solid #808080;
 }
 
 .ClusterViewContainer {
