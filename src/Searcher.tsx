@@ -100,11 +100,22 @@ export class Searcher {
                     pathToItem={pathToThisItem}
                     onParentTextClicked={this.directToLibrary.bind(this)}
                     detailed={detailed}
-                />);
+                    />);
             } else {
                 this.generateListItems(item.childItems, searchText, detailed, pathToThisItem, leafItems, false);
             }
         }
+
+        // Sort the result based on weight
+        leafItems = leafItems.sort((a, b) => {
+            if (a.props.data.weight > b.props.data.weight) {
+                return 1;
+            }
+            if (a.props.data.weight < b.props.data.weight) {
+                return -1;
+            }
+            return 0;
+        });
 
         return leafItems;
     }
