@@ -25,6 +25,14 @@ interface RefreshLibraryViewFunc {
     (): void;
 }
 
+interface SearchLibraryItemsCallbackFunc {
+    (loadedTypesJsonOnSearch: any): void;
+}
+
+interface SearchLibraryItemsFunc {
+    (text: string, callback: SearchLibraryItemsCallbackFunc): void;
+}
+
 export class LibraryController {
 
     ItemClickedEventName = "itemClicked";
@@ -40,6 +48,11 @@ export class LibraryController {
     setLoadedTypesJsonHandler: SetLoadedTypesJsonFunc = null;
     setLayoutSpecsJsonHandler: SetLayoutSpecsJsonFunc = null;
     refreshLibraryViewHandler: RefreshLibraryViewFunc = null;
+
+    // This is to make it possible to set an external search handler.
+    // Given a search text, it will call the callback function with search result.
+    // The search result will be in the same format as the first parameter for setLoadedTypesJsonHandler.
+    searchLibraryItemsHandler: SearchLibraryItemsFunc = null;
 
     constructor() {
         this.on = this.on.bind(this);

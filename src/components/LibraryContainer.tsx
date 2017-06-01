@@ -33,6 +33,7 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
     layoutSpecsJson: any = null;
 
     generatedSections: LibraryUtilities.ItemData[] = null;
+    generatedSectionsOnSearch: LibraryUtilities.ItemData[] = null;
     searchCategories: string[] = [];
 
     timeout: number;
@@ -118,14 +119,18 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
             this.loadedTypesJson, this.layoutSpecsJson,
             this.props.defaultSectionString, this.props.miscSectionString);
 
+        this.updateSections(this.generatedSections);
+    }
+
+    updateSections(sections: any): void {
         // Obtain the categories from each section to be added into the filtering options for search
-        for (let section of this.generatedSections) {
+        for (let section of sections) {
             for (let childItem of section.childItems)
                 this.searchCategories.push(childItem.text);
         }
 
         // Update the properties in searcher
-        this.searcher.sections = this.generatedSections;
+        this.searcher.sections = sections;
         this.searcher.initializeCategories(this.searchCategories);
 
         // Just to force a refresh of UI.
@@ -165,8 +170,23 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
             // but only show change on ui after 300ms
 
             this.timeout = setTimeout(function () {
-                LibraryUtilities.searchItemResursive(this.generatedSections, text);
-                this.updateSearchViewDelayed(text);
+                if (this.props.libraryController.searchLibraryItemsHandler) {
+                    this.props.libraryController.searchLibraryItemsHandler(text, function (loadedTypesJsonOnSearch: any) {
+                        // Generate sections based on layout specification and loaded types filtered by search string
+                        this.generatedSectionsOnSearch = LibraryUtilities.buildLibrarySectionsFromLayoutSpecs(
+                            loadedTypesJsonOnSearch, this.layoutSpecsJson,
+                            this.props.defaultSectionString, this.props.miscSectionString);
+
+                        this.updateSections(this.generatedSectionsOnSearch);
+
+                        // Set all categories and groups to be expanded
+                        LibraryUtilities.setItemStateRecursive(this.generatedSectionsOnSearch, true, true);
+                        this.updateSearchViewDelayed(text);
+                    }.bind(this));
+                } else {
+                    LibraryUtilities.searchItemResursive(this.generatedSections, text);
+                    this.updateSearchViewDelayed(text);
+                }
             }.bind(this), 300);
         } else {
             // Show change on ui immediately if search text is cleared
@@ -219,7 +239,7 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
                 }
                 else {
                     sections = this.searcher.generateListItems(
-                        this.generatedSections,
+                        this.props.libraryController.searchLibraryItemsHandler ? this.generatedSectionsOnSearch : this.generatedSections,
                         this.state.searchText,
                         this.state.detailed,
                         this.state.showItemSummary);
@@ -233,7 +253,7 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
                 onTextChanged={this.onTextChanged}
                 categories={this.searcher.getDisplayedCategories()}
                 setSearchInputField={this.searcher.setSearchInputField}
-            />
+            />;
 
             return (
                 <div className="LibraryContainer">

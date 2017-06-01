@@ -57,9 +57,9 @@ Constructing library view given the ID of an existing HTML element:
 
 - `htmlElementId` - The ID of an HTML whose content is to be replaced with `LibraryContainer`.
 
-- `loadedTypesJsonObject` - The JSON object to be used by library view as [Loaded Data Types](./docs/v0.0.1/loaded-data-types.md). This argument is optional, but if it is supplied, the corresponding `layoutSpecsJsonObject` must also be supplied. If this argument is not supplied, see *Method 2* below for details on how it can be supplied at a later time.
+- `loadedTypesJsonObject` - The JSON object to be used by library view as [Loaded Data Types](./docs/loaded-data-types.md). This argument is optional, but if it is supplied, the corresponding `layoutSpecsJsonObject` must also be supplied. If this argument is not supplied, see *Method 2* below for details on how it can be supplied at a later time.
 
-- `layoutSpecsJsonObject` - The JSON object to be used by library view as [Layout Specification](./docs/v0.0.1/layout-specs.md). This argument is optional, but if it is supplied, the corresponding `loadedTypesJsonObject` must also be supplied. If this argument is not supplied, see *Method 2* below for details on how it can be supplied at a later time.
+- `layoutSpecsJsonObject` - The JSON object to be used by library view as [Layout Specification](./docs/layout-specs.md). This argument is optional, but if it is supplied, the corresponding `loadedTypesJsonObject` must also be supplied. If this argument is not supplied, see *Method 2* below for details on how it can be supplied at a later time.
 
 ### Method 2
 Constructing a library view for consumption by other React.js components (e.g. hosting the library within a React.js tab control). This method creates a valid `JSX.Element` object so that it can be directly embedded under another React.js element. For details of `loadedTypesJsonObject` and `layoutSpecsJsonObject`, please refer to the above section.
