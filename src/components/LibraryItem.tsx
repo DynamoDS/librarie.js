@@ -23,7 +23,7 @@ import { LibraryContainer } from "./LibraryContainer";
 import * as LibraryUtilities from "../LibraryUtilities";
 
 export interface LibraryItemProps {
-    libraryContainer: LibraryContainer,
+    libraryContainer: any,
     data: LibraryUtilities.ItemData,
     showItemSummary: boolean,
     onItemWillExpand?: Function
