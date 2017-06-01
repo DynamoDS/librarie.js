@@ -4,9 +4,6 @@ import * as testClasses from '../data/libraryUtilitiesTestClasses'
 import { expect } from 'chai';
 import 'mocha';
 
-// To run all tests with coverage report use command "npm run test"
-// To run mocha tests use command "npm run test mocha test/libraryUtilitiesTest.ts"
-
 function compareLayoutElements(actual: LibraryUtilities.LayoutElement, expected: LibraryUtilities.LayoutElement) {
 
   // Basic element properties must match up.
