@@ -19,7 +19,8 @@ Installing all dependencies
 
 - Navigate to `localhost:3456` in Google Chrome browser
 
-## Test
+
+## Run Tests
 - Run UI test
 
     `$ npm run testjest`
@@ -31,6 +32,20 @@ Installing all dependencies
     `$ npm run test`
 
     Test file is at folder `./test/`
+- Example test  
+
+ ```typescript
+    // Importing the object to be tested
+     import { LibraryItem } from '../src/components/LibraryItem';
+
+    // A test case that tests object properties against their intended value 
+     it("should create a libraryItem", function () {
+     let libContainer = libController.createLibraryContainer(layoutSpecsJson, loadedTypesJson);
+     let libraryItem = mount(<LibraryItem libraryContainer={libContainer} data={data} />); 
+     expect(libraryItem.props().data.childItems[0].text).to.equal("Child0"); 
+    }
+ ```
+- Instructions to write a tests are found at https://github.com/DynamoDS/librarie.js/wiki/Setting-up-test-frameworks-for-librarie.js
 
 ## Usage
 There are few ways in which library view (i.e. `LibraryContainer` object) can be constructed. Regardless of which method is used, the caller should first call `LibraryEntryPoint.CreateLibraryController` method to create `LibraryController` before obtaining an instance of `LibraryContainer` object.
@@ -57,9 +72,9 @@ Constructing library view given the ID of an existing HTML element:
 
 - `htmlElementId` - The ID of an HTML whose content is to be replaced with `LibraryContainer`.
 
-- `loadedTypesJsonObject` - The JSON object to be used by library view as [Loaded Data Types](./docs/v0.0.1/loaded-data-types.md). This argument is optional, but if it is supplied, the corresponding `layoutSpecsJsonObject` must also be supplied. If this argument is not supplied, see *Method 2* below for details on how it can be supplied at a later time.
+- `loadedTypesJsonObject` - The JSON object to be used by library view as [Loaded Data Types](./docs/loaded-data-types.md). This argument is optional, but if it is supplied, the corresponding `layoutSpecsJsonObject` must also be supplied. If this argument is not supplied, see *Method 2* below for details on how it can be supplied at a later time.
 
-- `layoutSpecsJsonObject` - The JSON object to be used by library view as [Layout Specification](./docs/v0.0.1/layout-specs.md). This argument is optional, but if it is supplied, the corresponding `loadedTypesJsonObject` must also be supplied. If this argument is not supplied, see *Method 2* below for details on how it can be supplied at a later time.
+- `layoutSpecsJsonObject` - The JSON object to be used by library view as [Layout Specification](./docs/layout-specs.md). This argument is optional, but if it is supplied, the corresponding `loadedTypesJsonObject` must also be supplied. If this argument is not supplied, see *Method 2* below for details on how it can be supplied at a later time.
 
 ### Method 2
 Constructing a library view for consumption by other React.js components (e.g. hosting the library within a React.js tab control). This method creates a valid `JSX.Element` object so that it can be directly embedded under another React.js element. For details of `loadedTypesJsonObject` and `layoutSpecsJsonObject`, please refer to the above section.
@@ -203,7 +218,7 @@ libController.on(libController.ItemMouseEnterEventName, function(arg) {
 
 This event is raised when the mouse leaves the range of one library item.
 
- ```js
+```js
 libController.on("itemMouseLeave", function (searchText) {
     console.log("Data: " + arg.data);
     console.log("Rect(top, left, bottom, right): " + arg.rect.top + "," + arg.rect.left + "," + arg.rect.bottom + "," + arg.rect.right);
@@ -231,3 +246,4 @@ libController.on(libController.SectionIconClickedEventName, function (sectionTex
      return null;
 });
 ```
+
