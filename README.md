@@ -236,13 +236,34 @@ libController.on(libController.ItemMouseLeaveEventName, function(arg) {
 
 ### Event 'itemSummaryExpanded'
 
-This event is raised when user clicks on the expand icon displayed on the right of a leaf library item or search result item. This event should return data for showing summary, including `InputParameters`, `OutputParameters` and `Description`.
+This event is raised when user clicks on the expand icon displayed on the right of a leaf library item or search result item. This event should return data for showing summary, which contains `inputParameters`, `outputParameters` and `description`, follwing the format in the example below.
 
-- `arg`: This contains a callback function `onDataReceivedHandler` and `data` of the item.
+- `arg`: This contains a callback function `setDataCallback` and `contextData` of the item. The function `setDataCallback` will send the data back to librarie.js for displaying ItemSummary.
 
 ```js
 libController.on(libController.ItemSummaryExpandedEventName, function (arg) {
-    console.log(arg.data);
+    var data = arg.contextData;
+
+    // The final data sent back to librarie.js should follow the format in the example.
+    var finalData = {
+        "inputParameters": [
+            {
+                "name": "c1",
+                "type": "Color"
+            },
+            {
+                "name": "c2",
+                "type": "Color"
+            }
+        ],
+        "outputParameters": [
+            "Color"
+        ],
+        "description": "Construct a Color by combining two input Colors."
+    };
+
+    // Send data back to librarie.js
+    arg.setDataCallback(finalData);
 });
 ```
 

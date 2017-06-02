@@ -2,6 +2,13 @@ import * as React from 'react';
 import { ItemData } from "../LibraryUtilities";
 import { LibraryContainer } from "./LibraryContainer";
 
+/**
+ * 'ItemSummary' can optionally display the description text. In regular library 
+ * view the description text is always shown as part of 'ItemSummary' when it is 
+ * expanded. In search result view however, 'ItemSummary' does not display its 
+ * description text as each search result item already displays the same description
+ * text (in detailed view), in which case 'showDescription' property is set to false. 
+ */
 interface ItemSummaryProps {
     libraryContainer: LibraryContainer,
     data: ItemData;
@@ -19,11 +26,11 @@ export class ItemSummary extends React.Component<ItemSummaryProps, ItemSummarySt
         super(props);
         this.state = ({ hasSummaryData: false });
         this.summaryData = null;
-        this.onDataReceived = this.onDataReceived.bind(this);
+        this.setItemSummary = this.setItemSummary.bind(this);
     }
 
     render() {
-        this.onLibraryItemSummaryExpand();
+        this.fetchMissingItemSummary();
 
         let descriptionText = this.props.data.description;
         let input: JSX.Element[] = [];
@@ -37,23 +44,25 @@ export class ItemSummary extends React.Component<ItemSummaryProps, ItemSummarySt
             let descriptionTextReceived = this.summaryData.Description;
 
             for (let inputParameter of inputParameters) {
-                let inputParameterName = inputParameter.Item1
+                let inputParameterName = inputParameter.name
                 if (inputParameterName.length > 0) {
                     inputParameterName += ": ";
                 }
 
-                input.push(<div className={"IOParameter"}>{inputParameterName}{inputParameter.Item2}</div>);
+                input.push(<div className={"IOParameter"}>{inputParameterName}{inputParameter.type}</div>);
             }
 
             output = <div className={"IOParameter"}>{outputParameters}</div>;
 
             if (descriptionTextReceived.length > 0) {
                 descriptionText = descriptionTextReceived;
+            } else {
+                descriptionText = this.props.data.description;
             }
         }
 
         if (!descriptionText) {
-            descriptionText = "No description available";
+            descriptionText = this.state.hasSummaryData ? "No description available" : "Fetching summary...";
         }
 
         if (this.props.showDescription) {
@@ -79,21 +88,42 @@ export class ItemSummary extends React.Component<ItemSummaryProps, ItemSummarySt
     }
 
     // Raise event to get data if there is no data yet.
-    onLibraryItemSummaryExpand() {
+    fetchMissingItemSummary() {
         if (!this.state.hasSummaryData) {
             let libraryContainer = this.props.libraryContainer;
-            let itemSummaryExpandEvent = libraryContainer.props.libraryController.ItemSummaryExpandEventName;
+            let itemSummaryExpandedEvent = libraryContainer.props.libraryController.ItemSummaryExpandedEventName;
             libraryContainer.raiseEvent(
-                itemSummaryExpandEvent,
-                { onDataReceivedHandler: this.onDataReceived, data: this.props.data.contextData }
+                itemSummaryExpandedEvent,
+                { setDataCallback: this.setItemSummary, contextData: this.props.data.contextData }
             );
         }
     }
 
-    // Data received should have three attributes, InputParameters, OutputParameters and Description.
-    onDataReceived(data: any) {
+    /**
+     * Set data for displaying ItemSummary
+     * @param data The data received should in the following format: 
+     * 
+     * {
+     *   "inputParameters":[
+     *      {
+     *          "name":"c1",
+     *          "type":"Color"
+     *      },
+     *      {
+     *          "name":"c2",
+     *          "type":"Color"
+     *      }
+     *   ],
+     *   "outputParameters":[
+     *      "Color"
+     *   ],
+     *   "description": "Construct a Color by combining two input Colors."
+     * }
+     * 
+     */
+    setItemSummary(data: any) {
         let summaryData = JSON.parse(data);
-        if (summaryData && summaryData.InputParameters && summaryData.OutputParameters && summaryData.Description) {
+        if (summaryData && summaryData.inputParameters && summaryData.outputParameters && summaryData.description) {
             this.summaryData = summaryData;
             this.setState({ hasSummaryData: true });
         }

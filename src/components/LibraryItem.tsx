@@ -51,6 +51,23 @@ class GroupedItems {
                 case "query": this.queries.push(items[i]); break;
                 default: this.others.push(items[i]); break;
             }
+
+            var finalData = {
+                "inputParameters": [
+                    {
+                        "name": "c1",
+                        "type": "Color"
+                    },
+                    {
+                        "name": "c2",
+                        "type": "Color"
+                    }
+                ],
+                "outputParameters": [
+                    "Color"
+                ],
+                "description": "Construct a Color by combining two input Colors."
+            };
         }
 
         this.creates = LibraryUtilities.sortItemsByText(this.creates);
