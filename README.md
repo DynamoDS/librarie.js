@@ -218,7 +218,7 @@ libController.on(libController.ItemMouseEnterEventName, function(arg) {
 
 This event is raised when the mouse leaves the range of one library item.
 
- ```js
+```js
 libController.on("itemMouseLeave", function (arg) {
     console.log("Data: " + arg.data);
     console.log("Rect(top, left, bottom, right): " + arg.rect.top + "," + arg.rect.left + "," + arg.rect.bottom + "," + arg.rect.right);
