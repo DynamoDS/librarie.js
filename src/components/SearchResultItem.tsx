@@ -14,16 +14,18 @@ interface SearchResultItemProps {
     pathToItem: LibraryUtilities.ItemData[],
     onParentTextClicked: ParentTextClickedFunc,
     detailed: boolean,
-    selected: boolean,
     index: number
 }
 
-interface SearchResultItemStates { }
+interface SearchResultItemStates {
+    selected: boolean
+}
 
 export class SearchResultItem extends React.Component<SearchResultItemProps, SearchResultItemStates> {
 
     constructor(props: SearchResultItemProps) {
         super(props);
+        this.state = ({ selected: false });
     }
 
     componentWillMount() {
@@ -34,9 +36,17 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
         window.removeEventListener("keydown", this.handleKeyDown.bind(this));
     }
 
-    // Scroll current item to top/bottom when selection changed
+    // Update selection state and scroll current item to top/bottom when selection changed
     componentDidUpdate() {
-        if (this.props.selected) {
+        if (!this.state.selected && this.props.index == this.props.libraryContainer.getSelectionIndex()) {
+            this.setState({ selected: true });
+        }
+
+        if (this.state.selected && this.props.index != this.props.libraryContainer.getSelectionIndex()) {
+            this.setState({ selected: false });
+        }
+
+        if (this.state.selected) {
             let container = ReactDOM.findDOMNode(this.props.libraryContainer);
             let currentItem = ReactDOM.findDOMNode(this);
             let containerRect = container.getBoundingClientRect();
@@ -54,9 +64,9 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
 
     handleKeyDown(event: any) {
         switch (event.code) {
-            // Allow node creation by enter key
+            // Allow node creation by pressing enter key
             case "Enter":
-                if (this.props.selected) {
+                if (this.state.selected) {
                     this.onItemClicked();
                 }
             default:
@@ -65,7 +75,7 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
     }
 
     render() {
-        let ItemContainerStyle = this.props.selected ? "SearchResultItemContainerSelected" : "SearchResultItemContainer";
+        let ItemContainerStyle = this.state.selected ? "SearchResultItemContainerSelected" : "SearchResultItemContainer";
         let iconPath = this.props.data.iconUrl;
 
         // The parent of a search result item is the second last entry in 'pathToItem'

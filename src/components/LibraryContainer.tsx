@@ -33,6 +33,7 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
     layoutSpecsJson: any = null;
 
     generatedSections: LibraryUtilities.ItemData[] = null;
+    generatedSectionsOnSearch: LibraryUtilities.ItemData[] = null;
     renderedSections: JSX.Element[] = null;
     searchCategories: string[] = [];
 
@@ -83,11 +84,11 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
         switch (event.code) {
             case "ArrowUp":
                 event.preventDefault(); // Prevent arrow key from navigating around search input
-                this.onSelectionChanged(false);
+                this.updateSelection(false);
                 break;
             case "ArrowDown":
                 event.preventDefault();
-                this.onSelectionChanged(true);
+                this.updateSelection(true);
                 break;
             default:
                 break;
@@ -146,14 +147,18 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
         let index = 0;
         this.renderedSections = this.generatedSections.map(data => <LibraryItem key={index++} libraryContainer={this} data={data} />);
 
+        this.updateSections(this.generatedSections);
+    }
+
+    updateSections(sections: any): void {
         // Obtain the categories from each section to be added into the filtering options for search
-        for (let section of this.generatedSections) {
+        for (let section of sections) {
             for (let childItem of section.childItems)
                 this.searchCategories.push(childItem.text);
         }
 
         // Update the properties in searcher
-        this.searcher.sections = this.generatedSections;
+        this.searcher.sections = sections;
         this.searcher.initializeCategories(this.searchCategories);
 
         // Just to force a refresh of UI.
@@ -164,7 +169,9 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
         this.props.libraryController.raiseEvent(name, params);
     }
 
-    onSelectionChanged(incremented: boolean) {
+    // Update the selectionIndex. Current index will add by 1 if incremented is true,
+    // minus by 1 otherwise, but it should always be bigger or equal to 0.
+    updateSelection(incremented: boolean) {
         if (!this.state.inSearchMode) {
             return;
         }
@@ -179,9 +186,13 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
     }
 
     // Selection index will be set when arrow up/down key is pressed, 
-    // or when an item is clicked, and it will be reset when qutting from search mode
+    // or when an item is clicked, and it will be reset when qutting from search result
     setSelectionIndex(selectionIndex: number) {
         this.setState({ selectionIndex: selectionIndex });
+    }
+
+    getSelectionIndex() : number {
+        return this.state.selectionIndex;
     }
 
     onSearchModeChanged(inSearchMode: boolean) {
@@ -217,8 +228,23 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
             // but only show change on ui after 300ms
 
             this.timeout = setTimeout(function () {
-                LibraryUtilities.searchItemResursive(this.generatedSections, text);
-                this.updateSearchViewDelayed(text);
+                if (this.props.libraryController.searchLibraryItemsHandler) {
+                    this.props.libraryController.searchLibraryItemsHandler(text, function (loadedTypesJsonOnSearch: any) {
+                        // Generate sections based on layout specification and loaded types filtered by search string
+                        this.generatedSectionsOnSearch = LibraryUtilities.buildLibrarySectionsFromLayoutSpecs(
+                            loadedTypesJsonOnSearch, this.layoutSpecsJson,
+                            this.props.defaultSectionString, this.props.miscSectionString);
+
+                        this.updateSections(this.generatedSectionsOnSearch);
+
+                        // Set all categories and groups to be expanded
+                        LibraryUtilities.setItemStateRecursive(this.generatedSectionsOnSearch, true, true);
+                        this.updateSearchViewDelayed(text);
+                    }.bind(this));
+                } else {
+                    LibraryUtilities.searchItemResursive(this.generatedSections, text);
+                    this.updateSearchViewDelayed(text);
+                }
             }.bind(this), 300);
         } else {
             // Show change on ui immediately if search text is cleared
@@ -232,13 +258,13 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
             this.raiseEvent(this.props.libraryController.SearchTextUpdatedEventName, text);
         }
 
-        this.setState({ searchText: text });
         this.onSearchModeChanged(text.length > 0);
+        this.setState({ searchText: text });
     }
 
     clearSearch(text: string) {
-        this.setState({ searchText: text })
         this.onSearchModeChanged(false);
+        this.setState({ searchText: text })
     }
 
     render() {
@@ -255,7 +281,7 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
                 sections = this.searcher.generateStructuredItems();
             } else {
                 sections = this.searcher.generateListItems(
-                    this.generatedSections,
+                    this.props.libraryController.searchLibraryItemsHandler ? this.generatedSectionsOnSearch : this.generatedSections,
                     this.state.searchText,
                     this.state.detailed,
                     this.state.selectionIndex

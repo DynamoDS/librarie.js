@@ -112,12 +112,26 @@ export class Searcher {
                     pathToItem={pathToThisItem}
                     onParentTextClicked={this.directToLibrary.bind(this)}
                     detailed={detailed}
-                    selected={leafItems.length == selectionIndex}
-                    index={leafItems.length}
+                    index={0}
                 />);
             } else {
                 this.generateListItems(item.childItems, searchText, detailed, selectionIndex, pathToThisItem, leafItems, false);
             }
+        }
+
+        // Sort the result based on weight
+        leafItems = leafItems.sort((a, b) => {
+            if (a.props.data.weight > b.props.data.weight) {
+                return 1;
+            }
+            if (a.props.data.weight < b.props.data.weight) {
+                return -1;
+            }
+            return 0;
+        });
+
+        for(let i = 0; i < leafItems.length; i++) {
+            leafItems[i].props.index = i;
         }
 
         return leafItems;
