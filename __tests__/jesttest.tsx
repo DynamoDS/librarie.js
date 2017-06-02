@@ -78,12 +78,16 @@ describe("LibraryContainer", function () {
     // errors in children components wouldn't propagate to top level components,
     // this is useful when testing one component as a unit.
     let libContainer = shallow(
-      libController.createLibraryContainer(layoutSpecsJson, loadedTypesJson)
+      libController.createLibraryContainer()
     );
 
+    libController.setLoadedTypesJson(loadedTypesJson, false);
+    libController.setLayoutSpecsJson(layoutSpecsJson, false);
+    libController.refreshLibraryView();
+    
     // find is used to find a rendered component by css selectors, 
     // component constructors, display name or property selector.
-    expect(libContainer.find('SearchView')).to.have.lengthOf(1);
+    expect(libContainer.find('SearchBar')).to.have.lengthOf(1);
 
     let libraryItem = libContainer.find('LibraryItem');
     expect(libraryItem).to.have.lengthOf(1);
