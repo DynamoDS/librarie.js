@@ -191,7 +191,7 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
         this.setState({ selectionIndex: selectionIndex });
     }
 
-    getSelectionIndex() : number {
+    getSelectionIndex(): number {
         return this.state.selectionIndex;
     }
 
