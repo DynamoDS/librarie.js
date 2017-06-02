@@ -78,7 +78,6 @@ export class Searcher {
         items: LibraryUtilities.ItemData[] = this.sections,
         searchText: string,
         detailed: boolean,
-        selectionIndex: number,
         pathToItem: LibraryUtilities.ItemData[] = [],
         leafItems: JSX.Element[] = [],
         top: boolean = true): JSX.Element[] {
@@ -115,7 +114,7 @@ export class Searcher {
                     index={0}
                 />);
             } else {
-                this.generateListItems(item.childItems, searchText, detailed, selectionIndex, pathToThisItem, leafItems, false);
+                this.generateListItems(item.childItems, searchText, detailed, pathToThisItem, leafItems, false);
             }
         }
 
@@ -130,7 +129,7 @@ export class Searcher {
             return 0;
         });
 
-        for(let i = 0; i < leafItems.length; i++) {
+        for (let i = 0; i < leafItems.length; i++) {
             leafItems[i].props.index = i;
         }
 

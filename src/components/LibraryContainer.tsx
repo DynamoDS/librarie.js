@@ -283,8 +283,7 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
                 sections = this.searcher.generateListItems(
                     this.props.libraryController.searchLibraryItemsHandler ? this.generatedSectionsOnSearch : this.generatedSections,
                     this.state.searchText,
-                    this.state.detailed,
-                    this.state.selectionIndex
+                    this.state.detailed
                 );
 
                 // Make sure that selectionIndex doesn't go beyond the number of search result items
