@@ -194,6 +194,7 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
 
     render() {
         if (!this.generatedSections) {
+            this.props.libraryController.request(this.props.libraryController.RefreshLibraryViewRequestName, function() {});
             return (<div>This is LibraryContainer</div>);
         }
 

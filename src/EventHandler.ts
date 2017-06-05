@@ -23,7 +23,7 @@ export class Event {
     executeCallback(params?: any | any[]) {
         this.callbacks.forEach(callback => {
             try {
-                if (callback.length == 0) callback();
+                if (params.length == 0) callback();
                 else callback(params);
             }
             catch (e) {
