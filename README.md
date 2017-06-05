@@ -21,17 +21,11 @@ Installing all dependencies
 
 
 ## Run Tests
-- Run UI test
-
-    `$ npm run testjest`
-
-    Test file is at folder `./__test__/`
-
-- Run unit test
 
     `$ npm run test`
 
-    Test file is at folder `./test/`
+    Test file is at folder `./__test__/`
+
 - Example test  
 
  ```typescript
@@ -45,7 +39,7 @@ Installing all dependencies
      expect(libraryItem.props().data.childItems[0].text).to.equal("Child0"); 
     }
  ```
-- Instructions to write a tests are found at https://github.com/DynamoDS/librarie.js/wiki/Setting-up-test-frameworks-for-librarie.js
+- Instructions to write a tests are found at https://github.com/DynamoDS/librarie.js/wiki/Author-and-run-tests-for-librarie.js
 
 ## Usage
 There are few ways in which library view (i.e. `LibraryContainer` object) can be constructed. Regardless of which method is used, the caller should first call `LibraryEntryPoint.CreateLibraryController` method to create `LibraryController` before obtaining an instance of `LibraryContainer` object.
