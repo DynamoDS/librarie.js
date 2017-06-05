@@ -21,7 +21,6 @@ Installing all dependencies
 
 
 ## Run Tests
-- Run UI test
 
     `$ npm run test`
 
