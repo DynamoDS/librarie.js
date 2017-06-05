@@ -4,9 +4,9 @@ require("../resources/LibraryStyles.css");
 require("../resources/fonts/font-awesome-4.7.0/css/font-awesome.min.css");
 
 import * as React from "react";
+import * as LibraryUtilities from "../LibraryUtilities";
 import { LibraryController } from "../entry-point";
 import { LibraryItem } from "./LibraryItem";
-import * as LibraryUtilities from "../LibraryUtilities";
 import { Searcher } from "../Searcher";
 import { SearchBar } from "./SearchBar";
 
@@ -168,7 +168,6 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
         if (hasText) {
             // Starting searching immediately after user input, 
             // but only show change on ui after 300ms
-
             this.timeout = setTimeout(function () {
                 if (this.props.libraryController.searchLibraryItemsHandler) {
                     this.props.libraryController.searchLibraryItemsHandler(text, function (loadedTypesJsonOnSearch: any) {
@@ -211,7 +210,7 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
 
     clearSearch() {
         this.onSearchModeChanged(false);
-        this.setState({ searchText: "" })
+        this.setState({ searchText: "" });
     }
 
     render() {

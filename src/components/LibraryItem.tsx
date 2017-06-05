@@ -92,6 +92,12 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
             expanded: this.props.data.expanded,
             itemSummaryExpanded: false
         };
+
+        this.onLibraryItemClicked = this.onLibraryItemClicked.bind(this);
+        this.onLibraryItemMouseEnter = this.onLibraryItemMouseEnter.bind(this);
+        this.onLibraryItemMouseLeave = this.onLibraryItemMouseLeave.bind(this);
+        this.onSectionIconClicked = this.onSectionIconClicked.bind(this);
+        this.onSingleChildItemWillExpand = this.onSingleChildItemWillExpand.bind(this);
     }
 
     // By default all items in search view will be expanded. In search view, 
@@ -113,15 +119,23 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         let libraryItemTextStyle = "LibraryItemGroupText";
 
         // Group displays only text without icon.
-        if (this.props.data.itemType !== "group") {
+        if (this.props.data.itemType !== "group" && this.props.data.itemType !== "section") {
             libraryItemTextStyle = "LibraryItemText";
-            iconElement = (<img className={"LibraryItemIcon"} src={this.props.data.iconUrl} onError={this.onImageLoadFail} />);
+            iconElement = <img
+                className={"LibraryItemIcon"}
+                src={this.props.data.iconUrl}
+                onError={this.onImageLoadFail}
+            />;
         }
 
         // If it is a section, display the icon (if given) and provide a click interaction.
-        if (this.props.data.itemType === "section") {
-            iconElement = this.props.data.iconUrl ? (<img className={"LibraryItemIcon"} src={this.props.data.iconUrl} onError={this.onImageLoadFail}
-                onClick={this.onSectionIconClicked.bind(this)} />) : null;
+        if (this.props.data.itemType === "section" && this.props.data.iconUrl) {
+            iconElement = <img
+                className={"LibraryItemIcon"}
+                src={this.props.data.iconUrl}
+                onError={this.onImageLoadFail}
+                onClick={this.onSectionIconClicked}
+            />;
         }
 
         let nestedElements: JSX.Element = null;
@@ -139,7 +153,6 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
             // There are intermediate child items.
             nestedElements = this.getNestedElements(groupedItems);
         }
-
 
         let arrow: JSX.Element = null;
         let bodyIndentation: JSX.Element = null;
@@ -167,12 +180,13 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
 
         if (this.props.data.showHeader) {
             header = (
-                <div className={this.getLibraryItemHeaderStyle()} onClick={this.onLibraryItemClicked.bind(this)}
-                    onMouseOver={this.onLibraryItemMouseEnter.bind(this)} onMouseLeave={this.onLibraryItemMouseLeave.bind(this)}>
+                <div className={this.getLibraryItemHeaderStyle()} onClick={this.onLibraryItemClicked}
+                    onMouseOver={this.onLibraryItemMouseEnter} onMouseLeave={this.onLibraryItemMouseLeave}>
                     {arrow}
-                    {iconElement}
+                    {this.props.data.itemType === "section" ? null : iconElement}
                     <div className={libraryItemTextStyle}>{this.props.data.text}</div>
                     {parameters}
+                    {this.props.data.itemType === "section" ? iconElement : null}
                 </div>
             );
         }
@@ -236,7 +250,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
                             libraryContainer={this.props.libraryContainer}
                             data={item}
                             showItemSummary={this.props.showItemSummary}
-                            onItemWillExpand={this.onSingleChildItemWillExpand.bind(this)}
+                            onItemWillExpand={this.onSingleChildItemWillExpand}
                         />);
                     })
                 }
