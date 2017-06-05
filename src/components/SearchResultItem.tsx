@@ -36,15 +36,9 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
         window.removeEventListener("keydown", this.handleKeyDown.bind(this));
     }
 
-    // Update selection state and scroll current item to top/bottom when selection changed
+    // Update selection and scroll current item into view if the selected item is not in view yet.
     componentDidUpdate() {
-        if (!this.state.selected && this.props.index == this.props.libraryContainer.getSelectionIndex()) {
-            this.setState({ selected: true });
-        }
-
-        if (this.state.selected && this.props.index != this.props.libraryContainer.getSelectionIndex()) {
-            this.setState({ selected: false });
-        }
+        this.updateSelection();
 
         if (this.state.selected) {
             let container = ReactDOM.findDOMNode(this.props.libraryContainer);
@@ -64,13 +58,31 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
 
     handleKeyDown(event: any) {
         switch (event.code) {
-            // Allow node creation by pressing enter key
-            case "Enter":
+            case "ArrowUp":
+                event.preventDefault(); // Prevent arrow key from navigating around search input
+                this.updateSelection();
+                break;
+            case "ArrowDown":
+                event.preventDefault();
+                this.updateSelection();
+                break;
+            case "Enter": // Allow node creation by pressing enter key
                 if (this.state.selected) {
                     this.onItemClicked();
                 }
             default:
                 break;
+        }
+    }
+
+    // Select this item if selectioIndex matches the index of this item, and this item is not
+    // currently selected. Unselect this item if selectionIndex doesn't match index, and this item
+    // is currently selected.
+    updateSelection() {
+        if (!this.state.selected && this.props.libraryContainer.getSelectionIndex() == this.props.index) {
+            this.setState({ selected: true });
+        } else if (this.state.selected && this.props.libraryContainer.getSelectionIndex() != this.props.index) {
+            this.setState({ selected: false });
         }
     }
 

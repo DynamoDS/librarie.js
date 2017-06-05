@@ -23,8 +23,7 @@ export interface LibraryContainerStates {
     searchText: string,
     selectedCategories: string[],
     structured: boolean,
-    detailed: boolean,
-    selectionIndex: number
+    detailed: boolean
 }
 
 export class LibraryContainer extends React.Component<LibraryContainerProps, LibraryContainerStates> {
@@ -38,6 +37,8 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
     searchCategories: string[] = [];
 
     timeout: number;
+    selectionIndex: number = -1;
+    maxSelectionIndex: number = -1;
     searcher: Searcher = null;
 
     constructor(props: LibraryContainerProps) {
@@ -67,8 +68,7 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
             searchText: '',
             selectedCategories: [],
             structured: false,
-            detailed: false,
-            selectionIndex: -1
+            detailed: false
         };
     }
 
@@ -84,11 +84,11 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
         switch (event.code) {
             case "ArrowUp":
                 event.preventDefault(); // Prevent arrow key from navigating around search input
-                this.updateSelection(false);
+                this.updateSelectionIndex(false);
                 break;
             case "ArrowDown":
                 event.preventDefault();
-                this.updateSelection(true);
+                this.updateSelectionIndex(true);
                 break;
             default:
                 break;
@@ -169,35 +169,47 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
         this.props.libraryController.raiseEvent(name, params);
     }
 
-    // Update the selectionIndex. Current index will add by 1 if incremented is true,
-    // minus by 1 otherwise, but it should always be bigger or equal to 0.
-    updateSelection(incremented: boolean) {
+    // Update the selectionIndex. Current index will add by 1 if selectNextItem is true,
+    // minus by 1 otherwise, but it should always be between 0 and maxSelectionIndex.
+    updateSelectionIndex(selectNextItem: boolean) {
         if (!this.state.inSearchMode) {
             return;
         }
 
-        let currentIndex = this.state.selectionIndex;
-        let nextIndex = incremented ? currentIndex + 1 : currentIndex - 1;
-        if (nextIndex < 0) {
+        let nextIndex = selectNextItem ? this.selectionIndex + 1 : this.selectionIndex - 1;
+
+        if (nextIndex < 0 && this.maxSelectionIndex >= 0) {
             nextIndex = 0;
         }
 
-        this.setSelectionIndex(nextIndex);
+        if (nextIndex >= this.maxSelectionIndex) {
+            nextIndex = this.maxSelectionIndex;
+        }
+
+        this.selectionIndex = nextIndex;
     }
 
     // Selection index will be set when arrow up/down key is pressed, 
     // or when an item is clicked, and it will be reset when qutting from search result
-    setSelectionIndex(selectionIndex: number) {
-        this.setState({ selectionIndex: selectionIndex });
+    setSelectionIndex(index: number) {
+        this.selectionIndex = index;
+        this.forceUpdate();
+    }
+
+    // Set the max selection index(number of items in the search result), 
+    // and current selection index should never be bigger than it.
+    setMaxSelectionIndex(max: number) {
+        this.maxSelectionIndex = max;
     }
 
     getSelectionIndex(): number {
-        return this.state.selectionIndex;
+        return this.selectionIndex;
     }
 
     onSearchModeChanged(inSearchMode: boolean) {
         if (this.state.inSearchMode && !inSearchMode) {
-            this.setSelectionIndex(-1);
+            this.selectionIndex = -1;
+            this.maxSelectionIndex = -1;
         }
 
         this.setState({ inSearchMode: inSearchMode });
@@ -285,11 +297,6 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
                     this.state.searchText,
                     this.state.detailed
                 );
-
-                // Make sure that selectionIndex doesn't go beyond the number of search result items
-                if (this.state.selectionIndex >= sections.length) {
-                    this.setState({ selectionIndex: sections.length - 1 });
-                }
             }
 
             const searchBar = <SearchBar onCategoriesChanged={this.onCategoriesChanged} onDetailedModeChanged={this.onDetailedModeChanged}

@@ -133,6 +133,8 @@ export class Searcher {
             leafItems[i].props.index = i;
         }
 
+        this.libraryContainer.setMaxSelectionIndex(leafItems.length - 1);
+
         return leafItems;
     }
 
