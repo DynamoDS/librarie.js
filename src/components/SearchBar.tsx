@@ -74,9 +74,7 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
         let oldCategoryData = this.categoryData;
         this.categoryData = [];
         _.each(newProps.categories, function (c: string) {
-            let oldCategory = oldCategoryData.find((x) => {
-                return x.name === c;
-            });
+            let oldCategory = oldCategoryData.find(x => x.name === c);
             let data = new CategoryData(c, "CategoryCheckbox", true, this.onCategoriesChanged.bind(this));
             data.onOnlyButtonClicked = this.onOnlyButtonClicked.bind(this);
             if (oldCategory) {
@@ -86,15 +84,24 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
         }.bind(this));
     }
 
-    clearInput() {
-        if (this.searchInputField) {
-            this.searchInputField.value = '';
-            this.props.onTextChanged(this.searchInputField.value);
+    componentWillMount() {
+        window.addEventListener("keydown", this.handleKeyDown.bind(this));
+        window.addEventListener("click", this.handleGlobalClick.bind(this));
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener("keydown", this.handleKeyDown.bind(this));
+        window.removeEventListener("click", this.handleGlobalClick.bind(this));
+    }
+
+    handleKeyDown(event: any) {
+        switch (event.code) {
+            case "Escape":
+                this.clearInput();
+                break;
+            default:
+                break;
         }
-        this.setState({
-            hasText: false,
-            expanded: false // collapse filter options menu when text is cleared
-        });
     }
 
     handleGlobalClick(event: any) {
@@ -103,15 +110,17 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
             // If they are clicking outside of them, collapse the search options container
             if (!ReactDOM.findDOMNode(this.searchOptionsContainer).contains(event.target) &&
                 !ReactDOM.findDOMNode(this.filterBtn).contains(event.target)) {
-                this.setExpandedState(false);
+                this.setState({ expanded: false });
             }
         }
     }
 
-    setExpandedState(value: boolean) {
-        if (value) window.addEventListener('click', this.handleGlobalClick.bind(this));
-        else window.removeEventListener('click', this.handleGlobalClick.bind(this));
-        this.setState({ expanded: value });
+    clearInput() {
+        if (this.searchInputField) {
+            this.searchInputField.value = '';
+            this.props.onTextChanged(this.searchInputField.value);
+            this.setState({ hasText: false });
+        }
     }
 
     onTextChanged(event: any) {
@@ -122,7 +131,7 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
     }
 
     onExpandButtonClick() {
-        this.setExpandedState(!this.state.expanded);
+        this.setState({ expanded: !this.state.expanded });
     }
 
     onStructuredModeChanged(event: any) {
@@ -203,10 +212,10 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
     }
 
     render() {
+
         let options = null;
         let checkboxes: JSX.Element[] = [];
         let cancelButton: JSX.Element = null;
-
 
         this.categoryData.forEach(category => checkboxes.push(category.createCheckbox(true)));
 
@@ -246,7 +255,12 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
                 <div className="SearchInput">
                     <div>
                         <i className="fa fa-search SearchBarIcon"></i>
-                        <input className="SearchInputText" type="input" placeholder="Search..." onChange={this.onTextChanged.bind(this)} ref={(field) => { this.searchInputField = field; this.props.setSearchInputField(field) }}></input>
+                        <input
+                            className="SearchInputText"
+                            type="input" placeholder="Search..."
+                            onChange={this.onTextChanged.bind(this)}
+                            ref={(field) => { this.searchInputField = field; this.props.setSearchInputField(field) }}>
+                        </input>
                     </div>
                     {cancelButton}
                 </div>
