@@ -328,7 +328,8 @@ input {
 .CheckboxLabelEnabled .CheckboxLabelText,
 .CheckboxLabelDisabled .CheckboxLabelText {
     padding-left: 20px;
-    padding-right: 40px; /* for the "only" text */
+    padding-right: 40px;
+    /* for the "only" text */
 }
 
 .CheckboxLabelEnabled .CheckboxLabelRightButton,
@@ -392,12 +393,14 @@ input {
 
 .SearchResultItemContainer .ItemInfo {
     padding: 5px 0px 5px 0px;
-    width: 100%;
 }
 
 .SearchResultItemContainer .ItemIcon {
     padding: 2px 8px;
-    width: 40px;
+    min-width: 32px;
+    width: 32px;
+    min-height: 32px;
+    height: 32px;
 }
 
 .SearchResultItemContainer .ItemTitle {
