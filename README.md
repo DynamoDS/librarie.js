@@ -241,3 +241,16 @@ libController.on(libController.SectionIconClickedEventName, function (sectionTex
 });
 ```
 
+## Overriding the default search function
+
+The default search function can be overriden by setting searchLibraryItemsHandler of the controller.
+
+
+ ```js
+libController.searchLibraryItemsHandler = function (text, callback) {
+}
+```
+
+- `text`: This is the input string for searching.
+- `callback`: This is defined as SearchLibraryItemsCallbackFunc. It need to be called with the search result in a json format as defined
+in https://github.com/DynamoDS/librarie.js/blob/master/docs/loaded-data-types.md.
