@@ -189,15 +189,13 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
         this.selectionIndex = nextIndex;
     }
 
-    // Selection index will be set when arrow up/down key is pressed, 
-    // or when an item is clicked, and it will be reset when qutting from search result
+    // New selectionIndex will be set when user clicks on an item.
     setSelectionIndex(index: number) {
         this.selectionIndex = index;
         this.forceUpdate();
     }
 
-    // Set the max selection index(number of items in the search result), 
-    // and current selection index should never be bigger than it.
+    // Set the max selection index(number of items in the search result).
     setMaxSelectionIndex(max: number) {
         this.maxSelectionIndex = max;
     }
@@ -207,6 +205,7 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
     }
 
     onSearchModeChanged(inSearchMode: boolean) {
+        // Reset selectionIndex when quitting from search mode
         if (this.state.inSearchMode && !inSearchMode) {
             this.selectionIndex = -1;
             this.maxSelectionIndex = -1;
