@@ -6,19 +6,7 @@ import { LibraryContainer } from "./components/LibraryContainer";
 import * as LibraryUtilities from "./LibraryUtilities";
 import { SearchBar } from "./components/SearchBar";
 
-type displayMode = "structure" | "list";
-
-interface SearchModeChangedFunc {
-    (inSearchMode: boolean): void;
-}
-
-interface ClearSearchFunc {
-    (searchText: string): void;
-}
-
 export class Searcher {
-    onSearchModeChanged: SearchModeChangedFunc = null;
-    clearSearchFunc: ClearSearchFunc = null;
     libraryContainer: LibraryContainer = null;
     sections: LibraryUtilities.ItemData[] = [];
     searchInputField: HTMLInputElement = null;
@@ -29,9 +17,10 @@ export class Searcher {
     // that are most relevant to the current search results.
     displayedCategories: string[];
 
-    constructor(searchModeChangedFunc: SearchModeChangedFunc, clearSearchFunc: ClearSearchFunc, libraryContainer: LibraryContainer, sections: LibraryUtilities.ItemData[], categories: string[]) {
-        this.onSearchModeChanged = searchModeChangedFunc;
-        this.clearSearchFunc = clearSearchFunc;
+    constructor(
+        libraryContainer: LibraryContainer,
+        sections: LibraryUtilities.ItemData[] = [],
+        categories: string[] = []) {
         this.libraryContainer = libraryContainer;
         this.sections = sections;
         this.setSearchInputField = this.setSearchInputField.bind(this);
@@ -111,11 +100,22 @@ export class Searcher {
                     pathToItem={pathToThisItem}
                     onParentTextClicked={this.directToLibrary.bind(this)}
                     detailed={detailed}
-                />);
+                    />);
             } else {
                 this.generateListItems(item.childItems, searchText, detailed, pathToThisItem, leafItems, false);
             }
         }
+
+        // Sort the result based on weight
+        leafItems = leafItems.sort((a, b) => {
+            if (a.props.data.weight > b.props.data.weight) {
+                return 1;
+            }
+            if (a.props.data.weight < b.props.data.weight) {
+                return -1;
+            }
+            return 0;
+        });
 
         return leafItems;
     }
@@ -142,7 +142,7 @@ export class Searcher {
     clearSearch() {
         if (this.searchInputField) {
             this.searchInputField.value = "";
-            this.clearSearchFunc(this.searchInputField.value);
+            this.libraryContainer.clearSearch();
         }
     }
 }

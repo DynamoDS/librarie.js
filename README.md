@@ -19,18 +19,27 @@ Installing all dependencies
 
 - Navigate to `localhost:3456` in Google Chrome browser
 
-## Test
-- Run UI test
 
-    `$ npm run testjest`
-
-    Test file is at folder `./__test__/`
-
-- Run unit test
+## Run Tests
 
     `$ npm run test`
 
-    Test file is at folder `./test/`
+    Test file is at folder `./__test__/`
+
+- Example test  
+
+ ```typescript
+    // Importing the object to be tested
+     import { LibraryItem } from '../src/components/LibraryItem';
+
+    // A test case that tests object properties against their intended value 
+     it("should create a libraryItem", function () {
+     let libContainer = libController.createLibraryContainer(layoutSpecsJson, loadedTypesJson);
+     let libraryItem = mount(<LibraryItem libraryContainer={libContainer} data={data} />); 
+     expect(libraryItem.props().data.childItems[0].text).to.equal("Child0"); 
+    }
+ ```
+- Instructions to write a tests are found at https://github.com/DynamoDS/librarie.js/wiki/Author-and-run-tests-for-librarie.js
 
 ## Usage
 There are few ways in which library view (i.e. `LibraryContainer` object) can be constructed. Regardless of which method is used, the caller should first call `LibraryEntryPoint.CreateLibraryController` method to create `LibraryController` before obtaining an instance of `LibraryContainer` object.
@@ -203,7 +212,7 @@ libController.on(libController.ItemMouseEnterEventName, function(arg) {
 
 This event is raised when the mouse leaves the range of one library item.
 
- ```js
+```js
 libController.on("itemMouseLeave", function (searchText) {
     console.log("Data: " + arg.data);
     console.log("Rect(top, left, bottom, right): " + arg.rect.top + "," + arg.rect.left + "," + arg.rect.bottom + "," + arg.rect.right);
@@ -231,3 +240,17 @@ libController.on(libController.SectionIconClickedEventName, function (sectionTex
      return null;
 });
 ```
+
+## Overriding the default search function
+
+The default search function can be overriden by setting searchLibraryItemsHandler of the controller.
+
+
+ ```js
+libController.searchLibraryItemsHandler = function (text, callback) {
+}
+```
+
+- `text`: This is the input string for searching.
+- `callback`: This is defined as SearchLibraryItemsCallbackFunc. It need to be called with the search result in a json format as defined
+in https://github.com/DynamoDS/librarie.js/blob/master/docs/loaded-data-types.md.

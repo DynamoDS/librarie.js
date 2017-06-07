@@ -1,5 +1,5 @@
-import * as LibraryUtilities from '../src/LibraryUtilities'
-import * as testClasses from './libraryUtilitiesTestClasses'
+import * as LibraryUtilities from '../../src/LibraryUtilities'
+import * as testClasses from '../data/libraryUtilitiesTestClasses'
 
 import { expect } from 'chai';
 import 'mocha';

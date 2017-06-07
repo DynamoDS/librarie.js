@@ -3,8 +3,7 @@
   "description": "Project that contains all hosted contents of Dynamo Windows client",
   "main": "index.js",
   "scripts": {
-    "test": "mocha -r ts-node/register test/libraryUtilitiesTest.ts",
-    "testjest": "jest",
+    "test": "jest --coverage",
     "build": "npm run dev & npm run prod",
     "dev": "cross-env NODE_ENV=development webpack",
     "prod": "cross-env NODE_ENV=production webpack"
@@ -50,7 +49,7 @@
     "transform": {
       ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
     },
-    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
+    "testRegex": "(/__tests__/*/.*|\\.(test|spec))\\.(ts|tsx|js)$",
     "moduleFileExtensions": [
       "ts",
       "tsx",
@@ -60,6 +59,12 @@
     "moduleNameMapper": {
       "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/__mocks__/fileMock.ts",
       "\\.(css|less)$": "<rootDir>/__mocks__/styleMock.ts"
-    }
+    },
+    "collectCoverageFrom": [
+      "src/**/*.{ts,tsx}"
+    ],
+    "testPathIgnorePatterns": [
+      "__tests__/data/"
+    ]
   }
 }

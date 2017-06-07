@@ -59,17 +59,13 @@ input {
 
 .LibrarySectionHeader {
     display: flex;
-    align-items: center;
-    padding: 10px;
-    transition: 0.15s;
+    padding: 5px;
+    font-size: 14px;
     background-color: #464646;
     color: #888;
-    font-size: 14px;
-}
-
-.LibrarySectionHeader .LibraryItemIcon {
-    position: absolute;
-    right: 0px;
+    align-items: center;
+    justify-content: space-between;
+    transition: 0.15s;
 }
 
 .LibrarySectionHeader .LibraryItemIcon:hover {
@@ -139,8 +135,12 @@ input {
     color: #eee;
 }
 
-.LibraryItemGroupText {
+.LibraryItemHeader .LibraryItemGroupText,
+.LibrarySectionHeader .LibraryItemGroupText {
     padding: 7px 0px;
+}
+
+.LibraryItemHeader .LibraryItemGroupText {
     color: #a9a9a9;
 }
 
@@ -228,7 +228,7 @@ input {
     width: 100%;
 }
 
-.SearchBar #SearchInputText:focus::-webkit-input-placeholder {
+.SearchBar .SearchInputText:focus::-webkit-input-placeholder {
     opacity: 0;
 }
 
@@ -397,13 +397,14 @@ input {
 
 .SearchResultItemContainer .ItemInfo {
     padding: 5px 0px 5px 0px;
-    width: 100%;
 }
 
 .SearchResultItemContainer .ItemIcon {
     padding: 2px 8px;
-    width: 40px;
-    height: 40px;
+    min-width: 32px;
+    width: 32px;
+    min-height: 32px;
+    height: 32px;
 }
 
 .SearchResultItemContainer .ItemTitle {
