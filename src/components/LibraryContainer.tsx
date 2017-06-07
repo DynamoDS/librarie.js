@@ -71,29 +71,6 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
         };
     }
 
-    componentWillMount() {
-        window.addEventListener("keydown", this.handleKeyDown.bind(this));
-    }
-
-    componentWillUnmount() {
-        window.removeEventListener("keydown", this.handleKeyDown.bind(this));
-    }
-
-    handleKeyDown(event: any) {
-        switch (event.code) {
-            case "ArrowUp":
-                event.preventDefault(); // Prevent arrow key from navigating around search input
-                this.updateSelectionIndex(false);
-                break;
-            case "ArrowDown":
-                event.preventDefault();
-                this.updateSelectionIndex(true);
-                break;
-            default:
-                break;
-        }
-    }
-
     setLoadedTypesJson(loadedTypesJson: any, append: boolean = true): void {
 
         if (!loadedTypesJson) {
@@ -184,6 +161,10 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
         this.selectionIndex = nextIndex;
     }
 
+    getSelectionIndex(): number {
+        return this.selectionIndex;
+    }
+
     // New selectionIndex will be set when user clicks on an item.
     setSelectionIndex(index: number) {
         this.selectionIndex = index;
@@ -193,10 +174,6 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
     // Set the max selection index(number of items in the search result).
     setMaxSelectionIndex(max: number) {
         this.maxSelectionIndex = max;
-    }
-
-    getSelectionIndex(): number {
-        return this.selectionIndex;
     }
 
     onSearchModeChanged(inSearchMode: boolean) {
