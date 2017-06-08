@@ -36,8 +36,8 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
     searchCategories: string[] = [];
 
     timeout: number;
-    selectionIndex: number = -1;
-    maxSelectionIndex: number = -1;
+    selectionIndex: number = 0;
+    maxSelectionIndex: number = 0;
     searcher: Searcher = null;
 
     constructor(props: LibraryContainerProps) {
@@ -177,11 +177,9 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
     }
 
     onSearchModeChanged(inSearchMode: boolean) {
-        // Reset selectionIndex when quitting from search mode
-        if (this.state.inSearchMode && !inSearchMode) {
-            this.selectionIndex = -1;
-            this.maxSelectionIndex = -1;
-        }
+        // Reset selectionIndex when serach mode changed
+        this.selectionIndex = 0;
+        this.maxSelectionIndex = 0;
 
         this.setState({ inSearchMode: inSearchMode });
     }

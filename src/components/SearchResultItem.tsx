@@ -26,14 +26,15 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
     constructor(props: SearchResultItemProps) {
         super(props);
         this.state = ({ selected: false });
+        this.handleKeyDown = this.handleKeyDown.bind(this);
     }
 
     componentWillMount() {
-        window.addEventListener("keydown", this.handleKeyDown.bind(this));
+        window.addEventListener("keydown", this.handleKeyDown);
     }
 
     componentWillUnmount() {
-        window.removeEventListener("keydown", this.handleKeyDown.bind(this));
+        window.removeEventListener("keydown", this.handleKeyDown);
     }
 
     // Update selection state and scroll current item into view if the selected item is not in view yet.
@@ -83,7 +84,7 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
         this.updateSelectionState();
     }
 
-    // Select this item if selectioIndex matches the index of this item, and this item is not
+    // Select this item if selectionIndex matches the index of this item, and this item is not
     // currently selected. Unselect this item if selectionIndex doesn't match index, and this item
     // is currently selected.
     updateSelectionState() {
