@@ -335,11 +335,14 @@ function getIncludeInfo(layoutElements: LayoutElement[]): IncludeInfo[] {
 }
 
 /**
- * This method will take merges all typeListNodes under corresponding library items based on includeInfo.
+ * This method will merge all typeListNodes under corresponding library items based on includeInfo.
  * 
- * Comparison will happen between fullyQualifiedName of typeListNode and path of IncludeInfo. 
+ * When iterating through includeInfo, comparison will happen between fullyQualifiedName of typeListNode 
+ * and path of IncludeInfo. 
+ * 
  * If there is a match of them, which means they are exactly the same, this type node will be merged to 
  * the parent item of the includeInfo. 
+ * 
  * If there is not a match, but fullyQualifiedName includes path, this type node will
  * first be built from name, and then merged to the parent item.
  * For example, if fullayQualifiedName is A.B.C.D, path is A.B, the item to be merged would have the 
@@ -350,6 +353,8 @@ function getIncludeInfo(layoutElements: LayoutElement[]): IncludeInfo[] {
  *      |- C
  *          |- D
  * 
+ * If there is not a match or include, skip to next includeInfo/typeListNode, depending on their 
+ * lexicographical order.
  * 
  * @param {TypeListNode[]} typeListNodes 
  * An array of TypelistNode sorted in alphabetical order
