@@ -107,10 +107,9 @@ export class ItemData {
 
         // Get keywords from typeListNode and push them into itemData
         let keywords = typeListNode.keywords.split(",");
-        this.
-            keywords.forEach(keyword => {
-                this.keywords.push(keyword.toLowerCase().replace(/ /g, ''));
-            });
+        this.keywords.forEach(keyword => {
+            this.keywords.push(keyword.toLowerCase().replace(/ /g, ''));
+        });
         this.keywords.push(typeListNode.fullyQualifiedName.toLowerCase().replace(/ /g, ''));
     }
 
