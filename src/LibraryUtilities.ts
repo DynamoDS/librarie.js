@@ -297,6 +297,11 @@ function convertLayoutElementToItemData(layoutElements: LayoutElement[], parentI
         let layoutData = new ItemData(layoutElement.text);
         layoutData.constructFromLayoutElement(layoutElement);
 
+        // Sections that don't show its header will be expanded by default.
+        if (layoutData.itemType === "section" && !layoutData.showHeader) {
+            layoutData.expanded = true;
+        }
+
         if (parentItem) {
             parentItem.appendChild(layoutData);
         }
@@ -381,7 +386,13 @@ function constructFromIncludeInfo(typeListNodes: TypeListNode[], includeInfo: In
                 nodeMatch = true;
             } else if (compareResult > 0) {
                 nodeInculde = true;
-                let newName = fullyQualifiedNameParts.slice(-compareResult - 1).join('.');
+
+                let newNameParts = -compareResult - 1;
+                if(!includeInfo[i].inclusive) {
+                    newNameParts = -compareResult;
+                }
+
+                let newName = fullyQualifiedNameParts.slice(newNameParts).join('.');
                 buildLibraryItemsFromName(typeListNodes[t], includeInfo[i].parentItem, newName, includeInfo[i].iconUrl);
             } else if (typeListNodes[t].fullyQualifiedName.localeCompare(includeInfo[i].path) < 0) {
                 i--;
@@ -430,26 +441,18 @@ export function buildLibrarySectionsFromLayoutSpecs(loadedTypes: any, layoutSpec
 
     constructFromIncludeInfo(sortedTypeListNodes, sortedIncludeInfo);
 
+    // Misc section will take all unprocessed nodes
+    let miscSection = sections.find(section => section.text == miscSectionStr);
+    let unprocessedNodes = sortedTypeListNodes.filter(node => !node.processed);
+    unprocessedNodes.forEach(node => buildLibraryItemsFromName(node, miscSection));
+
     for (let section of sections) {
-        if (section.text == defaultSectionStr) {
-            // Default section is expanded by default
-            section.expanded = true;
-        } else {
-            if (section.text == miscSectionStr) { // Misc section will take all unprocessed nodes
-                let unprocessedNodes = sortedTypeListNodes.filter(node => !node.processed);
-                unprocessedNodes.forEach(node => buildLibraryItemsFromName(node, section));
+        // Change the itemType of the outermost nodes to category
+        section.childItems.forEach(item => {
+            if (item.itemType == "group") {
+                item.itemType = "category";
             }
-
-            // All sections other than default section is collapsed by default
-            section.expanded = false;
-
-            // Change the itemType of the outermost nodes to category
-            section.childItems.forEach(item => {
-                if (item.itemType == "group") {
-                    item.itemType = "category";
-                }
-            });
-        }
+        });
     }
 
     removeEmptyNodes(sections);
