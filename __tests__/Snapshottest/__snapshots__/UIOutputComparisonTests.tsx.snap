@@ -1,0 +1,152 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`LibraryContainer Test UI rendering of Library Item and child components 1`] = `
+<LibraryItem
+  data={
+    ItemData {
+      "childItems": Array [
+        ItemData {
+          "childItems": Array [],
+          "contextData": "",
+          "description": "",
+          "expanded": false,
+          "iconUrl": "",
+          "itemType": "category",
+          "keywords": Array [
+            "",
+          ],
+          "parameters": "",
+          "showHeader": true,
+          "text": "Child0",
+          "visible": true,
+          "weight": 0,
+        },
+        ItemData {
+          "childItems": Array [],
+          "contextData": "",
+          "description": "",
+          "expanded": false,
+          "iconUrl": "",
+          "itemType": "category",
+          "keywords": Array [
+            "",
+          ],
+          "parameters": "",
+          "showHeader": true,
+          "text": "Child1",
+          "visible": true,
+          "weight": 0,
+        },
+      ],
+      "contextData": "",
+      "description": "",
+      "expanded": false,
+      "iconUrl": "",
+      "itemType": "none",
+      "keywords": Array [
+        "",
+      ],
+      "parameters": "",
+      "showHeader": true,
+      "text": "TestItem",
+      "visible": true,
+      "weight": 0,
+    }
+  }
+  libraryContainer={
+    LibraryController {
+      "DefaultSectionName": "default",
+      "ItemClickedEventName": "itemClicked",
+      "ItemMouseEnterEventName": "itemMouseEnter",
+      "ItemMouseLeaveEventName": "itemMouseLeave",
+      "MiscSectionName": "Miscellaneous",
+      "SearchTextUpdatedEventName": "searchTextUpdated",
+      "SectionIconClickedEventName": "sectionIconClicked",
+      "createLibraryByElementId": [Function],
+      "createLibraryContainer": [Function],
+      "on": [Function],
+      "raiseEvent": [Function],
+      "reactor": Reactor {
+        "events": Array [],
+      },
+      "refreshLibraryView": [Function],
+      "refreshLibraryViewHandler": null,
+      "searchLibraryItemsHandler": null,
+      "setLayoutSpecsJson": [Function],
+      "setLayoutSpecsJsonHandler": null,
+      "setLoadedTypesJson": [Function],
+      "setLoadedTypesJsonHandler": null,
+    }
+  }
+>
+  <div
+    className="LibraryItemContainerNone"
+  >
+    <div
+      className="LibraryItemHeader"
+      onClick={[Function]}
+      onMouseLeave={[Function]}
+      onMouseOver={[Function]}
+    >
+      <img
+        className="Arrow"
+        onError={[Function]}
+        src="test-file-stub"
+      />
+      <img
+        className="LibraryItemIcon"
+        onError={[Function]}
+        src=""
+      />
+      <div
+        className="LibraryItemText"
+      >
+        TestItem
+      </div>
+    </div>
+    <div
+      className="LibraryItemBodyContainer"
+    >
+      <div
+        className="LibraryItemBodyElements"
+      />
+    </div>
+  </div>
+</LibraryItem>
+`;
+
+exports[`LibraryContainer Test UI rendering of single component Library Item 1`] = `
+<div
+  className="LibraryItemContainerNone"
+>
+  <div
+    className="LibraryItemHeader"
+    onClick={[Function]}
+    onMouseLeave={[Function]}
+    onMouseOver={[Function]}
+  >
+    <img
+      className="Arrow"
+      onError={[Function]}
+      src="test-file-stub"
+    />
+    <img
+      className="LibraryItemIcon"
+      onError={[Function]}
+      src=""
+    />
+    <div
+      className="LibraryItemText"
+    >
+      TestItem
+    </div>
+  </div>
+  <div
+    className="LibraryItemBodyContainer"
+  >
+    <div
+      className="LibraryItemBodyElements"
+    />
+  </div>
+</div>
+`;
