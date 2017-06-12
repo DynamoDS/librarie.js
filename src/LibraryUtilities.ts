@@ -574,8 +574,6 @@ export function isValidaIncludeInfoList(includeInfoList: IncludeInfo[]): boolean
         let currentParts = includeInfoList[i].path.split(".");
         let nextParts = includeInfoList[i + 1].path.split(".");
         if (compareParts(nextParts, currentParts) >= 0) {
-            console.log(includeInfoList[i].path);
-            console.log(includeInfoList[i + 1].path);
             return false;
         }
     }
