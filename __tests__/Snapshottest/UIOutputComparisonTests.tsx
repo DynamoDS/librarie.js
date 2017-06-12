@@ -48,7 +48,7 @@ describe("LibraryContainer", function () {
     // create child items and link with parent
     for (var i = 0; i < 2; i++) {
       let item = new ItemData("");
-      item.text = "Child " + i;
+      item.text = "Child" + i;
       item.itemType = "category";
       data.appendChild(item);
     }
