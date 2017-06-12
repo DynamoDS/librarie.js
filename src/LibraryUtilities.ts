@@ -36,7 +36,11 @@ export interface IncludeInfo {
     path: string;
     iconUrl?: string;
     inclusive?: boolean;
-    parentItem?: ItemData;
+}
+
+export class IncludeItemPair {
+    include: IncludeInfo;
+    parentItem: ItemData;
 }
 
 export class LayoutElement {
@@ -281,16 +285,22 @@ export function updateSections(oldLayoutSpecs: any, newLayoutSpecs: any): void {
 }
 
 /**
- * This function will convert layoutElements to ItemData, and assign each includeInfo with
- * its parentItem.
+ * This function will convert layoutElements to ItemData, and construct an array of IncludeItemPair,
+ * which stores an includeInfo and its parent item.
  * 
  * @param {LayoutElement[]} layoutElements 
  * The layoutElements to be converted to ItemData
  * 
+ * @param {IncludeItemPair[]} pairs
+ * The IncludeItemPairs to be contructed from
+ * 
  * @param {ItemData} parentItem 
  * The parentItem of layoutElements (if exist)
  */
-function convertLayoutElementToItemData(layoutElements: LayoutElement[], parentItem?: ItemData): ItemData[] {
+function convertLayoutElementToItemData(
+    layoutElements: LayoutElement[],
+    pairs: IncludeItemPair[],
+    parentItem?: ItemData): ItemData[] {
     let results: ItemData[] = [];
 
     for (let layoutElement of layoutElements) {
@@ -308,12 +318,15 @@ function convertLayoutElementToItemData(layoutElements: LayoutElement[], parentI
 
         if (layoutElement.include.length > 0) {
             for (let include of layoutElement.include) {
-                include.parentItem = layoutData;
+                let pair = new IncludeItemPair();
+                pair.include = include;
+                pair.parentItem = layoutData;
+                pairs.push(pair);
             }
         }
 
         if (layoutElement.childElements.length > 0) {
-            convertLayoutElementToItemData(layoutElement.childElements, layoutData);
+            convertLayoutElementToItemData(layoutElement.childElements, pairs, layoutData);
         }
 
         results.push(layoutData);
@@ -322,8 +335,8 @@ function convertLayoutElementToItemData(layoutElements: LayoutElement[], parentI
     return results;
 }
 
-// This method will return all the includeInfo in layoutElements
-function getIncludeInfo(layoutElements: LayoutElement[]): IncludeInfo[] {
+// This method will return a sorted array of all the includeInfo in layoutElements
+export function getIncludeInfo(layoutElements: LayoutElement[]): IncludeInfo[] {
     let results: IncludeInfo[] = [];
 
     for (let layoutElement of layoutElements) {
@@ -336,14 +349,17 @@ function getIncludeInfo(layoutElements: LayoutElement[]): IncludeInfo[] {
         }
     }
 
+    results = results.sort((a, b) => a.path.localeCompare(b.path));
+
     return results;
 }
 
 /**
- * This method will merge all typeListNodes under corresponding library items based on includeInfo.
+ * This method will merge all typeListNodes under corresponding library items based on includeItemPairs.
+ * Each includeItemPair stores includeInfo and the parent item of this includeInfo.
  * 
- * When iterating through includeInfo, comparison will happen between fullyQualifiedName of typeListNode 
- * and path of IncludeInfo. 
+ * When iterating through includeItemPairs, comparison will happen between fullyQualifiedName of typeListNode 
+ * and path of the include info of each pair.. 
  * 
  * If there is a match of them, which means they are exactly the same, this type node will be merged to 
  * the parent item of the includeInfo. 
@@ -364,22 +380,26 @@ function getIncludeInfo(layoutElements: LayoutElement[]): IncludeInfo[] {
  * @param {TypeListNode[]} typeListNodes 
  * An array of TypelistNode sorted in alphabetical order
  * 
- * @param {IncludeInfo[]} includeInfo 
- * An array of IncludeInfo sorted in alphabetical order
+ * @param {IncludeItemPairs[]} includeItemPairs
+ * An array of IncludeItemPair sorted in alphabetical order of include.path
  */
-function constructFromIncludeInfo(typeListNodes: TypeListNode[], includeInfo: IncludeInfo[]) {
+export function constructFromIncludeInfo(typeListNodes: TypeListNode[], includeItemPairs: IncludeItemPair[]) {
     let t = 0;
     let prefix = "://";
     let nodeMatch = false;
     let nodeInculde = false;
 
-    for (let i = 0; i < includeInfo.length && t < typeListNodes.length; i++) {
+    for (let i = 0; i < includeItemPairs.length && t < typeListNodes.length; i++) {
+
+        let fullyQualifiedNameParts = typeListNodes[t].fullyQualifiedName.split(".");
+        let include = includeItemPairs[i].include;
+        let parentItem = includeItemPairs[i].parentItem;
+        let node = typeListNodes[t];
         nodeMatch = false;
         nodeInculde = false;
-        let fullyQualifiedNameParts = typeListNodes[t].fullyQualifiedName.split(".");
 
-        if (includeInfo[i].path.indexOf(prefix) == -1) {
-            let includeParts = includeInfo[i].path.split(".");
+        if (include.path.indexOf(prefix) == -1) {
+            let includeParts = include.path.split(".");
             let compareResult = compareParts(fullyQualifiedNameParts, includeParts);
 
             if (compareResult == 0) {
@@ -388,32 +408,32 @@ function constructFromIncludeInfo(typeListNodes: TypeListNode[], includeInfo: In
                 nodeInculde = true;
 
                 let newNameParts = -compareResult - 1;
-                if(!includeInfo[i].inclusive) {
+                if (include.inclusive == false) {
                     newNameParts = -compareResult;
                 }
 
                 let newName = fullyQualifiedNameParts.slice(newNameParts).join('.');
-                buildLibraryItemsFromName(typeListNodes[t], includeInfo[i].parentItem, newName, includeInfo[i].iconUrl);
-            } else if (typeListNodes[t].fullyQualifiedName.localeCompare(includeInfo[i].path) < 0) {
+
+                buildLibraryItemsFromName(node, parentItem, newName, include.iconUrl);
+            } else if (node.fullyQualifiedName.localeCompare(include.path) < 0) {
                 i--;
                 t++;
             }
-
-        } else if (typeListNodes[t].fullyQualifiedName.startsWith(includeInfo[i].path)) {
+        } else if (node.fullyQualifiedName.startsWith(include.path)) {
             nodeInculde = true;
-            let prefixIndex = typeListNodes[t].fullyQualifiedName.indexOf(prefix);
-            let newName = typeListNodes[t].fullyQualifiedName.substring(prefixIndex + prefix.length);
-            buildLibraryItemsFromName(typeListNodes[t], includeInfo[i].parentItem, newName);
+            let prefixIndex = node.fullyQualifiedName.indexOf(prefix);
+            let newName = node.fullyQualifiedName.substring(prefixIndex + prefix.length);
+            buildLibraryItemsFromName(node, parentItem, newName);
         }
 
         if (nodeMatch) {
             let item = new ItemData(fullyQualifiedNameParts[fullyQualifiedNameParts.length - 1]);
-            item.constructFromTypeListNode(typeListNodes[t]);
-            includeInfo[i].parentItem.appendChild(item);
+            item.constructFromTypeListNode(node);
+            parentItem.appendChild(item);
         }
 
         if (nodeMatch || nodeInculde) {
-            typeListNodes[t].processed = true;
+            node.processed = true;
             i--;
             t++;
         }
@@ -434,12 +454,19 @@ export function buildLibrarySectionsFromLayoutSpecs(loadedTypes: any, layoutSpec
         sectionElements.push(new LayoutElement(section));
     }
 
-    let sections = convertLayoutElementToItemData(sectionElements);
-    let includeInfo = getIncludeInfo(sectionElements);
-    let sortedIncludeInfo = includeInfo.sort((a, b) => a.path.localeCompare(b.path));
+    let includeItemPairs: IncludeItemPair[] = [];
+    let sortedIncludeInfoList = getIncludeInfo(sectionElements);
+
+    if (!isValidaIncludeInfoList(sortedIncludeInfoList)) {
+        console.error("Invalid layoutSpecs: include info is not unique");
+    }
+
+    let sections = convertLayoutElementToItemData(sectionElements, includeItemPairs);
+
+    let sortedIncludeItemPairs = includeItemPairs.sort((a, b) => a.include.path.localeCompare(b.include.path));
     let sortedTypeListNodes = typeListNodes.sort((a, b) => a.fullyQualifiedName.localeCompare(b.fullyQualifiedName));
 
-    constructFromIncludeInfo(sortedTypeListNodes, sortedIncludeInfo);
+    constructFromIncludeInfo(sortedTypeListNodes, sortedIncludeItemPairs);
 
     // Misc section will take all unprocessed nodes
     let miscSection = sections.find(section => section.text == miscSectionStr);
@@ -540,6 +567,20 @@ export function buildLibraryItemsFromName(typeListNode: TypeListNode, parentNode
     // Create nested items for the name 'B.C.D' while passing 'A' as the parent node.
     buildLibraryItemsFromName(typeListNode, newParentNode, newName);
     parentNode.childItems.unshift(newParentNode);
+}
+
+export function isValidaIncludeInfoList(includeInfoList: IncludeInfo[]): boolean {
+    for (let i = 0; i < includeInfoList.length - 1; i++) {
+        let currentParts = includeInfoList[i].path.split(".");
+        let nextParts = includeInfoList[i + 1].path.split(".");
+        if (compareParts(nextParts, currentParts) >= 0) {
+            console.log(includeInfoList[i].path);
+            console.log(includeInfoList[i + 1].path);
+            return false;
+        }
+    }
+
+    return true;
 }
 
 // Recursively set visible and expanded states of ItemData
