@@ -33,7 +33,7 @@ export class Searcher {
         this.displayedCategories = categories;
     }
 
-    generateStructuredItems(): JSX.Element[] {
+    generateStructuredItems(showItemSummary: boolean): JSX.Element[] {
         let structuredItems: JSX.Element[] = [];
         let categoryItems: LibraryUtilities.ItemData[] = [];
 
@@ -57,8 +57,9 @@ export class Searcher {
             structuredItems.push(<LibraryItem
                 key={index++}
                 libraryContainer={this.libraryContainer}
-                data={item} />
-            );
+                data={item}
+                showItemSummary={showItemSummary}
+            />);
         }
         return structuredItems;
     }
@@ -67,6 +68,7 @@ export class Searcher {
         items: LibraryUtilities.ItemData[] = this.sections,
         searchText: string,
         detailed: boolean,
+        showItemSummary: boolean,
         pathToItem: LibraryUtilities.ItemData[] = [],
         leafItems: JSX.Element[] = [],
         top: boolean = true): JSX.Element[] {
@@ -100,9 +102,18 @@ export class Searcher {
                     pathToItem={pathToThisItem}
                     onParentTextClicked={this.directToLibrary.bind(this)}
                     detailed={detailed}
-                    />);
+                    showItemSummary={showItemSummary}
+                />);
             } else {
-                this.generateListItems(item.childItems, searchText, detailed, pathToThisItem, leafItems, false);
+                this.generateListItems(
+                    item.childItems,
+                    searchText,
+                    detailed,
+                    showItemSummary,
+                    pathToThisItem,
+                    leafItems,
+                    false
+                );
             }
         }
 

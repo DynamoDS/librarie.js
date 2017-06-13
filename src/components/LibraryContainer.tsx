@@ -23,7 +23,8 @@ export interface LibraryContainerStates {
     searchText: string,
     selectedCategories: string[],
     structured: boolean,
-    detailed: boolean
+    detailed: boolean,
+    showItemSummary: boolean,
 }
 
 export class LibraryContainer extends React.Component<LibraryContainerProps, LibraryContainerStates> {
@@ -65,7 +66,8 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
             searchText: '',
             selectedCategories: [],
             structured: false,
-            detailed: false
+            detailed: false,
+            showItemSummary: false // disable expandable tool tip by default
         };
     }
 
@@ -222,17 +224,24 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
             if (!this.state.inSearchMode) {
                 let index = 0;
                 sections = this.generatedSections.map(data =>
-                    <LibraryItem key={index++} libraryContainer={this} data={data} />
+                    <LibraryItem
+                        key={index++}
+                        libraryContainer={this}
+                        data={data}
+                        showItemSummary={this.state.showItemSummary}
+                    />
                 );
             }
             else {
                 if (this.state.structured) {
-                    sections = this.searcher.generateStructuredItems();
+                    sections = this.searcher.generateStructuredItems(this.state.showItemSummary);
                 }
                 else {
-                    sections = this.searcher.generateListItems(this.props.libraryController.searchLibraryItemsHandler ?
-                        this.generatedSectionsOnSearch : this.generatedSections,
-                        this.state.searchText, this.state.detailed);
+                    sections = this.searcher.generateListItems(
+                        this.props.libraryController.searchLibraryItemsHandler ? this.generatedSectionsOnSearch : this.generatedSections,
+                        this.state.searchText,
+                        this.state.detailed,
+                        this.state.showItemSummary);
                 }
             }
 

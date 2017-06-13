@@ -14,14 +14,18 @@ interface SearchResultItemProps {
     pathToItem: LibraryUtilities.ItemData[];
     onParentTextClicked: ParentTextClickedFunc;
     detailed: boolean;
+    showItemSummary: boolean;
 }
 
-interface SearchResultItemStates { }
+interface SearchResultItemStates {
+    itemSummaryExpanded: boolean
+}
 
 export class SearchResultItem extends React.Component<SearchResultItemProps, SearchResultItemStates> {
 
     constructor(props: SearchResultItemProps) {
         super(props);
+        this.state = ({ itemSummaryExpanded: false });
     }
 
     render() {
@@ -71,11 +75,12 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
     }
 
     onImageLoadFail(event: any) {
-        event.target.src = require("../resources/icons/Dynamo.svg");
+        event.target.src = require("../resources/icons/default-icon.svg");
     }
 
     onParentTextClicked(event: any) {
         event.stopPropagation();
+        this.onLibraryItemMouseLeave(); // Floating toolTip should be dismissed when clicking on parent text
         this.props.onParentTextClicked(this.props.pathToItem);
     }
 
