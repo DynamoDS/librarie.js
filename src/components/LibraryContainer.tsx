@@ -67,7 +67,7 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
             selectedCategories: [],
             structured: false,
             detailed: false,
-            showItemSummary: false // disable expandable tool tip by default
+            showItemSummary: false // disable item summary by default
         };
     }
 

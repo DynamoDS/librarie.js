@@ -29,13 +29,6 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
         this.state = ({ itemSummaryExpanded: false });
     }
 
-    // Collapse all expanded tooltips when unselect "show expandable tooltip" option
-    componentWillReceiveProps(nextProps: SearchResultItemProps) {
-        if (this.state.itemSummaryExpanded && !nextProps.showItemSummary) {
-            this.setState({ itemSummaryExpanded: false });
-        }
-    }
-
     render() {
         let iconPath = this.props.data.iconUrl;
 
