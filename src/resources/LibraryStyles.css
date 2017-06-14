@@ -76,14 +76,60 @@ input {
     display: flex;
     flex-direction: row;
     align-items: center;
+    color: white;
     transition: 0.15s;
     overflow-y: hidden;
 }
 
-.LibraryItemHeader:hover,
+.LibraryHeaderContainer:hover,
 .LibrarySectionHeader:hover {
     color: white;
     background: rgba(255, 255, 255, 0.1);
+}
+
+.ItemSummaryExpandIcon {
+    margin-left: auto;
+    cursor: pointer;
+    padding: 0px 10px;
+    font-size: 14px;
+    color: #aaa;
+    transition: 0.1s;
+}
+
+.ItemSummaryExpandIcon:hover {
+    color: white;
+}
+
+.LibraryItemSummary {
+    display: flex;
+    font-size: 12px;
+    padding: 0px 10px 5px 10px;
+    background: transparent;
+    color: #ededed;
+    justify-content: space-between;
+}
+
+.LibraryItemSummary .LeftPane {
+    width: 60%;
+}
+
+.LibraryItemSummary .Icon {
+    height: 80px;
+    padding-right: 20px;
+}
+
+.LibraryItemSummary .Description {
+    padding-top: 5px;
+}
+
+.LibraryItemSummary .Input,
+.LibraryItemSummary .Output {
+    color: #60d7ff;
+    padding-top: 10px;
+}
+
+.LibraryItemSummary .IOParameter {
+    color: #999;
 }
 
 .LibraryItemBodyElements {
@@ -134,6 +180,11 @@ input {
 
 .LibraryItemContainerNone .LibraryItemText {
     color: #eee;
+}
+
+.LibraryHeaderContainer {
+    transition: 0.15s;
+    font-size: 14px;
 }
 
 .LibraryItemHeader .LibraryItemGroupText,
@@ -392,6 +443,7 @@ input {
 }
 
 .SearchResultItemContainer .ItemInfo {
+    width: 100%;
     padding: 5px 0px 5px 0px;
 }
 
@@ -404,18 +456,21 @@ input {
 }
 
 .SearchResultItemContainer .ItemTitle {
-    margin-bottom: 2px;
+    font-size: 14px;
+    display: flex;
+    padding-left: 10px;
 }
 
 .SearchResultItemContainer .ItemDescription {
     font-size: 11px;
-    padding: 2px 0px;
+    padding: 5px 0px 0px 10px;
     color: #aaa;
 }
 
 .SearchResultItemContainer .ItemDetails {
     display: flex;
     align-items: center;
+    padding: 5px 0px 0px 10px;
     font-size: 12px;
     color: #aaaaaa;
 }

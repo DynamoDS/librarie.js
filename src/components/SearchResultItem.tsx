@@ -1,7 +1,8 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import { LibraryContainer } from "./LibraryContainer";
 import * as LibraryUtilities from "../LibraryUtilities";
+import { LibraryContainer } from "./LibraryContainer";
+import { ItemSummary } from "./ItemSummary";
 
 interface ParentTextClickedFunc {
     (pathToItem: LibraryUtilities.ItemData[]): void;
@@ -28,6 +29,13 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
         this.state = ({ itemSummaryExpanded: false });
     }
 
+    // Collapse all expanded tooltips when unselect "show expandable tooltip" option
+    componentWillReceiveProps(nextProps: SearchResultItemProps) {
+        if (this.state.itemSummaryExpanded && !nextProps.showItemSummary) {
+            this.setState({ itemSummaryExpanded: false });
+        }
+    }
+
     render() {
         let iconPath = this.props.data.iconUrl;
 
@@ -43,8 +51,26 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
         let highLightedCategoryText = LibraryUtilities.getHighlightedText(categoryText, this.props.highlightedText, false);
         let itemTypeIconPath = "src/resources/icons/library-" + this.props.data.itemType + ".svg";
         let itemDescription: JSX.Element = null;
+        let itemSummary: JSX.Element = null;
+        let expandIcon: JSX.Element = null;
 
-        if (this.props.detailed) {
+        if (this.props.showItemSummary) {
+            expandIcon = (
+                <div className="ItemSummaryExpandIcon">
+                    <i className="fa fa-ellipsis-h" aria-hidden="true" onClick={this.onExpandIconClicked.bind(this)} />
+                </div>
+            );
+
+            if (this.state.itemSummaryExpanded) {
+                itemSummary = <ItemSummary
+                    libraryContainer={this.props.libraryContainer}
+                    data={this.props.data}
+                    showDescription={false}
+                />;
+            }
+        }
+
+        if (this.props.detailed || this.state.itemSummaryExpanded) {
             let description = "No description available";
             if (this.props.data.description && this.props.data.description.length > 0) {
                 description = this.props.data.description;
@@ -60,6 +86,7 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
                 <div className={"ItemInfo"}>
                     <div className={"ItemTitle"}>{highLightedItemText}
                         <div className={"LibraryItemParameters"}>{parameters}</div>
+                        {expandIcon}
                     </div>
                     {itemDescription}
                     <div className={"ItemDetails"}>
@@ -69,6 +96,7 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
                         <img className={"ItemTypeIcon"} src={itemTypeIconPath} onError={this.onImageLoadFail.bind(this)} />
                         <div className={"ItemCategory"}>{highLightedCategoryText}</div>
                     </div>
+                    {itemSummary}
                 </div>
             </div>
         );
@@ -87,6 +115,11 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
     onItemClicked() {
         this.props.libraryContainer.raiseEvent("itemClicked", this.props.data.contextData);
     };
+
+    onExpandIconClicked(event: any) {
+        event.stopPropagation();
+        this.setState({ itemSummaryExpanded: !this.state.itemSummaryExpanded });
+    }
 
     onLibraryItemMouseLeave() {
         let libraryContainer = this.props.libraryContainer;

@@ -39,9 +39,9 @@ export class ItemSummary extends React.Component<ItemSummaryProps, ItemSummarySt
         let icon: JSX.Element = null;
 
         if (this.state.hasSummaryData) {
-            let inputParameters = this.summaryData.InputParameters;
-            let outputParameters = this.summaryData.OutputParameters;
-            let descriptionTextReceived = this.summaryData.Description;
+            let inputParameters = this.summaryData.inputParameters;
+            let outputParameters = this.summaryData.outputParameters;
+            let descriptionTextReceived = this.summaryData.description;
 
             for (let inputParameter of inputParameters) {
                 let inputParameterName = inputParameter.name
@@ -78,7 +78,7 @@ export class ItemSummary extends React.Component<ItemSummaryProps, ItemSummarySt
                     <div className={"Output"}>OUTPUT</div>
                     {output}
                 </div>
-                <img className={"Icon"} src={this.props.data.iconUrl} onError={this.onImageLoadFail} />;
+                <img className={"Icon"} src={this.props.data.iconUrl} onError={this.onImageLoadFail} />
             </div>
         );
     }
@@ -122,8 +122,10 @@ export class ItemSummary extends React.Component<ItemSummaryProps, ItemSummarySt
      * 
      */
     setItemSummary(data: any) {
+        console.log("setting data summary");
         let summaryData = JSON.parse(data);
         if (summaryData && summaryData.inputParameters && summaryData.outputParameters && summaryData.description) {
+            console.log("all data received");
             this.summaryData = summaryData;
             this.setState({ hasSummaryData: true });
         }

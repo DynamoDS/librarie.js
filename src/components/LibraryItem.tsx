@@ -18,9 +18,10 @@
 
 import * as React from "react";
 import * as ReactDOM from "react-dom";
+import * as LibraryUtilities from "../LibraryUtilities";
 import { ClusterView } from "./ClusterView";
 import { LibraryContainer } from "./LibraryContainer";
-import * as LibraryUtilities from "../LibraryUtilities";
+import { ItemSummary } from "./ItemSummary";
 
 export interface LibraryItemProps {
     libraryContainer: any,
@@ -158,6 +159,8 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         let bodyIndentation: JSX.Element = null;
         let header: JSX.Element = null;
         let parameters: JSX.Element = null;
+        let expandIcon: JSX.Element = null;
+        let itemSummary: JSX.Element = null;
 
         // Indentation and arrow are only added for non-category and non-section items
         if (this.props.data.itemType !== "category" && this.props.data.itemType !== "section") {
@@ -174,19 +177,42 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
             }
         }
 
+        // Show itemSummary only if this is a leaf item and showItemSummary is set to true
+        if (this.props.showItemSummary && this.props.data.childItems.length == 0) {
+            expandIcon = (
+                <div className="ItemSummaryExpandIcon">
+                    <i className="fa fa-ellipsis-h" aria-hidden="true" onClick={this.onExpandIconClicked.bind(this)} />
+                </div>
+            );
+
+            if (this.state.itemSummaryExpanded) {
+                itemSummary = <ItemSummary
+                    libraryContainer={this.props.libraryContainer}
+                    data={this.props.data}
+                    showDescription={true}
+                />;
+            }
+        }
+
         if (this.props.data.parameters && (this.props.data.parameters.length > 0)) {
             parameters = <div className="LibraryItemParameters">{this.props.data.parameters}</div>;
         }
 
         if (this.props.data.showHeader) {
             header = (
-                <div className={this.getLibraryItemHeaderStyle()} onClick={this.onLibraryItemClicked}
-                    onMouseOver={this.onLibraryItemMouseEnter} onMouseLeave={this.onLibraryItemMouseLeave}>
-                    {arrow}
-                    {this.props.data.itemType === "section" ? null : iconElement}
-                    <div className={libraryItemTextStyle}>{this.props.data.text}</div>
-                    {parameters}
-                    {this.props.data.itemType === "section" ? iconElement : null}
+                <div className="LibraryHeaderContainer">
+                    <div className={this.getLibraryItemHeaderStyle()}
+                        onClick={this.onLibraryItemClicked}
+                        onMouseOver={this.onLibraryItemMouseEnter}
+                        onMouseLeave={this.onLibraryItemMouseLeave}>
+                        {arrow}
+                        {this.props.data.itemType === "section" ? null : iconElement}
+                        <div className={libraryItemTextStyle}>{this.props.data.text}</div>
+                        {parameters}
+                        {this.props.data.itemType === "section" ? iconElement : null}
+                        {expandIcon}
+                    </div>
+                    {itemSummary}
                 </div>
             );
         }
@@ -305,6 +331,11 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
                 {queryCluster}
             </div>
         );
+    }
+
+    onExpandIconClicked(event: any) {
+        event.stopPropagation();
+        this.setState({ itemSummaryExpanded: !this.state.itemSummaryExpanded });
     }
 
     onLibraryItemClicked() {
