@@ -335,25 +335,6 @@ function convertLayoutElementToItemData(
     return results;
 }
 
-// This method will return a sorted array of all the includeInfo in layoutElements
-export function getIncludeInfo(layoutElements: LayoutElement[]): IncludeInfo[] {
-    let results: IncludeInfo[] = [];
-
-    for (let layoutElement of layoutElements) {
-        if (layoutElement.include.length > 0) {
-            results = results.concat(layoutElement.include);
-        }
-
-        if (layoutElement.childElements.length > 0) {
-            results = results.concat(getIncludeInfo(layoutElement.childElements));
-        }
-    }
-
-    results = results.sort((a, b) => a.path.localeCompare(b.path));
-
-    return results;
-}
-
 /**
  * This method will merge all typeListNodes under corresponding library items based on includeItemPairs.
  * Each includeItemPair stores includeInfo and the parent item of this includeInfo.
@@ -389,17 +370,46 @@ export function constructFromIncludeInfo(typeListNodes: TypeListNode[], includeI
     let nodeMatch = false;
     let nodeInculde = false;
 
-    for (let i = 0; i < includeItemPairs.length && t < typeListNodes.length; i++) {
+    // previousInclude is the includeInfo path of the pair before current pair.
+    let previousIncludePath = "";
+
+    // previousStartingIndex keeps track of the index of typeListNodes when previousInclude starts comparison.
+    let previousStartingIndex = 0;
+
+    // currentStartingIndex keeps track of the index of typeListNodes when current IncludeInfo starts comparison.
+    let currentStartingIndex = 0;
+
+    for (let i = 0; i < includeItemPairs.length; i++) {
+
+        let include = includeItemPairs[i].include;
+        let includeParts = include.path.split(".");
+        let previousIncludeParts = previousIncludePath.split(".");
+
+        // Start from previousStartingIndex if current path is same as or included by previous path.
+        if (i >= 1 && (compareParts(includeParts, previousIncludeParts) >= 0 ||
+            include.path.indexOf(prefix) != -1 &&
+            previousIncludePath.length > 0 &&
+            include.path.startsWith(previousIncludePath))) {
+            t = previousStartingIndex;
+            currentStartingIndex = previousStartingIndex;
+            previousIncludePath = "";
+        }
+
+        // Continue iterating through the remaining includeInfo even if there are no more typeListNodes
+        if (t >= typeListNodes.length) {
+            previousIncludePath = include.path;
+            previousStartingIndex = currentStartingIndex;
+            currentStartingIndex = t;
+            continue;
+        }
 
         let fullyQualifiedNameParts = typeListNodes[t].fullyQualifiedName.split(".");
-        let include = includeItemPairs[i].include;
-        let parentItem = includeItemPairs[i].parentItem;
         let node = typeListNodes[t];
+        let parentItem = includeItemPairs[i].parentItem;
         nodeMatch = false;
         nodeInculde = false;
 
         if (include.path.indexOf(prefix) == -1) {
-            let includeParts = include.path.split(".");
             let compareResult = compareParts(fullyQualifiedNameParts, includeParts);
 
             if (compareResult == 0) {
@@ -418,6 +428,7 @@ export function constructFromIncludeInfo(typeListNodes: TypeListNode[], includeI
             } else if (node.fullyQualifiedName.localeCompare(include.path) < 0) {
                 i--;
                 t++;
+                continue;
             }
         } else if (node.fullyQualifiedName.startsWith(include.path)) {
             nodeInculde = true;
@@ -437,6 +448,13 @@ export function constructFromIncludeInfo(typeListNodes: TypeListNode[], includeI
             i--;
             t++;
         }
+
+        // Go to next includeInfo and update previousIncludePath, previousStartingIndex and currentStartingIndex
+        if (!(nodeMatch || nodeInculde) || t > typeListNodes.length) {
+            previousIncludePath = include.path;
+            previousStartingIndex = currentStartingIndex;
+            currentStartingIndex = t;
+        }
     }
 }
 
@@ -455,16 +473,13 @@ export function buildLibrarySectionsFromLayoutSpecs(loadedTypes: any, layoutSpec
     }
 
     let includeItemPairs: IncludeItemPair[] = [];
-    let sortedIncludeInfoList = getIncludeInfo(sectionElements);
-
-    if (!isValidaIncludeInfoList(sortedIncludeInfoList)) {
-        console.error("Invalid layoutSpecs: include info is not unique");
-    }
-
     let sections = convertLayoutElementToItemData(sectionElements, includeItemPairs);
-
     let sortedIncludeItemPairs = includeItemPairs.sort((a, b) => a.include.path.localeCompare(b.include.path));
     let sortedTypeListNodes = typeListNodes.sort((a, b) => a.fullyQualifiedName.localeCompare(b.fullyQualifiedName));
+
+    if (!isValidIncludeInfo(sortedIncludeItemPairs)) {
+        console.error("Invalid layoutSpecs: include info is not unique");
+    }
 
     constructFromIncludeInfo(sortedTypeListNodes, sortedIncludeItemPairs);
 
@@ -569,11 +584,11 @@ export function buildLibraryItemsFromName(typeListNode: TypeListNode, parentNode
     parentNode.childItems.unshift(newParentNode);
 }
 
-export function isValidaIncludeInfoList(includeInfoList: IncludeInfo[]): boolean {
-    for (let i = 0; i < includeInfoList.length - 1; i++) {
-        let currentParts = includeInfoList[i].path.split(".");
-        let nextParts = includeInfoList[i + 1].path.split(".");
-        if (compareParts(nextParts, currentParts) >= 0) {
+export function isValidIncludeInfo(pairs: IncludeItemPair[]): boolean {
+    for (let i = 0; i < pairs.length - 1; i++) {
+        let currentParts = pairs[i].include.path.split(".");
+        let nextParts = pairs[i + 1].include.path.split(".");
+        if (compareParts(nextParts, currentParts) >= 0 && pairs[i].parentItem === pairs[i + 1].parentItem) {
             return false;
         }
     }
