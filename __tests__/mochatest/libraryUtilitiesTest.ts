@@ -105,6 +105,28 @@ describe("isValidIncludeInfo function", function () {
     let result = LibraryUtilities.isValidIncludeInfo(includeItemPairs);
     expect(result).to.equal(false);
   });
+
+  it("should return false if one include with prefix is contained in another include", function () {
+    let parentItem1 = new LibraryUtilities.ItemData("1");
+    let parentItem2 = new LibraryUtilities.ItemData("2");
+
+    let includeItemPair1 = new LibraryUtilities.IncludeItemPair();
+    let includeItemPair2 = new LibraryUtilities.IncludeItemPair();
+    let includeItemPair3 = new LibraryUtilities.IncludeItemPair();
+
+    includeItemPair1.include = { "path": "a" };
+    includeItemPair2.include = { "path": "test://" };
+    includeItemPair3.include = { "path": "test://a" };
+
+    includeItemPair1.parentItem = parentItem1;
+    includeItemPair2.parentItem = parentItem2;
+    includeItemPair3.parentItem = parentItem2;
+
+    includeItemPairs = [includeItemPair1, includeItemPair2, includeItemPair3];
+
+    let result = LibraryUtilities.isValidIncludeInfo(includeItemPairs);
+    expect(result).to.equal(false);
+  });
 });
 
 describe("constructFromIncludeInfo function", function () {

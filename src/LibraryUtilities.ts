@@ -584,11 +584,26 @@ export function buildLibraryItemsFromName(typeListNode: TypeListNode, parentNode
     parentNode.childItems.unshift(newParentNode);
 }
 
+/**
+ * This method validates pairs. 
+ * 
+ * Pairs are not valid if there are multiple includeInfo samea as each other, or one contained by another,
+ * like a and a.b, test:// and test://a, and they share the same parentItem.
+ * 
+ * @param {IncludeItemPair[]} pairs
+ * An array of sorted IncludeItemPair to be validated
+ */
 export function isValidIncludeInfo(pairs: IncludeItemPair[]): boolean {
     for (let i = 0; i < pairs.length - 1; i++) {
+        let prefix = "://";
+        let currentPath = pairs[i].include.path;
         let currentParts = pairs[i].include.path.split(".");
+        let nextPath = pairs[i + 1].include.path;
         let nextParts = pairs[i + 1].include.path.split(".");
-        if (compareParts(nextParts, currentParts) >= 0 && pairs[i].parentItem === pairs[i + 1].parentItem) {
+        let included = compareParts(nextParts, currentParts) >= 0 ||
+            (nextPath.indexOf(prefix) != -1 && currentPath.length > 0 && nextPath.startsWith(currentPath));
+
+        if (included && pairs[i].parentItem === pairs[i + 1].parentItem) {
             return false;
         }
     }
