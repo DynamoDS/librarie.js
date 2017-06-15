@@ -71,7 +71,7 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
             selectedCategories: [],
             structured: false,
             detailed: false,
-            showItemSummary: false
+            showItemSummary: false // disable expandable tool tip by default
         };
     }
 
@@ -183,7 +183,7 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
     }
 
     onStructuredModeChanged(value: boolean) {
-        this.updateSearchResultItems(true, value);
+        this.updateSearchResultItems(true, value); // generate structured items 
         this.setState({ structured: value });
     }
 
