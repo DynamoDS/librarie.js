@@ -9,6 +9,7 @@ import { LibraryController } from "../entry-point";
 import { LibraryItem } from "./LibraryItem";
 import { Searcher } from "../Searcher";
 import { SearchBar } from "./SearchBar";
+import { SearchResultItem } from "./SearchResultItem";
 
 declare var boundContainer: any; // Object set from C# side.
 
@@ -23,8 +24,8 @@ export interface LibraryContainerStates {
     searchText: string,
     selectedCategories: string[],
     structured: boolean,
-    detailed: boolean,
-    showItemSummary: boolean,
+    detailed: boolean
+    showItemSummary: boolean
 }
 
 export class LibraryContainer extends React.Component<LibraryContainerProps, LibraryContainerStates> {
@@ -34,10 +35,13 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
 
     generatedSections: LibraryUtilities.ItemData[] = null;
     generatedSectionsOnSearch: LibraryUtilities.ItemData[] = null;
-    searchCategories: string[] = [];
+    searchResultItemRefs: SearchResultItem[] = [];
+    searchResultItems: LibraryUtilities.ItemData[] = [];
 
-    timeout: number;
     searcher: Searcher = null;
+    searchCategories: string[] = [];
+    timeout: number;
+    selectionIndex: number = 0;
 
     constructor(props: LibraryContainerProps) {
         super(props);
@@ -51,7 +55,7 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
         this.onDetailedModeChanged = this.onDetailedModeChanged.bind(this);
         this.onCategoriesChanged = this.onCategoriesChanged.bind(this);
         this.onTextChanged = this.onTextChanged.bind(this);
-        this.clearSearch = this.clearSearch.bind(this);
+        this.handleKeyDown = this.handleKeyDown.bind(this);
 
         // Set handlers after methods are bound.
         this.props.libraryController.setLoadedTypesJsonHandler = this.setLoadedTypesJson;
@@ -59,7 +63,7 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
         this.props.libraryController.refreshLibraryViewHandler = this.refreshLibraryView;
 
         // Initialize the search utilities with empty data
-        this.searcher = new Searcher(this);
+        this.searcher = new Searcher();
 
         this.state = {
             inSearchMode: false,
@@ -69,6 +73,29 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
             detailed: false,
             showItemSummary: false // disable expandable tool tip by default
         };
+    }
+
+    componentWillMount() {
+        window.addEventListener("keydown", this.handleKeyDown);
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener("keydown", this.handleKeyDown);
+    }
+
+    handleKeyDown(event: any) {
+        switch (event.code) {
+            case "ArrowUp":
+                event.preventDefault(); // Prevent arrow key from navigating around search input
+                this.updateSelectionIndex(false);
+                break;
+            case "ArrowDown":
+                event.preventDefault();
+                this.updateSelectionIndex(true);
+                break;
+            default:
+                break;
+        }
     }
 
     setLoadedTypesJson(loadedTypesJson: any, append: boolean = true): void {
@@ -141,11 +168,22 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
         this.props.libraryController.raiseEvent(name, params);
     }
 
-    onSearchModeChanged(inSearchMode: boolean) {
-        this.setState({ inSearchMode: inSearchMode });
+    onSearchModeChanged(inSearchMode: boolean, searchText?: string) {
+        // Reset selectionIndex when serach mode changed
+        this.selectionIndex = 0;
+        this.updateSearchResultItems(inSearchMode, this.state.structured);
+        if (searchText) {
+            this.setState({
+                inSearchMode: inSearchMode,
+                searchText: searchText
+            });
+        } else {
+            this.setState({ inSearchMode: inSearchMode });
+        }
     }
 
     onStructuredModeChanged(value: boolean) {
+        this.updateSearchResultItems(true, value); // generate structured items 
         this.setState({ structured: value });
     }
 
@@ -154,8 +192,9 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
     }
 
     onCategoriesChanged(categories: string[]) {
-        this.setState({ selectedCategories: categories });
         this.searcher.categories = categories;
+        this.updateSearchResultItems(true, this.state.structured);
+        this.setState({ selectedCategories: categories });
     }
 
     onTextChanged(text: string) {
@@ -196,21 +235,64 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
 
     updateSearchViewDelayed(text: string) {
         if (text.length == 0) {
-            this.clearSearch();
+            this.onSearchModeChanged(false);
+        } else if (!this.state.structured) {
+            this.raiseEvent(this.props.libraryController.SearchTextUpdatedEventName, text);
+            this.onSearchModeChanged(true, text);
+        }
+    }
+
+    updateSearchResultItems(inSearchMode: boolean, structured: boolean) {
+        if (!inSearchMode) {
+            this.searchResultItemRefs = [];
             return;
         }
 
-        if (!this.state.structured) {
-            this.raiseEvent(this.props.libraryController.SearchTextUpdatedEventName, text);
+        let index = 0;
+        let data: LibraryUtilities.ItemData[] = null;
+        if (structured) {
+            this.searchResultItems = this.searcher.generateStructuredItems();
+        } else {
+            this.searchResultItems = this.searcher.generateListItems(
+                this.props.libraryController.searchLibraryItemsHandler ? this.generatedSectionsOnSearch : this.generatedSections
+            );
         }
-
-        this.onSearchModeChanged(true);
-        this.setState({ searchText: text });
     }
 
-    clearSearch() {
-        this.onSearchModeChanged(false);
-        this.setState({ searchText: "" });
+    // Update the selectionIndex. Current index will add by 1 if selectNextItem is true,
+    // minus by 1 otherwise, but it should always be between 0 and maxSelectionIndex.
+    updateSelectionIndex(selectNextItem: boolean) {
+        if (!this.state.inSearchMode || this.state.structured) {
+            return;
+        }
+
+        let nextIndex = selectNextItem ? this.selectionIndex + 1 : this.selectionIndex - 1;
+        let maxSelectionIndex = this.searchResultItems.length - 1;
+
+        if (nextIndex < 0 && maxSelectionIndex >= 0) {
+            nextIndex = 0;
+        }
+
+        if (nextIndex >= maxSelectionIndex) {
+            nextIndex = maxSelectionIndex;
+        }
+
+        this.setSelection(nextIndex);
+    }
+
+    // Set item at index to be selected, and the previous selected item will be unselected.
+    setSelection(index: number) {
+        this.searchResultItemRefs[this.selectionIndex].setSelected(false);
+        this.searchResultItemRefs[index].setSelected(true);
+        this.selectionIndex = index;
+    }
+
+    // Direct back to library and expand items based on pathToItem. 
+    directToLibrary(pathToItem: LibraryUtilities.ItemData[]) {
+        LibraryUtilities.setItemStateRecursive(this.generatedSections, true, false);
+        if (LibraryUtilities.findAndExpandItemByPath(pathToItem.slice(0), this.generatedSections)) {
+            this.onSearchModeChanged(false);
+        }
     }
 
     render() {
@@ -220,9 +302,8 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
 
         try {
             let sections: JSX.Element[] = null;
-
+            let index = 0;
             if (!this.state.inSearchMode) {
-                let index = 0;
                 sections = this.generatedSections.map(data =>
                     <LibraryItem
                         key={index++}
@@ -231,18 +312,24 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
                         showItemSummary={this.state.showItemSummary}
                     />
                 );
-            }
-            else {
-                if (this.state.structured) {
-                    sections = this.searcher.generateStructuredItems(this.state.showItemSummary);
-                }
-                else {
-                    sections = this.searcher.generateListItems(
-                        this.props.libraryController.searchLibraryItemsHandler ? this.generatedSectionsOnSearch : this.generatedSections,
-                        this.state.searchText,
-                        this.state.detailed,
-                        this.state.showItemSummary);
-                }
+            } else if (this.state.structured) {
+                sections = this.searchResultItems.map(item =>
+                    <LibraryItem key={index++} data={item} libraryContainer={this} showItemSummary={this.state.showItemSummary} />
+                );
+            } else {
+                sections = this.searchResultItems.map(item =>
+                    <SearchResultItem
+                        ref={item => { if (item) this.searchResultItemRefs.push(item); }}
+                        index={index}
+                        key={index++}
+                        data={item}
+                        libraryContainer={this}
+                        highlightedText={this.state.searchText}
+                        detailed={this.state.detailed}
+                        showItemSummary={this.state.showItemSummary}
+                        onParentTextClicked={this.directToLibrary.bind(this)}
+                    />
+                );
             }
 
             const searchBar = <SearchBar

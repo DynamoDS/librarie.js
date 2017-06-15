@@ -18,7 +18,7 @@ export class TypeListNode {
     parameters: string = "";
     description: string = "";
     processed: boolean = false;
-    weight: Number = 0;
+    weight: number = 0;
 
     constructor(data: any) {
         this.fullyQualifiedName = data.fullyQualifiedName;
@@ -81,7 +81,8 @@ export class ItemData {
     parameters: string = "";
     description: string = "";
     childItems: ItemData[] = [];
-    weight: Number = 0;
+    pathToItem: ItemData[] = [];
+    weight: number = 0;
 
     constructor(public text: string) {
         this.keywords.push(text ? text.toLowerCase() : text);
