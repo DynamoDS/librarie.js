@@ -20,7 +20,12 @@ export interface LibraryContainerProps {
 }
 
 export interface LibraryContainerStates {
-    inSearchMode: boolean
+    inSearchMode: boolean,
+    searchText: string,
+    selectedCategories: string[],
+    structured: boolean,
+    detailed: boolean
+    showItemSummary: boolean
 }
 
 export class LibraryContainer extends React.Component<LibraryContainerProps, LibraryContainerStates> {
@@ -30,16 +35,13 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
 
     generatedSections: LibraryUtilities.ItemData[] = null;
     generatedSectionsOnSearch: LibraryUtilities.ItemData[] = null;
-    searchResultItems: SearchResultItem[] = [];
-    generatedSerachResultItems: JSX.Element[] = null;
-    searchCategories: string[] = [];
+    searchResultItemRefs: SearchResultItem[] = [];
+    searchResultItems: LibraryUtilities.ItemData[] = [];
 
     searcher: Searcher = null;
+    searchCategories: string[] = [];
     timeout: number;
     selectionIndex: number = 0;
-    searchText: string = "";
-    structured: boolean = false;
-    detailed: boolean = false;
 
     constructor(props: LibraryContainerProps) {
         super(props);
@@ -63,7 +65,14 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
         // Initialize the search utilities with empty data
         this.searcher = new Searcher();
 
-        this.state = { inSearchMode: false };
+        this.state = {
+            inSearchMode: false,
+            searchText: '',
+            selectedCategories: [],
+            structured: false,
+            detailed: false,
+            showItemSummary: false
+        };
     }
 
     componentWillMount() {
@@ -159,25 +168,33 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
         this.props.libraryController.raiseEvent(name, params);
     }
 
-    onSearchModeChanged(inSearchMode: boolean) {
+    onSearchModeChanged(inSearchMode: boolean, searchText?: string) {
         // Reset selectionIndex when serach mode changed
         this.selectionIndex = 0;
-        this.updateSearchResultItems(inSearchMode);
-        this.setState({ inSearchMode: inSearchMode });
+        this.updateSearchResultItems(inSearchMode, this.state.structured);
+        if (searchText) {
+            this.setState({
+                inSearchMode: inSearchMode,
+                searchText: searchText
+            });
+        } else {
+            this.setState({ inSearchMode: inSearchMode });
+        }
     }
 
     onStructuredModeChanged(value: boolean) {
-        this.structured = value;
-        this.onSearchModeChanged(true);
+        this.updateSearchResultItems(true, value);
+        this.setState({ structured: value });
     }
 
     onDetailedModeChanged(value: boolean) {
-        this.detailed = value;
-        this.onSearchModeChanged(true);
+        this.setState({ detailed: value });
     }
 
     onCategoriesChanged(categories: string[]) {
         this.searcher.categories = categories;
+        this.updateSearchResultItems(true, this.state.structured);
+        this.setState({ selectedCategories: categories });
     }
 
     onTextChanged(text: string) {
@@ -219,45 +236,25 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
     updateSearchViewDelayed(text: string) {
         if (text.length == 0) {
             this.onSearchModeChanged(false);
-        } else if (!this.structured) {
+        } else if (!this.state.structured) {
             this.raiseEvent(this.props.libraryController.SearchTextUpdatedEventName, text);
-            this.searchText = text;
-            this.onSearchModeChanged(true);
+            this.onSearchModeChanged(true, text);
         }
     }
 
-    updateSearchResultItems(inSearchMode: boolean) {
+    updateSearchResultItems(inSearchMode: boolean, structured: boolean) {
         if (!inSearchMode) {
-            this.searchResultItems = [];
-            this.generatedSerachResultItems = null;
+            this.searchResultItemRefs = [];
             return;
         }
 
         let index = 0;
         let data: LibraryUtilities.ItemData[] = null;
-        if (this.structured) {
-            data = this.searcher.generateStructuredItems();
-            this.generatedSerachResultItems = data.map(item =>
-                <LibraryItem key={index++} data={item} libraryContainer={this} />
-            );
+        if (structured) {
+            this.searchResultItems = this.searcher.generateStructuredItems();
         } else {
-            data = this.searcher.generateListItems(
+            this.searchResultItems = this.searcher.generateListItems(
                 this.props.libraryController.searchLibraryItemsHandler ? this.generatedSectionsOnSearch : this.generatedSections
-            );
-
-            this.generatedSerachResultItems = data.map(item =>
-                <SearchResultItem
-                    ref={item => {
-                        if (item) {
-                            this.searchResultItems.push(item);
-                        }
-                    }}
-                    key={index++}
-                    data={item}
-                    libraryContainer={this}
-                    onParentTextClicked={this.directToLibrary.bind(this)}
-                    index={index - 1}
-                />
             );
         }
     }
@@ -265,12 +262,12 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
     // Update the selectionIndex. Current index will add by 1 if selectNextItem is true,
     // minus by 1 otherwise, but it should always be between 0 and maxSelectionIndex.
     updateSelectionIndex(selectNextItem: boolean) {
-        if (!this.state.inSearchMode || this.structured) {
+        if (!this.state.inSearchMode || this.state.structured) {
             return;
         }
 
         let nextIndex = selectNextItem ? this.selectionIndex + 1 : this.selectionIndex - 1;
-        let maxSelectionIndex = this.generatedSerachResultItems.length - 1;
+        let maxSelectionIndex = this.searchResultItems.length - 1;
 
         if (nextIndex < 0 && maxSelectionIndex >= 0) {
             nextIndex = 0;
@@ -285,8 +282,8 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
 
     // Set item at index to be selected, and the previous selected item will be unselected.
     setSelection(index: number) {
-        this.searchResultItems[this.selectionIndex].setSelected(false);
-        this.searchResultItems[index].setSelected(true);
+        this.searchResultItemRefs[this.selectionIndex].setSelected(false);
+        this.searchResultItemRefs[index].setSelected(true);
         this.selectionIndex = index;
     }
 
@@ -308,10 +305,31 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
             let index = 0;
             if (!this.state.inSearchMode) {
                 sections = this.generatedSections.map(data =>
-                    <LibraryItem key={index++} libraryContainer={this} data={data} />
+                    <LibraryItem
+                        key={index++}
+                        libraryContainer={this}
+                        data={data}
+                        showItemSummary={this.state.showItemSummary}
+                    />
+                );
+            } else if (this.state.structured) {
+                sections = this.searchResultItems.map(item =>
+                    <LibraryItem key={index++} data={item} libraryContainer={this} showItemSummary={this.state.showItemSummary} />
                 );
             } else {
-                sections = this.generatedSerachResultItems;
+                sections = this.searchResultItems.map(item =>
+                    <SearchResultItem
+                        ref={item => { if (item) this.searchResultItemRefs.push(item); }}
+                        index={index}
+                        key={index++}
+                        data={item}
+                        libraryContainer={this}
+                        highlightedText={this.state.searchText}
+                        detailed={this.state.detailed}
+                        showItemSummary={this.state.showItemSummary}
+                        onParentTextClicked={this.directToLibrary.bind(this)}
+                    />
+                );
             }
 
             const searchBar = <SearchBar

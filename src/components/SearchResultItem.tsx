@@ -8,21 +8,28 @@ interface ParentTextClickedFunc {
 }
 
 interface SearchResultItemProps {
+    index: number,
     data: LibraryUtilities.ItemData,
     libraryContainer: LibraryContainer,
+    highlightedText: string;
+    detailed: boolean;
+    showItemSummary: boolean;
     onParentTextClicked: ParentTextClickedFunc,
-    index: number
 }
 
 interface SearchResultItemStates {
-    selected: boolean
+    selected: boolean,
+    itemSummaryExpanded: boolean
 }
 
 export class SearchResultItem extends React.Component<SearchResultItemProps, SearchResultItemStates> {
 
     constructor(props: SearchResultItemProps) {
         super(props);
-        this.state = ({ selected: this.props.index == this.props.libraryContainer.selectionIndex });
+        this.state = {
+            selected: this.props.index == this.props.libraryContainer.selectionIndex,
+            itemSummaryExpanded: false
+        };
         this.handleKeyDown = this.handleKeyDown.bind(this);
     }
 
@@ -34,13 +41,13 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
         window.removeEventListener("keydown", this.handleKeyDown);
     }
 
-    componentWillReceiveProps(nextProps: SearchResultItemProps) {
-        if (nextProps.libraryContainer.selectionIndex == this.props.index) {
-            this.setState({ selected: true });
-        } else if (this.state.selected && nextProps.libraryContainer.selectionIndex != this.props.index) {
-            this.setState({ selected: false });
-        }
-    }
+    // componentWillReceiveProps(nextProps: SearchResultItemProps) {
+    //     if (nextProps.libraryContainer.selectionIndex == this.props.index) {
+    //         this.setState({ selected: true });
+    //     } else if (this.state.selected && nextProps.libraryContainer.selectionIndex != this.props.index) {
+    //         this.setState({ selected: false });
+    //     }
+    // }
 
     // Update selection state and scroll current item into view if the selected item is not in view yet.
     componentDidUpdate() {
@@ -85,16 +92,14 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
 
         // Category of the item is the item with type category in the array pathToItem
         let categoryText = this.props.data.pathToItem.find(item => item.itemType === "category").text;
-
-        let searchText = this.props.libraryContainer.searchText;
         let parameters = this.props.data.parameters;
-        let highLightedItemText = LibraryUtilities.getHighlightedText(this.props.data.text, searchText, true);
-        let highLightedParentText = LibraryUtilities.getHighlightedText(parentText, searchText, false);
-        let highLightedCategoryText = LibraryUtilities.getHighlightedText(categoryText, searchText, false);
+        let highLightedItemText = LibraryUtilities.getHighlightedText(this.props.data.text, this.props.highlightedText, true);
+        let highLightedParentText = LibraryUtilities.getHighlightedText(parentText, this.props.highlightedText, false);
+        let highLightedCategoryText = LibraryUtilities.getHighlightedText(categoryText, this.props.highlightedText, false);
         let itemTypeIconPath = "src/resources/icons/library-" + this.props.data.itemType + ".svg";
         let itemDescription: JSX.Element = null;
 
-        if (this.props.libraryContainer.detailed) {
+        if (this.props.detailed) {
             let description = "No description available";
             if (this.props.data.description && this.props.data.description.length > 0) {
                 description = this.props.data.description;
@@ -125,11 +130,12 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
     }
 
     onImageLoadFail(event: any) {
-        event.target.src = require("../resources/icons/Dynamo.svg");
+        event.target.src = require("../resources/icons/default-icon.svg");
     }
 
     onParentTextClicked(event: any) {
         event.stopPropagation();
+        this.onLibraryItemMouseLeave(); // Floating toolTip should be dismissed when clicking on parent text
         this.props.onParentTextClicked(this.props.data.pathToItem);
     }
 
