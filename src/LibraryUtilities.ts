@@ -81,6 +81,7 @@ export class ItemData {
     parameters: string = "";
     description: string = "";
     childItems: ItemData[] = [];
+    pathToItem: ItemData[] = [];
     weight: number = 0;
 
     constructor(public text: string) {

@@ -10,10 +10,7 @@ interface ParentTextClickedFunc {
 interface SearchResultItemProps {
     data: LibraryUtilities.ItemData,
     libraryContainer: LibraryContainer,
-    highlightedText: string,
-    pathToItem: LibraryUtilities.ItemData[],
     onParentTextClicked: ParentTextClickedFunc,
-    detailed: boolean,
     index: number
 }
 
@@ -25,7 +22,7 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
 
     constructor(props: SearchResultItemProps) {
         super(props);
-        this.state = ({ selected: false });
+        this.state = ({ selected: this.props.index == this.props.libraryContainer.selectionIndex });
         this.handleKeyDown = this.handleKeyDown.bind(this);
     }
 
@@ -37,10 +34,16 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
         window.removeEventListener("keydown", this.handleKeyDown);
     }
 
+    componentWillReceiveProps(nextProps: SearchResultItemProps) {
+        if (nextProps.libraryContainer.selectionIndex == this.props.index) {
+            this.setState({ selected: true });
+        } else if (this.state.selected && nextProps.libraryContainer.selectionIndex != this.props.index) {
+            this.setState({ selected: false });
+        }
+    }
+
     // Update selection state and scroll current item into view if the selected item is not in view yet.
     componentDidUpdate() {
-        this.updateSelectionState();
-
         if (this.state.selected) {
             let container = ReactDOM.findDOMNode(this.props.libraryContainer);
             let currentItem = ReactDOM.findDOMNode(this);
@@ -59,14 +62,6 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
 
     handleKeyDown(event: any) {
         switch (event.code) {
-            case "ArrowUp":
-                event.preventDefault(); // Prevent arrow key from navigating around search input
-                this.updateSelectionIndex(false);
-                break;
-            case "ArrowDown":
-                event.preventDefault();
-                this.updateSelectionIndex(true);
-                break;
             case "Enter": // Allow node creation by pressing enter key
                 if (this.state.selected) {
                     this.onItemClicked();
@@ -76,43 +71,30 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
         }
     }
 
-    // Update the current selectionIndex in libraryContainer
-    updateSelectionIndex(selectNextItem: boolean) {
-        if (this.props.index == 0) {
-            this.props.libraryContainer.updateSelectionIndex(selectNextItem);
-        }
-        this.updateSelectionState();
-    }
-
-    // Select this item if selectionIndex matches the index of this item, and this item is not
-    // currently selected. Unselect this item if selectionIndex doesn't match index, and this item
-    // is currently selected.
-    updateSelectionState() {
-        if (!this.state.selected && this.props.libraryContainer.getSelectionIndex() == this.props.index) {
-            this.setState({ selected: true });
-        } else if (this.state.selected && this.props.libraryContainer.getSelectionIndex() != this.props.index) {
-            this.setState({ selected: false });
-        }
+    setSelected(selected: boolean) {
+        this.setState({ selected: selected });
     }
 
     render() {
+        // console.log("render SearchResultItem");
         let ItemContainerStyle = this.state.selected ? "SearchResultItemContainerSelected" : "SearchResultItemContainer";
         let iconPath = this.props.data.iconUrl;
 
         // The parent of a search result item is the second last entry in 'pathToItem'
-        let parentText = this.props.pathToItem[this.props.pathToItem.length - 2].text;
+        let parentText = this.props.data.pathToItem[this.props.data.pathToItem.length - 2].text;
 
         // Category of the item is the item with type category in the array pathToItem
-        let categoryText = this.props.pathToItem.find(item => item.itemType === "category").text;
+        let categoryText = this.props.data.pathToItem.find(item => item.itemType === "category").text;
 
+        let searchText = this.props.libraryContainer.searchText;
         let parameters = this.props.data.parameters;
-        let highLightedItemText = LibraryUtilities.getHighlightedText(this.props.data.text, this.props.highlightedText, true);
-        let highLightedParentText = LibraryUtilities.getHighlightedText(parentText, this.props.highlightedText, false);
-        let highLightedCategoryText = LibraryUtilities.getHighlightedText(categoryText, this.props.highlightedText, false);
+        let highLightedItemText = LibraryUtilities.getHighlightedText(this.props.data.text, searchText, true);
+        let highLightedParentText = LibraryUtilities.getHighlightedText(parentText, searchText, false);
+        let highLightedCategoryText = LibraryUtilities.getHighlightedText(categoryText, searchText, false);
         let itemTypeIconPath = "src/resources/icons/library-" + this.props.data.itemType + ".svg";
         let itemDescription: JSX.Element = null;
 
-        if (this.props.detailed) {
+        if (this.props.libraryContainer.detailed) {
             let description = "No description available";
             if (this.props.data.description && this.props.data.description.length > 0) {
                 description = this.props.data.description;
@@ -148,12 +130,12 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
 
     onParentTextClicked(event: any) {
         event.stopPropagation();
-        this.props.onParentTextClicked(this.props.pathToItem);
+        this.props.onParentTextClicked(this.props.data.pathToItem);
     }
 
     onItemClicked() {
         // Update selection index when an item is clicked
-        this.props.libraryContainer.setSelectionIndex(this.props.index);
+        this.props.libraryContainer.setSelection(this.props.index);
         this.props.libraryContainer.raiseEvent("itemClicked", this.props.data.contextData);
     };
 
