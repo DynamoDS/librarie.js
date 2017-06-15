@@ -115,7 +115,7 @@ exports[`LibraryContainer Test UI rendering of Library Item and child components
 </LibraryItem>
 `;
 
-exports[`LibraryContainer Test UI rendering of single component Library Item 1`] = `
+exports[`LibraryContainer Test UI rendering of single component of Library Item 1`] = `
 <div
   className="LibraryItemContainerNone"
 >
