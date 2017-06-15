@@ -34,6 +34,7 @@
     "cross-env": "^3.2.4",
     "css-loader": "^0.27.3",
     "enzyme": "^2.8.2",
+    "enzyme-to-json": "^1.5.1",
     "file-loader": "^0.10.1",
     "jest": "^19.0.2",
     "mocha": "^3.3.0",
@@ -65,6 +66,9 @@
     ],
     "testPathIgnorePatterns": [
       "__tests__/data/"
+    ],
+    "snapshotSerializers": [
+      "<rootDir>/node_modules/enzyme-to-json/serializer"
     ]
   }
 }
