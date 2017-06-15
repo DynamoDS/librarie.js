@@ -41,14 +41,6 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
         window.removeEventListener("keydown", this.handleKeyDown);
     }
 
-    // componentWillReceiveProps(nextProps: SearchResultItemProps) {
-    //     if (nextProps.libraryContainer.selectionIndex == this.props.index) {
-    //         this.setState({ selected: true });
-    //     } else if (this.state.selected && nextProps.libraryContainer.selectionIndex != this.props.index) {
-    //         this.setState({ selected: false });
-    //     }
-    // }
-
     // Update selection state and scroll current item into view if the selected item is not in view yet.
     componentDidUpdate() {
         if (this.state.selected) {
