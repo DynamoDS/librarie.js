@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { shallow, mount } from 'enzyme';
-import { expect } from 'chai';
+import {shallow,mount} from 'enzyme';
 import * as LibraryEntryPoint from '../src/entry-point';
 import { LibraryItem } from '../src/components/LibraryItem';
 import { ItemData } from "../src/LibraryUtilities";
@@ -8,7 +7,7 @@ import * as chai from 'chai';
 
 describe("sample test", function () {
   it("should add two numbers", function () {
-    expect(1 + 2).to.equal(3);
+    chai.expect(1 + 2).to.equal(3);
   });
 });
 
@@ -93,16 +92,16 @@ describe("LibraryContainer UI", function () {
 
     let libraryItem = mount(<LibraryItem libraryContainer={libContainer} data={data} />);
 
-    expect(libraryItem).to.have.lengthOf(1);
-    expect(libraryItem.props().data.childItems).to.have.lengthOf(2);
-    expect(libraryItem.props().data.text).to.equal("TestItem");
-    expect(libraryItem.props().data.showHeader).to.be.true;
-    expect(libraryItem.props().data.childItems[0].text).to.equal("Child0");
-    expect(libraryItem.props().data.childItems[1].text).to.equal("Child1");
+    chai.expect(libraryItem).to.have.lengthOf(1);
+    chai.expect(libraryItem.props().data.childItems).to.have.lengthOf(2);
+    chai.expect(libraryItem.props().data.text).to.equal("TestItem");
+    chai.expect(libraryItem.props().data.showHeader).to.be.true;
+    chai.expect(libraryItem.props().data.childItems[0].text).to.equal("Child0");
+    chai.expect(libraryItem.props().data.childItems[1].text).to.equal("Child1");
     let header = libraryItem.find(('div.LibraryItemHeader')).at(0);// the state of LibraryItem is changed when clicking on header
-    expect(header).to.have.lengthOf(1); // verify that there is a header
+    chai.expect(header).to.have.lengthOf(1); // verify that there is a header
     header.simulate('click'); // enzyme function to simulate mouse click
-    expect(libraryItem.state('expanded')).to.be.true; // check for if the libraryItem is expanded after mouse click       
+    chai.expect(libraryItem.state('expanded')).to.be.true; // check for if the libraryItem is expanded after mouse click       
   });
 
   // Test uses timeout function and testframework knows 
@@ -192,9 +191,9 @@ describe("LibraryContainer UI", function () {
     chai.expect(detail).to.have.lengthOf(1);
     detail.simulate('click');
     // Verify the detailed view is active
-    expect(libContainer.state('detailed')).to.be.true; 
+    chai.expect(libContainer.state('detailed')).to.be.true;
     setTimeout(function () {    // Search has timeout delay so verify results after the search is displayed
-    // Get the search results  
+    // Get the search results   
     let value = libContainer.find('SearchResultItem');
     chai.expect(value).to.have.lengthOf(2);
     chai.expect(value.at(0).props().data.text).to.equal("Child1");
@@ -202,9 +201,9 @@ describe("LibraryContainer UI", function () {
     // Make sure the search results has correct item description
     let describe = libContainer.find('div.ItemDescription');
     chai.expect(describe).to.have.lengthOf(2);
-    expect(describe.at(0)).to.equal('First item');
-    expect(describe.at(0)).to.equal('Second item');
+    chai.expect(describe.at(0).text()).to.equal('First item');    
+    chai.expect(describe.at(1).text()).to.equal('Second item');
     done(); // For testframework to know when to terminate execution
-    }, 400);
+    }, 500);
   });
 });
