@@ -372,8 +372,8 @@ export function constructFromIncludeInfo(typeListNodes: TypeListNode[], includeI
     let nodeMatch = false;
     let nodeInculde = false;
 
-    // previousInclude is the includeInfo path of the pair before current pair.
-    let previousIncludePath = "";
+    // previousIncludeParts is the includeInfo path parts of the pair before current pair.
+    let previousIncludeParts: string[] = [];
 
     // previousStartingIndex keeps track of the index of typeListNodes when previousInclude starts comparison.
     let previousStartingIndex = 0;
@@ -384,66 +384,56 @@ export function constructFromIncludeInfo(typeListNodes: TypeListNode[], includeI
     for (let i = 0; i < includeItemPairs.length; i++) {
 
         let include = includeItemPairs[i].include;
-        let includeParts = include.path.split(".");
-        let previousIncludeParts = previousIncludePath.split(".");
+        let includeParts = splitToParts(prefix, include.path);
 
         // Start from previousStartingIndex if current path is same as or included by previous path.
-        if (i >= 1 && (compareParts(includeParts, previousIncludeParts) >= 0 ||
-            include.path.indexOf(prefix) != -1 &&
-            previousIncludePath.length > 0 &&
-            include.path.startsWith(previousIncludePath))) {
+        if (i >= 1 && (previousIncludeParts.length > 0 && compareParts(includeParts, previousIncludeParts) >= 0)) {
             t = previousStartingIndex;
             currentStartingIndex = previousStartingIndex;
-            previousIncludePath = "";
+            previousIncludeParts = [];
         }
 
         // Continue iterating through the remaining includeInfo even if there are no more typeListNodes
         if (t >= typeListNodes.length) {
-            previousIncludePath = include.path;
+            previousIncludeParts = includeParts;
             previousStartingIndex = currentStartingIndex;
             currentStartingIndex = t;
             continue;
         }
 
-        let fullyQualifiedNameParts = typeListNodes[t].fullyQualifiedName.split(".");
         let node = typeListNodes[t];
+        let fullyQualifiedNameParts = splitToParts(prefix, node.fullyQualifiedName);
         let parentItem = includeItemPairs[i].parentItem;
-        let newName = "";
         nodeMatch = false;
         nodeInculde = false;
 
-        if (include.path.indexOf(prefix) == -1) {
-            let compareResult = compareParts(fullyQualifiedNameParts, includeParts);
+        let compareResult = compareParts(fullyQualifiedNameParts, includeParts);
 
-            if (compareResult == 0) {
-                nodeMatch = true;
-            } else if (compareResult > 0) {
-                nodeInculde = true;
-                let newNameParts = -compareResult - 1;
-                if (include.inclusive == false) {
-                    newNameParts = -compareResult;
-                }
-
-                newName = fullyQualifiedNameParts.slice(newNameParts).join('.');
-            } else if (node.fullyQualifiedName.localeCompare(include.path) < 0) {
-                i--;
-                t++;
-                continue;
-            }
-        } else if (node.fullyQualifiedName.startsWith(include.path)) {
+        if (compareResult == 0) {
+            nodeMatch = true;
+        } else if (compareResult > 0) {
             nodeInculde = true;
-            let prefixIndex = node.fullyQualifiedName.indexOf(prefix);
-            newName = node.fullyQualifiedName.substring(prefixIndex + prefix.length);
+            let newNameParts = -compareResult - 1;
+            if (include.inclusive == false) {
+                newNameParts = -compareResult;
+            }
+
+            if (fullyQualifiedNameParts[0].indexOf(prefix) != -1) {
+                fullyQualifiedNameParts.shift();
+            }
+
+            let newName = fullyQualifiedNameParts.slice(newNameParts).join('.');
+            buildLibraryItemsFromName(node, parentItem, newName, include.iconUrl);
+        } else if (node.fullyQualifiedName.localeCompare(include.path) < 0) {
+            i--;
+            t++;
+            continue;
         }
 
         if (nodeMatch) {
             let item = new ItemData(fullyQualifiedNameParts[fullyQualifiedNameParts.length - 1]);
             item.constructFromTypeListNode(node);
             parentItem.appendChild(item);
-        }
-
-        if (nodeInculde) {
-            buildLibraryItemsFromName(node, parentItem, newName, include.iconUrl);
         }
 
         if (nodeMatch || nodeInculde) {
@@ -454,7 +444,7 @@ export function constructFromIncludeInfo(typeListNodes: TypeListNode[], includeI
 
         // Go to next includeInfo and update previousIncludePath, previousStartingIndex and currentStartingIndex
         if (!(nodeMatch || nodeInculde) || t > typeListNodes.length) {
-            previousIncludePath = include.path;
+            previousIncludeParts = includeParts;
             previousStartingIndex = currentStartingIndex;
             currentStartingIndex = t;
         }
@@ -497,7 +487,7 @@ export function buildLibrarySectionsFromLayoutSpecs(loadedTypes: any, layoutSpec
 }
 
 // Remove empty non-leaf nodes from items
-function removeEmptyNodes(items: ItemData[]) {
+export function removeEmptyNodes(items: ItemData[]) {
     items.forEach((item, index, items) => {
         if (item.childItems.length > 0) {
             removeEmptyNodes(item.childItems);
@@ -505,6 +495,31 @@ function removeEmptyNodes(items: ItemData[]) {
             items.splice(index, 1);
         }
     });
+}
+
+/**
+ * Split text to an string array by prefix and delimiter ".".
+ * 
+ * For example, if prefix is "://", text is "test://a.b.c", this will return 
+ * ["test://", "a", "b", "c"]; If text is "a.b.c", it will return ["a", "b", "c"]
+ */
+export function splitToParts(prefix: string, text: string): string[] {
+    let parts: string[] = [];
+    let prefixIndex = text.indexOf(prefix);
+
+    if (prefixIndex == -1 && text.length > 0) {
+        parts = text.split(".");
+    } else if (text.length > 0) {
+        let endIndex = prefixIndex + prefix.length;
+        parts.push(text.substring(0, endIndex));
+
+        let newText = text.substring(endIndex);
+        if (newText.length > 0) {
+            parts = parts.concat(newText.split("."));
+        }
+    }
+
+    return parts;
 }
 
 export function buildLibraryItemsFromName(typeListNode: TypeListNode, parentNode: ItemData, newNodeName?: string, iconUrl?: string) {

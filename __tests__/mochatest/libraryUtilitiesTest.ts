@@ -1298,3 +1298,54 @@ describe("sortItemsByText function", function () {
     expect(result[4]).to.equal(itemData5);
   });
 });
+
+describe("splitToParts function", function () {
+  let prefix = "://";
+
+  it("should return empty array if text is empty", function () {
+    let text = "";
+    let result = LibraryUtilities.splitToParts(prefix, text);
+    expect(result.length).to.equal(0);
+  });
+
+  it("should return correct parts if text doesn't have prefix or delimiter", function () {
+    let text = "a";
+    let result = LibraryUtilities.splitToParts(prefix, text);
+    expect(result.length).to.equal(1);
+    expect(result[0]).to.equal("a");
+  });
+
+  it("should return correct parts if text doesn't have prefix", function () {
+    let text = "a.b.c";
+    let result = LibraryUtilities.splitToParts(prefix, text);
+    expect(result.length).to.equal(3);
+    expect(result[0]).to.equal("a");
+    expect(result[1]).to.equal("b");
+    expect(result[2]).to.equal("c");
+  });
+
+  it("should return correct parts if text has only prefix", function () {
+    let text = "test://";
+    let result = LibraryUtilities.splitToParts(prefix, text);
+    expect(result.length).to.equal(1);
+    expect(result[0]).to.equal("test://");
+  });
+
+  it("should return correct parts if text has prefix but no delimiter", function () {
+    let text = "test://a";
+    let result = LibraryUtilities.splitToParts(prefix, text);
+    expect(result.length).to.equal(2);
+    expect(result[0]).to.equal("test://");
+    expect(result[1]).to.equal("a");
+  });
+
+  it("should return correct parts if text has prefix and delimiter", function () {
+    let text = "test://a.b.c";
+    let result = LibraryUtilities.splitToParts(prefix, text);
+    expect(result.length).to.equal(4);
+    expect(result[0]).to.equal("test://");
+    expect(result[1]).to.equal("a");
+    expect(result[2]).to.equal("b");
+    expect(result[3]).to.equal("c");
+  });
+});
