@@ -300,7 +300,9 @@ export function updateSections(oldLayoutSpecs: any, newLayoutSpecs: any): void {
 function convertLayoutElementToItemData(
     layoutElements: LayoutElement[],
     pairs: IncludeItemPair[],
-    parentItem?: ItemData): ItemData[] {
+    parentItem?: ItemData):
+    ItemData[] {
+
     let results: ItemData[] = [];
 
     for (let layoutElement of layoutElements) {
@@ -406,6 +408,7 @@ export function constructFromIncludeInfo(typeListNodes: TypeListNode[], includeI
         let fullyQualifiedNameParts = typeListNodes[t].fullyQualifiedName.split(".");
         let node = typeListNodes[t];
         let parentItem = includeItemPairs[i].parentItem;
+        let newName = "";
         nodeMatch = false;
         nodeInculde = false;
 
@@ -416,15 +419,12 @@ export function constructFromIncludeInfo(typeListNodes: TypeListNode[], includeI
                 nodeMatch = true;
             } else if (compareResult > 0) {
                 nodeInculde = true;
-
                 let newNameParts = -compareResult - 1;
                 if (include.inclusive == false) {
                     newNameParts = -compareResult;
                 }
 
-                let newName = fullyQualifiedNameParts.slice(newNameParts).join('.');
-
-                buildLibraryItemsFromName(node, parentItem, newName, include.iconUrl);
+                newName = fullyQualifiedNameParts.slice(newNameParts).join('.');
             } else if (node.fullyQualifiedName.localeCompare(include.path) < 0) {
                 i--;
                 t++;
@@ -433,14 +433,17 @@ export function constructFromIncludeInfo(typeListNodes: TypeListNode[], includeI
         } else if (node.fullyQualifiedName.startsWith(include.path)) {
             nodeInculde = true;
             let prefixIndex = node.fullyQualifiedName.indexOf(prefix);
-            let newName = node.fullyQualifiedName.substring(prefixIndex + prefix.length);
-            buildLibraryItemsFromName(node, parentItem, newName);
+            newName = node.fullyQualifiedName.substring(prefixIndex + prefix.length);
         }
 
         if (nodeMatch) {
             let item = new ItemData(fullyQualifiedNameParts[fullyQualifiedNameParts.length - 1]);
             item.constructFromTypeListNode(node);
             parentItem.appendChild(item);
+        }
+
+        if (nodeInculde) {
+            buildLibraryItemsFromName(node, parentItem, newName, include.iconUrl);
         }
 
         if (nodeMatch || nodeInculde) {
@@ -487,15 +490,6 @@ export function buildLibrarySectionsFromLayoutSpecs(loadedTypes: any, layoutSpec
     let miscSection = sections.find(section => section.text == miscSectionStr);
     let unprocessedNodes = sortedTypeListNodes.filter(node => !node.processed);
     unprocessedNodes.forEach(node => buildLibraryItemsFromName(node, miscSection));
-
-    for (let section of sections) {
-        // Change the itemType of the outermost nodes to category
-        section.childItems.forEach(item => {
-            if (item.itemType == "group") {
-                item.itemType = "category";
-            }
-        });
-    }
 
     removeEmptyNodes(sections);
 
@@ -575,6 +569,8 @@ export function buildLibraryItemsFromName(typeListNode: TypeListNode, parentNode
     if (iconUrl) {
         newParentNode.itemType = "none";
         newParentNode.iconUrl = iconUrl;
+    } else if (parentNode.itemType === "section") {
+        newParentNode.itemType = "category";
     } else {
         newParentNode.itemType = "group";
     }

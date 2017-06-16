@@ -29,9 +29,21 @@ function compareLayoutElements(actual: LibraryUtilities.LayoutElement, expected:
 
 describe("isValidIncludeInfo function", function () {
   let includeItemPairs: LibraryUtilities.IncludeItemPair[];
+  let parentItem1: LibraryUtilities.ItemData;
+  let parentItem2: LibraryUtilities.ItemData;
+  let parentItem3: LibraryUtilities.ItemData;
+  let includeItemPair1: LibraryUtilities.IncludeItemPair;
+  let includeItemPair2: LibraryUtilities.IncludeItemPair;
+  let includeItemPair3: LibraryUtilities.IncludeItemPair;
 
   beforeEach(function () {
     includeItemPairs = [];
+    parentItem1 = new LibraryUtilities.ItemData("1");
+    parentItem2 = new LibraryUtilities.ItemData("2");
+    parentItem3 = new LibraryUtilities.ItemData("3");
+    includeItemPair1 = new LibraryUtilities.IncludeItemPair();
+    includeItemPair2 = new LibraryUtilities.IncludeItemPair();
+    includeItemPair3 = new LibraryUtilities.IncludeItemPair();
   });
 
   it("should return true if includeItemPairs is empty", function () {
@@ -40,89 +52,56 @@ describe("isValidIncludeInfo function", function () {
   });
 
   it("should return true if includeItemPairs is valid", function () {
-    let parentItem1 = new LibraryUtilities.ItemData("1");
-    let parentItem2 = new LibraryUtilities.ItemData("2");
-    let parentItem3 = new LibraryUtilities.ItemData("3");
-
-    let includeItemPair1 = new LibraryUtilities.IncludeItemPair();
-    let includeItemPair2 = new LibraryUtilities.IncludeItemPair();
-    let includeItemPair3 = new LibraryUtilities.IncludeItemPair();
-
-    includeItemPair1.include = { "path": "a" };
-    includeItemPair2.include = { "path": "b" };
-    includeItemPair3.include = { "path": "c" };
-
-    includeItemPair1.parentItem = parentItem1;
-    includeItemPair2.parentItem = parentItem2;
-    includeItemPair3.parentItem = parentItem3;
-
     includeItemPairs = [includeItemPair1, includeItemPair2, includeItemPair3];
+    let includeList = [{ "path": "a" }, { "path": "b" }, { "path": "c" }];
+    let parentItemList = [parentItem1, parentItem2, parentItem3];
+
+    includeItemPairs.forEach((pair, i) => {
+      pair.include = includeList[i];
+      pair.parentItem = parentItemList[i];
+    });
 
     let result = LibraryUtilities.isValidIncludeInfo(includeItemPairs);
     expect(result).to.equal(true);
   });
 
   it("should return false if includes are not unique", function () {
-    let parentItem1 = new LibraryUtilities.ItemData("1");
-    let parentItem2 = new LibraryUtilities.ItemData("2");
-
-    let includeItemPair1 = new LibraryUtilities.IncludeItemPair();
-    let includeItemPair2 = new LibraryUtilities.IncludeItemPair();
-    let includeItemPair3 = new LibraryUtilities.IncludeItemPair();
-
-    includeItemPair1.include = { "path": "a" };
-    includeItemPair2.include = { "path": "a" };
-    includeItemPair3.include = { "path": "b" };
-
-    includeItemPair1.parentItem = parentItem1;
-    includeItemPair2.parentItem = parentItem1;
-    includeItemPair3.parentItem = parentItem2;
-
     includeItemPairs = [includeItemPair1, includeItemPair2, includeItemPair3];
+    let includeList = [{ "path": "a" }, { "path": "a" }, { "path": "b" }];
+    let parentItemList = [parentItem1, parentItem1, parentItem2];
+
+    includeItemPairs.forEach((pair, i) => {
+      pair.include = includeList[i];
+      pair.parentItem = parentItemList[i];
+    });
 
     let result = LibraryUtilities.isValidIncludeInfo(includeItemPairs);
     expect(result).to.equal(false);
   });
 
   it("should return false if one include is contained in another include", function () {
-    let parentItem1 = new LibraryUtilities.ItemData("1");
-    let parentItem2 = new LibraryUtilities.ItemData("2");
-
-    let includeItemPair1 = new LibraryUtilities.IncludeItemPair();
-    let includeItemPair2 = new LibraryUtilities.IncludeItemPair();
-    let includeItemPair3 = new LibraryUtilities.IncludeItemPair();
-
-    includeItemPair1.include = { "path": "a" };
-    includeItemPair2.include = { "path": "a.b" };
-    includeItemPair3.include = { "path": "c" };
-
-    includeItemPair1.parentItem = parentItem1;
-    includeItemPair2.parentItem = parentItem1;
-    includeItemPair3.parentItem = parentItem2;
-
     includeItemPairs = [includeItemPair1, includeItemPair2, includeItemPair3];
+    let includeList = [{ "path": "a" }, { "path": "a.b" }, { "path": "c" }];
+    let parentItemList = [parentItem1, parentItem1, parentItem2];
+
+    includeItemPairs.forEach((pair, i) => {
+      pair.include = includeList[i];
+      pair.parentItem = parentItemList[i];
+    });
 
     let result = LibraryUtilities.isValidIncludeInfo(includeItemPairs);
     expect(result).to.equal(false);
   });
 
   it("should return false if one include with prefix is contained in another include", function () {
-    let parentItem1 = new LibraryUtilities.ItemData("1");
-    let parentItem2 = new LibraryUtilities.ItemData("2");
-
-    let includeItemPair1 = new LibraryUtilities.IncludeItemPair();
-    let includeItemPair2 = new LibraryUtilities.IncludeItemPair();
-    let includeItemPair3 = new LibraryUtilities.IncludeItemPair();
-
-    includeItemPair1.include = { "path": "a" };
-    includeItemPair2.include = { "path": "test://" };
-    includeItemPair3.include = { "path": "test://a" };
-
-    includeItemPair1.parentItem = parentItem1;
-    includeItemPair2.parentItem = parentItem2;
-    includeItemPair3.parentItem = parentItem2;
-
     includeItemPairs = [includeItemPair1, includeItemPair2, includeItemPair3];
+    let includeList = [{ "path": "a" }, { "path": "test://" }, { "path": "test://a" }];
+    let parentItemList = [parentItem1, parentItem2, parentItem2];
+
+    includeItemPairs.forEach((pair, i) => {
+      pair.include = includeList[i];
+      pair.parentItem = parentItemList[i];
+    });
 
     let result = LibraryUtilities.isValidIncludeInfo(includeItemPairs);
     expect(result).to.equal(false);
@@ -172,27 +151,21 @@ describe("constructFromIncludeInfo function", function () {
     pair3.parentItem = parentItem3;
     pair4.parentItem = parentItem4;
 
-    includeItemPairs.push(pair1);
-    includeItemPairs.push(pair2);
-    includeItemPairs.push(pair3);
-    includeItemPairs.push(pair4);
-
-    typeListNodes.push(node1);
-    typeListNodes.push(node2);
-    typeListNodes.push(node3);
-    typeListNodes.push(node4);
+    includeItemPairs = [pair1, pair2, pair3, pair4];
+    typeListNodes = [node1, node2, node3, node4];
   });
 
   it("should merge all typeListNodes if all of them are matched in include info", function () {
-    node1.fullyQualifiedName = "a";
-    node2.fullyQualifiedName = "b";
-    node3.fullyQualifiedName = "c";
-    node4.fullyQualifiedName = "d";
+    let nameList = ["a", "b", "c", "d"];
+    let includeList = [{ "path": "a" }, { "path": "b" }, { "path": "c" }, { "path": "d" }];
 
-    pair1.include = { "path": "a" };
-    pair2.include = { "path": "b" };
-    pair3.include = { "path": "c" };
-    pair4.include = { "path": "d" };
+    typeListNodes.forEach((node, i) => {
+      node.fullyQualifiedName = nameList[i];
+    });
+
+    includeItemPairs.forEach((pair, i) => {
+      pair.include = includeList[i];
+    });
 
     LibraryUtilities.constructFromIncludeInfo(typeListNodes, includeItemPairs);
 
@@ -213,15 +186,16 @@ describe("constructFromIncludeInfo function", function () {
   });
 
   it("should skip nodes that are not matched or included", function () {
-    node1.fullyQualifiedName = "a";
-    node2.fullyQualifiedName = "b";
-    node3.fullyQualifiedName = "c";
-    node4.fullyQualifiedName = "d";
+    let nameList = ["a", "b", "c", "d"];
+    let includeList = [{ "path": "a" }, { "path": "c" }, { "path": "d" }, { "path": "e" }];
 
-    pair1.include = { "path": "a" };
-    pair2.include = { "path": "c" };
-    pair3.include = { "path": "d" };
-    pair4.include = { "path": "e" };
+    typeListNodes.forEach((node, i) => {
+      node.fullyQualifiedName = nameList[i];
+    });
+
+    includeItemPairs.forEach((pair, i) => {
+      pair.include = includeList[i];
+    });
 
     LibraryUtilities.constructFromIncludeInfo(typeListNodes, includeItemPairs);
 
@@ -241,15 +215,16 @@ describe("constructFromIncludeInfo function", function () {
   });
 
   it("should merge typeListNodes even if appear in different include info", function () {
-    node1.fullyQualifiedName = "a";
-    node2.fullyQualifiedName = "b";
-    node3.fullyQualifiedName = "c";
-    node4.fullyQualifiedName = "d";
+    let nameList = ["a", "b", "c", "d"];
+    let includeList = [{ "path": "a" }, { "path": "b" }, { "path": "b" }, { "path": "c" }];
 
-    pair1.include = { "path": "a" };
-    pair2.include = { "path": "b" };
-    pair3.include = { "path": "b" };
-    pair4.include = { "path": "c" };
+    typeListNodes.forEach((node, i) => {
+      node.fullyQualifiedName = nameList[i];
+    });
+
+    includeItemPairs.forEach((pair, i) => {
+      pair.include = includeList[i];
+    });
 
     LibraryUtilities.constructFromIncludeInfo(typeListNodes, includeItemPairs);
 
@@ -270,15 +245,16 @@ describe("constructFromIncludeInfo function", function () {
   });
 
   it("should merge typeListNodes if they are matched or included in include info", function () {
-    node1.fullyQualifiedName = "b";
-    node2.fullyQualifiedName = "c.d";
-    node3.fullyQualifiedName = "c.e.f";
-    node4.fullyQualifiedName = "c.g";
+    let nameList = ["b", "c.d", "c.e.f", "c.g"];
+    let includeList = [{ "path": "a" }, { "path": "c.d" }, { "path": "c.e" }, { "path": "c.g" }];
 
-    pair1.include = { "path": "a" };
-    pair2.include = { "path": "c.d" };
-    pair3.include = { "path": "c.e" };
-    pair4.include = { "path": "c.g" };
+    typeListNodes.forEach((node, i) => {
+      node.fullyQualifiedName = nameList[i];
+    });
+
+    includeItemPairs.forEach((pair, i) => {
+      pair.include = includeList[i];
+    });
 
     LibraryUtilities.constructFromIncludeInfo(typeListNodes, includeItemPairs);
 
@@ -300,16 +276,16 @@ describe("constructFromIncludeInfo function", function () {
   });
 
   it("should merge typeListNodes based on the attribute inclusive of include info", function () {
-    node1.fullyQualifiedName = "b";
-    node2.fullyQualifiedName = "c.d";
-    node3.fullyQualifiedName = "c.e.f";
-    node4.fullyQualifiedName = "c.g";
+    let nameList = ["b", "c.d", "c.e.f", "c.g"];
+    let includeList = [{ "path": "a" }, { "path": "c.d" }, { "path": "c.e", "inclusive": false }, { "path": "c.g" }];
 
-    pair1.include = { "path": "a" };
-    pair2.include = { "path": "c.d" };
-    pair3.include = { "path": "c.e" };
-    pair3.include.inclusive = false;
-    pair4.include = { "path": "c.g" };
+    typeListNodes.forEach((node, i) => {
+      node.fullyQualifiedName = nameList[i];
+    });
+
+    includeItemPairs.forEach((pair, i) => {
+      pair.include = includeList[i];
+    });
 
     LibraryUtilities.constructFromIncludeInfo(typeListNodes, includeItemPairs);
 
@@ -330,15 +306,16 @@ describe("constructFromIncludeInfo function", function () {
   });
 
   it("should merge typeListNodes based on include path with prefix", function () {
-    node1.fullyQualifiedName = "a";
-    node2.fullyQualifiedName = "b";
-    node3.fullyQualifiedName = "test://c";
-    node4.fullyQualifiedName = "test://d";
+    let nameList = ["a", "b", "test://c", "test://d"];
+    let includeList = [{ "path": "a" }, { "path": "b" }, { "path": "test://c" }, { "path": "test://d" }];
 
-    pair1.include = { "path": "a" };
-    pair2.include = { "path": "b" };
-    pair3.include = { "path": "test://c" };
-    pair4.include = { "path": "test://d" };
+    typeListNodes.forEach((node, i) => {
+      node.fullyQualifiedName = nameList[i];
+    });
+
+    includeItemPairs.forEach((pair, i) => {
+      pair.include = includeList[i];
+    });
 
     LibraryUtilities.constructFromIncludeInfo(typeListNodes, includeItemPairs);
 
@@ -359,15 +336,16 @@ describe("constructFromIncludeInfo function", function () {
   });
 
   it("should merge typeListNodes even if multiple include paths have the same prefix", function () {
-    node1.fullyQualifiedName = "a";
-    node2.fullyQualifiedName = "b";
-    node3.fullyQualifiedName = "test://c";
-    node4.fullyQualifiedName = "test://d";
+    let nameList = ["a", "b", "test://c", "test://d"];
+    let includeList = [{ "path": "a" }, { "path": "b" }, { "path": "test://" }, { "path": "test://" }];
 
-    pair1.include = { "path": "a" };
-    pair2.include = { "path": "b" };
-    pair3.include = { "path": "test://" };
-    pair4.include = { "path": "test://" };
+    typeListNodes.forEach((node, i) => {
+      node.fullyQualifiedName = nameList[i];
+    });
+
+    includeItemPairs.forEach((pair, i) => {
+      pair.include = includeList[i];
+    });
 
     LibraryUtilities.constructFromIncludeInfo(typeListNodes, includeItemPairs);
 
@@ -390,15 +368,16 @@ describe("constructFromIncludeInfo function", function () {
   });
 
   it("should merge typeListNodes and build node name from their fullyQualifiedNames after prefix", function () {
-    node1.fullyQualifiedName = "a";
-    node2.fullyQualifiedName = "b";
-    node3.fullyQualifiedName = "test://c.d.e";
-    node4.fullyQualifiedName = "test://f";
+    let nameList = ["a", "b", "test://c.d.e", "test://f"];
+    let includeList = [{ "path": "a" }, { "path": "b" }, { "path": "test://" }, { "path": "test://c" }];
 
-    pair1.include = { "path": "a" };
-    pair2.include = { "path": "b" };
-    pair3.include = { "path": "test://" };
-    pair4.include = { "path": "test://c" };
+    typeListNodes.forEach((node, i) => {
+      node.fullyQualifiedName = nameList[i];
+    });
+
+    includeItemPairs.forEach((pair, i) => {
+      pair.include = includeList[i];
+    });
 
     LibraryUtilities.constructFromIncludeInfo(typeListNodes, includeItemPairs);
 
