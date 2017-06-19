@@ -22,9 +22,17 @@ Installing all dependencies
 
 ## Run Tests
 
+- Run all tests
+
     `$ npm run test`
 
-    Test file is at folder `./__test__/`
+    Test file is at folder `./__tests__/`
+
+- Run test for utility functions
+
+    `$ npm run utiltest`
+
+    Test file is at `./__tests__/mochatest/libraryUtilitiesTest.ts`
 
 - Example test  
 
