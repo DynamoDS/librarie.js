@@ -5,7 +5,7 @@
     <desc>Created with Sketch.</desc>
     <defs></defs>
     <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <polygon id="Triangle" fill="#808080" transform="translate(18.000000, 16.500000) rotate(90.000000) translate(-18.000000, -16.500000) " points="18 13.5 21.25 19.5 14.75 19.5"></polygon>
+        <polygon id="Triangle" fill="#808080" transform="translate(20.000000, 16.500000) rotate(90.000000) translate(-20.000000, -16.500000) " points="20 13.5 23.25 19.5 16.75 19.5"></polygon>
         <path d="M1.5,16.5 L10.5,16.5" id="Line" stroke="#808080" stroke-linecap="square"></path>
         <path d="M0.5,-0.5 L0.5,32.5" id="Line" stroke="#808080" stroke-linecap="square"></path>
     </g>
