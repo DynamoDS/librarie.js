@@ -27,6 +27,380 @@ function compareLayoutElements(actual: LibraryUtilities.LayoutElement, expected:
   }
 }
 
+describe("isValidIncludeInfo function", function () {
+  let includeItemPairs: LibraryUtilities.IncludeItemPair[];
+  let owningItem1: LibraryUtilities.ItemData;
+  let owningItem2: LibraryUtilities.ItemData;
+  let owningItem3: LibraryUtilities.ItemData;
+  let includeItemPair1: LibraryUtilities.IncludeItemPair;
+  let includeItemPair2: LibraryUtilities.IncludeItemPair;
+  let includeItemPair3: LibraryUtilities.IncludeItemPair;
+
+  beforeEach(function () {
+    includeItemPairs = [];
+    owningItem1 = new LibraryUtilities.ItemData("1");
+    owningItem2 = new LibraryUtilities.ItemData("2");
+    owningItem3 = new LibraryUtilities.ItemData("3");
+    includeItemPair1 = new LibraryUtilities.IncludeItemPair(null, owningItem1);
+    includeItemPair2 = new LibraryUtilities.IncludeItemPair(null, owningItem2);
+    includeItemPair3 = new LibraryUtilities.IncludeItemPair(null, owningItem3);
+  });
+
+  it("should return true if includeItemPairs is empty", function () {
+    let result = LibraryUtilities.isValidIncludeInfo(includeItemPairs);
+    expect(result).to.equal(true);
+  });
+
+  it("should return true if includeItemPairs is valid", function () {
+    includeItemPairs = [includeItemPair1, includeItemPair2, includeItemPair3];
+    let includeList = [{ "path": "a" }, { "path": "b" }, { "path": "c" }];
+    let owningItemList = [owningItem1, owningItem2, owningItem3];
+
+    includeItemPairs.forEach((pair, i) => {
+      pair.include = includeList[i];
+      pair.owningItem = owningItemList[i];
+    });
+
+    let result = LibraryUtilities.isValidIncludeInfo(includeItemPairs);
+    expect(result).to.equal(true);
+  });
+
+  it("should return false if includes are not unique", function () {
+    includeItemPairs = [includeItemPair1, includeItemPair2, includeItemPair3];
+    let includeList = [{ "path": "a" }, { "path": "a" }, { "path": "b" }];
+    let owningItemList = [owningItem1, owningItem1, owningItem2];
+
+    includeItemPairs.forEach((pair, i) => {
+      pair.include = includeList[i];
+      pair.owningItem = owningItemList[i];
+    });
+
+    let result = LibraryUtilities.isValidIncludeInfo(includeItemPairs);
+    expect(result).to.equal(false);
+  });
+
+  it("should return false if one include is contained in another include", function () {
+    includeItemPairs = [includeItemPair1, includeItemPair2, includeItemPair3];
+    let includeList = [{ "path": "a" }, { "path": "a.b" }, { "path": "c" }];
+    let owningItemList = [owningItem1, owningItem1, owningItem2];
+
+    includeItemPairs.forEach((pair, i) => {
+      pair.include = includeList[i];
+      pair.owningItem = owningItemList[i];
+    });
+
+    let result = LibraryUtilities.isValidIncludeInfo(includeItemPairs);
+    expect(result).to.equal(false);
+  });
+
+  it("should return false if one include with prefix is contained in another include", function () {
+    includeItemPairs = [includeItemPair1, includeItemPair2, includeItemPair3];
+    let includeList = [{ "path": "a" }, { "path": "test://" }, { "path": "test://a" }];
+    let owningItemList = [owningItem1, owningItem2, owningItem2];
+
+    includeItemPairs.forEach((pair, i) => {
+      pair.include = includeList[i];
+      pair.owningItem = owningItemList[i];
+    });
+
+    let result = LibraryUtilities.isValidIncludeInfo(includeItemPairs);
+    expect(result).to.equal(false);
+  });
+});
+
+
+describe("constructFromIncludeInfo function", function () {
+  let includeItemPairs: LibraryUtilities.IncludeItemPair[];
+  let typeListNodes: LibraryUtilities.TypeListNode[];
+
+  let pair1: LibraryUtilities.IncludeItemPair;
+  let pair2: LibraryUtilities.IncludeItemPair;
+  let pair3: LibraryUtilities.IncludeItemPair;
+  let pair4: LibraryUtilities.IncludeItemPair;
+
+  let node1: LibraryUtilities.TypeListNode;
+  let node2: LibraryUtilities.TypeListNode;
+  let node3: LibraryUtilities.TypeListNode;
+  let node4: LibraryUtilities.TypeListNode;
+
+  let owningItem1: LibraryUtilities.ItemData;
+  let owningItem2: LibraryUtilities.ItemData;
+  let owningItem3: LibraryUtilities.ItemData;
+  let owningItem4: LibraryUtilities.ItemData;
+
+  beforeEach(function () {
+    includeItemPairs = [];
+    typeListNodes = [];
+
+    owningItem1 = new LibraryUtilities.ItemData("1");
+    owningItem2 = new LibraryUtilities.ItemData("2");
+    owningItem3 = new LibraryUtilities.ItemData("3");
+    owningItem4 = new LibraryUtilities.ItemData("4");
+
+    pair1 = new LibraryUtilities.IncludeItemPair(null, owningItem1);
+    pair2 = new LibraryUtilities.IncludeItemPair(null, owningItem2);
+    pair3 = new LibraryUtilities.IncludeItemPair(null, owningItem3);
+    pair4 = new LibraryUtilities.IncludeItemPair(null, owningItem4);
+
+    node1 = new LibraryUtilities.TypeListNode(new testClasses.TypeListNodeData());
+    node2 = new LibraryUtilities.TypeListNode(new testClasses.TypeListNodeData());
+    node3 = new LibraryUtilities.TypeListNode(new testClasses.TypeListNodeData());
+    node4 = new LibraryUtilities.TypeListNode(new testClasses.TypeListNodeData());
+
+    includeItemPairs = [pair1, pair2, pair3, pair4];
+    typeListNodes = [node1, node2, node3, node4];
+  });
+
+  it("should merge all typeListNodes if all of them are matched in include info", function () {
+    let nameList = ["a", "b", "c", "d"];
+    let includeList = [{ "path": "a" }, { "path": "b" }, { "path": "c" }, { "path": "d" }];
+
+    typeListNodes.forEach((node, i) => {
+      node.fullyQualifiedName = nameList[i];
+    });
+
+    includeItemPairs.forEach((pair, i) => {
+      pair.include = includeList[i];
+    });
+
+    LibraryUtilities.constructFromIncludeInfo(typeListNodes, includeItemPairs);
+
+    expect(owningItem1.childItems.length).to.equal(1);
+    expect(owningItem2.childItems.length).to.equal(1);
+    expect(owningItem3.childItems.length).to.equal(1);
+    expect(owningItem4.childItems.length).to.equal(1);
+
+    expect(owningItem1.childItems[0].text).to.equal("a");
+    expect(owningItem2.childItems[0].text).to.equal("b");
+    expect(owningItem3.childItems[0].text).to.equal("c");
+    expect(owningItem4.childItems[0].text).to.equal("d");
+
+    expect(node1.processed).to.equal(true);
+    expect(node2.processed).to.equal(true);
+    expect(node3.processed).to.equal(true);
+    expect(node4.processed).to.equal(true);
+  });
+
+  it("should skip nodes that are not matched or included", function () {
+    let nameList = ["a", "b", "c", "d"];
+    let includeList = [{ "path": "a" }, { "path": "c" }, { "path": "d" }, { "path": "e" }];
+
+    typeListNodes.forEach((node, i) => {
+      node.fullyQualifiedName = nameList[i];
+    });
+
+    includeItemPairs.forEach((pair, i) => {
+      pair.include = includeList[i];
+    });
+
+    LibraryUtilities.constructFromIncludeInfo(typeListNodes, includeItemPairs);
+
+    expect(owningItem1.childItems.length).to.equal(1);
+    expect(owningItem2.childItems.length).to.equal(1);
+    expect(owningItem3.childItems.length).to.equal(1);
+    expect(owningItem4.childItems.length).to.equal(0);
+
+    expect(owningItem1.childItems[0].text).to.equal("a");
+    expect(owningItem2.childItems[0].text).to.equal("c");
+    expect(owningItem3.childItems[0].text).to.equal("d");
+
+    expect(node1.processed).to.equal(true);
+    expect(node2.processed).to.equal(false);
+    expect(node3.processed).to.equal(true);
+    expect(node4.processed).to.equal(true);
+  });
+
+  it("should merge typeListNodes even if appear in different include info", function () {
+    let nameList = ["a", "b", "c", "d"];
+    let includeList = [{ "path": "a" }, { "path": "b" }, { "path": "b" }, { "path": "c" }];
+
+    typeListNodes.forEach((node, i) => {
+      node.fullyQualifiedName = nameList[i];
+    });
+
+    includeItemPairs.forEach((pair, i) => {
+      pair.include = includeList[i];
+    });
+
+    LibraryUtilities.constructFromIncludeInfo(typeListNodes, includeItemPairs);
+
+    expect(owningItem1.childItems.length).to.equal(1);
+    expect(owningItem2.childItems.length).to.equal(1);
+    expect(owningItem3.childItems.length).to.equal(1);
+    expect(owningItem4.childItems.length).to.equal(1);
+
+    expect(owningItem1.childItems[0].text).to.equal("a");
+    expect(owningItem2.childItems[0].text).to.equal("b");
+    expect(owningItem3.childItems[0].text).to.equal("b");
+    expect(owningItem4.childItems[0].text).to.equal("c");
+
+    expect(node1.processed).to.equal(true);
+    expect(node2.processed).to.equal(true);
+    expect(node3.processed).to.equal(true);
+    expect(node4.processed).to.equal(false);
+  });
+
+  it("should merge typeListNodes if they are matched or included in include info", function () {
+    let nameList = ["b", "c.d", "c.e.f", "c.g"];
+    let includeList = [{ "path": "a" }, { "path": "c.d" }, { "path": "c.e" }, { "path": "c.g" }];
+
+    typeListNodes.forEach((node, i) => {
+      node.fullyQualifiedName = nameList[i];
+    });
+
+    includeItemPairs.forEach((pair, i) => {
+      pair.include = includeList[i];
+    });
+
+    LibraryUtilities.constructFromIncludeInfo(typeListNodes, includeItemPairs);
+
+    expect(owningItem1.childItems.length).to.equal(0);
+    expect(owningItem2.childItems.length).to.equal(1);
+    expect(owningItem3.childItems.length).to.equal(1);
+    expect(owningItem3.childItems[0].childItems.length).to.equal(1);
+    expect(owningItem4.childItems.length).to.equal(1);
+
+    expect(owningItem2.childItems[0].text).to.equal("d");
+    expect(owningItem3.childItems[0].text).to.equal("e");
+    expect(owningItem3.childItems[0].childItems[0].text).to.equal("f");
+    expect(owningItem4.childItems[0].text).to.equal("g");
+
+    expect(node1.processed).to.equal(false);
+    expect(node2.processed).to.equal(true);
+    expect(node3.processed).to.equal(true);
+    expect(node4.processed).to.equal(true);
+  });
+
+  it("should merge typeListNodes based on the attribute inclusive of include info", function () {
+    let nameList = ["b", "c.d", "c.e.f", "c.g"];
+    let includeList = [{ "path": "a" }, { "path": "c.d" }, { "path": "c.e", "inclusive": false }, { "path": "c.g" }];
+
+    typeListNodes.forEach((node, i) => {
+      node.fullyQualifiedName = nameList[i];
+    });
+
+    includeItemPairs.forEach((pair, i) => {
+      pair.include = includeList[i];
+    });
+
+    LibraryUtilities.constructFromIncludeInfo(typeListNodes, includeItemPairs);
+
+    expect(owningItem1.childItems.length).to.equal(0);
+    expect(owningItem2.childItems.length).to.equal(1);
+    expect(owningItem3.childItems.length).to.equal(1);
+    expect(owningItem3.childItems[0].childItems.length).to.equal(0);
+    expect(owningItem4.childItems.length).to.equal(1);
+
+    expect(owningItem2.childItems[0].text).to.equal("d");
+    expect(owningItem3.childItems[0].text).to.equal("f");
+    expect(owningItem4.childItems[0].text).to.equal("g");
+
+    expect(node1.processed).to.equal(false);
+    expect(node2.processed).to.equal(true);
+    expect(node3.processed).to.equal(true);
+    expect(node4.processed).to.equal(true);
+  });
+
+  it("should merge typeListNodes based on include path with prefix", function () {
+    let nameList = ["a", "b", "test://c", "test://d"];
+    let includeList = [{ "path": "a" }, { "path": "b" }, { "path": "test://c" }, { "path": "test://d" }];
+
+    typeListNodes.forEach((node, i) => {
+      node.fullyQualifiedName = nameList[i];
+    });
+
+    includeItemPairs.forEach((pair, i) => {
+      pair.include = includeList[i];
+    });
+
+    LibraryUtilities.constructFromIncludeInfo(typeListNodes, includeItemPairs);
+
+    expect(owningItem1.childItems.length).to.equal(1);
+    expect(owningItem2.childItems.length).to.equal(1);
+    expect(owningItem3.childItems.length).to.equal(1);
+    expect(owningItem4.childItems.length).to.equal(1);
+
+    expect(owningItem1.childItems[0].text).to.equal("a");
+    expect(owningItem2.childItems[0].text).to.equal("b");
+    expect(owningItem3.childItems[0].text).to.equal("c");
+    expect(owningItem4.childItems[0].text).to.equal("d");
+
+    expect(node1.processed).to.equal(true);
+    expect(node2.processed).to.equal(true);
+    expect(node3.processed).to.equal(true);
+    expect(node4.processed).to.equal(true);
+  });
+
+  it("should merge typeListNodes even if multiple include paths have the same prefix", function () {
+    let nameList = ["a", "b", "test://c", "test://d"];
+    let includeList = [{ "path": "a" }, { "path": "b" }, { "path": "test://" }, { "path": "test://" }];
+
+    typeListNodes.forEach((node, i) => {
+      node.fullyQualifiedName = nameList[i];
+    });
+
+    includeItemPairs.forEach((pair, i) => {
+      pair.include = includeList[i];
+    });
+
+    LibraryUtilities.constructFromIncludeInfo(typeListNodes, includeItemPairs);
+
+    expect(owningItem1.childItems.length).to.equal(1);
+    expect(owningItem2.childItems.length).to.equal(1);
+    expect(owningItem3.childItems.length).to.equal(2);
+    expect(owningItem4.childItems.length).to.equal(2);
+
+    expect(owningItem1.childItems[0].text).to.equal("a");
+    expect(owningItem2.childItems[0].text).to.equal("b");
+    expect(owningItem3.childItems[0].text).to.equal("c");
+    expect(owningItem3.childItems[1].text).to.equal("d");
+    expect(owningItem4.childItems[0].text).to.equal("c");
+    expect(owningItem4.childItems[1].text).to.equal("d");
+
+    expect(node1.processed).to.equal(true);
+    expect(node2.processed).to.equal(true);
+    expect(node3.processed).to.equal(true);
+    expect(node4.processed).to.equal(true);
+  });
+
+  it("should merge typeListNodes and build node name from their fullyQualifiedNames after prefix", function () {
+    let nameList = ["a", "b", "test://c.d.e", "test://f"];
+    let includeList = [{ "path": "a" }, { "path": "b" }, { "path": "test://" }, { "path": "test://c" }];
+
+    typeListNodes.forEach((node, i) => {
+      node.fullyQualifiedName = nameList[i];
+    });
+
+    includeItemPairs.forEach((pair, i) => {
+      pair.include = includeList[i];
+    });
+
+    LibraryUtilities.constructFromIncludeInfo(typeListNodes, includeItemPairs);
+
+    expect(owningItem1.childItems.length).to.equal(1);
+    expect(owningItem2.childItems.length).to.equal(1);
+    expect(owningItem3.childItems.length).to.equal(2);
+    expect(owningItem4.childItems.length).to.equal(1);
+
+    expect(owningItem1.childItems[0].text).to.equal("a");
+    expect(owningItem2.childItems[0].text).to.equal("b");
+    expect(owningItem3.childItems[0].text).to.equal("c");
+    expect(owningItem3.childItems[1].text).to.equal("f");
+    expect(owningItem3.childItems[0].childItems[0].text).to.equal("d");
+    expect(owningItem3.childItems[0].childItems[0].childItems[0].text).to.equal("e");
+    expect(owningItem4.childItems[0].text).to.equal("c");
+    expect(owningItem4.childItems[0].childItems[0].text).to.equal("d");
+    expect(owningItem4.childItems[0].childItems[0].childItems[0].text).to.equal("e");
+
+    expect(node1.processed).to.equal(true);
+    expect(node2.processed).to.equal(true);
+    expect(node3.processed).to.equal(true);
+    expect(node4.processed).to.equal(true);
+  });
+
+});
+
+
 describe("updateSections function", function () {
 
   it("should throw exceptions 0", function () {
@@ -605,588 +979,6 @@ describe('ItemData class', function () {
   });
 });
 
-describe('constructNestedLibraryItems function', function () {
-  var includedParts: any;
-  var typeListNode: any;
-  var inclusive: any;
-  var parentItem: any;
-  var result: any;
-
-  it('should construct an empty LibraryItem', function () {
-    includedParts = [];
-    typeListNode = new LibraryUtilities.TypeListNode(new testClasses.TypeListNodeData());
-    inclusive = true;
-    typeListNode.fullyQualifiedName = '';
-    parentItem = new LibraryUtilities.ItemData('');
-
-    result = LibraryUtilities.constructNestedLibraryItems(includedParts, typeListNode, inclusive, parentItem);
-    expect(result).to.be.an.instanceOf(LibraryUtilities.ItemData);
-    expect(result).to.equal(parentItem);
-  });
-
-  it('should throw error if includedParts is larger than fullNameParts', function () {
-    includedParts = ['a', 'b', 'c'];
-    typeListNode = new LibraryUtilities.TypeListNode(new testClasses.TypeListNodeData());
-    inclusive = true;
-    parentItem = new LibraryUtilities.ItemData('');
-    typeListNode.fullyQualifiedName = '';
-
-    expect(LibraryUtilities.constructNestedLibraryItems.bind(
-      LibraryUtilities.constructNestedLibraryItems, includedParts, typeListNode, inclusive, parentItem)).to.throw(/Invalid input/);
-  });
-
-  it('should work if incluedParts is less than fullNameParts, and parentItem is null', function () {
-    includedParts = ['a'];
-    typeListNode = new LibraryUtilities.TypeListNode(new testClasses.TypeListNodeData());
-    typeListNode.fullyQualifiedName = 'a.b';
-    inclusive = true;
-    parentItem = null;
-
-    result = LibraryUtilities.constructNestedLibraryItems(includedParts, typeListNode, inclusive, parentItem);
-
-    expect(result.text).to.equal('a');
-    expect(result.itemType).to.equal('none');
-    expect(result.childItems.length).to.equal(1);
-
-    expect(result.childItems[0].text).to.equal('b');
-    expect(result.childItems[0].iconUrl).to.equal(typeListNode.iconUrl);
-    expect(result.childItems[0].contextData).to.equal(typeListNode.contextData);
-    expect(result.childItems[0].itemType).to.equal(typeListNode.memberType);
-  });
-
-  it('should work if incluedParts is less than fullNameParts, and parentItem is null', function () {
-    includedParts = ['a'];
-    typeListNode = new LibraryUtilities.TypeListNode(new testClasses.TypeListNodeData());
-    typeListNode.fullyQualifiedName = 'a.b.c';
-    inclusive = true;
-    parentItem = null;
-
-    result = LibraryUtilities.constructNestedLibraryItems(includedParts, typeListNode, inclusive, parentItem);
-
-    expect(result.text).to.equal('a');
-    expect(result.itemType).to.equal('none');
-    expect(result.childItems.length).to.equal(1);
-
-    expect(result.childItems[0].text).to.equal('b');
-    expect(result.childItems[0].itemType).to.equal('none');
-    expect(result.childItems[0].childItems.length).to.equal(1);
-
-    expect(result.childItems[0].childItems[0].text).to.equal('c');
-    expect(result.childItems[0].childItems[0].iconUrl).to.equal(typeListNode.iconUrl);
-    expect(result.childItems[0].childItems[0].contextData).to.equal(typeListNode.contextData);
-    expect(result.childItems[0].childItems[0].itemType).to.equal(typeListNode.memberType);
-    expect(result.childItems[0].childItems[0].childItems.length).to.equal(0);
-  });
-
-  it('should work if incluedParts is less than fullNameParts, and parentItem is not null', function () {
-    includedParts = ['a'];
-    typeListNode = new LibraryUtilities.TypeListNode(new testClasses.TypeListNodeData());
-    typeListNode.fullyQualifiedName = 'a.b';
-    inclusive = true;
-    parentItem = new LibraryUtilities.ItemData('');
-
-    result = LibraryUtilities.constructNestedLibraryItems(includedParts, typeListNode, inclusive, parentItem);
-
-    expect(result.text).to.equal(parentItem.text);
-    expect(result.iconUrl).to.equal(parentItem.iconUrl);
-    expect(result.contextData).to.equal(parentItem.contextData);
-    expect(result.itemType).to.equal(parentItem.itemType);
-    expect(result.childItems.length).to.equal(1);
-
-    expect(result.childItems[0].text).to.equal('b');
-    expect(result.childItems[0].iconUrl).to.equal(typeListNode.iconUrl);
-    expect(result.childItems[0].contextData).to.equal(typeListNode.contextData);
-    expect(result.childItems[0].itemType).to.equal(typeListNode.memberType);
-  });
-
-  it('should work if incluedParts is less than fullNameParts, and parentItem is not null', function () {
-    includedParts = ['a'];
-    typeListNode = new LibraryUtilities.TypeListNode(new testClasses.TypeListNodeData());
-    typeListNode.fullyQualifiedName = 'a.b.c';
-    inclusive = true;
-    parentItem = new LibraryUtilities.ItemData('');
-
-    result = LibraryUtilities.constructNestedLibraryItems(includedParts, typeListNode, inclusive, parentItem);
-
-    expect(result.text).to.equal(parentItem.text);
-    expect(result.iconUrl).to.equal(parentItem.iconUrl);
-    expect(result.contextData).to.equal(parentItem.contextData);
-    expect(result.itemType).to.equal(parentItem.itemType);
-    expect(result.childItems.length).to.equal(1);
-
-    expect(result.childItems[0].text).to.equal('b');
-    expect(result.childItems[0].itemType).to.equal('none');
-    expect(result.childItems[0].childItems.length).to.equal(1);
-
-    expect(result.childItems[0].childItems[0].text).to.equal('c');
-    expect(result.childItems[0].childItems[0].iconUrl).to.equal(typeListNode.iconUrl);
-    expect(result.childItems[0].childItems[0].contextData).to.equal(typeListNode.contextData);
-    expect(result.childItems[0].childItems[0].itemType).to.equal(typeListNode.memberType);
-    expect(result.childItems[0].childItems[0].childItems.length).to.equal(0);
-  });
-});
-
-describe('constructLibraryItem function', function () {
-  var layoutElements: LibraryUtilities.LayoutElement[];
-  var typeListNodes: LibraryUtilities.TypeListNode[];
-  var includeInfo1: LibraryUtilities.IncludeInfo;
-  var includeInfo2: LibraryUtilities.IncludeInfo;
-  var includeInfo3: LibraryUtilities.IncludeInfo;
-  var result: any;
-
-  beforeEach(function () {
-    layoutElements = [];
-    typeListNodes = [];
-
-    // Suppress logging to console during test runs
-    console.warn = function () { };
-  });
-
-  afterEach(function () {
-    // Reset console.warn that was suppressed
-    delete (console.warn);
-  })
-
-  it('should construct an empty LibraryItem', function () {
-    let layoutElement = new LibraryUtilities.LayoutElement(new testClasses.LayoutElementData());
-    layoutElement.include = [];
-    let typeListNode = new LibraryUtilities.TypeListNode(new testClasses.TypeListNodeData());
-
-    result = LibraryUtilities.constructLibraryItem(typeListNodes, layoutElement);
-
-    expect(result).to.be.an.instanceOf(LibraryUtilities.ItemData);
-    expect(result.text).to.equal(layoutElement.text);
-    expect(result.iconUrl).to.equal(layoutElement.iconUrl);
-    expect(result.itemType).to.equal(layoutElement.elementType);
-    expect(result.childItems.length).to.equal(0);
-  });
-
-  it('should constrcut the correct LibraryItem when there is only one TypeListNode', function () {
-    let layoutElement = new LibraryUtilities.LayoutElement(new testClasses.LayoutElementData());
-    layoutElement.include = [];
-    includeInfo1 = { path: 'a' };
-    layoutElement.include.push(includeInfo1);
-
-    let typeListNode = new LibraryUtilities.TypeListNode(new testClasses.TypeListNodeData());
-    typeListNode.fullyQualifiedName = 'b';
-    typeListNodes.push(typeListNode);
-
-    result = LibraryUtilities.constructLibraryItem(typeListNodes, layoutElement);
-
-    expect(result.text).to.equal(layoutElement.text);
-    expect(result.iconUrl).to.equal(layoutElement.iconUrl);
-    expect(result.itemType).to.equal(layoutElement.elementType);
-    expect(result.childItems.length).to.equal(0);
-  });
-
-  it('should constrcut the correct LibraryItem when there is only one TypeListNode', function () {
-    let layoutElement = new LibraryUtilities.LayoutElement(new testClasses.LayoutElementData());
-    layoutElement.include = [];
-    includeInfo1 = { path: 'a' };
-    layoutElement.include.push(includeInfo1);
-
-    let typeListNode = new LibraryUtilities.TypeListNode(new testClasses.TypeListNodeData());
-    typeListNode.fullyQualifiedName = 'a';
-    typeListNodes.push(typeListNode);
-
-    result = LibraryUtilities.constructLibraryItem(typeListNodes, layoutElement);
-
-    expect(result.text).to.equal(layoutElement.text);
-    expect(result.iconUrl).to.equal(layoutElement.iconUrl);
-    expect(result.itemType).to.equal(layoutElement.elementType);
-    expect(result.childItems.length).to.equal(1);
-
-    expect(result.childItems[0].text).to.equal(typeListNode.fullyQualifiedName);
-    expect(result.childItems[0].iconUrl).to.equal(typeListNode.iconUrl);
-    expect(result.childItems[0].contextData).to.equal(typeListNode.contextData);
-    expect(result.childItems[0].itemType).to.equal(typeListNode.memberType);
-    expect(result.childItems[0].childItems.length).to.equal(0);
-  });
-
-  /*
-    This test creates a single layoutELement:
-    {
-      ...
-      "include": [ { "path": "a.b" } ],
-      "childElements": []
-    }
-
-    And two typeListNodes:
-    {
-      {
-        "fullyQualifiedName": "a.b",
-        "contextData": "a.b@param1"
-      },
-      {
-        "fullyQualifiedName": "a.b",
-        "contextData": "a.b@param1,param2",
-      }
-    }
-
-    The result should have the following structure:
-    - parent node
-      |- b (overload 1)
-      |- b (overload 2)
-   */
-  it('should construct overloads using a single path', function () {
-    let layoutElement = new LibraryUtilities.LayoutElement(new testClasses.LayoutElementData());
-    layoutElement.include = [];
-    includeInfo1 = { path: 'a.b' };
-    layoutElement.include.push(includeInfo1);
-
-    let typeListNode1 = new LibraryUtilities.TypeListNode(new testClasses.TypeListNodeData());
-    typeListNode1.fullyQualifiedName = 'a.b';
-    typeListNode1.contextData = 'a.b@param1';
-    typeListNodes.push(typeListNode1);
-
-    let typeListNode2 = new LibraryUtilities.TypeListNode(new testClasses.TypeListNodeData());
-    typeListNode2.fullyQualifiedName = 'a.b'; // The overload has the same fullyQualifiedName
-    typeListNode2.contextData = 'a.b@param1,param2';
-    typeListNodes.push(typeListNode2);
-
-    result = LibraryUtilities.constructLibraryItem(typeListNodes, layoutElement);
-    expect(result.childItems.length).to.equal(2);
-    expect(result.childItems[0].text).to.equal('b');
-    expect(result.childItems[0].contextData).to.equal('a.b@param1');
-    expect(result.childItems[1].text).to.equal('b');
-    expect(result.childItems[1].contextData).to.equal('a.b@param1,param2');
-  })
-
-  /*
-    The following test creates a nested layoutElement:
-    {
-      ... //  parent item 1
-      "include": []
-      "childItems": [
-        {
-          ... // parent item 2
-          "include": [ { "path": "a.b.c" } ],
-          "childItems": []
-        }
-      ]
-    }
-
-    And two typeListNodes:
-    {
-      {
-        "fullyQualifiedName": "a.b.c.d"
-      },
-      {
-        "fullyQualifiedName": "a.b.c.e"
-      }
-    }
-
-    The result should have the following structure:
-    - parent item 1 (result)
-      |- parent item 2
-          |- c
-             |- d
-             |- e
-  */
-  it('should construct correctly nested library items', function () {
-    let layoutElement = new LibraryUtilities.LayoutElement(new testClasses.LayoutElementData());
-    layoutElement.include = [];
-
-    let childLayoutElement = new LibraryUtilities.LayoutElement(new testClasses.LayoutElementData());
-    childLayoutElement.include = [];
-    includeInfo1 = { path: 'a.b.c' };
-    childLayoutElement.include.push(includeInfo1);
-    layoutElement.childElements.push(childLayoutElement);
-
-    let typeListNode1 = new LibraryUtilities.TypeListNode(new testClasses.TypeListNodeData());
-    typeListNode1.fullyQualifiedName = 'a.b.c.d';
-    typeListNodes.push(typeListNode1);
-
-    let typeListNode2 = new LibraryUtilities.TypeListNode(new testClasses.TypeListNodeData());
-    typeListNode2.fullyQualifiedName = 'a.b.c.e';
-    typeListNodes.push(typeListNode2);
-
-    result = LibraryUtilities.constructLibraryItem(typeListNodes, layoutElement);
-    expect(result.childItems.length).to.equal(1);
-    expect(result.childItems[0].childItems.length).to.equal(1);
-
-    let cNode = result.childItems[0].childItems[0];
-    expect(cNode.text).to.equal('c');
-    expect(cNode.childItems.length).to.equal(2);
-    expect(cNode.childItems[0].text).to.equal('d');
-    expect(cNode.childItems[1].text).to.equal('e');
-  })
-
-  /*
-  The following test creates a nested layoutElement:
-  {
-    ... //  parent item 1
-    "include": []
-    "childItems": [
-      {
-        ... // parent item 2
-        "include": [ 
-          { "path": "a.b.c", "inclusive": false } 
-          ],
-        "childItems": []
-      }
-    ]
-  }
-
-  And two typeListNodes:
-  {
-    {
-      "fullyQualifiedName": "a.b.c.d"
-    },
-    {
-      "fullyQualifiedName": "a.b.c.e"
-    }
-  }
-
-  The result should have the following structure:
-  - parent item 1 (result)
-    |- parent item 2
-         |- d
-         |- e
-*/
-  it('should not construct items that are not inclusive', function () {
-    let layoutElement = new LibraryUtilities.LayoutElement(new testClasses.LayoutElementData());
-    layoutElement.include = [];
-
-    let childLayoutElement = new LibraryUtilities.LayoutElement(new testClasses.LayoutElementData());
-    childLayoutElement.include = [];
-    includeInfo1 = { path: 'a.b.c', inclusive: false };
-    childLayoutElement.include.push(includeInfo1);
-    layoutElement.childElements.push(childLayoutElement);
-
-    let typeListNode1 = new LibraryUtilities.TypeListNode(new testClasses.TypeListNodeData());
-    typeListNode1.fullyQualifiedName = 'a.b.c.d';
-    typeListNodes.push(typeListNode1);
-
-    let typeListNode2 = new LibraryUtilities.TypeListNode(new testClasses.TypeListNodeData());
-    typeListNode2.fullyQualifiedName = 'a.b.c.e';
-    typeListNodes.push(typeListNode2);
-
-    result = LibraryUtilities.constructLibraryItem(typeListNodes, layoutElement);
-    expect(result.childItems.length).to.equal(1);
-    expect(result.childItems[0].childItems.length).to.equal(2);
-
-    let parentNode2 = result.childItems[0];
-    expect(parentNode2.childItems.length).to.equal(2);
-    expect(parentNode2.childItems[0].text).to.equal('d');
-    expect(parentNode2.childItems[1].text).to.equal('e');
-  })
-
-  /*
-    The following test creates two layoutElements:
-    {
-      {
-        ... // parent item 1
-        "include": [],
-        "childItems": [
-          {
-            ... // child item 1
-            "include": [ { "path": "a.b" } ],
-            "childElements": []
-          },
-          {
-            ... // child item 2
-            "include": [ { "path": "a.b" } ],
-            "childElements": []
-          }
-        ]
-      }
-    }
-
-    And one typeListNode:
-    {
-      {
-        "fullyQualifiedName": "a.b"
-      }
-    }
-
-    The result should have the following structure:
-    - parent item 1 (result)
-      |- child item 1
-         |- b
-      |- child item 2
-         |- b
-  */
-  it('should construct nodes from duplicated paths', function () {
-    let layoutElement = new LibraryUtilities.LayoutElement(new testClasses.LayoutElementData());
-    layoutElement.include = [];
-
-    includeInfo1 = { path: 'a.b' };
-
-    let childItem1 = new LibraryUtilities.LayoutElement(new testClasses.LayoutElementData());
-    childItem1.include = [];
-    childItem1.include.push(includeInfo1);
-
-    let childItem2 = new LibraryUtilities.LayoutElement(new testClasses.LayoutElementData());
-    childItem2.include = [];
-    childItem2.include.push(includeInfo1);
-
-    layoutElement.childElements.push(childItem1);
-    layoutElement.childElements.push(childItem2);
-
-    let typeListNode = new LibraryUtilities.TypeListNode(new testClasses.TypeListNodeData());
-    typeListNode.fullyQualifiedName = 'a.b';
-    typeListNodes.push(typeListNode);
-
-    result = LibraryUtilities.constructLibraryItem(typeListNodes, layoutElement);
-    expect(result.childItems.length).to.equal(2);
-    expect(result.childItems[0].childItems.length).to.equal(1);
-    expect(result.childItems[1].childItems.length).to.equal(1);
-    expect(result.childItems[0].childItems[0].text).to.equal('b');
-    expect(result.childItems[1].childItems[0].text).to.equal('b');
-  })
-
-  /*
-    The following test creates a nested layoutElement:
-    {
-      ... //  parent item 1
-      "include": [
-        { "path": "a.b" }
-      ]
-    }
-
-    And two typeListNodes:
-    {
-      {
-        "fullyQualifiedName": "a.b.c.d"
-      },
-      {
-        "fullyQualifiedName": "a.b.c.e"
-      }
-    }
-
-    The result should have the following structure:
-    - a (result)
-      |- b
-          |- c
-             |- d
-             |- e
-  */
-  it('should construct nested items using fullyQualifiedName for partial paths', function () {
-    let layoutElement = new LibraryUtilities.LayoutElement(new testClasses.LayoutElementData());
-    layoutElement.include = [];
-    layoutElement.include.push({ path: 'a.b' });
-
-    let typeListNode1 = new LibraryUtilities.TypeListNode(new testClasses.TypeListNodeData());
-    typeListNode1.fullyQualifiedName = 'a.b.c.d';
-    typeListNodes.push(typeListNode1);
-    let typeListNode2 = new LibraryUtilities.TypeListNode(new testClasses.TypeListNodeData());
-    typeListNode2.fullyQualifiedName = 'a.b.c.e';
-    typeListNodes.push(typeListNode2);
-
-    result = LibraryUtilities.constructLibraryItem(typeListNodes, layoutElement);
-    expect(result.childItems.length).to.equal(1);
-    expect(result.childItems[0].text).to.equal('b');
-    expect(result.childItems[0].childItems.length).to.equal(1);
-
-    let cNode = result.childItems[0].childItems[0];
-    expect(cNode.text).to.equal('c');
-    expect(cNode.childItems.length).to.equal(2);
-    expect(cNode.childItems[0].text).to.equal('d');
-    expect(cNode.childItems[1].text).to.equal('e');
-  })
-});
-
-describe('convertToDefaultSection and convertToMiscSection functions', function () {
-  var layoutElements: LibraryUtilities.LayoutElement[];
-  var typeListNodes: LibraryUtilities.TypeListNode[];
-  var result: LibraryUtilities.ItemData[];
-
-  beforeEach(function () {
-    layoutElements = [];
-    typeListNodes = [];
-    result = [];
-
-    let defaultSection = new LibraryUtilities.LayoutElement(new testClasses.LayoutElementSectionData());
-    defaultSection.text = "default";
-    layoutElements.push(defaultSection);
-
-    let miscSection = new LibraryUtilities.LayoutElement(new testClasses.LayoutElementSectionData());
-    miscSection.text = "Miscellaneous";
-    layoutElements.push(miscSection);
-
-    // Suppress logging to console during test runs
-    console.warn = function () { };
-  })
-
-  afterEach(function () {
-    // Reset console.warn that was suppressed
-    delete (console.warn);
-  })
-
-  it('should correctly construct default section', function () {
-    let layoutElement = new LibraryUtilities.LayoutElement(new testClasses.LayoutElementData());
-    layoutElement.text = 'a';
-    layoutElement.include = [];
-    layoutElement.include.push({ path: 'a.b' });
-    layoutElements[0].childElements.push(layoutElement);
-
-    let typeListNode = new LibraryUtilities.TypeListNode(new testClasses.TypeListNodeData());
-    typeListNode.fullyQualifiedName = 'a.b.c';
-    typeListNodes.push(typeListNode);
-
-    let typeListNode2 = new LibraryUtilities.TypeListNode(new testClasses.TypeListNodeData());
-    typeListNode2.fullyQualifiedName = 'a.b.d';
-    typeListNodes.push(typeListNode2);
-
-    /*
-    The result in default section should be:
-    - a
-      |- b
-         |- c
-         |- d
-    */
-    result.push(LibraryUtilities.convertToDefaultSection(typeListNodes, layoutElements[0]));
-    result.push(LibraryUtilities.convertToMiscSection(typeListNodes, layoutElements[1]));
-
-    let aNode = result[0].childItems[0]; // result[0] = default section
-    expect(aNode.text).to.equal('a');
-    expect(aNode.childItems.length).to.equal(1);
-    expect(aNode.childItems[0].text).to.equal('b');
-    expect(aNode.childItems[0].childItems.length).to.equal(2);
-    expect(aNode.childItems[0].childItems[0].text).to.equal('c');
-    expect(aNode.childItems[0].childItems[1].text).to.equal('d');
-
-    let miscSection = result[1];
-    expect(miscSection.text).to.equal("Miscellaneous");
-    expect(miscSection.childItems.length).to.equal(0);
-  })
-
-  it('should construct left-over items in Miscellaneous section', function () {
-    let layoutElement = new LibraryUtilities.LayoutElement(new testClasses.LayoutElementData());
-    layoutElement.text = 'x';
-    layoutElement.include = [];
-    layoutElement.include.push({ path: 'x.y' });
-    layoutElements[0].childElements.push(layoutElement);
-
-    let typeListNode = new LibraryUtilities.TypeListNode(new testClasses.TypeListNodeData());
-    typeListNode.fullyQualifiedName = 'a.b.c';
-    typeListNodes.push(typeListNode);
-
-    let typeListNode2 = new LibraryUtilities.TypeListNode(new testClasses.TypeListNodeData());
-    typeListNode2.fullyQualifiedName = 'a.d.e';
-    typeListNodes.push(typeListNode2);
-
-    // All the items should be displayed in Miscellaneous section
-    result.push(LibraryUtilities.convertToDefaultSection(typeListNodes, layoutElements[0]));
-    result.push(LibraryUtilities.convertToMiscSection(typeListNodes, layoutElements[1]));
-
-    let defaultSection = result[0];
-    expect(defaultSection.childItems.length).to.equal(0);
-
-    let miscSection = result[1];
-    expect(miscSection.childItems.length).to.equal(1);
-    expect(miscSection.childItems[0].text).to.equal('a');
-    expect(miscSection.childItems[0].childItems.length).to.equal(2);
-    expect(miscSection.childItems[0].childItems[0].text).to.equal('d');
-    expect(miscSection.childItems[0].childItems[0].childItems.length).to.equal(1);
-    expect(miscSection.childItems[0].childItems[0].childItems[0].text).to.equal('e');
-    expect(miscSection.childItems[0].childItems[1].text).to.equal('b');
-    expect(miscSection.childItems[0].childItems[1].childItems.length).to.equal(1);
-    expect(miscSection.childItems[0].childItems[1].childItems[0].text).to.equal('c');
-  })
-})
-
 describe('buildLibraryItemsFromName function', function () {
   var typeListNodes: LibraryUtilities.TypeListNode[];
   var result: LibraryUtilities.ItemData;
@@ -1268,19 +1060,6 @@ describe('buildLibraryItemsFromName function', function () {
     expect(aNode.childItems[0].childItems[0].text).to.equal('c');
     expect(aNode.childItems[0].childItems[1].text).to.equal('d');
     expect(aNode.childItems[1].childItems.length).to.equal(0);
-  });
-});
-
-describe('convertSectionToItemData function', function () {
-  it('should convert LayoutElement to ItemData', function () {
-    let section = new LibraryUtilities.LayoutElement(new testClasses.LayoutElementData());
-    section.text = "test";
-    section.elementType = "section";
-
-    let result = LibraryUtilities.convertSectionToItemData(section);
-    expect(result).to.be.instanceOf(LibraryUtilities.ItemData);
-    expect(result.text).to.equal(section.text);
-    expect(result.itemType).to.equal(section.elementType);
   });
 });
 
@@ -1515,5 +1294,56 @@ describe("sortItemsByText function", function () {
     expect(result[2]).to.equal(itemData3);
     expect(result[3]).to.equal(itemData4);
     expect(result[4]).to.equal(itemData5);
+  });
+});
+
+describe("splitToParts function", function () {
+  let prefix = "://";
+
+  it("should return empty array if text is empty", function () {
+    let text = "";
+    let result = LibraryUtilities.splitToParts(prefix, text);
+    expect(result.length).to.equal(0);
+  });
+
+  it("should return correct parts if text doesn't have prefix or delimiter", function () {
+    let text = "a";
+    let result = LibraryUtilities.splitToParts(prefix, text);
+    expect(result.length).to.equal(1);
+    expect(result[0]).to.equal("a");
+  });
+
+  it("should return correct parts if text doesn't have prefix", function () {
+    let text = "a.b.c";
+    let result = LibraryUtilities.splitToParts(prefix, text);
+    expect(result.length).to.equal(3);
+    expect(result[0]).to.equal("a");
+    expect(result[1]).to.equal("b");
+    expect(result[2]).to.equal("c");
+  });
+
+  it("should return correct parts if text has only prefix", function () {
+    let text = "test://";
+    let result = LibraryUtilities.splitToParts(prefix, text);
+    expect(result.length).to.equal(1);
+    expect(result[0]).to.equal("test://");
+  });
+
+  it("should return correct parts if text has prefix but no delimiter", function () {
+    let text = "test://a";
+    let result = LibraryUtilities.splitToParts(prefix, text);
+    expect(result.length).to.equal(2);
+    expect(result[0]).to.equal("test://");
+    expect(result[1]).to.equal("a");
+  });
+
+  it("should return correct parts if text has prefix and delimiter", function () {
+    let text = "test://a.b.c";
+    let result = LibraryUtilities.splitToParts(prefix, text);
+    expect(result.length).to.equal(4);
+    expect(result[0]).to.equal("test://");
+    expect(result[1]).to.equal("a");
+    expect(result[2]).to.equal("b");
+    expect(result[3]).to.equal("c");
   });
 });

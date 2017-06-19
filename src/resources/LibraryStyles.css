@@ -428,46 +428,57 @@ input {
     cursor: pointer;
 }
 
-.SearchResultItemContainer {
+.SearchResultItemContainer,
+.SearchResultItemContainerSelected {
     display: flex;
     flex-direction: row;
-    align-items: center;
+    align-items: stretch;
     padding: 3px;
     color: white;
     transition: 0.15s;
 }
 
-.SearchResultItemContainer:hover {
+.SearchResultItemContainerSelected {
+    background-color: #444;
+}
+
+.SearchResultItemContainer:hover,
+.SearchResultItemContainerSelected:hover {
     color: white;
     background: rgba(255, 255, 255, 0.1);
 }
 
-.SearchResultItemContainer .ItemInfo {
-    width: 100%;
+.SearchResultItemContainer .ItemInfo,
+.SearchResultItemContainerSelected .ItemInfo {
     padding: 5px 0px 5px 0px;
+    width: 100%;
 }
 
-.SearchResultItemContainer .ItemIcon {
+.SearchResultItemContainer .ItemIcon,
+.SearchResultItemContainerSelected .ItemIcon {
     padding: 2px 8px;
     min-width: 32px;
     width: 32px;
     min-height: 32px;
     height: 32px;
+    margin-top: 5px;
 }
 
-.SearchResultItemContainer .ItemTitle {
-    font-size: 14px;
+.SearchResultItemContainer .ItemTitle,
+.SearchResultItemContainerSelected .ItemTitle {
     display: flex;
     padding-left: 10px;
 }
 
-.SearchResultItemContainer .ItemDescription {
+.SearchResultItemContainer .ItemDescription,
+.SearchResultItemContainerSelected .ItemDescription {
     font-size: 11px;
     padding: 5px 0px 0px 10px;
     color: #aaa;
 }
 
-.SearchResultItemContainer .ItemDetails {
+.SearchResultItemContainer .ItemDetails,
+.SearchResultItemContainerSelected .ItemDetails {
     display: flex;
     align-items: center;
     padding: 5px 0px 0px 10px;
@@ -475,25 +486,29 @@ input {
     color: #aaaaaa;
 }
 
-.SearchResultItemContainer .ItemParent {
+.SearchResultItemContainer .ItemParent,
+.SearchResultItemContainerSelected .ItemParent {
     display: inline-block;
     padding-right: 5px;
     transition: 0.15s;
     text-decoration: underline;
 }
 
-.SearchResultItemContainer .ItemParent:hover {
+.SearchResultItemContainer .ItemParent:hover,
+.SearchResultItemContainerSelected .ItemParent:hover {
     cursor: pointer;
     color: white;
 }
 
-.SearchResultItemContainer .ItemCategory {
+.SearchResultItemContainer .ItemCategory,
+.SearchResultItemContainerSelected .ItemCategory {
     display: inline-block;
     color: #ddd;
     padding-left: 5px;
 }
 
-.SearchResultItemContainer .ItemTypeIcon {
+.SearchResultItemContainer .ItemTypeIcon,
+.SearchResultItemContainerSelected .ItemTypeIcon {
     width: 14px;
     height: 14px;
     padding-bottom: 3px;
