@@ -39,17 +39,21 @@
 
             libController.on(libController.ItemClickedEventName, function (item) {
                 console.log(item);
-            })
+            });
 
             libController.on(libController.ItemMouseEnterEventName, function (arg) {
                 console.log("Data: " + arg.data);
                 console.log("Rect(top, left, bottom, right): " + arg.rect.top + "," + arg.rect.left + "," + arg.rect.bottom + "," + arg.rect.right);
-            })
+            });
 
             libController.on(libController.ItemMouseLeaveEventName, function (arg) {
                 console.log("Data: " + arg.data);
                 console.log("Rect(top, left, bottom, right): " + arg.rect.top + "," + arg.rect.left + "," + arg.rect.bottom + "," + arg.rect.right);
-            })
+            });
+
+            libController.on(libController.ItemSummaryExpandedEventName, function (arg) {
+                console.log(arg.data);
+            });
 
             libController.on(libController.SearchTextUpdatedEventName, function (searchText) {
                 console.log(searchText);

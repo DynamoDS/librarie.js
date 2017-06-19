@@ -22,16 +22,11 @@ interface SearchBarExpandedFunc {
     (event: any): void;
 }
 
-interface SetSearchInputFieldFunc {
-    (field: HTMLInputElement): void
-}
-
 export interface SearchBarProps {
     onTextChanged: SearchTextChangedFunc;
     onStructuredModeChanged: StructuredModeChangedFunc;
     onDetailedModeChanged: DetailedModeChangedFunc;
     onCategoriesChanged: SearchCategoriesChangedFunc;
-    setSearchInputField: SetSearchInputFieldFunc;
     categories: string[];
 }
 
@@ -126,8 +121,12 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
     onTextChanged(event: any) {
         let text = event.target.value.toLowerCase().replace(/ /g, '');
         let expanded = text.length == 0 ? false : this.state.expanded;
-        this.setState({ expanded: expanded, hasText: text.length > 0 });
-        this.props.onTextChanged(text);
+        let hasText = text.length > 0;
+
+        if (this.state.hasText || hasText) {
+            this.setState({ expanded: expanded, hasText: hasText });
+            this.props.onTextChanged(text);
+        }
     }
 
     onExpandButtonClick() {
@@ -259,7 +258,7 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
                             className="SearchInputText"
                             type="input" placeholder="Search..."
                             onChange={this.onTextChanged.bind(this)}
-                            ref={(field) => { this.searchInputField = field; this.props.setSearchInputField(field) }}>
+                            ref={(field) => { this.searchInputField = field; }}>
                         </input>
                     </div>
                     {cancelButton}
