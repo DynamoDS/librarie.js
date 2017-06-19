@@ -20,26 +20,28 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { ClusterView } from "./ClusterView";
 import { LibraryContainer } from "./LibraryContainer";
-import { ItemData, sortItemsByText } from "../LibraryUtilities";
+import * as LibraryUtilities from "../LibraryUtilities";
 
 export interface LibraryItemProps {
     libraryContainer: any,
-    data: ItemData,
+    data: LibraryUtilities.ItemData,
+    showItemSummary: boolean,
     onItemWillExpand?: Function
 }
 
 export interface LibraryItemState {
+    itemSummaryExpanded: boolean,
     expanded: boolean
 }
 
 class GroupedItems {
 
-    creates: ItemData[] = [];
-    actions: ItemData[] = [];
-    queries: ItemData[] = [];
-    others: ItemData[] = [];
+    creates: LibraryUtilities.ItemData[] = [];
+    actions: LibraryUtilities.ItemData[] = [];
+    queries: LibraryUtilities.ItemData[] = [];
+    others: LibraryUtilities.ItemData[] = [];
 
-    constructor(items: ItemData[]) {
+    constructor(items: LibraryUtilities.ItemData[]) {
 
         for (let i = 0; i < items.length; i++) {
 
@@ -49,18 +51,35 @@ class GroupedItems {
                 case "query": this.queries.push(items[i]); break;
                 default: this.others.push(items[i]); break;
             }
+
+            var finalData = {
+                "inputParameters": [
+                    {
+                        "name": "c1",
+                        "type": "Color"
+                    },
+                    {
+                        "name": "c2",
+                        "type": "Color"
+                    }
+                ],
+                "outputParameters": [
+                    "Color"
+                ],
+                "description": "Construct a Color by combining two input Colors."
+            };
         }
 
-        this.creates = sortItemsByText(this.creates);
-        this.actions = sortItemsByText(this.actions);
-        this.queries = sortItemsByText(this.queries);
-        this.others = sortItemsByText(this.others);
+        this.creates = LibraryUtilities.sortItemsByText(this.creates);
+        this.actions = LibraryUtilities.sortItemsByText(this.actions);
+        this.queries = LibraryUtilities.sortItemsByText(this.queries);
+        this.others = LibraryUtilities.sortItemsByText(this.others);
     }
 
-    getCreateItems(): ItemData[] { return this.creates; }
-    getActionItems(): ItemData[] { return this.actions; }
-    getQueryItems(): ItemData[] { return this.queries; }
-    getOtherItems(): ItemData[] { return this.others; }
+    getCreateItems(): LibraryUtilities.ItemData[] { return this.creates; }
+    getActionItems(): LibraryUtilities.ItemData[] { return this.actions; }
+    getQueryItems(): LibraryUtilities.ItemData[] { return this.queries; }
+    getOtherItems(): LibraryUtilities.ItemData[] { return this.others; }
 }
 
 export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemState> {
@@ -70,7 +89,8 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
 
         // All items are collapsed by default, except for section items
         this.state = {
-            expanded: this.props.data.expanded
+            expanded: this.props.data.expanded,
+            itemSummaryExpanded: false
         };
 
         this.onLibraryItemClicked = this.onLibraryItemClicked.bind(this);
@@ -125,7 +145,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         if (this.state.expanded && this.props.data.childItems.length > 0) {
 
             // Break item list down into sub-lists based on the type of each item.
-            let groupedItems = new GroupedItems(sortItemsByText(this.props.data.childItems));
+            let groupedItems = new GroupedItems(LibraryUtilities.sortItemsByText(this.props.data.childItems));
 
             // There are some leaf nodes (e.g. methods).
             clusteredElements = this.getClusteredElements(groupedItems);
@@ -186,7 +206,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
     }
 
     onImageLoadFail(event: any) {
-        event.target.src = require("../resources/icons/Dynamo.svg");
+        event.target.src = require("../resources/icons/default-icon.svg");
     }
 
     getLibraryItemContainerStyle(): string {
@@ -224,11 +244,12 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
                 {
                     // 'getNestedElements' method is meant to render all other 
                     // types of items except ones of type create/action/query.
-                    regularItems.map((item: ItemData) => {
+                    regularItems.map((item: LibraryUtilities.ItemData) => {
                         return (<LibraryItem
                             key={index++}
                             libraryContainer={this.props.libraryContainer}
                             data={item}
+                            showItemSummary={this.props.showItemSummary}
                             onItemWillExpand={this.onSingleChildItemWillExpand}
                         />);
                     })
@@ -249,6 +270,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
                 libraryContainer={this.props.libraryContainer}
                 icon={require("../resources/icons/library-create.svg")}
                 borderColor="#62895b" /* green */
+                showItemSummary={this.props.showItemSummary}
                 childItems={createMethods} />);
         }
 
@@ -258,6 +280,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
                 libraryContainer={this.props.libraryContainer}
                 icon={require("../resources/icons/library-action.svg")}
                 borderColor="#ad5446" /* red */
+                showItemSummary={this.props.showItemSummary}
                 childItems={actionMethods} />);
         }
 
@@ -267,6 +290,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
                 libraryContainer={this.props.libraryContainer}
                 icon={require("../resources/icons/library-query.svg")}
                 borderColor="#4b9dbf" /* blue */
+                showItemSummary={this.props.showItemSummary}
                 childItems={queryMethods} />);
         }
 

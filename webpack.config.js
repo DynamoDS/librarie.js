@@ -31,7 +31,7 @@ module.exports = {
     output: {
         filename: productionBuild ? "librarie.min.js" : "librarie.js",
         path: __dirname + "/dist/",
-        publicPath: "./dist/",
+        publicPath: "./dist",
         libraryTarget: "umd",
         library: "LibraryEntryPoint"
     },
