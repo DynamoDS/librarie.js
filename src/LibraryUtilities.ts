@@ -38,6 +38,16 @@ export interface IncludeInfo {
     inclusive?: boolean;
 }
 
+export class IncludeItemPair {
+    include: IncludeInfo;
+    owningItem: ItemData;
+
+    constructor(include: IncludeInfo, owningItem: ItemData) {
+        this.include = include;
+        this.owningItem = owningItem;
+    }
+}
+
 export class LayoutElement {
 
     text: string = "";
@@ -104,84 +114,18 @@ export class ItemData {
         if (typeListNode.weight) {
             this.weight = typeListNode.weight;
         }
+
+        // Get keywords from typeListNode and push them into itemData
+        let keywords = typeListNode.keywords.split(",");
+        this.keywords.forEach(keyword => {
+            this.keywords.push(keyword.toLowerCase().replace(/ /g, ''));
+        });
+        this.keywords.push(typeListNode.fullyQualifiedName.toLowerCase().replace(/ /g, ''));
     }
 
     appendChild(childItem: ItemData) {
         this.childItems.push(childItem);
     }
-}
-
-export function constructNestedLibraryItems(
-    includeParts: string[],
-    typeListNode: TypeListNode,
-    inclusive: boolean,
-    parentItem: ItemData,
-    iconUrl?: string): ItemData {
-    // 'includeParts' is always lesser or equal to 'fullNameParts' in length.
-    // 
-    // Take an example:
-    //      includeParts  = [ A, B, C ];
-    //      fullNameParts = [ A, B, C, D, E ];
-    // 
-    let fullyQualifiedName = typeListNode.fullyQualifiedName;
-    let fullNameParts: string[] = fullyQualifiedName.split('.');
-    if (includeParts.length > fullNameParts.length) {
-        throw new Error("Invalid input");
-    }
-
-    // If 'inclusive == true', then for the above example we start building 
-    // LibraryItem from 'C' onward, otherwise it starts from 'D'.
-    // 
-    let startIndex = inclusive ? includeParts.length - 1 : includeParts.length;
-
-    // Starting index may optionally include the first item in the case when 
-    // 'inclusive = true'. If 'parentItem != null && inclusive == true', then 
-    // the 'parentItem' is already created in a previous iteration, so we will 
-    // continue to append child items under 'parentItem' without recreating 
-    // a new LibraryItem from 'remainingParts[0]'.
-    // 
-    if (inclusive && parentItem) {
-        startIndex = startIndex + 1;
-    }
-
-    let rootLibraryItem: ItemData = parentItem;
-    for (let i = startIndex; i < fullNameParts.length; i++) {
-        let libraryItem = new ItemData(fullNameParts[i]);
-        libraryItem.itemType = "none";
-
-        if (iconUrl) {
-            libraryItem.iconUrl = iconUrl;
-        } else {
-            // If 'i' is now '2' (i.e. it points to 'C'), then we will construct 
-            // the iconName as 'A.B.C'. And since the second parameter of 'slice' 
-            // is exclusive, we add '1' to it otherwise 'C' won't be included.
-            //  
-            libraryItem.iconUrl = fullNameParts.slice(0, i + 1).join(".");
-        }
-        // If this is the leaf most level, copy all item information over.
-        if (i == fullNameParts.length - 1) {
-            libraryItem.constructFromTypeListNode(typeListNode);
-            pushKeywords(libraryItem, typeListNode);
-
-            // Mark the typeListNode as processed.
-            typeListNode.processed = true;
-        }
-
-        if (parentItem) {
-            // If there was a parent item, insert the new 'libraryItem' under 
-            // it as a child item, then update 'parentItem' to be 'libraryItem'.
-            parentItem.appendChild(libraryItem);
-            parentItem = libraryItem;
-        } else {
-            // If there was not a parent item, that means this is the first 
-            // library item node that we create. Make it the rootLibraryItem
-            // and point 'parentItem' to it.
-            parentItem = libraryItem;
-            rootLibraryItem = libraryItem;
-        }
-    }
-
-    return rootLibraryItem;
 }
 
 export class JsonDownloader {
@@ -227,110 +171,6 @@ export class JsonDownloader {
 }
 
 /**
- * This method merges a type node (and its immediate sub nodes) under the given
- * library item.
- * 
- * Note that this is not a recursive function by design, it only considers the
- * current TypeTreeNode, and any possible child TypeTreeNode but nothing beyond
- * that depth.
- * 
- * @param {TypeTreeNode} typeTreeNode
- * The type node to be merged under the given library item. Its immediate child 
- * nodes will also be merged under the new library item, but the recursion does 
- * not go beyond that depth.
- * 
- * @param {LibraryItem} libraryItem
- * The library item under which a type node (and its sub nodes) is to be merged.
- */
-export function constructLibraryItem(
-    typeListNodes: TypeListNode[],
-    layoutElement: LayoutElement): ItemData {
-    let result = new ItemData(layoutElement.text);
-    result.constructFromLayoutElement(layoutElement);
-
-    // Traverse through the strings in 'include'
-    for (let i = 0; i < layoutElement.include.length; i++) {
-
-        let includePath = layoutElement.include[i].path;
-        let includeParts = includePath.split('.');
-
-        let inclusive = true; // If not specified, inclusive by default.
-        if (layoutElement.include[i].inclusive != null) {
-            inclusive = layoutElement.include[i].inclusive;
-        }
-
-        // If inclusive, then a new root node will be created (in the first iteration 
-        // of 'j' below, and reused subsequently for all other 'j'), otherwise use the 
-        // current 'result' as the parent node for child nodes to be appended.
-        // 
-        let parentNode = inclusive ? null : result;
-        let nodeFound: boolean = false;
-
-        for (let j = 0; j < typeListNodes.length; j++) {
-            let fullyQualifiedName = typeListNodes[j].fullyQualifiedName;
-            if (!fullyQualifiedName.startsWith(includePath)) {
-                continue; // Not matching, skip to the next type node.
-            }
-
-            let fullyQualifiedNameParts = fullyQualifiedName.split('.');
-
-            // Check if each part in fullyQualifiedName matches those in includePath,
-            // and if fullyQualifiedName contains more parts than includePath.
-            let k = compareParts(fullyQualifiedNameParts, includeParts);
-
-            if (k >= 0) {
-                nodeFound = true;
-
-                if (k > 1) {
-                    // If the includePath does not represent the immediate parent of the leaf node
-                    // E.g. includePath = "A.B", fullyQualifiedName = "A.B.C.D"
-                    // The library structure should be constructed such that B contains C, which
-                    // contains the leaf node D.
-
-                    // If the path is not inclusive, start constructing from "C.D" (B will not be created)
-                    // Otherwise, start constructing using "B.C.D"
-                    let newName = inclusive ? fullyQualifiedNameParts.slice(k - 1).join('.') : fullyQualifiedNameParts.slice(k).join('.');
-                    buildLibraryItemsFromName(typeListNodes[j], result, newName);
-                }
-                else {
-                    parentNode = constructNestedLibraryItems(includeParts,
-                        typeListNodes[j], inclusive, parentNode, layoutElement.include[i].iconUrl);
-                }
-            }
-
-            if (k == 0) {
-                // If fullyQualifiedName == includePath, then includePath represents a leaf node
-                result.appendChild(parentNode);
-
-                // Reset the value of parentNode, to check through the rest of typeListNodes.
-                parentNode = inclusive ? null : result;
-            }
-        }
-        if (parentNode && (parentNode != result)) {
-            // If a new parent node was created, append it as a child of 
-            // the current resulting node.
-            result.appendChild(parentNode);
-        }
-
-        if (!nodeFound) {
-            console.warn("Matching type not found: " + includePath);
-        }
-    }
-
-    // Construct all child library items from child layout elements.
-    for (let i = 0; i < layoutElement.childElements.length; i++) {
-        let childLayoutElement = layoutElement.childElements[i];
-        let libItem = constructLibraryItem(typeListNodes, childLayoutElement);
-        if (libItem.childItems.length > 0) {
-            // Only append the item to results if there are nodes generated
-            result.appendChild(libItem);
-        }
-    }
-
-    return result;
-}
-
-/**
  * Checks if each string in 'partsToInclude' matches the string with the same index in 'parts'.
  * If all match, returns how many strings 'parts' has more than 'partsToInclude'.
  * 
@@ -360,122 +200,6 @@ function compareParts(parts: string[], partsToInclude: string[]): number {
         }
     }
     return parts.length - partsToInclude.length;
-}
-
-/**
- * Combine a data type tree and layout element tree to 
- * produce the resulting library item tree under a specific section .
- * 
- * @param {TypeTreeNode[]} typeTreeNodes
- * A tree of hierarchical data type identifiers. This tree is constructed 
- * based entirely on the loaded data types and their fully qualified names.
- * See TypeTreeNode for more information.
- * 
- * @param {LayoutElement} section
- * The section that the converted items will be under
- * 
- * @returns
- * Returns the resulting library item tree containing nodes merged from the 
- * type tree. The merging operation is done through the specifications of 
- * layout element tree.
- */
-export function convertToDefaultSection(typeListNodes: TypeListNode[], section: LayoutElement): ItemData {
-    let layoutElements = section.childElements;
-    let sectionData = convertSectionToItemData(section);
-
-    // Generate the resulting library item tree before merging data types.
-    for (let layoutElement of layoutElements) {
-        let libItem = constructLibraryItem(typeListNodes, layoutElement);
-
-        if (libItem.childItems.length > 0) {
-            // Only append the new item header if there are child nodes generated
-            sectionData.appendChild(libItem);
-        }
-    }
-
-    // Default section is expanded by default.
-    sectionData.expanded = true;
-
-    return sectionData;
-}
-
-export function buildLibrarySectionsFromLayoutSpecs(loadedTypes: any, layoutSpecs: any, defaultSectionStr: string, miscSectionStr: string): ItemData[] {
-
-    let typeListNodes: TypeListNode[] = [];
-    let sections: LayoutElement[] = [];
-
-    // Converting raw data to strongly typed data.
-    for (let loadedType of loadedTypes.loadedTypes) {
-        typeListNodes.push(new TypeListNode(loadedType));
-    }
-
-    for (let section of layoutSpecs.sections) {
-        sections.push(new LayoutElement(section));
-    }
-
-    let results: ItemData[] = [];
-    let defaultSection = sections.find(x => x.text == defaultSectionStr);
-    let miscSection = sections.find(x => x.text == miscSectionStr);
-
-    results.push(convertToDefaultSection(typeListNodes, defaultSection));
-
-    _.each(sections, function (section) {
-        if (section.text != defaultSectionStr && section.text != miscSectionStr) {
-            let convertedSection = convertToOtherSection(typeListNodes, section);
-
-            // If there are nodes generated in the section, append it to results
-            if (convertedSection.childItems.length > 0) {
-                // Change the itemType of the outermost parents
-                _.each(convertedSection.childItems, function (node) {
-                    if (node.itemType === "group") node.itemType = "category";
-                })
-                results.push(convertedSection);
-            }
-        }
-    })
-
-    let convertedMiscSection = convertToMiscSection(typeListNodes, miscSection);
-
-    // If there are leftover nodes, add the Miscellaneous section into results
-    if (convertedMiscSection.childItems.length > 0) {
-        // Change the itemType of the outermost parents
-        _.each(convertedMiscSection.childItems, function (node) {
-            if (node.itemType === "group") node.itemType = "category";
-        })
-        results.push(convertedMiscSection);
-    }
-
-    return results;
-}
-
-function convertToOtherSection(typeListNodes: TypeListNode[], section: LayoutElement): ItemData {
-    let sectionData = convertSectionToItemData(section);
-    let includePatterns = section.include;
-    let nodeToProcess: TypeListNode[] = [];
-
-    _.each(typeListNodes, function (node) {
-        _.each(includePatterns, function (includePattern) {
-            if (node.fullyQualifiedName.startsWith(includePattern.path)) {
-                // If the path contains '://', remove it with the text before it from the fullyQualifiedName 
-                let tempName = (includePattern.path.indexOf("://") == -1) ? node.fullyQualifiedName : node.fullyQualifiedName.split(includePattern.path)[1];
-
-                // Construct the library item using the new name
-                node.processed = true;
-                buildLibraryItemsFromName(node, sectionData, tempName);
-            }
-        })
-    })
-
-    // Sections other than default section are collapsed by default.
-    sectionData.expanded = false;
-
-    return sectionData;
-}
-
-export function convertSectionToItemData(section: LayoutElement): ItemData {
-    let sectionData = new ItemData(section.text);
-    sectionData.constructFromLayoutElement(section);
-    return sectionData;
 }
 
 function updateElement(oldElement: LayoutElement, newElement: LayoutElement): void {
@@ -567,48 +291,260 @@ export function updateSections(oldLayoutSpecs: any, newLayoutSpecs: any): void {
 }
 
 /**
- * Convert an array of typeListNodes to ItemData which are not processed based on their fullyQualifiedNames, 
- * by splitting the name with '.', and put them under a specific section.
+ * This function converts LayoutElement objects to corresponding ItemData objects 
+ * in hierarchical structure. As part of this process, the function generates a 
+ * list of IncludeItemPair objects for each of the IncludeInfo object under a given 
+ * LayoutElement object. 
  * 
- * As an example, for two typeListNodes 'A.B.C' and 'A.B.D', the resulting nodes are:
- * - A
- *   |- B
- *      |- C
- *      |- D
+ * @param {LayoutElement[]} layoutElements 
+ * A list of LayoutElement objects to be converted to ItemData
  * 
- * @param {TypeListNode[]} allNodes 
- * All the typeListNodes
+ * @param {IncludeItemPair[]} pairs
+ * A list of IncludeItemPair objects that are generated, each for an 
+ * IncludeInfo under a given LayoutElement object.
  * 
- * @param {LayoutElement} section
- * The section that the converted items will be under
- * 
- * @returns
- * Returns a single ItemData that contains the new nodes in its childItems.
+ * @param {ItemData} parentItem 
+ * The parent ItemData object if one exists. Each of the LayoutElement objects
+ * will be converted to the corresponding ItemData, and these ItemData objects 
+ * will be appended under 'parentItem' as a child item.
  */
-export function convertToMiscSection(allNodes: TypeListNode[], section: LayoutElement): ItemData {
+function convertLayoutElementToItemData(
+    layoutElements: LayoutElement[],
+    pairs: IncludeItemPair[],
+    parentItem?: ItemData):
+    ItemData[] {
 
-    // Search for the nodes that are not displayed in library view.
-    let unprocessedNodes: TypeListNode[] = [];
-    let sectionData = convertSectionToItemData(section);
+    let results: ItemData[] = [];
 
-    _.each(allNodes, function (node) {
-        if (!node.processed) {
-            console.warn("Item filtered out from library view: " + node.contextData);
-            unprocessedNodes.push(node);
+    for (let layoutElement of layoutElements) {
+        let layoutData = new ItemData(layoutElement.text);
+        layoutData.constructFromLayoutElement(layoutElement);
+
+        // Sections that don't show its header will be expanded by default.
+        if (layoutData.itemType === "section" && !layoutData.showHeader) {
+            layoutData.expanded = true;
         }
-    });
 
-    _.each(unprocessedNodes, function (node) {
-        buildLibraryItemsFromName(node, sectionData)
-    });
+        if (parentItem) {
+            parentItem.appendChild(layoutData);
+        }
 
-    // Sections other than default section are collapsed by default.
-    sectionData.expanded = false;
+        if (layoutElement.include.length > 0) {
+            for (let include of layoutElement.include) {
+                let pair = new IncludeItemPair(include, layoutData);
+                pairs.push(pair);
+            }
+        }
 
-    return sectionData;
+        if (layoutElement.childElements.length > 0) {
+            convertLayoutElementToItemData(layoutElement.childElements, pairs, layoutData);
+        }
+
+        results.push(layoutData);
+    }
+
+    return results;
 }
 
-export function buildLibraryItemsFromName(typeListNode: TypeListNode, parentNode: ItemData, newNodeName?: string) {
+/**
+ * This function merges all TypeListNode objects under the corresponding ItemData 
+ * (i.e. a library item) based on information provided in IncludeItemPair. Each 
+ * IncludeItemPair stores an IncludeInfo and the owning ItemData for that IncludeInfo.
+ * 
+ * When the function iterates through each IncludeItemPair object, comparison happens 
+ * between fullyQualifiedName of a given TypeListNode, and the IncludeInfo.path found 
+ * in each IncludeItemPair.
+ * 
+ * If fullyQualifiedName matches IncludeInfo.path, it means they are exactly the same 
+ * and therefore the TypeListNode will be merged to the owning ItemData specified in 
+ * the IncludeItemPair.
+ * 
+ * If IncludeInfo.path does not completely match fullyQualifiedName but represents a 
+ * substring of fullyQualifiedName, then the following takes place:
+ * 
+ * Hierarchical structure of ItemData objects will be generated by looking at the 
+ * fullyQualifiedName of TypeListNode. These ItemData objects will then be merged 
+ * under the owning ItemData specified in the IncludeItemPair. For example: if the 
+ * fullyQualifiedName is "A.B.C.D", IncludeInfo.path is "A.B", and IncludeInfo.inclusive 
+ * is true(by default), then the generated ItemData will take the following form:
+ * 
+ * - owningItem
+ *    |- B
+ *       |- C
+ *          |- D
+ * 
+ * If IncludeInfo.inclusive is false, then the generated ItemData will take this form instead:
+ * 
+ * - owningItem
+*     |- C
+*        |- D
+ * 
+ * If there is no match between fullyQualifiedName and IncludeInfo.path, then skip to 
+ * the next IncludeInfo/TypeListNode depending on their lexicographical order.
+ * 
+ * @param {TypeListNode[]} typeListNodes 
+ * An array of TypelistNode sorted in alphabetical order
+ * 
+ * @param {IncludeItemPairs[]} includeItemPairs
+ * An array of IncludeItemPair sorted in alphabetical order of include.path
+ */
+export function constructFromIncludeInfo(typeListNodes: TypeListNode[], includeItemPairs: IncludeItemPair[]) {
+    let t = 0;
+    let prefix = "://";
+    let nodeMatch = false;
+    let nodeInculde = false;
+
+    // previousIncludeParts is the includeInfo path parts of the pair before current pair.
+    let previousIncludeParts: string[] = [];
+
+    // previousStartingIndex keeps track of the index of typeListNodes when previousInclude starts comparison.
+    let previousStartingIndex = 0;
+
+    // currentStartingIndex keeps track of the index of typeListNodes when current IncludeInfo starts comparison.
+    let currentStartingIndex = 0;
+
+    for (let i = 0; i < includeItemPairs.length; i++) {
+
+        let include = includeItemPairs[i].include;
+        let includeParts = splitToParts(prefix, include.path);
+
+        // Start from previousStartingIndex if current path is same as or included by previous path.
+        if (i >= 1 && (previousIncludeParts.length > 0 && compareParts(includeParts, previousIncludeParts) >= 0)) {
+            t = previousStartingIndex;
+            currentStartingIndex = previousStartingIndex;
+            previousIncludeParts = [];
+        }
+
+        // Continue iterating through the remaining includeInfo even if there are no more typeListNodes
+        if (t >= typeListNodes.length) {
+            previousIncludeParts = includeParts;
+            previousStartingIndex = currentStartingIndex;
+            currentStartingIndex = t;
+            continue;
+        }
+
+        let node = typeListNodes[t];
+        let fullyQualifiedNameParts = splitToParts(prefix, node.fullyQualifiedName);
+        let owningItem = includeItemPairs[i].owningItem;
+        nodeMatch = false;
+        nodeInculde = false;
+
+        let compareResult = compareParts(fullyQualifiedNameParts, includeParts);
+
+        if (compareResult == 0) {
+            nodeMatch = true;
+        } else if (compareResult > 0) {
+            nodeInculde = true;
+            let newNameParts = -compareResult - 1;
+            if (include.inclusive == false) {
+                newNameParts = -compareResult;
+            }
+
+            if (fullyQualifiedNameParts[0].indexOf(prefix) != -1) {
+                fullyQualifiedNameParts.shift();
+            }
+
+            let newName = fullyQualifiedNameParts.slice(newNameParts).join('.');
+            buildLibraryItemsFromName(node, owningItem, newName, include.iconUrl);
+        } else if (node.fullyQualifiedName.localeCompare(include.path) < 0) {
+            i--;
+            t++;
+            continue;
+        }
+
+        if (nodeMatch) {
+            let item = new ItemData(fullyQualifiedNameParts[fullyQualifiedNameParts.length - 1]);
+            item.constructFromTypeListNode(node);
+            owningItem.appendChild(item);
+        }
+
+        if (nodeMatch || nodeInculde) {
+            node.processed = true;
+            i--;
+            t++;
+        }
+
+        // Go to next includeInfo and update previousIncludePath, previousStartingIndex and currentStartingIndex
+        if (!(nodeMatch || nodeInculde) || t > typeListNodes.length) {
+            previousIncludeParts = includeParts;
+            previousStartingIndex = currentStartingIndex;
+            currentStartingIndex = t;
+        }
+    }
+}
+
+export function buildLibrarySectionsFromLayoutSpecs(loadedTypes: any, layoutSpecs: any, defaultSectionStr: string, miscSectionStr: string): ItemData[] {
+
+    let typeListNodes: TypeListNode[] = [];
+    let sectionElements: LayoutElement[] = [];
+
+    // Converting raw data to strongly typed data.
+    for (let loadedType of loadedTypes.loadedTypes) {
+        typeListNodes.push(new TypeListNode(loadedType));
+    }
+
+    for (let section of layoutSpecs.sections) {
+        sectionElements.push(new LayoutElement(section));
+    }
+
+    let includeItemPairs: IncludeItemPair[] = [];
+    let sections = convertLayoutElementToItemData(sectionElements, includeItemPairs);
+    let sortedIncludeItemPairs = includeItemPairs.sort((a, b) => a.include.path.localeCompare(b.include.path));
+    let sortedTypeListNodes = typeListNodes.sort((a, b) => a.fullyQualifiedName.localeCompare(b.fullyQualifiedName));
+
+    if (!isValidIncludeInfo(sortedIncludeItemPairs)) {
+        console.error("Invalid layoutSpecs: include info is not unique");
+    }
+
+    constructFromIncludeInfo(sortedTypeListNodes, sortedIncludeItemPairs);
+
+    // Misc section will take all unprocessed nodes
+    let miscSection = sections.find(section => section.text == miscSectionStr);
+    let unprocessedNodes = sortedTypeListNodes.filter(node => !node.processed);
+    unprocessedNodes.forEach(node => buildLibraryItemsFromName(node, miscSection));
+
+    removeEmptyNodes(sections);
+
+    return sections;
+}
+
+// Remove empty non-leaf nodes from items
+export function removeEmptyNodes(items: ItemData[]) {
+    items.forEach((item, index, items) => {
+        if (item.childItems.length > 0) {
+            removeEmptyNodes(item.childItems);
+        } else if (item.itemType === "section" || item.itemType === "category" || item.itemType === "group") {
+            items.splice(index, 1);
+        }
+    });
+}
+
+/**
+ * Split text to an string array by prefix and delimiter ".".
+ * 
+ * For example, if prefix is "://", text is "test://a.b.c", this will return 
+ * ["test://", "a", "b", "c"]; If text is "a.b.c", it will return ["a", "b", "c"]
+ */
+export function splitToParts(prefix: string, text: string): string[] {
+    let parts: string[] = [];
+    let prefixIndex = text.indexOf(prefix);
+
+    if (prefixIndex == -1 && text.length > 0) {
+        parts = text.split(".");
+    } else if (text.length > 0) {
+        let endIndex = prefixIndex + prefix.length;
+        parts.push(text.substring(0, endIndex));
+
+        let newText = text.substring(endIndex);
+        if (newText.length > 0) {
+            parts = parts.concat(newText.split("."));
+        }
+    }
+
+    return parts;
+}
+
+export function buildLibraryItemsFromName(typeListNode: TypeListNode, parentNode: ItemData, newNodeName?: string, iconUrl?: string) {
     let fullyQualifiedNameParts: string[] = newNodeName ? newNodeName.split('.') : typeListNode.fullyQualifiedName.split('.');
 
     // Take an example:
@@ -623,7 +559,6 @@ export function buildLibraryItemsFromName(typeListNode: TypeListNode, parentNode
         let newNode: ItemData = new ItemData(fullyQualifiedNameParts[0]);
         newNode.constructFromTypeListNode(typeListNode);
         typeListNode.processed = true;
-        pushKeywords(newNode, typeListNode);
 
         // All items without category will fall under Others
         if (parentNode.itemType === "section") {
@@ -667,20 +602,46 @@ export function buildLibraryItemsFromName(typeListNode: TypeListNode, parentNode
     // Otherwise, create the new parent node 'A' (using the previous example).
     let newParentNode = new ItemData(fullyQualifiedNameParts[0]);
     newParentNode.constructFromTypeListNode(typeListNode);
-    newParentNode.itemType = "group";
+
+    if (iconUrl) {
+        newParentNode.itemType = "none";
+        newParentNode.iconUrl = iconUrl;
+    } else if (parentNode.itemType === "section") {
+        newParentNode.itemType = "category";
+    } else {
+        newParentNode.itemType = "group";
+    }
 
     // Create nested items for the name 'B.C.D' while passing 'A' as the parent node.
     buildLibraryItemsFromName(typeListNode, newParentNode, newName);
     parentNode.childItems.unshift(newParentNode);
 }
 
-// Get keywords from typeListNode and push them into itemData
-export function pushKeywords(itemData: ItemData, typeListNode: TypeListNode) {
-    let keywords = typeListNode.keywords.split(",");
-    keywords.forEach(keyword => {
-        itemData.keywords.push(keyword.toLowerCase().replace(/ /g, ''));
-    });
-    itemData.keywords.push(typeListNode.fullyQualifiedName.toLowerCase().replace(/ /g, ''));
+/**
+ * This method validates pairs. 
+ * 
+ * Pairs are not valid if there are multiple includeInfo samea as each other, or one contained by another,
+ * like a and a.b, test:// and test://a, and they share the same owningItem.
+ * 
+ * @param {IncludeItemPair[]} pairs
+ * An array of sorted IncludeItemPair to be validated
+ */
+export function isValidIncludeInfo(pairs: IncludeItemPair[]): boolean {
+    for (let i = 0; i < pairs.length - 1; i++) {
+        let prefix = "://";
+        let currentPath = pairs[i].include.path;
+        let currentParts = pairs[i].include.path.split(".");
+        let nextPath = pairs[i + 1].include.path;
+        let nextParts = pairs[i + 1].include.path.split(".");
+        let included = compareParts(nextParts, currentParts) >= 0 ||
+            (nextPath.indexOf(prefix) != -1 && currentPath.length > 0 && nextPath.startsWith(currentPath));
+
+        if (included && pairs[i].owningItem === pairs[i + 1].owningItem) {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 // Recursively set visible and expanded states of ItemData
