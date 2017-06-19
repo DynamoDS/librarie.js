@@ -424,7 +424,7 @@ export function constructFromIncludeInfo(typeListNodes: TypeListNode[], includeI
 
         let node = typeListNodes[t];
         let fullyQualifiedNameParts = splitToParts(prefix, node.fullyQualifiedName);
-        let parentItem = includeItemPairs[i].owningItem;
+        let owningItem = includeItemPairs[i].owningItem;
         nodeMatch = false;
         nodeInculde = false;
 
@@ -444,7 +444,7 @@ export function constructFromIncludeInfo(typeListNodes: TypeListNode[], includeI
             }
 
             let newName = fullyQualifiedNameParts.slice(newNameParts).join('.');
-            buildLibraryItemsFromName(node, parentItem, newName, include.iconUrl);
+            buildLibraryItemsFromName(node, owningItem, newName, include.iconUrl);
         } else if (node.fullyQualifiedName.localeCompare(include.path) < 0) {
             i--;
             t++;
@@ -454,7 +454,7 @@ export function constructFromIncludeInfo(typeListNodes: TypeListNode[], includeI
         if (nodeMatch) {
             let item = new ItemData(fullyQualifiedNameParts[fullyQualifiedNameParts.length - 1]);
             item.constructFromTypeListNode(node);
-            parentItem.appendChild(item);
+            owningItem.appendChild(item);
         }
 
         if (nodeMatch || nodeInculde) {
@@ -620,7 +620,7 @@ export function buildLibraryItemsFromName(typeListNode: TypeListNode, parentNode
  * This method validates pairs. 
  * 
  * Pairs are not valid if there are multiple includeInfo samea as each other, or one contained by another,
- * like a and a.b, test:// and test://a, and they share the same parentItem.
+ * like a and a.b, test:// and test://a, and they share the same owningItem.
  * 
  * @param {IncludeItemPair[]} pairs
  * An array of sorted IncludeItemPair to be validated
