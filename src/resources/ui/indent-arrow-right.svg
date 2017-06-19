@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="35px" height="35px" viewBox="0 0 35 35" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <!-- Generator: Sketch 43.1 (39012) - http://www.bohemiancoding.com/sketch -->
     <title>indent-arrow-right</title>
     <desc>Created with Sketch.</desc>
     <defs></defs>
     <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <polygon id="Triangle" fill="#808080" transform="translate(20.500000, 16.541667) rotate(90.000000) translate(-20.500000, -16.541667) " points="20.5 13.0416667 26.0416667 20.0416667 14.9583333 20.0416667"></polygon>
-        <path d="M-0.5,16.5 L20.5,16.5" id="Line" stroke="#808080" stroke-linecap="square"></path>
+        <polygon id="Triangle" fill="#808080" transform="translate(18.000000, 16.500000) rotate(90.000000) translate(-18.000000, -16.500000) " points="18 13.5 21.25 19.5 14.75 19.5"></polygon>
+        <path d="M1.5,16.5 L10.5,16.5" id="Line" stroke="#808080" stroke-linecap="square"></path>
+        <path d="M0.5,-0.5 L0.5,32.5" id="Line" stroke="#808080" stroke-linecap="square"></path>
     </g>
 </svg>

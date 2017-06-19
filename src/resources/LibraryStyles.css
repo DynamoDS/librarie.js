@@ -137,7 +137,7 @@ input {
 
 .LibraryItemHeader .LibraryItemGroupText,
 .LibrarySectionHeader .LibraryItemGroupText {
-    padding: 7px 0px;
+    padding: 6px 0px;
 }
 
 .LibraryItemHeader .LibraryItemGroupText {
@@ -153,18 +153,13 @@ input {
 }
 
 .Arrow {
-    height: 35px;
-    width: 35px;
+    height: 32px;
+    width: 32px;
 }
 
-.BodyIndentationWithLine,
-.BodyIndentationWithoutLine {
+.BodyIndentation {
     margin-bottom: 18px;
     padding-left: 18px;
-}
-
-.BodyIndentationWithLine {
-    border-right: 1px solid #808080;
 }
 
 .ClusterViewContainer {
