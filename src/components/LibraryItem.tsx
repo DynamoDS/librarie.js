@@ -26,6 +26,7 @@ export interface LibraryItemProps {
     libraryContainer: any,
     data: LibraryUtilities.ItemData,
     showItemSummary: boolean,
+    isLastItem?: boolean,
     onItemWillExpand?: Function
 }
 
@@ -172,7 +173,11 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
                 let arrowIcon: any = null;
 
                 if (!this.state.expanded) {
-                    arrowIcon = require("../resources/ui/indent-arrow-right.svg");
+                    if (this.props.isLastItem) {
+                        arrowIcon = require("../resources/ui/indent-arrow-right-last.svg");
+                    } else {
+                        arrowIcon = require("../resources/ui/indent-arrow-right.svg");
+                    }
                 } else {
                     arrowIcon = require("../resources/ui/indent-arrow-down.svg");
                 }
@@ -251,12 +256,19 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
                 {
                     // 'getNestedElements' method is meant to render all other 
                     // types of items except ones of type create/action/query.
-                    regularItems.map((item: LibraryUtilities.ItemData) => {
+                    regularItems.map((item, i) => {
+                        let isLastItem = false;
+
+                        if (i == regularItems.length - 1) {
+                            isLastItem = true;
+                        }
+
                         return (<LibraryItem
                             key={index++}
                             libraryContainer={this.props.libraryContainer}
                             data={item}
                             showItemSummary={this.props.showItemSummary}
+                            isLastItem={isLastItem}
                             onItemWillExpand={this.onSingleChildItemWillExpand}
                         />);
                     })
