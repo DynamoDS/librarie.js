@@ -29,21 +29,21 @@ function compareLayoutElements(actual: LibraryUtilities.LayoutElement, expected:
 
 describe("isValidIncludeInfo function", function () {
   let includeItemPairs: LibraryUtilities.IncludeItemPair[];
-  let parentItem1: LibraryUtilities.ItemData;
-  let parentItem2: LibraryUtilities.ItemData;
-  let parentItem3: LibraryUtilities.ItemData;
+  let owningItem1: LibraryUtilities.ItemData;
+  let owningItem2: LibraryUtilities.ItemData;
+  let owningItem3: LibraryUtilities.ItemData;
   let includeItemPair1: LibraryUtilities.IncludeItemPair;
   let includeItemPair2: LibraryUtilities.IncludeItemPair;
   let includeItemPair3: LibraryUtilities.IncludeItemPair;
 
   beforeEach(function () {
     includeItemPairs = [];
-    parentItem1 = new LibraryUtilities.ItemData("1");
-    parentItem2 = new LibraryUtilities.ItemData("2");
-    parentItem3 = new LibraryUtilities.ItemData("3");
-    includeItemPair1 = new LibraryUtilities.IncludeItemPair();
-    includeItemPair2 = new LibraryUtilities.IncludeItemPair();
-    includeItemPair3 = new LibraryUtilities.IncludeItemPair();
+    owningItem1 = new LibraryUtilities.ItemData("1");
+    owningItem2 = new LibraryUtilities.ItemData("2");
+    owningItem3 = new LibraryUtilities.ItemData("3");
+    includeItemPair1 = new LibraryUtilities.IncludeItemPair(null, owningItem1);
+    includeItemPair2 = new LibraryUtilities.IncludeItemPair(null, owningItem2);
+    includeItemPair3 = new LibraryUtilities.IncludeItemPair(null, owningItem3);
   });
 
   it("should return true if includeItemPairs is empty", function () {
@@ -54,11 +54,11 @@ describe("isValidIncludeInfo function", function () {
   it("should return true if includeItemPairs is valid", function () {
     includeItemPairs = [includeItemPair1, includeItemPair2, includeItemPair3];
     let includeList = [{ "path": "a" }, { "path": "b" }, { "path": "c" }];
-    let parentItemList = [parentItem1, parentItem2, parentItem3];
+    let owningItemList = [owningItem1, owningItem2, owningItem3];
 
     includeItemPairs.forEach((pair, i) => {
       pair.include = includeList[i];
-      pair.parentItem = parentItemList[i];
+      pair.owningItem = owningItemList[i];
     });
 
     let result = LibraryUtilities.isValidIncludeInfo(includeItemPairs);
@@ -68,11 +68,11 @@ describe("isValidIncludeInfo function", function () {
   it("should return false if includes are not unique", function () {
     includeItemPairs = [includeItemPair1, includeItemPair2, includeItemPair3];
     let includeList = [{ "path": "a" }, { "path": "a" }, { "path": "b" }];
-    let parentItemList = [parentItem1, parentItem1, parentItem2];
+    let owningItemList = [owningItem1, owningItem1, owningItem2];
 
     includeItemPairs.forEach((pair, i) => {
       pair.include = includeList[i];
-      pair.parentItem = parentItemList[i];
+      pair.owningItem = owningItemList[i];
     });
 
     let result = LibraryUtilities.isValidIncludeInfo(includeItemPairs);
@@ -82,11 +82,11 @@ describe("isValidIncludeInfo function", function () {
   it("should return false if one include is contained in another include", function () {
     includeItemPairs = [includeItemPair1, includeItemPair2, includeItemPair3];
     let includeList = [{ "path": "a" }, { "path": "a.b" }, { "path": "c" }];
-    let parentItemList = [parentItem1, parentItem1, parentItem2];
+    let owningItemList = [owningItem1, owningItem1, owningItem2];
 
     includeItemPairs.forEach((pair, i) => {
       pair.include = includeList[i];
-      pair.parentItem = parentItemList[i];
+      pair.owningItem = owningItemList[i];
     });
 
     let result = LibraryUtilities.isValidIncludeInfo(includeItemPairs);
@@ -96,17 +96,18 @@ describe("isValidIncludeInfo function", function () {
   it("should return false if one include with prefix is contained in another include", function () {
     includeItemPairs = [includeItemPair1, includeItemPair2, includeItemPair3];
     let includeList = [{ "path": "a" }, { "path": "test://" }, { "path": "test://a" }];
-    let parentItemList = [parentItem1, parentItem2, parentItem2];
+    let owningItemList = [owningItem1, owningItem2, owningItem2];
 
     includeItemPairs.forEach((pair, i) => {
       pair.include = includeList[i];
-      pair.parentItem = parentItemList[i];
+      pair.owningItem = owningItemList[i];
     });
 
     let result = LibraryUtilities.isValidIncludeInfo(includeItemPairs);
     expect(result).to.equal(false);
   });
 });
+
 
 describe("constructFromIncludeInfo function", function () {
   let includeItemPairs: LibraryUtilities.IncludeItemPair[];
@@ -122,34 +123,29 @@ describe("constructFromIncludeInfo function", function () {
   let node3: LibraryUtilities.TypeListNode;
   let node4: LibraryUtilities.TypeListNode;
 
-  let parentItem1: LibraryUtilities.ItemData;
-  let parentItem2: LibraryUtilities.ItemData;
-  let parentItem3: LibraryUtilities.ItemData;
-  let parentItem4: LibraryUtilities.ItemData;
+  let owningItem1: LibraryUtilities.ItemData;
+  let owningItem2: LibraryUtilities.ItemData;
+  let owningItem3: LibraryUtilities.ItemData;
+  let owningItem4: LibraryUtilities.ItemData;
 
   beforeEach(function () {
     includeItemPairs = [];
     typeListNodes = [];
 
-    pair1 = new LibraryUtilities.IncludeItemPair();
-    pair2 = new LibraryUtilities.IncludeItemPair();
-    pair3 = new LibraryUtilities.IncludeItemPair();
-    pair4 = new LibraryUtilities.IncludeItemPair();
+    owningItem1 = new LibraryUtilities.ItemData("1");
+    owningItem2 = new LibraryUtilities.ItemData("2");
+    owningItem3 = new LibraryUtilities.ItemData("3");
+    owningItem4 = new LibraryUtilities.ItemData("4");
 
-    parentItem1 = new LibraryUtilities.ItemData("1");
-    parentItem2 = new LibraryUtilities.ItemData("2");
-    parentItem3 = new LibraryUtilities.ItemData("3");
-    parentItem4 = new LibraryUtilities.ItemData("4");
+    pair1 = new LibraryUtilities.IncludeItemPair(null, owningItem1);
+    pair2 = new LibraryUtilities.IncludeItemPair(null, owningItem2);
+    pair3 = new LibraryUtilities.IncludeItemPair(null, owningItem3);
+    pair4 = new LibraryUtilities.IncludeItemPair(null, owningItem4);
 
     node1 = new LibraryUtilities.TypeListNode(new testClasses.TypeListNodeData());
     node2 = new LibraryUtilities.TypeListNode(new testClasses.TypeListNodeData());
     node3 = new LibraryUtilities.TypeListNode(new testClasses.TypeListNodeData());
     node4 = new LibraryUtilities.TypeListNode(new testClasses.TypeListNodeData());
-
-    pair1.parentItem = parentItem1;
-    pair2.parentItem = parentItem2;
-    pair3.parentItem = parentItem3;
-    pair4.parentItem = parentItem4;
 
     includeItemPairs = [pair1, pair2, pair3, pair4];
     typeListNodes = [node1, node2, node3, node4];
@@ -169,15 +165,15 @@ describe("constructFromIncludeInfo function", function () {
 
     LibraryUtilities.constructFromIncludeInfo(typeListNodes, includeItemPairs);
 
-    expect(parentItem1.childItems.length).to.equal(1);
-    expect(parentItem2.childItems.length).to.equal(1);
-    expect(parentItem3.childItems.length).to.equal(1);
-    expect(parentItem4.childItems.length).to.equal(1);
+    expect(owningItem1.childItems.length).to.equal(1);
+    expect(owningItem2.childItems.length).to.equal(1);
+    expect(owningItem3.childItems.length).to.equal(1);
+    expect(owningItem4.childItems.length).to.equal(1);
 
-    expect(parentItem1.childItems[0].text).to.equal("a");
-    expect(parentItem2.childItems[0].text).to.equal("b");
-    expect(parentItem3.childItems[0].text).to.equal("c");
-    expect(parentItem4.childItems[0].text).to.equal("d");
+    expect(owningItem1.childItems[0].text).to.equal("a");
+    expect(owningItem2.childItems[0].text).to.equal("b");
+    expect(owningItem3.childItems[0].text).to.equal("c");
+    expect(owningItem4.childItems[0].text).to.equal("d");
 
     expect(node1.processed).to.equal(true);
     expect(node2.processed).to.equal(true);
@@ -199,14 +195,14 @@ describe("constructFromIncludeInfo function", function () {
 
     LibraryUtilities.constructFromIncludeInfo(typeListNodes, includeItemPairs);
 
-    expect(parentItem1.childItems.length).to.equal(1);
-    expect(parentItem2.childItems.length).to.equal(1);
-    expect(parentItem3.childItems.length).to.equal(1);
-    expect(parentItem4.childItems.length).to.equal(0);
+    expect(owningItem1.childItems.length).to.equal(1);
+    expect(owningItem2.childItems.length).to.equal(1);
+    expect(owningItem3.childItems.length).to.equal(1);
+    expect(owningItem4.childItems.length).to.equal(0);
 
-    expect(parentItem1.childItems[0].text).to.equal("a");
-    expect(parentItem2.childItems[0].text).to.equal("c");
-    expect(parentItem3.childItems[0].text).to.equal("d");
+    expect(owningItem1.childItems[0].text).to.equal("a");
+    expect(owningItem2.childItems[0].text).to.equal("c");
+    expect(owningItem3.childItems[0].text).to.equal("d");
 
     expect(node1.processed).to.equal(true);
     expect(node2.processed).to.equal(false);
@@ -228,15 +224,15 @@ describe("constructFromIncludeInfo function", function () {
 
     LibraryUtilities.constructFromIncludeInfo(typeListNodes, includeItemPairs);
 
-    expect(parentItem1.childItems.length).to.equal(1);
-    expect(parentItem2.childItems.length).to.equal(1);
-    expect(parentItem3.childItems.length).to.equal(1);
-    expect(parentItem4.childItems.length).to.equal(1);
+    expect(owningItem1.childItems.length).to.equal(1);
+    expect(owningItem2.childItems.length).to.equal(1);
+    expect(owningItem3.childItems.length).to.equal(1);
+    expect(owningItem4.childItems.length).to.equal(1);
 
-    expect(parentItem1.childItems[0].text).to.equal("a");
-    expect(parentItem2.childItems[0].text).to.equal("b");
-    expect(parentItem3.childItems[0].text).to.equal("b");
-    expect(parentItem4.childItems[0].text).to.equal("c");
+    expect(owningItem1.childItems[0].text).to.equal("a");
+    expect(owningItem2.childItems[0].text).to.equal("b");
+    expect(owningItem3.childItems[0].text).to.equal("b");
+    expect(owningItem4.childItems[0].text).to.equal("c");
 
     expect(node1.processed).to.equal(true);
     expect(node2.processed).to.equal(true);
@@ -258,16 +254,16 @@ describe("constructFromIncludeInfo function", function () {
 
     LibraryUtilities.constructFromIncludeInfo(typeListNodes, includeItemPairs);
 
-    expect(parentItem1.childItems.length).to.equal(0);
-    expect(parentItem2.childItems.length).to.equal(1);
-    expect(parentItem3.childItems.length).to.equal(1);
-    expect(parentItem3.childItems[0].childItems.length).to.equal(1);
-    expect(parentItem4.childItems.length).to.equal(1);
+    expect(owningItem1.childItems.length).to.equal(0);
+    expect(owningItem2.childItems.length).to.equal(1);
+    expect(owningItem3.childItems.length).to.equal(1);
+    expect(owningItem3.childItems[0].childItems.length).to.equal(1);
+    expect(owningItem4.childItems.length).to.equal(1);
 
-    expect(parentItem2.childItems[0].text).to.equal("d");
-    expect(parentItem3.childItems[0].text).to.equal("e");
-    expect(parentItem3.childItems[0].childItems[0].text).to.equal("f");
-    expect(parentItem4.childItems[0].text).to.equal("g");
+    expect(owningItem2.childItems[0].text).to.equal("d");
+    expect(owningItem3.childItems[0].text).to.equal("e");
+    expect(owningItem3.childItems[0].childItems[0].text).to.equal("f");
+    expect(owningItem4.childItems[0].text).to.equal("g");
 
     expect(node1.processed).to.equal(false);
     expect(node2.processed).to.equal(true);
@@ -289,15 +285,15 @@ describe("constructFromIncludeInfo function", function () {
 
     LibraryUtilities.constructFromIncludeInfo(typeListNodes, includeItemPairs);
 
-    expect(parentItem1.childItems.length).to.equal(0);
-    expect(parentItem2.childItems.length).to.equal(1);
-    expect(parentItem3.childItems.length).to.equal(1);
-    expect(parentItem3.childItems[0].childItems.length).to.equal(0);
-    expect(parentItem4.childItems.length).to.equal(1);
+    expect(owningItem1.childItems.length).to.equal(0);
+    expect(owningItem2.childItems.length).to.equal(1);
+    expect(owningItem3.childItems.length).to.equal(1);
+    expect(owningItem3.childItems[0].childItems.length).to.equal(0);
+    expect(owningItem4.childItems.length).to.equal(1);
 
-    expect(parentItem2.childItems[0].text).to.equal("d");
-    expect(parentItem3.childItems[0].text).to.equal("f");
-    expect(parentItem4.childItems[0].text).to.equal("g");
+    expect(owningItem2.childItems[0].text).to.equal("d");
+    expect(owningItem3.childItems[0].text).to.equal("f");
+    expect(owningItem4.childItems[0].text).to.equal("g");
 
     expect(node1.processed).to.equal(false);
     expect(node2.processed).to.equal(true);
@@ -319,15 +315,15 @@ describe("constructFromIncludeInfo function", function () {
 
     LibraryUtilities.constructFromIncludeInfo(typeListNodes, includeItemPairs);
 
-    expect(parentItem1.childItems.length).to.equal(1);
-    expect(parentItem2.childItems.length).to.equal(1);
-    expect(parentItem3.childItems.length).to.equal(1);
-    expect(parentItem4.childItems.length).to.equal(1);
+    expect(owningItem1.childItems.length).to.equal(1);
+    expect(owningItem2.childItems.length).to.equal(1);
+    expect(owningItem3.childItems.length).to.equal(1);
+    expect(owningItem4.childItems.length).to.equal(1);
 
-    expect(parentItem1.childItems[0].text).to.equal("a");
-    expect(parentItem2.childItems[0].text).to.equal("b");
-    expect(parentItem3.childItems[0].text).to.equal("c");
-    expect(parentItem4.childItems[0].text).to.equal("d");
+    expect(owningItem1.childItems[0].text).to.equal("a");
+    expect(owningItem2.childItems[0].text).to.equal("b");
+    expect(owningItem3.childItems[0].text).to.equal("c");
+    expect(owningItem4.childItems[0].text).to.equal("d");
 
     expect(node1.processed).to.equal(true);
     expect(node2.processed).to.equal(true);
@@ -349,17 +345,17 @@ describe("constructFromIncludeInfo function", function () {
 
     LibraryUtilities.constructFromIncludeInfo(typeListNodes, includeItemPairs);
 
-    expect(parentItem1.childItems.length).to.equal(1);
-    expect(parentItem2.childItems.length).to.equal(1);
-    expect(parentItem3.childItems.length).to.equal(2);
-    expect(parentItem4.childItems.length).to.equal(2);
+    expect(owningItem1.childItems.length).to.equal(1);
+    expect(owningItem2.childItems.length).to.equal(1);
+    expect(owningItem3.childItems.length).to.equal(2);
+    expect(owningItem4.childItems.length).to.equal(2);
 
-    expect(parentItem1.childItems[0].text).to.equal("a");
-    expect(parentItem2.childItems[0].text).to.equal("b");
-    expect(parentItem3.childItems[0].text).to.equal("c");
-    expect(parentItem3.childItems[1].text).to.equal("d");
-    expect(parentItem4.childItems[0].text).to.equal("c");
-    expect(parentItem4.childItems[1].text).to.equal("d");
+    expect(owningItem1.childItems[0].text).to.equal("a");
+    expect(owningItem2.childItems[0].text).to.equal("b");
+    expect(owningItem3.childItems[0].text).to.equal("c");
+    expect(owningItem3.childItems[1].text).to.equal("d");
+    expect(owningItem4.childItems[0].text).to.equal("c");
+    expect(owningItem4.childItems[1].text).to.equal("d");
 
     expect(node1.processed).to.equal(true);
     expect(node2.processed).to.equal(true);
@@ -381,27 +377,29 @@ describe("constructFromIncludeInfo function", function () {
 
     LibraryUtilities.constructFromIncludeInfo(typeListNodes, includeItemPairs);
 
-    expect(parentItem1.childItems.length).to.equal(1);
-    expect(parentItem2.childItems.length).to.equal(1);
-    expect(parentItem3.childItems.length).to.equal(2);
-    expect(parentItem4.childItems.length).to.equal(1);
+    expect(owningItem1.childItems.length).to.equal(1);
+    expect(owningItem2.childItems.length).to.equal(1);
+    expect(owningItem3.childItems.length).to.equal(2);
+    expect(owningItem4.childItems.length).to.equal(1);
 
-    expect(parentItem1.childItems[0].text).to.equal("a");
-    expect(parentItem2.childItems[0].text).to.equal("b");
-    expect(parentItem3.childItems[0].text).to.equal("c");
-    expect(parentItem3.childItems[1].text).to.equal("f");
-    expect(parentItem3.childItems[0].childItems[0].text).to.equal("d");
-    expect(parentItem3.childItems[0].childItems[0].childItems[0].text).to.equal("e");
-    expect(parentItem4.childItems[0].text).to.equal("c");
-    expect(parentItem4.childItems[0].childItems[0].text).to.equal("d");
-    expect(parentItem4.childItems[0].childItems[0].childItems[0].text).to.equal("e");
+    expect(owningItem1.childItems[0].text).to.equal("a");
+    expect(owningItem2.childItems[0].text).to.equal("b");
+    expect(owningItem3.childItems[0].text).to.equal("c");
+    expect(owningItem3.childItems[1].text).to.equal("f");
+    expect(owningItem3.childItems[0].childItems[0].text).to.equal("d");
+    expect(owningItem3.childItems[0].childItems[0].childItems[0].text).to.equal("e");
+    expect(owningItem4.childItems[0].text).to.equal("c");
+    expect(owningItem4.childItems[0].childItems[0].text).to.equal("d");
+    expect(owningItem4.childItems[0].childItems[0].childItems[0].text).to.equal("e");
 
     expect(node1.processed).to.equal(true);
     expect(node2.processed).to.equal(true);
     expect(node3.processed).to.equal(true);
     expect(node4.processed).to.equal(true);
   });
+
 });
+
 
 describe("updateSections function", function () {
 
