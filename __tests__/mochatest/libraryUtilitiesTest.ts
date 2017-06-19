@@ -108,6 +108,151 @@ describe("isValidIncludeInfo function", function () {
   });
 });
 
+describe("removeEmptyNodes function", function () {
+
+  it("should work for empty array", function () {
+    let items: LibraryUtilities.ItemData[] = [];
+    LibraryUtilities.removeEmptyNodes(items);
+    expect(items.length).to.equal(0);
+  });
+
+  it("should remove all items for an array of sections with no childItems", function () {
+    let section1 = new LibraryUtilities.ItemData("section1");
+    let section2 = new LibraryUtilities.ItemData("section2");
+    let section3 = new LibraryUtilities.ItemData("section3");
+    let items: LibraryUtilities.ItemData[] = [];
+
+    section1.itemType = "section";
+    section2.itemType = "section";
+    section3.itemType = "section";
+
+    items = [section1, section2, section3];
+
+    LibraryUtilities.removeEmptyNodes(items);
+
+    expect(items.length).to.equal(0);
+  });
+
+  it("should remove all items from an array of sections with childItems but no leaf items", function () {
+    let section1 = new LibraryUtilities.ItemData("section1");
+    let section2 = new LibraryUtilities.ItemData("section2");
+    let section3 = new LibraryUtilities.ItemData("section3");
+
+    let category11 = new LibraryUtilities.ItemData("category11");
+    let category12 = new LibraryUtilities.ItemData("category12");
+    let category21 = new LibraryUtilities.ItemData("category21");
+
+    let group111 = new LibraryUtilities.ItemData("group111");
+    let group112 = new LibraryUtilities.ItemData("group112");
+
+    section1.itemType = "section";
+    section2.itemType = "section";
+    section3.itemType = "section";
+    category11.itemType = "category";
+    category12.itemType = "category";
+    category21.itemType = "category";
+    group111.itemType = "group";
+    group112.itemType = "group";
+
+    category11.appendChild(group111);
+    category11.appendChild(group112);
+    section1.appendChild(category11);
+    section1.appendChild(category12);
+    section2.appendChild(category21);
+
+    let items: LibraryUtilities.ItemData[] = [section1, section2, section3];
+
+    LibraryUtilities.removeEmptyNodes(items);
+
+    expect(items.length).to.equal(0);
+  });
+
+  it("should remove items with no leaf items", function () {
+    let section1 = new LibraryUtilities.ItemData("section1");
+    let section2 = new LibraryUtilities.ItemData("section2");
+    let section3 = new LibraryUtilities.ItemData("section3");
+
+    let category11 = new LibraryUtilities.ItemData("category11");
+    let category12 = new LibraryUtilities.ItemData("category12");
+    let category21 = new LibraryUtilities.ItemData("category21");
+
+    let group111 = new LibraryUtilities.ItemData("group111");
+    let group112 = new LibraryUtilities.ItemData("group112");
+
+    let leaf1111 = new LibraryUtilities.ItemData("leaf1111");
+
+    section1.itemType = "section";
+    section2.itemType = "section";
+    section3.itemType = "section";
+    category11.itemType = "category";
+    category12.itemType = "category";
+    category21.itemType = "category";
+    group111.itemType = "group";
+    group112.itemType = "group";
+
+    group111.appendChild(leaf1111);
+    category11.appendChild(group111);
+    category11.appendChild(group112);
+    section1.appendChild(category11);
+    section1.appendChild(category12);
+    section2.appendChild(category21);
+
+    let items: LibraryUtilities.ItemData[] = [section1, section2, section3];
+
+    LibraryUtilities.removeEmptyNodes(items);
+
+    expect(items.length).to.equal(1);
+    expect(items[0]).to.equal(section1);
+    expect(items[0].childItems[0].childItems[0].childItems[0].text).to.equal("leaf1111");
+  });
+
+  it("should not remove items if all items have leaf items", function () {
+    let section1 = new LibraryUtilities.ItemData("section1");
+    let section2 = new LibraryUtilities.ItemData("section2");
+
+    let category11 = new LibraryUtilities.ItemData("category11");
+    let category12 = new LibraryUtilities.ItemData("category12");
+    let category21 = new LibraryUtilities.ItemData("category21");
+
+    let group111 = new LibraryUtilities.ItemData("group111");
+    let group112 = new LibraryUtilities.ItemData("group112");
+    let group211 = new LibraryUtilities.ItemData("group211");
+
+    let leaf1111 = new LibraryUtilities.ItemData("leaf1111");
+    let leaf1121 = new LibraryUtilities.ItemData("leaf1121");
+    let leaf2111 = new LibraryUtilities.ItemData("leaf2111");
+
+    section1.itemType = "section";
+    section2.itemType = "section";
+    category11.itemType = "category";
+    category12.itemType = "category";
+    category21.itemType = "category";
+    group111.itemType = "group";
+    group112.itemType = "group";
+    group211.itemType = "group";
+
+    group111.appendChild(leaf1111);
+    group112.appendChild(leaf1121);
+    group211.appendChild(leaf2111);
+    category11.appendChild(group111);
+    category11.appendChild(group112);
+    category21.appendChild(group211);
+    section1.appendChild(category11);
+    section1.appendChild(category12);
+    section2.appendChild(category21);
+
+    let items: LibraryUtilities.ItemData[] = [section1, section2];
+
+    LibraryUtilities.removeEmptyNodes(items);
+
+    expect(items.length).to.equal(2);
+    expect(items[0]).to.equal(section1);
+    expect(items[1]).to.equal(section2);
+    expect(items[0].childItems[0].childItems[0].childItems[0].text).to.equal("leaf1111");
+    expect(items[0].childItems[0].childItems[1].childItems[0].text).to.equal("leaf1121");
+    expect(items[1].childItems[0].childItems[0].childItems[0].text).to.equal("leaf2111");
+  });
+});
 
 describe("constructFromIncludeInfo function", function () {
   let includeItemPairs: LibraryUtilities.IncludeItemPair[];
