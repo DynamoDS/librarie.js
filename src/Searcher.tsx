@@ -8,7 +8,6 @@ import { SearchBar } from "./components/SearchBar";
 
 export class Searcher {
     libraryContainer: LibraryContainer = null;
-    searchInputField: HTMLInputElement = null;
     sections: LibraryUtilities.ItemData[] = [];
     categories: string[] = [];
 
@@ -18,7 +17,6 @@ export class Searcher {
     displayedCategories: string[];
 
     constructor() {
-        this.setSearchInputField = this.setSearchInputField.bind(this);
     }
 
     // To set the categories and displayedCategories
@@ -97,10 +95,5 @@ export class Searcher {
     // This function will be called to the the updated categories.
     getDisplayedCategories(): string[] {
         return this.displayedCategories;
-    }
-
-    // Obtain the search input field from SearchBar.
-    setSearchInputField(field: HTMLInputElement) {
-        this.searchInputField = field;
     }
 }

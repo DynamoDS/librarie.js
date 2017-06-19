@@ -338,7 +338,6 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
                 onStructuredModeChanged={this.onStructuredModeChanged}
                 onTextChanged={this.onTextChanged}
                 categories={this.searcher.getDisplayedCategories()}
-                setSearchInputField={this.searcher.setSearchInputField}
             />;
 
             return (
