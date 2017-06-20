@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {shallow,mount} from 'enzyme';
+import { shallow, mount } from 'enzyme';
 import * as LibraryEntryPoint from '../src/entry-point';
 import { LibraryItem } from '../src/components/LibraryItem';
 import { ItemData } from "../src/LibraryUtilities";
@@ -90,7 +90,7 @@ describe("LibraryContainer UI", function () {
     // If you are testing full React components, 
     // mount is used to do rendering  and test actions are simulated on mounted html
 
-    let libraryItem = mount(<LibraryItem libraryContainer={libContainer} data={data} />);
+    let libraryItem = mount(<LibraryItem libraryContainer={libContainer} data={data} showItemSummary={false} />);
 
     chai.expect(libraryItem).to.have.lengthOf(1);
     chai.expect(libraryItem.props().data.childItems).to.have.lengthOf(2);
@@ -107,10 +107,12 @@ describe("LibraryContainer UI", function () {
   // Test uses timeout function and testframework knows 
   // when to complete the test bases on calling funciton 'done()' 
   it("search a string in library and verify change of state and results", function (done) {
+    
     // Test for positive scenario where the node names are correct
     let libContainer = mount(
       libController.createLibraryContainer()
     );
+    
     // Load the data to libController
     libController.setLoadedTypesJson(loadedTypesJson, false);
     libController.setLayoutSpecsJson(layoutSpecsJson, false);
@@ -122,7 +124,7 @@ describe("LibraryContainer UI", function () {
     // Set the search text in searchbar
     text().simulate('change', { target: { value: 'Child' } });
     chai.expect(text()).to.have.lengthOf(1);
-    
+
     // Search is triggered after a timeout of 300 milli seconds
     // So wait before verifying the results 
 
@@ -138,9 +140,11 @@ describe("LibraryContainer UI", function () {
       done();// For testframework to figure out when to complete this test
     }, 500);
   });
+
   // Test uses timeout function and testframework knows 
   // when to complete the test bases on calling funciton 'done()' 
   it("search a negative scenario for search", function (done) {
+    
     // Test for negative scenario where search results are not found 
     let libContainer = mount(
       libController.createLibraryContainer()
@@ -171,6 +175,7 @@ describe("LibraryContainer UI", function () {
   });
 
   it("change state of searchbar to detail view and verify the search results display item description", function (done) {
+    
     // Change the search mode to detail view and verify the results display description  
     let libContainer = mount(
       libController.createLibraryContainer()
@@ -186,24 +191,25 @@ describe("LibraryContainer UI", function () {
     text().simulate('change', { target: { value: 'Child' } });
     chai.expect(text()).to.have.lengthOf(1);
     // Find the div for Detailed view and click on it
-    let option= libContainer.find('button.SearchOptionsBtnEnabled');
-    let detail=option.find('[title="Compact/Detailed View"]');
+    let option = libContainer.find('button.SearchOptionsBtnEnabled');
+    let detail = option.find('[title="Compact/Detailed View"]');
     chai.expect(detail).to.have.lengthOf(1);
     detail.simulate('click');
     // Verify the detailed view is active
     chai.expect(libContainer.state('detailed')).to.be.true;
+    
     setTimeout(function () {    // Search has timeout delay so verify results after the search is displayed
-    // Get the search results   
-    let value = libContainer.find('SearchResultItem');
-    chai.expect(value).to.have.lengthOf(2);
-    chai.expect(value.at(0).props().data.text).to.equal("Child1");
-    chai.expect(value.at(1).props().data.text).to.equal("Child2");
-    // Make sure the search results has correct item description
-    let describe = libContainer.find('div.ItemDescription');
-    chai.expect(describe).to.have.lengthOf(2);
-    chai.expect(describe.at(0).text()).to.equal('First item');    
-    chai.expect(describe.at(1).text()).to.equal('Second item');
-    done(); // For testframework to know when to terminate execution
+      // Get the search results   
+      let value = libContainer.find('SearchResultItem');
+      chai.expect(value).to.have.lengthOf(2);
+      chai.expect(value.at(0).props().data.text).to.equal("Child1");
+      chai.expect(value.at(1).props().data.text).to.equal("Child2");
+      // Make sure the search results has correct item description
+      let describe = libContainer.find('div.ItemDescription');
+      chai.expect(describe).to.have.lengthOf(2);
+      chai.expect(describe.at(0).text()).to.equal('First item');
+      chai.expect(describe.at(1).text()).to.equal('Second item');
+      done(); // For testframework to know when to terminate execution
     }, 500);
   });
 });
