@@ -515,7 +515,7 @@ export function removeEmptyNodes(items: ItemData[]) {
     items.forEach((item, index, items) => {
         if (item.childItems.length > 0) {
             if (removeEmptyNodes(item.childItems)) {
-                removeEmptyNodes(items);
+                removeEmptyNodes([item]);
             }
         } else if (item.itemType === "section" || item.itemType === "category" || item.itemType === "group") {
             items.splice(index, 1);
