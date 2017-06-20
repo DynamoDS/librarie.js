@@ -512,17 +512,18 @@ export function buildLibrarySectionsFromLayoutSpecs(loadedTypes: any, layoutSpec
 export function removeEmptyNodes(items: ItemData[]) {
     let itemRemoved = false;
 
-    items.forEach((item, index, items) => {
+    for (let i = 0; i < items.length; i++) {
+        let item = items[i];
         if (item.childItems.length > 0) {
             if (removeEmptyNodes(item.childItems)) {
-                removeEmptyNodes([item]);
+                i--;
             }
         } else if (item.itemType === "section" || item.itemType === "category" || item.itemType === "group") {
-            items.splice(index, 1);
+            items.splice(i, 1);
+            i--;
             itemRemoved = true;
-            removeEmptyNodes(items);
         }
-    });
+    }
 
     return itemRemoved;
 }
