@@ -510,13 +510,22 @@ export function buildLibrarySectionsFromLayoutSpecs(loadedTypes: any, layoutSpec
 
 // Remove empty non-leaf nodes from items
 export function removeEmptyNodes(items: ItemData[]) {
-    items.forEach((item, index, items) => {
+    let itemRemoved = false;
+
+    for (let i = 0; i < items.length; i++) {
+        let item = items[i];
         if (item.childItems.length > 0) {
-            removeEmptyNodes(item.childItems);
+            if (removeEmptyNodes(item.childItems)) {
+                i--;
+            }
         } else if (item.itemType === "section" || item.itemType === "category" || item.itemType === "group") {
-            items.splice(index, 1);
+            items.splice(i, 1);
+            i--;
+            itemRemoved = true;
         }
-    });
+    }
+
+    return itemRemoved;
 }
 
 /**
