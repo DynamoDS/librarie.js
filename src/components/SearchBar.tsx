@@ -31,11 +31,11 @@ export interface SearchBarProps {
 }
 
 export interface SearchBarState {
-    expanded: boolean;
-    selectedCategories: string[];
-    structured: boolean;
-    detailed: boolean;
-    hasText: boolean;
+    expanded?: boolean;
+    selectedCategories?: string[];
+    structured?: boolean;
+    detailed?: boolean;
+    hasText?: boolean;
 }
 
 export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {

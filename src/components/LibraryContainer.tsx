@@ -1,4 +1,4 @@
-/// <reference path="../../node_modules/@types/node/index.d.ts" />
+/// <reference types="node" />
 
 require("../resources/LibraryStyles.css");
 require("../resources/fonts/font-awesome-4.7.0/css/font-awesome.min.css");
@@ -20,12 +20,12 @@ export interface LibraryContainerProps {
 }
 
 export interface LibraryContainerStates {
-    inSearchMode: boolean,
-    searchText: string,
-    selectedCategories: string[],
-    structured: boolean,
-    detailed: boolean
-    showItemSummary: boolean
+    inSearchMode?: boolean,
+    searchText?: string,
+    selectedCategories?: string[],
+    structured?: boolean,
+    detailed?: boolean
+    showItemSummary?: boolean
 }
 
 export class LibraryContainer extends React.Component<LibraryContainerProps, LibraryContainerStates> {
