@@ -1,5 +1,6 @@
 {
   "name": "librarie.js",
+  "version": "0.0.1",
   "description": "Reusable lightweight library component based on React.js",
   "main": "index.js",
   "scripts": {
