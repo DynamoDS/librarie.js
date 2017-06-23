@@ -98,8 +98,7 @@ input {
 
 .LibraryItemBodyContainer {
     display: flex;
-    flex-direction: row;
-    align-items: center;
+    align-items: stretch;
     background: #414141;
 }
 
@@ -138,7 +137,7 @@ input {
 
 .LibraryItemHeader .LibraryItemGroupText,
 .LibrarySectionHeader .LibraryItemGroupText {
-    padding: 7px 0px 7px 5px;
+    padding: 6px 0px;
 }
 
 .LibraryItemHeader .LibraryItemGroupText {
@@ -154,13 +153,13 @@ input {
 }
 
 .Arrow {
-    padding: 3px 6px 6px 12px;
-    height: 11px;
-    width: 11px;
+    height: 32px;
+    width: 32px;
 }
 
 .BodyIndentation {
-    padding: 8px;
+    margin-bottom: 18px;
+    padding-left: 18px;
 }
 
 .ClusterViewContainer {

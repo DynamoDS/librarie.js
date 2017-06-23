@@ -26,6 +26,7 @@ export interface LibraryItemProps {
     libraryContainer: any,
     data: LibraryUtilities.ItemData,
     showItemSummary: boolean,
+    isLastItem?: boolean,
     onItemWillExpand?: Function
 }
 
@@ -115,31 +116,10 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
             return null;
         }
 
-        let iconElement: JSX.Element = null;
-        let libraryItemTextStyle = "LibraryItemGroupText";
-
-        // Group displays only text without icon.
-        if (this.props.data.itemType !== "group" && this.props.data.itemType !== "section") {
-            libraryItemTextStyle = "LibraryItemText";
-            iconElement = <img
-                className={"LibraryItemIcon"}
-                src={this.props.data.iconUrl}
-                onError={this.onImageLoadFail}
-            />;
-        }
-
-        // If it is a section, display the icon (if given) and provide a click interaction.
-        if (this.props.data.itemType === "section" && this.props.data.iconUrl) {
-            iconElement = <img
-                className={"LibraryItemIcon"}
-                src={this.props.data.iconUrl}
-                onError={this.onImageLoadFail}
-                onClick={this.onSectionIconClicked}
-            />;
-        }
-
         let nestedElements: JSX.Element = null;
         let clusteredElements: JSX.Element = null;
+        let bodyIndentation: JSX.Element = null;
+        let header = this.getHeaderElement();
 
         // visible only nested elements when expanded.
         if (this.state.expanded && this.props.data.childItems.length > 0) {
@@ -154,41 +134,9 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
             nestedElements = this.getNestedElements(groupedItems);
         }
 
-        let arrow: JSX.Element = null;
-        let bodyIndentation: JSX.Element = null;
-        let header: JSX.Element = null;
-        let parameters: JSX.Element = null;
-
-        // Indentation and arrow are only added for non-category and non-section items
-        if (this.props.data.itemType !== "category" && this.props.data.itemType !== "section") {
-
-            // Indent one level for clustered and nested elements
-            if (clusteredElements || nestedElements) {
-                bodyIndentation = (<div className={"BodyIndentation"} />);
-            }
-
-            // Show arrow for non-leaf items
-            if (this.props.data.childItems.length > 0) {
-                let arrowIcon = this.state.expanded ? require("../resources/ui/indent-arrow-down.svg") : require("../resources/ui/indent-arrow-right.svg");
-                arrow = <img className={"Arrow"} src={arrowIcon} onError={this.onImageLoadFail} />;
-            }
-        }
-
-        if (this.props.data.parameters && (this.props.data.parameters.length > 0)) {
-            parameters = <div className="LibraryItemParameters">{this.props.data.parameters}</div>;
-        }
-
-        if (this.props.data.showHeader) {
-            header = (
-                <div className={this.getLibraryItemHeaderStyle()} onClick={this.onLibraryItemClicked}
-                    onMouseOver={this.onLibraryItemMouseEnter} onMouseLeave={this.onLibraryItemMouseLeave}>
-                    {arrow}
-                    {this.props.data.itemType === "section" ? null : iconElement}
-                    <div className={libraryItemTextStyle}>{this.props.data.text}</div>
-                    {parameters}
-                    {this.props.data.itemType === "section" ? iconElement : null}
-                </div>
-            );
+        // Indent one level for clustered and nested elements
+        if (this.props.data.itemType !== "section" && (nestedElements || clusteredElements)) {
+            bodyIndentation = <div className={"BodyIndentation"} />;
         }
 
         return (
@@ -207,6 +155,79 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
 
     onImageLoadFail(event: any) {
         event.target.src = require("../resources/icons/default-icon.svg");
+    }
+
+    getIconElement(): JSX.Element {
+        // Group displays only text without icon.
+        if (this.props.data.itemType !== "group" && this.props.data.itemType !== "section") {
+            return <img
+                className={"LibraryItemIcon"}
+                src={this.props.data.iconUrl}
+                onError={this.onImageLoadFail}
+            />;
+        }
+
+        // If it is a section, display the icon (if given) and provide a click interaction.
+        if (this.props.data.itemType === "section" && this.props.data.iconUrl) {
+            return <img
+                className={"LibraryItemIcon"}
+                src={this.props.data.iconUrl}
+                onError={this.onImageLoadFail}
+                onClick={this.onSectionIconClicked}
+            />;
+        }
+
+        return null;
+    }
+
+    // Show arrow for non-section, non-category and non-leaf items
+    getArrowElement(): JSX.Element {
+        if (this.props.data.itemType === "section" || this.props.data.itemType === "category") {
+            return null;
+        }
+
+        if (this.props.data.childItems.length == 0) {
+            return null;
+        }
+
+        let arrowIcon: any = null;
+
+        if (!this.state.expanded) {
+            if (this.props.isLastItem) {
+                arrowIcon = require("../resources/ui/indent-arrow-right-last.svg");
+            } else {
+                arrowIcon = require("../resources/ui/indent-arrow-right.svg");
+            }
+        } else {
+            arrowIcon = require("../resources/ui/indent-arrow-down.svg");
+        }
+
+        return <img className={"Arrow"} src={arrowIcon} onError={this.onImageLoadFail} />;
+    }
+
+    getHeaderElement(): JSX.Element {
+        let arrow = this.getArrowElement();
+        let iconElement = this.getIconElement();
+        let parameters: JSX.Element = null;
+
+        if (this.props.data.parameters && (this.props.data.parameters.length > 0)) {
+            parameters = <div className="LibraryItemParameters">{this.props.data.parameters}</div>;
+        }
+
+        if (this.props.data.showHeader) {
+            return (
+                <div className={this.getLibraryItemHeaderStyle()} onClick={this.onLibraryItemClicked}
+                    onMouseOver={this.onLibraryItemMouseEnter} onMouseLeave={this.onLibraryItemMouseLeave}>
+                    {arrow}
+                    {this.props.data.itemType === "section" ? null : iconElement}
+                    <div className={this.getLibraryItemTextStyle()}>{this.props.data.text}</div>
+                    {parameters}
+                    {this.props.data.itemType === "section" ? iconElement : null}
+                </div>
+            );
+        }
+
+        return null;
     }
 
     getLibraryItemContainerStyle(): string {
@@ -231,6 +252,16 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         }
     }
 
+    getLibraryItemTextStyle(): string {
+        switch (this.props.data.itemType) {
+            case "group":
+            case "section":
+                return "LibraryItemGroupText";
+            default:
+                return "LibraryItemText";
+        }
+    }
+
     getNestedElements(groupedItems: GroupedItems): JSX.Element {
 
         let regularItems = groupedItems.getOtherItems();
@@ -244,12 +275,19 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
                 {
                     // 'getNestedElements' method is meant to render all other 
                     // types of items except ones of type create/action/query.
-                    regularItems.map((item: LibraryUtilities.ItemData) => {
+                    regularItems.map((item, i) => {
+                        let isLastItem = false;
+
+                        if (i == regularItems.length - 1) {
+                            isLastItem = true;
+                        }
+
                         return (<LibraryItem
                             key={index++}
                             libraryContainer={this.props.libraryContainer}
                             data={item}
                             showItemSummary={this.props.showItemSummary}
+                            isLastItem={isLastItem}
                             onItemWillExpand={this.onSingleChildItemWillExpand}
                         />);
                     })
