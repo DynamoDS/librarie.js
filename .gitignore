@@ -38,3 +38,6 @@ dist
 
 # Optional REPL history
 .node_repl_history
+
+# OSX file system cache
+.DS_Store

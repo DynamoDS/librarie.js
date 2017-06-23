@@ -18,8 +18,8 @@ interface SearchResultItemProps {
 }
 
 interface SearchResultItemStates {
-    selected: boolean,
-    itemSummaryExpanded: boolean
+    selected?: boolean,
+    itemSummaryExpanded?: boolean
 }
 
 export class SearchResultItem extends React.Component<SearchResultItemProps, SearchResultItemStates> {

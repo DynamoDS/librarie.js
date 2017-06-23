@@ -31,8 +31,8 @@ export interface LibraryItemProps {
 }
 
 export interface LibraryItemState {
-    itemSummaryExpanded: boolean,
-    expanded: boolean
+    itemSummaryExpanded?: boolean,
+    expanded?: boolean
 }
 
 class GroupedItems {

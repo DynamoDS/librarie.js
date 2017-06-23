@@ -1,6 +1,7 @@
 {
-  "name": "dynamo-hosted-contents",
-  "description": "Project that contains all hosted contents of Dynamo Windows client",
+  "name": "librarie.js",
+  "version": "0.0.1",
+  "description": "Reusable lightweight library component based on React.js",
   "main": "index.js",
   "scripts": {
     "test": "jest --coverage",
