@@ -53,5 +53,24 @@ describe("LibraryContainer", function () {
     let libraryItem = mount(<LibraryItem libraryContainer={libContainer} data={data} />);
     expect(toJson(libraryItem)).toMatchSnapshot();  // toJson serializes the output    
   });
+  it("Demonstrate testing UIitems loads correctly from static data", function () {
+    // This is demo test to show how to test the LibrayUI is rendered correctly
+    // Dynamo dynamcally generates the data in the libraryUI
+    // So this test does not ensure all the required items are loaded there
+    let layoutSpecsJson = require("../../docs/LayoutSpecs.json");
+    let loadedTypesJson = require("../../docs/RawTypeData.json");
+    let libController = LibraryEntryPoint.CreateLibraryController();
+    // Render with mount to test child components
+    const tree =mount(libController.createLibraryContainer()
+      ); // required to dump the html version of librarie.js
+      // create the library Controleer with the static data in the libraryui project 
+    libController.setLoadedTypesJson(loadedTypesJson, false);
+    libController.setLayoutSpecsJson(layoutSpecsJson, false);
+    libController.refreshLibraryView();
+    let libContainer = LibraryEntryPoint.CreateLibraryController();
+    // Search for all LibraryItems      
+    let text = tree.find('div.LibraryItemText');
+    expect(toJson(text)).toMatchSnapshot();
+  });
 });
 
