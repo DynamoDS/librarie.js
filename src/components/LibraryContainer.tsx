@@ -248,6 +248,10 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
             return;
         }
 
+        if(structured) {
+            this.searchResultItemRefs = [];
+        }
+
         let index = 0;
         let data: LibraryUtilities.ItemData[] = null;
         if (structured) {
