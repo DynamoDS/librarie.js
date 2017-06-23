@@ -217,6 +217,8 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
 
         if (this.props.data.showHeader) {
             let expandIcon: JSX.Element = null;
+
+            // Show itemSummary only if this is a leaf item and showItemSummary is set to true
             if (this.props.showItemSummary && this.props.data.childItems.length == 0) {
                 expandIcon = (
                     <div className="ItemSummaryExpandIcon">
@@ -245,7 +247,6 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
     }
 
     getItemSummaryElement(): JSX.Element {
-        // Show itemSummary only if this is a leaf item and showItemSummary is set to true
         if (this.props.showItemSummary && this.state.itemSummaryExpanded) {
             return <ItemSummary
                 libraryContainer={this.props.libraryContainer}
