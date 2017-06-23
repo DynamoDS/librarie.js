@@ -22,9 +22,18 @@ Installing all dependencies
 
 ## Run Tests
 
+####  Run all tests
+
     `$ npm run test`
 
-    Test file is at folder `./__test__/`
+    Test file is at folder `./__tests__/`
+####  Run test for utility functions
+
+    `$ npm run utiltest`
+
+    Test file is at `./__tests__/mochatest/libraryUtilitiesTest.ts`
+
+    Run all tests command does run all the tests, but it does not output libraryUtilitiesTest.ts console messages. When any test fail, it is unclear which one does and why. When that happens, use the command above to run just the utility tests.
 
 - Example test  
 
