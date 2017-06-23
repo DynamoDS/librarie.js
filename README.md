@@ -22,13 +22,12 @@ Installing all dependencies
 
 ## Run Tests
 
-- Run all tests
+####  Run all tests
 
     `$ npm run test`
 
     Test file is at folder `./__tests__/`
-
-- Run test for utility functions
+####  Run test for utility functions
 
     `$ npm run utiltest`
 
