@@ -34,6 +34,8 @@ Installing all dependencies
 
     Test file is at `./__tests__/mochatest/libraryUtilitiesTest.ts`
 
+    Run all tests command does run all the tests, but it does not output libraryUtilitiesTest.ts console messages. When any test fail, it is unclear which one does and why. When that happens, use the command above to run just the utility tests.
+
 - Example test  
 
  ```typescript
