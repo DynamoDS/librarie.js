@@ -77,7 +77,6 @@ input {
     flex-direction: row;
     align-items: center;
     transition: 0.15s;
-    overflow-y: hidden;
 }
 
 .LibraryItemHeader:hover,
