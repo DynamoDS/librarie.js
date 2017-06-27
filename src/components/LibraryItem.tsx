@@ -210,7 +210,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         let iconElement = this.getIconElement();
         let parameters: JSX.Element = null;
 
-        if (this.props.data.parameters && (this.props.data.parameters.length > 0)) {
+        if (this.props.data.parameters && this.props.data.parameters.length > 0 && this.props.data.childItems.length == 0) {
             parameters = <div className="LibraryItemParameters">{this.props.data.parameters}</div>;
         }
 

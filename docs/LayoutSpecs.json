@@ -1400,16 +1400,24 @@
               "elementType": "group",
               "include": [
                 {
-                  "path": "Analyze",
-                  "inclusive": false
-                },
-                {
                   "path": "Analysis.Analysis",
                   "inclusive": false
                 },
                 {
                   "path": "SimpleRaaS.Analyze",
                   "inclusive": false
+                }
+              ],
+              "childElements": [
+                {
+                  "text": "SiteLocation",
+                  "iconUrl": "",
+                  "elementType": "group",
+                  "include": [
+                    {
+                      "path": "Analyze.SiteLocation"
+                    }
+                  ]
                 }
               ]
             },
@@ -1420,17 +1428,6 @@
                 "include": [
                   {
                     "path": "Revit.Selection",
-                    "inclusive": false
-                  }
-                ]
-            },
-            {
-                "text": "View",
-                "iconUrl": "",
-                "elementType": "group",
-                "include": [
-                  {
-                    "path": "Revit.View",
                     "inclusive": false
                   }
                 ]
@@ -1514,9 +1511,6 @@
                   },
                   {
                     "path": "RevitNodes.Revit.Elements.FilledRegion"
-                  },
-                  {
-                    "path": "RevitNodes.Revit.Elements.FilledRegionType"
                   },
                   {
                     "path": "RevitNodes.Revit.Elements.Floor"
@@ -1632,7 +1626,7 @@
                     ]
                   },
                   {
-                    "text": "FillRegionType",
+                    "text": "FilledRegionType",
                     "iconUrl": "",
                     "elementType": "group",
                     "include": [
@@ -1868,9 +1862,6 @@
                     "path": "RevitNodes.Revit.Elements.Views.StructuralPlanView"
                   },
                   {
-                    "path": "RevitNodes.Revit.Elements.Views.View"
-                  },
-                  {
                     "path": "RevitNodes.Revit.Elements.Views.View3D"
                   }
                 ],
@@ -1889,7 +1880,33 @@
                         "inclusive": false
                       }
                     ]
-                  } 
+                  },
+                  {
+                    "text": "View",
+                    "iconUrl": "",
+                    "elementType": "group",
+                    "include": [
+                      {
+                        "path": "RevitNodes.Revit.Elements.Views.View",
+                        "inclusive": false
+                      },
+                      {
+                        "path": "Revit.View.All Elements In Active View",
+                        "inclusive": false
+                      }
+                    ]
+                  },
+                  {
+                    "text": "SunSettings",
+                    "iconUrl": "",
+                    "elementType": "group",
+                    "include": [
+                      {
+                        "path": "Revit.View.SunSettings",
+                        "inclusive": false
+                      }
+                    ]
+                  }
                 ]
             }
         ]
