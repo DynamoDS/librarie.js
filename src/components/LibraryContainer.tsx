@@ -297,6 +297,8 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
 
     render() {
         if (!this.generatedSections) {
+            let eventName = this.props.libraryController.RefreshLibraryViewRequestName;
+            this.props.libraryController.request(eventName, null);
             return (<div>This is LibraryContainer</div>);
         }
 
