@@ -66,7 +66,7 @@ export class LibraryController {
 
     /**
      * This method registers the callback function when the value of a given 
-     * named variable is requested. See PackageController.request method for 
+     * named variable is requested. See LibraryController.request method for 
      * more information on each available variable name.
      * 
      * Note that if called more than once, this method replaces the original 
@@ -104,8 +104,13 @@ export class LibraryController {
 
         // Invokve handler if there's one registered.
         let requestHandler = this.requestHandler[variableName];
-        if (requestHandler && callback) {
-            let value = requestHandler(argsArray);
+        // If the a request handler was not specified, the callback 
+        // function will still be invoked with a 'null' as result.
+        let value = null; 
+        if (requestHandler) {
+            value = requestHandler(argsArray);
+        }
+        if(callback){
             callback(value);
         }
     }
