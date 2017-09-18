@@ -1838,6 +1838,9 @@
                 "elementType": "group",
                 "include": [
                   {
+                    "path": "RevitNodes.Revit.Elements.Views.AreaPlanView"
+                  },
+                  {
                     "path": "RevitNodes.Revit.Elements.Views.AxonometricView"
                   },
                   {
