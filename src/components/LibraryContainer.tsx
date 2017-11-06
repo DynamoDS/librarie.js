@@ -101,7 +101,7 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
         }
     }
 
-    private offset(el:any) {
+    private offset(el: any) {
         var rect = el.getBoundingClientRect(),
             scrollLeft = window.pageXOffset || document.documentElement.scrollLeft,
             scrollTop = window.pageYOffset || document.documentElement.scrollTop;
@@ -109,24 +109,32 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
     }
 
 
-    ensureActiveItemVisible(offset:any,element:HTMLElement) {
+    ensureActiveItemVisible(element: HTMLElement) {
         console.log("here!");
         if (element) {
-            console.log(element);
             var currentElement = ReactDOM.findDOMNode(this).querySelector(".LibraryItemContainer");
-            console.log(currentElement);
-            var currentDocOffset = currentElement.scrollTop;
-            console.log(currentDocOffset);
-            var oldOffset = offset.top - currentDocOffset;
+            var currentDocScrollTop = currentElement.scrollTop;
 
-            var newOffset = this.offset(element).top - oldOffset;
+            console.log(currentDocScrollTop);
+            //this is the offset between the old element and the container scroll positon.
+            var offsetOldElement = this.offset(element);
+            var oldOffset = offsetOldElement.top - currentDocScrollTop;
 
-            currentElement.scrollTop = newOffset;
+            //now we wait until the expansion and re-render occus
+            setTimeout(() => {
+                // this should be the current top position of the element after it's been expanded
+                var currentTopOfElementAfterExpand = this.offset(element).top;
+                //this is the new scroll position to not move the element.
+                var newOffset = currentTopOfElementAfterExpand - oldOffset;
+
+                currentElement.scrollTop = newOffset;
+
+            }, 10);
 
         }
     }
 
-   
+
 
     setLoadedTypesJson(loadedTypesJson: any, append: boolean = true): void {
 
@@ -342,14 +350,14 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
                         libraryContainer={this}
                         data={data}
                         showItemSummary={this.state.showItemSummary}
-                        handler = {this.ensureActiveItemVisible}
+                        handler={this.ensureActiveItemVisible}
                     />
                 }
                 );
             } else if (this.state.structured) {
                 sections = this.searchResultItems.map(item =>
                     <LibraryItem key={index++} data={item} libraryContainer={this} showItemSummary={this.state.showItemSummary}
-                     handler = {this.ensureActiveItemVisible} />
+                        handler={this.ensureActiveItemVisible} />
                 );
             } else {
                 sections = this.searchResultItems.map(item =>
