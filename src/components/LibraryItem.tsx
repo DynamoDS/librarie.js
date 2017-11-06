@@ -28,7 +28,6 @@ export interface LibraryItemProps {
     showItemSummary: boolean,
     isLastItem?: boolean,
     onItemWillExpand?: Function
-    handler?: Function
 }
 
 export interface LibraryItemState {
@@ -288,8 +287,10 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
                             data={item}
                             showItemSummary={this.props.showItemSummary}
                             isLastItem={isLastItem}
-                            onItemWillExpand={this.onSingleChildItemWillExpand}
-                            handler={this.props.libraryContainer.ensureActiveItemVisible}
+                            onItemWillExpand={(args:any) => {
+                                this.onSingleChildItemWillExpand();
+                                this.props.libraryContainer.scrollToExpandedItem(args)
+                            }}
                         />);
                     })
                 }
@@ -345,20 +346,19 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
             </div>
         );
     }
-    
+
     onLibraryItemClicked() {
         // Toggle expansion state.
         let currentlyExpanded = this.state.expanded;
         if (this.props.data.childItems.length > 0 && !currentlyExpanded && this.props.onItemWillExpand) {
-            this.props.onItemWillExpand();
+            this.props.onItemWillExpand(ReactDOM.findDOMNode(this));
         }
 
         this.setState({ expanded: !currentlyExpanded });
-        console.log(this.props.data.expanded);
-        if (this.props.data.expanded == false) {
-                this.props.handler(ReactDOM.findDOMNode(this));
+        //if the item is not expanded, but was clicked on
+        //we're about to expand it - call the passed function
+        //to scroll back up to it.
 
-        }
 
         let libraryContainer = this.props.libraryContainer;
         if (this.props.data.childItems.length == 0) {

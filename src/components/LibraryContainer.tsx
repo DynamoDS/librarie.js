@@ -57,7 +57,7 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
         this.onCategoriesChanged = this.onCategoriesChanged.bind(this);
         this.onTextChanged = this.onTextChanged.bind(this);
         this.handleKeyDown = this.handleKeyDown.bind(this);
-        this.ensureActiveItemVisible = this.ensureActiveItemVisible.bind(this)
+        this.scrollToExpandedItem = this.scrollToExpandedItem.bind(this)
 
         // Set handlers after methods are bound.
         this.props.libraryController.setLoadedTypesJsonHandler = this.setLoadedTypesJson;
@@ -108,28 +108,34 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
         return { top: rect.top + scrollTop, left: rect.left + scrollLeft }
     }
 
-
-    ensureActiveItemVisible(element: HTMLElement) {
-        console.log("here!");
+    /**
+     * This method attempts to scroll the outer libraryItemContainer so that the position
+     * on screen of the passed element does not change, even though the scroll position does.
+     * @param element 
+     */
+    scrollToExpandedItem(element: HTMLElement) {
         if (element) {
             var currentElement = ReactDOM.findDOMNode(this).querySelector(".LibraryItemContainer");
             var currentDocScrollTop = currentElement.scrollTop;
 
             console.log(currentDocScrollTop);
-            //this is the offset between the old element and the container scroll positon.
+            //this is the offset between the old element position and the container scroll positon.
+            //before the item is expanded.
             var offsetOldElement = this.offset(element);
             var oldOffset = offsetOldElement.top - currentDocScrollTop;
 
-            //now we wait until the expansion and re-render occus
+            //now we wait until the expansion and re-render occurs,
             setTimeout(() => {
                 // this should be the current top position of the element after it's been expanded
                 var currentTopOfElementAfterExpand = this.offset(element).top;
-                //this is the new scroll position to not move the element.
+                //this is the new scroll position which will make it appear as if
+                //the element is in the same location on screen, even though the scroll
+                //has changed.
                 var newOffset = currentTopOfElementAfterExpand - oldOffset;
 
                 currentElement.scrollTop = newOffset;
 
-            }, 10);
+            }, 1);
 
         }
     }
@@ -350,14 +356,12 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
                         libraryContainer={this}
                         data={data}
                         showItemSummary={this.state.showItemSummary}
-                        handler={this.ensureActiveItemVisible}
                     />
                 }
                 );
             } else if (this.state.structured) {
                 sections = this.searchResultItems.map(item =>
-                    <LibraryItem key={index++} data={item} libraryContainer={this} showItemSummary={this.state.showItemSummary}
-                        handler={this.ensureActiveItemVisible} />
+                    <LibraryItem key={index++} data={item} libraryContainer={this} showItemSummary={this.state.showItemSummary} />
                 );
             } else {
                 sections = this.searchResultItems.map(item =>

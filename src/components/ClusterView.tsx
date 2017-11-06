@@ -59,7 +59,6 @@ export class ClusterView extends React.Component<ClusterViewProps, undefined> {
                 libraryContainer={this.props.libraryContainer}
                 showItemSummary={this.props.showItemSummary}
                 data={item}
-                handler = {this.props.libraryContainer.ensureActiveItemVisible}
             />);
         });
     }
