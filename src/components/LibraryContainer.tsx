@@ -101,19 +101,32 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
         }
     }
 
-    ensureActiveItemVisible(element:HTMLElement) {
+    private offset(el:any) {
+        var rect = el.getBoundingClientRect(),
+            scrollLeft = window.pageXOffset || document.documentElement.scrollLeft,
+            scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        return { top: rect.top + scrollTop, left: rect.left + scrollLeft }
+    }
+
+
+    ensureActiveItemVisible(offset:any,element:HTMLElement) {
         console.log("here!");
         if (element) {
             console.log(element);
-            var rect = element.getBoundingClientRect();
-            if (rect.bottom > window.innerHeight) {
-                element.scrollIntoView();
-            }
-            if (rect.top < 0) {
-                element.scrollIntoView();
-            } 
+            var currentElement = ReactDOM.findDOMNode(this).querySelector(".LibraryItemContainer");
+            console.log(currentElement);
+            var currentDocOffset = currentElement.scrollTop;
+            console.log(currentDocOffset);
+            var oldOffset = offset.top - currentDocOffset;
+
+            var newOffset = this.offset(element).top - oldOffset;
+
+            currentElement.scrollTop = newOffset;
+
         }
     }
+
+   
 
     setLoadedTypesJson(loadedTypesJson: any, append: boolean = true): void {
 

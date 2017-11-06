@@ -346,6 +346,13 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         );
     }
 
+    private offset(el:any) {
+        var rect = el.getBoundingClientRect(),
+            scrollLeft = window.pageXOffset || document.documentElement.scrollLeft,
+            scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        return { top: rect.top + scrollTop, left: rect.left + scrollLeft }
+    }
+
     onLibraryItemClicked() {
         // Toggle expansion state.
         let currentlyExpanded = this.state.expanded;
@@ -355,8 +362,11 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
 
         this.setState({ expanded: !currentlyExpanded });
         console.log(this.props.data.expanded);
+        var oldoffset = this.offset(ReactDOM.findDOMNode(this));
         if (this.props.data.expanded == false) {
-            setTimeout(() => {this.props.handler(ReactDOM.findDOMNode(this))},100);
+            setTimeout(() => {
+                this.props.handler(oldoffset, ReactDOM.findDOMNode(this)
+                )}, 100);
 
         }
 
