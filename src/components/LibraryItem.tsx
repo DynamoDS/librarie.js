@@ -28,6 +28,7 @@ export interface LibraryItemProps {
     showItemSummary: boolean,
     isLastItem?: boolean,
     onItemWillExpand?: Function
+    handler?: Function
 }
 
 export interface LibraryItemState {
@@ -281,7 +282,6 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
                         if (i == regularItems.length - 1) {
                             isLastItem = true;
                         }
-
                         return (<LibraryItem
                             key={index++}
                             libraryContainer={this.props.libraryContainer}
@@ -289,6 +289,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
                             showItemSummary={this.props.showItemSummary}
                             isLastItem={isLastItem}
                             onItemWillExpand={this.onSingleChildItemWillExpand}
+                            handler={this.props.libraryContainer.ensureActiveItemVisible}
                         />);
                     })
                 }
@@ -353,6 +354,11 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         }
 
         this.setState({ expanded: !currentlyExpanded });
+        console.log(this.props.data.expanded);
+        if (this.props.data.expanded == false) {
+            setTimeout(() => {this.props.handler(ReactDOM.findDOMNode(this))},100);
+
+        }
 
         let libraryContainer = this.props.libraryContainer;
         if (this.props.data.childItems.length == 0) {

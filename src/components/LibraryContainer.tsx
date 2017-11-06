@@ -10,6 +10,7 @@ import { LibraryItem } from "./LibraryItem";
 import { Searcher } from "../Searcher";
 import { SearchBar } from "./SearchBar";
 import { SearchResultItem } from "./SearchResultItem";
+import * as ReactDOM from "react-dom";
 
 declare var boundContainer: any; // Object set from C# side.
 
@@ -56,11 +57,13 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
         this.onCategoriesChanged = this.onCategoriesChanged.bind(this);
         this.onTextChanged = this.onTextChanged.bind(this);
         this.handleKeyDown = this.handleKeyDown.bind(this);
+        this.ensureActiveItemVisible = this.ensureActiveItemVisible.bind(this)
 
         // Set handlers after methods are bound.
         this.props.libraryController.setLoadedTypesJsonHandler = this.setLoadedTypesJson;
         this.props.libraryController.setLayoutSpecsJsonHandler = this.setLayoutSpecsJson;
         this.props.libraryController.refreshLibraryViewHandler = this.refreshLibraryView;
+
 
         // Initialize the search utilities with empty data
         this.searcher = new Searcher();
@@ -95,6 +98,20 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
                 break;
             default:
                 break;
+        }
+    }
+
+    ensureActiveItemVisible(element:HTMLElement) {
+        console.log("here!");
+        if (element) {
+            console.log(element);
+            var rect = element.getBoundingClientRect();
+            if (rect.bottom > window.innerHeight) {
+                element.scrollIntoView();
+            }
+            if (rect.top < 0) {
+                element.scrollIntoView();
+            } 
         }
     }
 
@@ -306,17 +323,20 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
             let sections: JSX.Element[] = null;
             let index = 0;
             if (!this.state.inSearchMode) {
-                sections = this.generatedSections.map(data =>
-                    <LibraryItem
+                sections = this.generatedSections.map(data => {
+                    return <LibraryItem
                         key={index++}
                         libraryContainer={this}
                         data={data}
                         showItemSummary={this.state.showItemSummary}
+                        handler = {this.ensureActiveItemVisible}
                     />
+                }
                 );
             } else if (this.state.structured) {
                 sections = this.searchResultItems.map(item =>
-                    <LibraryItem key={index++} data={item} libraryContainer={this} showItemSummary={this.state.showItemSummary} />
+                    <LibraryItem key={index++} data={item} libraryContainer={this} showItemSummary={this.state.showItemSummary}
+                     handler = {this.ensureActiveItemVisible} />
                 );
             } else {
                 sections = this.searchResultItems.map(item =>
