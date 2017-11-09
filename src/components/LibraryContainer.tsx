@@ -115,27 +115,18 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
      */
     scrollToExpandedItem(element: HTMLElement) {
         if (element) {
-            //this is a fail safe so we never get stuck in an infinte loop.
-            //TODO would be good to do a binary search or real adaptive march.
-            //or figure out the edge cases - or disable item collapse on item expand.
-            var maxAttempts = 10000;
-            //get the outer container
+            
             var currentElement = ReactDOM.findDOMNode(this).querySelector(".LibraryItemContainer");
             //get the offset for the element we care about scrolling to.
             var offsetOldElement = this.offset(element);
 
             //now we wait until the expansion and re-render occurs,
             setTimeout(() => {
-                //could not find methods which worked for all edge cases...so do a simple march :).
-                var newOffset = 0;
+                //measure the distance between the old element and the new position post expansion
                 var distance = offsetOldElement.top - this.offset(element).top;
-                //don't bother marching if the distance is negative
-                //as we don't have enough room to scroll.
-                while (distance > 5 && (newOffset < maxAttempts)) {
-                    newOffset = newOffset + 1;
-                    currentElement.scrollTop = newOffset;
-                    distance = this.offset(element).top - offsetOldElement.top;  
-                };
+                //scroll back up by that distance.
+                currentElement.scrollBy(0, -distance);
+
             }, 1);
         }
     }
