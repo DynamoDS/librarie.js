@@ -281,14 +281,16 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
                         if (i == regularItems.length - 1) {
                             isLastItem = true;
                         }
-
                         return (<LibraryItem
                             key={index++}
                             libraryContainer={this.props.libraryContainer}
                             data={item}
                             showItemSummary={this.props.showItemSummary}
                             isLastItem={isLastItem}
-                            onItemWillExpand={this.onSingleChildItemWillExpand}
+                            onItemWillExpand={(args:any) => {
+                                this.onSingleChildItemWillExpand();
+                                this.props.libraryContainer.scrollToExpandedItem(args)
+                            }}
                         />);
                     })
                 }
@@ -349,7 +351,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         // Toggle expansion state.
         let currentlyExpanded = this.state.expanded;
         if (this.props.data.childItems.length > 0 && !currentlyExpanded && this.props.onItemWillExpand) {
-            this.props.onItemWillExpand();
+            this.props.onItemWillExpand(ReactDOM.findDOMNode(this));
         }
 
         this.setState({ expanded: !currentlyExpanded });

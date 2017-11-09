@@ -104,15 +104,64 @@ describe("LibraryContainer UI", function () {
     chai.expect(libraryItem.state('expanded')).to.be.true; // check for if the libraryItem is expanded after mouse click       
   });
 
-  // Test uses timeout function and testframework knows 
-  // when to complete the test bases on calling funciton 'done()' 
-  it("search a string in library and verify change of state and results", function (done) {
-    
+  it("should raise the onItemWillExpand when expanding", function (done) {
+    // test data to create LibraryItem  
+    // parent item that will hold the child items
+    let data = new ItemData("");
+    data.text = "TestItem";
+    data.itemType = "none";
+
+    // create child items and link with parent
+    for (var i = 0; i < 2; i++) {
+      let item = new ItemData("");
+      item.text = "Child" + i;
+      item.itemType = "category";
+      data.appendChild(item);
+    }
+
+    // create "LibraryContainer" to pass as an argument for creation of "LibraryItem"
+    let libContainer = LibraryEntryPoint.CreateLibraryController();
+    //pass a callback which if called will end the test
+    let libraryItem = mount(<LibraryItem libraryContainer={libContainer} data={data} showItemSummary={false} onItemWillExpand={() => { done() }} />);
+
+    let header = libraryItem.find(('div.LibraryItemHeader')).at(0);// the state of LibraryItem is changed when clicking on header
+    chai.expect(header).to.have.lengthOf(1); // verify that there is a header
+    header.simulate('click'); // enzyme function to simulate mouse click
+    chai.expect(libraryItem.state('expanded')).to.be.true;
+  });
+
+  it("scrollToElement should be called when libraryItem is expanded only", function () {
+
     // Test for positive scenario where the node names are correct
     let libContainer = mount(
       libController.createLibraryContainer()
     );
-    
+    // Load the data to libController
+    libController.setLoadedTypesJson(loadedTypesJson, false);
+    libController.setLayoutSpecsJson(layoutSpecsJson, false);
+    libController.refreshLibraryView();
+
+    let header = libContainer.find('div.LibraryItemHeader').at(0);
+    chai.expect(header).to.have.lengthOf(1);
+    var count = 0;
+    //replace the scroll method with a method which ends the test.
+    libContainer.getNode().scrollToExpandedItem = () => { count = count + 1; }
+    header.simulate('click');
+    header.simulate('click');
+    chai.assert.equal(count, 1);
+
+  });
+
+
+  // Test uses timeout function and testframework knows 
+  // when to complete the test bases on calling funciton 'done()' 
+  it("search a string in library and verify change of state and results", function (done) {
+
+    // Test for positive scenario where the node names are correct
+    let libContainer = mount(
+      libController.createLibraryContainer()
+    );
+
     // Load the data to libController
     libController.setLoadedTypesJson(loadedTypesJson, false);
     libController.setLayoutSpecsJson(layoutSpecsJson, false);
@@ -144,7 +193,7 @@ describe("LibraryContainer UI", function () {
   // Test uses timeout function and testframework knows 
   // when to complete the test bases on calling funciton 'done()' 
   it("search a negative scenario for search", function (done) {
-    
+
     // Test for negative scenario where search results are not found 
     let libContainer = mount(
       libController.createLibraryContainer()
@@ -175,7 +224,7 @@ describe("LibraryContainer UI", function () {
   });
 
   it("change state of searchbar to detail view and verify the search results display item description", function (done) {
-    
+
     // Change the search mode to detail view and verify the results display description  
     let libContainer = mount(
       libController.createLibraryContainer()
@@ -197,7 +246,7 @@ describe("LibraryContainer UI", function () {
     detail.simulate('click');
     // Verify the detailed view is active
     chai.expect(libContainer.state('detailed')).to.be.true;
-    
+
     setTimeout(function () {    // Search has timeout delay so verify results after the search is displayed
       // Get the search results   
       let value = libContainer.find('SearchResultItem');

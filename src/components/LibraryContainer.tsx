@@ -10,6 +10,7 @@ import { LibraryItem } from "./LibraryItem";
 import { Searcher } from "../Searcher";
 import { SearchBar } from "./SearchBar";
 import { SearchResultItem } from "./SearchResultItem";
+import * as ReactDOM from "react-dom";
 
 declare var boundContainer: any; // Object set from C# side.
 
@@ -56,11 +57,13 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
         this.onCategoriesChanged = this.onCategoriesChanged.bind(this);
         this.onTextChanged = this.onTextChanged.bind(this);
         this.handleKeyDown = this.handleKeyDown.bind(this);
+        this.scrollToExpandedItem = this.scrollToExpandedItem.bind(this)
 
         // Set handlers after methods are bound.
         this.props.libraryController.setLoadedTypesJsonHandler = this.setLoadedTypesJson;
         this.props.libraryController.setLayoutSpecsJsonHandler = this.setLayoutSpecsJson;
         this.props.libraryController.refreshLibraryViewHandler = this.refreshLibraryView;
+
 
         // Initialize the search utilities with empty data
         this.searcher = new Searcher();
@@ -97,6 +100,38 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
                 break;
         }
     }
+
+    private offset(el: any) {
+        var rect = el.getBoundingClientRect(),
+            scrollLeft = window.pageXOffset || document.documentElement.scrollLeft,
+            scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        return { top: rect.top + scrollTop, left: rect.left + scrollLeft }
+    }
+
+    /**
+     * This method attempts to scroll the outer libraryItemContainer so that the position
+     * on screen of the passed element does not change, even though the scroll position does.
+     * @param element 
+     */
+    scrollToExpandedItem(element: HTMLElement) {
+        if (element) {
+            
+            var currentElement = ReactDOM.findDOMNode(this).querySelector(".LibraryItemContainer");
+            //get the offset for the element we care about scrolling to.
+            var offsetOldElement = this.offset(element);
+
+            //now we wait until the expansion and re-render occurs,
+            setTimeout(() => {
+                //measure the distance between the old element and the new position post expansion
+                var distance = offsetOldElement.top - this.offset(element).top;
+                //scroll back up by that distance.
+                currentElement.scrollBy(0, -distance);
+
+            }, 0);
+        }
+    }
+
+
 
     setLoadedTypesJson(loadedTypesJson: any, append: boolean = true): void {
 
@@ -306,13 +341,14 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
             let sections: JSX.Element[] = null;
             let index = 0;
             if (!this.state.inSearchMode) {
-                sections = this.generatedSections.map(data =>
-                    <LibraryItem
+                sections = this.generatedSections.map(data => {
+                    return <LibraryItem
                         key={index++}
                         libraryContainer={this}
                         data={data}
                         showItemSummary={this.state.showItemSummary}
                     />
+                }
                 );
             } else if (this.state.structured) {
                 sections = this.searchResultItems.map(item =>
