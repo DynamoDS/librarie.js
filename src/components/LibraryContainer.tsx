@@ -131,7 +131,7 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
                 var distance = offsetOldElement.top - this.offset(element).top;
                 //don't bother marching if the distance is negative
                 //as we don't have enough room to scroll.
-                while (distance > 5 || (newOffset > maxAttempts)) {
+                while (distance > 5 && (newOffset < maxAttempts)) {
                     newOffset = newOffset + 1;
                     currentElement.scrollTop = newOffset;
                     distance = this.offset(element).top - offsetOldElement.top;  
