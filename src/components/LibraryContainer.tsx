@@ -127,7 +127,7 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
                 //scroll back up by that distance.
                 currentElement.scrollBy(0, -distance);
 
-            }, 1);
+            }, 0);
         }
     }
 
