@@ -115,28 +115,28 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
      */
     scrollToExpandedItem(element: HTMLElement) {
         if (element) {
+            //this is a fail safe so we never get stuck in an infinte loop.
+            //TODO would be good to do a binary search or real adaptive march.
+            //or figure out the edge cases - or disable item collapse on item expand.
+            var maxAttempts = 10000;
+            //get the outer container
             var currentElement = ReactDOM.findDOMNode(this).querySelector(".LibraryItemContainer");
-            var currentDocScrollTop = currentElement.scrollTop;
-
-            console.log(currentDocScrollTop);
-            //this is the offset between the old element position and the container scroll positon.
-            //before the item is expanded.
+            //get the offset for the element we care about scrolling to.
             var offsetOldElement = this.offset(element);
-            var oldOffset = offsetOldElement.top - currentDocScrollTop;
 
             //now we wait until the expansion and re-render occurs,
             setTimeout(() => {
-                // this should be the current top position of the element after it's been expanded
-                var currentTopOfElementAfterExpand = this.offset(element).top;
-                //this is the new scroll position which will make it appear as if
-                //the element is in the same location on screen, even though the scroll
-                //has changed.
-                var newOffset = currentTopOfElementAfterExpand - oldOffset;
-
-                currentElement.scrollTop = newOffset;
-
+                //could not find methods which worked for all edge cases...so do a simple march :).
+                var newOffset = 0;
+                var distance = offsetOldElement.top - this.offset(element).top;
+                //don't bother marching if the distance is negative
+                //as we don't have enough room to scroll.
+                while (distance > 5 || (newOffset > maxAttempts)) {
+                    newOffset = newOffset + 1;
+                    currentElement.scrollTop = newOffset;
+                    distance = this.offset(element).top - offsetOldElement.top;  
+                };
             }, 1);
-
         }
     }
 
