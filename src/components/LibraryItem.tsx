@@ -355,10 +355,6 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         }
 
         this.setState({ expanded: !currentlyExpanded });
-        //if the item is not expanded, but was clicked on
-        //we're about to expand it - call the passed function
-        //to scroll back up to it.
-
 
         let libraryContainer = this.props.libraryContainer;
         if (this.props.data.childItems.length == 0) {
