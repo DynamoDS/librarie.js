@@ -119,13 +119,12 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
             var currentElement = ReactDOM.findDOMNode(this).querySelector(".LibraryItemContainer");
             //get the offset for the element we care about scrolling to.
             var offsetOldElement = this.offset(element);
-
             //now we wait until the expansion and re-render occurs,
             setTimeout(() => {
                 //measure the distance between the old element and the new position post expansion
                 var distance = offsetOldElement.top - this.offset(element).top;
                 //scroll back up by that distance.
-                currentElement.scrollBy(0, -distance);
+                currentElement.scrollTop = currentElement.scrollTop - distance;
 
             }, 0);
         }
