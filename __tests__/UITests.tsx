@@ -261,4 +261,31 @@ describe("LibraryContainer UI", function () {
       done(); // For testframework to know when to terminate execution
     }, 500);
   });
+
+  it("search bar should not contain structured view button", function () {
+    
+        
+        let libContainer = mount(
+          libController.createLibraryContainer()
+        );
+       
+        libController.setLoadedTypesJson(loadedTypesJson, false);
+        libController.setLayoutSpecsJson(layoutSpecsJson, false);
+        libController.refreshLibraryView();
+
+        let buttons = libContainer.find('button');
+       //detail view, filter.
+        chai.expect(buttons).to.have.lengthOf(2);
+    
+        // Trigger the search so the option for detail view is enabled
+        let text = () => libContainer.find('input.SearchInputText');
+        // Set the search string 
+        text().simulate('change', { target: { value: 'Child' } });
+        chai.expect(text()).to.have.lengthOf(1);
+        // Find the buttons in the search
+        buttons = libContainer.find('button');
+       //detail view, filter, and x button//
+        chai.expect(buttons).to.have.lengthOf(3);
+        
+      });
 });

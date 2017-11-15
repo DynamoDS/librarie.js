@@ -249,7 +249,7 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
                 <div className="LibraryHeader">
                     Library
                     <div>
-                        |{this.createFilterButton()}|{this.createStructuredButton()}|{this.createDetailedButton()}
+                        |{this.createFilterButton()}|{this.createDetailedButton()}
                     </div>
                 </div>
                 <div className="SearchInput">
