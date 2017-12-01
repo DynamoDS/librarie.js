@@ -2,6 +2,7 @@ import * as React from 'react';
 import { shallow, mount } from 'enzyme';
 import * as LibraryEntryPoint from '../src/entry-point';
 import { LibraryItem } from '../src/components/LibraryItem';
+import { SearchResultItem } from '../src/components/SearchResultItem';
 import { ItemData } from "../src/LibraryUtilities";
 import * as chai from 'chai';
 
@@ -263,29 +264,70 @@ describe("LibraryContainer UI", function () {
   });
 
   it("search bar should not contain structured view button", function () {
-    
-        
-        let libContainer = mount(
-          libController.createLibraryContainer()
-        );
-       
-        libController.setLoadedTypesJson(loadedTypesJson, false);
-        libController.setLayoutSpecsJson(layoutSpecsJson, false);
-        libController.refreshLibraryView();
 
-        let buttons = libContainer.find('button');
-       //detail view, filter.
-        chai.expect(buttons).to.have.lengthOf(2);
-    
-        // Trigger the search so the option for detail view is enabled
-        let text = () => libContainer.find('input.SearchInputText');
-        // Set the search string 
-        text().simulate('change', { target: { value: 'Child' } });
-        chai.expect(text()).to.have.lengthOf(1);
-        // Find the buttons in the search
-        buttons = libContainer.find('button');
-       //detail view, filter, and x button//
-        chai.expect(buttons).to.have.lengthOf(3);
-        
-      });
+
+    let libContainer = mount(
+      libController.createLibraryContainer()
+    );
+
+    libController.setLoadedTypesJson(loadedTypesJson, false);
+    libController.setLayoutSpecsJson(layoutSpecsJson, false);
+    libController.refreshLibraryView();
+
+    let buttons = libContainer.find('button');
+    //detail view, filter.
+    chai.expect(buttons).to.have.lengthOf(2);
+
+    // Trigger the search so the option for detail view is enabled
+    let text = () => libContainer.find('input.SearchInputText');
+    // Set the search string 
+    text().simulate('change', { target: { value: 'Child' } });
+    chai.expect(text()).to.have.lengthOf(1);
+    // Find the buttons in the search
+    buttons = libContainer.find('button');
+    //detail view, filter, and x button//
+    chai.expect(buttons).to.have.lengthOf(3);
+
+  });
+
+  it("click item text on search should return to the library item", function (done) {
+
+    // create "LibraryContainer" to pass as an argument for creation of "LibraryItem"
+    let libContainer = mount(
+      libController.createLibraryContainer()
+    );
+
+    libController.setLoadedTypesJson(loadedTypesJson, false);
+    libController.setLayoutSpecsJson(layoutSpecsJson, false);
+    libController.refreshLibraryView();
+
+    // Trigger the search so the option for detail view is enabled
+    let text = () => libContainer.find('input.SearchInputText');
+    // Set the search string 
+    text().simulate('change', { target: { value: 'Child' } });
+    chai.expect(text()).to.have.lengthOf(1);
+
+    // Find the div for Detailed view and click on it
+    let option = libContainer.find('button.SearchOptionsBtnEnabled');
+    let detail = option.find('[title="Compact/Detailed View"]');
+    chai.expect(detail).to.have.lengthOf(1);
+    detail.simulate('click');
+   
+    setTimeout(function () {    // Search has timeout delay so verify results after the search is displayed
+      // Get the search results   
+      let value = libContainer.find('SearchResultItem');
+      chai.expect(value).to.have.lengthOf(2);
+      chai.expect(value.at(0).props().data.text).to.equal("Child1");
+      chai.expect(value.at(1).props().data.text).to.equal("Child2");
+
+      //make the library item expanded to false.
+      value.at(0).props().data.pathToItem[0].expanded = false;
+      
+      let detials = libContainer.find('div.ItemParent');
+      //click the item text
+      detials.at(0).simulate('click');
+      chai.expect(value.at(0).props().data.pathToItem[0].expanded).to.be.true;
+      done();
+    }, 500);
+  });
 });

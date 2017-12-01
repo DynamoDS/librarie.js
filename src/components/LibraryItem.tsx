@@ -111,6 +111,17 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         }
     }
 
+    //Afer rendering each Library item, scroll to the expanded item
+    componentDidMount() {
+        if (this.props.data.expanded) {
+            let test = this.props.data;
+            setTimeout(() => {
+                let elem = ReactDOM.findDOMNode(this);
+                elem.scrollIntoView();
+            }, 0);
+        }
+    }
+
     render() {
         if (!this.props.data.visible) {
             return null;
@@ -287,7 +298,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
                             data={item}
                             showItemSummary={this.props.showItemSummary}
                             isLastItem={isLastItem}
-                            onItemWillExpand={(args:any) => {
+                            onItemWillExpand={(args: any) => {
                                 this.onSingleChildItemWillExpand();
                                 this.props.libraryContainer.scrollToExpandedItem(args)
                             }}
