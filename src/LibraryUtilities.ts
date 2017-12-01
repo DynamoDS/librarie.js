@@ -748,21 +748,10 @@ export function getHighlightedText(text: string, highlightedText: string, matchD
  */
 export function findAndExpandItemByPath(pathToItem: ItemData[], allItems: ItemData[]): boolean {
 
-    //If RawDataType is handcrafted, then there is a chance for the item
-    //to get incorrect information. Otherwise, pathToItem has the right members
-    //just expanding the item to true will work. 
-    pathToItem.forEach(element => {
-        element.expanded = true;
-    });
-
-    return true;
-   
-    //if the above code did not work, then uncomment the below
-    //code to find the actual issue.
-   /* let item: ItemData;
-
+   let item: ItemData;
+    //commented the check for iconUrl. This is false only for static RawDataType files.
     item = allItems.find(item =>
-        item.text == pathToItem[0].text && item.iconUrl == pathToItem[0].iconUrl
+        item.text == pathToItem[0].text //&& item.iconUrl == pathToItem[0].iconUrl
     );
 
     if (pathToItem.length == 1) {
@@ -773,7 +762,7 @@ export function findAndExpandItemByPath(pathToItem: ItemData[], allItems: ItemDa
         item.expanded = result; // Expand only if item is found.
         return result;
     }
-    */
+    
 }
 
 export function sortItemsByText(items: ItemData[]): ItemData[] {
