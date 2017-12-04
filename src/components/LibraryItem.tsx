@@ -111,6 +111,26 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         }
     }
 
+    //Afer rendering each Library item, scroll to the expanded item
+    componentDidMount() {
+        if (this.props.data.expanded) {
+            //scroll to only that element clicked from search. Determining that element from 
+            //other elements is little tricky. The idea here is, the element which has
+            //its child elements expanded to false is the actual element clicked from search. Scroll
+            //to that element.
+            let isThereChildItemsToExpand = this.props.data.childItems.filter((item: any) => {
+                return item.expanded == true;
+            });
+            if (isThereChildItemsToExpand.length == 0) {
+                setTimeout(() => {
+                    let elem = ReactDOM.findDOMNode(this);
+                    elem.scrollIntoView();
+                }, 0);
+            }
+
+        }
+    }
+
     render() {
         if (!this.props.data.visible) {
             return null;
@@ -188,7 +208,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
 
         if (this.props.data.childItems.length == 0) {
             return null;
-        }
+        };
 
         let arrowIcon: any = null;
 
@@ -287,7 +307,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
                             data={item}
                             showItemSummary={this.props.showItemSummary}
                             isLastItem={isLastItem}
-                            onItemWillExpand={(args:any) => {
+                            onItemWillExpand={(args: any) => {
                                 this.onSingleChildItemWillExpand();
                                 this.props.libraryContainer.scrollToExpandedItem(args)
                             }}
