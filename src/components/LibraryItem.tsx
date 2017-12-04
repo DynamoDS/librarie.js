@@ -158,8 +158,9 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
     }
 
     getIconElement(): JSX.Element {
-        // Group displays only text without icon.
-        if (this.props.data.itemType !== "group" && this.props.data.itemType !== "section") {
+        let itemType = this.props.data.itemType;
+        // If the element type is a section, group, or none an icon shouldn't be displayed
+        if (itemType !== "group" && itemType !== "section" && itemType !== "none") {
             return <img
                 className={"LibraryItemIcon"}
                 src={this.props.data.iconUrl}
