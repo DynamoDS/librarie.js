@@ -4,7 +4,7 @@ import * as React from "react";
 
 type MemberType = "none" | "create" | "action" | "query";
 type ElementType = "none" | "section" | "category" | "group";
-type ItemType = "none" | "section" | "category" | "group" | "create" | "action" | "query";
+type ItemType = "none" | "section" | "category" | "group" | "create" | "action" | "query" | "class";
 
 import * as _ from 'underscore';
 

@@ -202,7 +202,10 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
 
     // Show arrow for non-section, non-category and non-leaf items
     getArrowElement(): JSX.Element {
-        if (this.props.data.itemType === "section" || this.props.data.itemType === "category") {
+        //TODO: uncomment this and add this to the if condition
+        //if groups should not have lines.
+        // || this.props.data.itemType === "group") 
+        if (this.props.data.itemType === "section") { 
             return null;
         }
 
@@ -220,6 +223,16 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
             }
         } else {
             arrowIcon = require("../resources/ui/indent-arrow-down.svg");
+        }
+
+        if (this.props.data.itemType == "category") {
+            if (!this.state.expanded) {
+                arrowIcon = require("../resources/ui/indent-arrow-right-wo-lines.svg");
+            }
+            else {
+                arrowIcon = require("../resources/ui/indent-arrow-down-wo-lines.svg");
+            }
+
         }
 
         return <img className={"Arrow"} src={arrowIcon} onError={this.onImageLoadFail} />;
@@ -370,11 +383,18 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
     onLibraryItemClicked() {
         // Toggle expansion state.
         let currentlyExpanded = this.state.expanded;
+
         if (this.props.data.childItems.length > 0 && !currentlyExpanded && this.props.onItemWillExpand) {
             this.props.onItemWillExpand(ReactDOM.findDOMNode(this));
         }
 
         this.setState({ expanded: !currentlyExpanded });
+
+        // if(this.props.data.itemType === "category" ) {
+        //     this.props.data.childItems.forEach((item: any) => {
+        //         item.expanded = true;
+        //     });
+        // }
 
         let libraryContainer = this.props.libraryContainer;
         if (this.props.data.childItems.length == 0) {
