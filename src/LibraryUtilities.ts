@@ -4,7 +4,7 @@ import * as React from "react";
 
 type MemberType = "none" | "create" | "action" | "query";
 type ElementType = "none" | "section" | "category" | "group";
-type ItemType = "none" | "section" | "category" | "group" | "create" | "action" | "query" | "class";
+type ItemType = "none" | "section" | "category" | "group" | "create" | "action" | "query" | "class" | "coregroup";
 
 import * as _ from 'underscore';
 
@@ -518,7 +518,7 @@ export function removeEmptyNodes(items: ItemData[]) {
             if (removeEmptyNodes(item.childItems)) {
                 i--;
             }
-        } else if (item.itemType === "section" || item.itemType === "category" || item.itemType === "group") {
+        } else if (item.itemType === "section" || item.itemType === "category" || item.itemType === "group" || item.itemType === "coregroup") {
             items.splice(i, 1);
             i--;
             itemRemoved = true;
@@ -672,7 +672,7 @@ export function setItemStateRecursive(items: ItemData | ItemData[], visible: boo
 }
 
 export function search(text: string, item: ItemData) {
-    if (item.itemType !== "group") {
+    if (item.itemType !== "group" && item.itemType !== "coregroup") {
         for (let keyword of item.keywords) {
             if (keyword.includes(text)) {
                 // Show all items recursively if a given text is found in the current 

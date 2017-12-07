@@ -157,6 +157,12 @@ input {
     width: 32px;
 }
 
+.CategoryArrow {
+    height: 32px;
+    width: 32px;
+    margin-left:-10px;
+}
+
 .BodyIndentation {
     margin-bottom: 18px;
     padding-left: 4px;

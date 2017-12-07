@@ -179,7 +179,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
 
     getIconElement(): JSX.Element {
         // Group displays only text without icon.
-        if (this.props.data.itemType !== "group" && this.props.data.itemType !== "section") {
+        if (this.props.data.itemType !== "group" && this.props.data.itemType !== "section" && this.props.data.itemType !== "coregroup") {
             return <img
                 className={"LibraryItemIcon"}
                 src={this.props.data.iconUrl}
@@ -205,7 +205,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         //TODO: uncomment this and add this to the if condition
         //if groups should not have lines.
         // || this.props.data.itemType === "group") 
-        if (this.props.data.itemType === "section") { 
+        if (this.props.data.itemType === "section" || this.props.data.itemType === "coregroup" ) { 
             return null;
         }
 
@@ -232,6 +232,8 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
             else {
                 arrowIcon = require("../resources/ui/indent-arrow-down-wo-lines.svg");
             }
+
+            return <img className={"CategoryArrow"} src={arrowIcon} onError={this.onImageLoadFail} />;
 
         }
 
@@ -270,6 +272,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
             case "category":
                 return "LibraryItemContainerCategory";
             case "group":
+            case "coregroup":
                 return "LibraryItemContainerGroup";
             default:
                 return "LibraryItemContainerNone";
@@ -288,6 +291,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
     getLibraryItemTextStyle(): string {
         switch (this.props.data.itemType) {
             case "group":
+            case "coregroup":
             case "section":
                 return "LibraryItemGroupText";
             default:
