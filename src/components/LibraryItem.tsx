@@ -109,11 +109,15 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         if (nextProps.data.expanded !== this.state.expanded) {
             this.setState({ expanded: nextProps.data.expanded });
         }
+        //keep the core group defined in layoutspec always expanded.
+        if(nextProps.data.itemType == "coregroup") {
+            this.setState({expanded:true});
+        }
     }
 
     //Afer rendering each Library item, scroll to the expanded item
     componentDidMount() {
-        if (this.props.data.expanded) {
+        if (this.props.data.expanded && this.props.data.itemType !== "coregroup") {
             //scroll to only that element clicked from search. Determining that element from 
             //other elements is little tricky. The idea here is, the element which has
             //its child elements expanded to false is the actual element clicked from search. Scroll
@@ -394,11 +398,12 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
 
         this.setState({ expanded: !currentlyExpanded });
 
-        // if(this.props.data.itemType === "category" ) {
-        //     this.props.data.childItems.forEach((item: any) => {
-        //         item.expanded = true;
-        //     });
-        // }
+        if(this.props.data.itemType === "category" ) {
+            this.props.data.childItems.forEach((item: any) => {
+                if(item.itemType == "coregroup")
+                item.expanded = true;
+            });
+        }
 
         let libraryContainer = this.props.libraryContainer;
         if (this.props.data.childItems.length == 0) {

@@ -667,6 +667,11 @@ export function setItemStateRecursive(items: ItemData | ItemData[], visible: boo
             item.expanded = false;
         }
 
+        //All groups defined in layoutspec.json should be expanded by default.
+        if (item.itemType === "coregroup") {
+            item.expanded = true;
+        }
+
         setItemStateRecursive(item.childItems, visible, expanded);
     }
 }
