@@ -206,9 +206,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
 
     // Show arrow for non-section, non-category and non-leaf items
     getArrowElement(): JSX.Element {
-        //TODO: uncomment this and add this to the if condition
-        //if groups should not have lines.
-        // || this.props.data.itemType === "group") 
+        //no arrow for groups defined in layout spec
         if (this.props.data.itemType === "section" || this.props.data.itemType === "coregroup" ) { 
             return null;
         }
@@ -400,8 +398,9 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
 
         if(this.props.data.itemType === "category" ) {
             this.props.data.childItems.forEach((item: any) => {
-                if(item.itemType == "coregroup")
-                item.expanded = true;
+                if(item.itemType == "coregroup"){
+                    item.expanded = true;
+                }
             });
         }
 
