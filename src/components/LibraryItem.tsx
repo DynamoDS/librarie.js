@@ -399,6 +399,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
 
         this.setState({ expanded: !currentlyExpanded });
 
+        //auto expand the coregroup elements
         if(this.props.data.itemType === "category" ) {
             this.props.data.childItems.forEach((item: any) => {
                 if(item.itemType == "coregroup"){
