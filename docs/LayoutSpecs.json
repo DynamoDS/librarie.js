@@ -16,7 +16,7 @@
             {
               "text": "Inspect",
               "iconUrl": "",
-              "elementType": "coregroup",
+              "elementType": "group",
               "include": [
                 {
                   "path": "DSCore.List.AllFalse"
@@ -108,7 +108,7 @@
             {
               "text": "Modify",
               "iconUrl": "",
-              "elementType": "coregroup",
+              "elementType": "group",
               "include": [
                 {
                   "path": "List.RemoveIfNot"
@@ -200,7 +200,7 @@
             {
               "text": "Organize",
               "iconUrl": "",
-              "elementType": "coregroup",
+              "elementType": "group",
               "include": [
                 {
                   "path": "List.GroupByFunction"
@@ -253,7 +253,7 @@
             {
               "text": "Generate",
               "iconUrl": "",
-              "elementType": "coregroup",
+              "elementType": "group",
               "include": [
                 {
                   "path": "Core.List.List.Create"
@@ -288,7 +288,7 @@
             {
               "text": "Match",
               "iconUrl": "",
-              "elementType": "coregroup",
+              "elementType": "group",
               "include": [
                 {
                   "path": "Core.List.List.LaceShortest"
@@ -319,7 +319,7 @@
             {
               "text": "DateTime",
               "iconUrl": "",
-              "elementType": "coregroup",
+              "elementType": "group",
               "include": [
                 {
                   "path": "Core.Input.Date Time"
@@ -388,7 +388,7 @@
             {
               "text": "Location",
               "iconUrl": "",
-              "elementType": "coregroup",
+              "elementType": "group",
               "include": [
                 {
                   "path": "DynamoUnits.Location.Name"
@@ -408,7 +408,7 @@
             {
               "text": "Basic",
               "iconUrl": "",
-              "elementType": "coregroup",
+              "elementType": "group",
               "include": [
                 {
                   "path": "Core.Input.Boolean"
@@ -440,7 +440,7 @@
             {
               "text": "TimeSpan",
               "iconUrl": "",
-              "elementType": "coregroup",
+              "elementType": "group",
               "include": [
                 {
                   "path": "DSCore.TimeSpan.ByDateDifference"
@@ -496,7 +496,7 @@
             {
               "text": "Object",
               "iconUrl": "",
-              "elementType": "coregroup",
+              "elementType": "group",
               "include": [
                 {
                   "path": "DSCore.Object.IsNull"
@@ -513,7 +513,7 @@
             {
               "text": "Thread",
               "iconUrl": "",
-              "elementType": "coregroup",
+              "elementType": "group",
               "include": [
                 {
                   "path": "DSCore.Thread"
@@ -532,7 +532,7 @@
             {
               "text": "Functions",
               "iconUrl": "",
-              "elementType": "coregroup",
+              "elementType": "group",
               "include": [
                 {
                   "path": "DSCore.Math.Random"
@@ -654,7 +654,7 @@
             {
               "text": "Units",
               "iconUrl": "",
-              "elementType": "coregroup",
+              "elementType": "group",
               "include": [
                 {
                   "path": "Core.Units.Convert Between Units"
@@ -677,7 +677,7 @@
             {
               "text": "Operators",
               "iconUrl": "/src/resources/icons/Category.Operators.svg",
-              "elementType": "coregroup",
+              "elementType": "group",
               "include": [
                 {
                   "path": "+"
@@ -727,7 +727,7 @@
             {
               "text": "Logic",
               "iconUrl": "",
-              "elementType": "coregroup",
+              "elementType": "group",
               "include": [
                 {
                   "path": "Core.Math.And"
@@ -752,7 +752,7 @@
             {
               "text": "Evaluate",
               "iconUrl": "",
-              "elementType": "coregroup",
+              "elementType": "group",
               "include": [
                 {
                   "path": "Core.Evaluate.Function.Apply"
@@ -766,7 +766,7 @@
             {
               "text": "Control Flow",
               "iconUrl": "",
-              "elementType": "coregroup",
+              "elementType": "group",
               "include": [
                 {
                   "path": "LoopWhile"
@@ -783,7 +783,7 @@
             {
               "text": "Editor",
               "iconUrl": "",
-              "elementType": "coregroup",
+              "elementType": "group",
               "include": [
                 {
                   "path": "Core.Scripting.Python Script"
@@ -897,7 +897,7 @@
             {
               "text": "CAD",
               "iconUrl": "",
-              "elementType": "coregroup",
+              "elementType": "group",
               "include": [
                 {
                   "path": "Dynamo.Translation.CAD.Import"
@@ -920,7 +920,7 @@
             {
               "text": "File",
               "iconUrl": "",
-              "elementType": "coregroup",
+              "elementType": "group",
               "include": [
                 {
                   "path": "Core.Input.File Path"
@@ -991,7 +991,7 @@
             {
               "text": "Image",
               "iconUrl": "",
-              "elementType": "coregroup",
+              "elementType": "group",
               "include": [
                 {
                   "path": "DSCore.IO.Image.ReadFromFile"
@@ -1014,7 +1014,7 @@
             {
               "text": "Data",
               "iconUrl": "",
-              "elementType": "coregroup",
+              "elementType": "group",
               "include": [
                 {
                   "path": "DSOffice.Data.ImportExcel"
@@ -1034,7 +1034,7 @@
             {
               "text": "Web",
               "iconUrl": "",
-              "elementType": "coregroup",
+              "elementType": "group",
               "include": [
                 {
                   "path": "Core.Web.Web Request"
@@ -1053,7 +1053,7 @@
             {
               "text": "Inspect",
               "iconUrl": "",
-              "elementType": "coregroup",
+              "elementType": "group",
               "include": [
                 {
                   "path": "DSCore.String.Contains"
@@ -1085,7 +1085,7 @@
             {
               "text": "Modify",
               "iconUrl": "",
-              "elementType": "coregroup",
+              "elementType": "group",
               "include": [
                 {
                   "path": "DSCore.String.TrimWhitespace"
@@ -1138,7 +1138,7 @@
             {
               "text": "Generate",
               "iconUrl": "",
-              "elementType": "coregroup",
+              "elementType": "group",
               "include": [
                 {
                   "path": "Core.String.String from Object"
@@ -1166,7 +1166,7 @@
             {
               "text": "Abstract",
               "iconUrl": "",
-              "elementType": "coregroup",
+              "elementType": "group",
               "include": [
                 {
                   "path": "Autodesk.DesignScript.Geometry.BoundingBox",
@@ -1206,7 +1206,7 @@
             {
               "text": "Points",
               "iconUrl": "",
-              "elementType": "coregroup",
+              "elementType": "group",
               "include": [
                 {
                   "path": "Autodesk.DesignScript.Geometry.Point",
@@ -1222,7 +1222,7 @@
             {
               "text": "Curves",
               "iconUrl": "",
-              "elementType": "coregroup",
+              "elementType": "group",
               "include": [
                 {
                   "path": "Autodesk.DesignScript.Geometry.Arc",
@@ -1274,7 +1274,7 @@
             {
               "text": "Surfaces",
               "iconUrl": "",
-              "elementType": "coregroup",
+              "elementType": "group",
               "include": [
                 {
                   "path": "Autodesk.DesignScript.Geometry.NurbsSurface",
@@ -1294,7 +1294,7 @@
             {
               "text": "Solids",
               "iconUrl": "",
-              "elementType": "coregroup",
+              "elementType": "group",
               "include": [
                 {
                   "path": "Autodesk.DesignScript.Geometry.Cone",
@@ -1322,7 +1322,7 @@
             {
               "text": "Meshes",
               "iconUrl": "",
-              "elementType": "coregroup",
+              "elementType": "group",
               "include": [
                 {
                   "path": "Autodesk.DesignScript.Geometry.IndexGroup",
@@ -1338,7 +1338,7 @@
             {
               "text": "Modifiers",
               "iconUrl": "",
-              "elementType": "coregroup",
+              "elementType": "group",
               "include": [
                 {
                   "path": "Geometry.Geometry",
@@ -1353,7 +1353,7 @@
                 {
                   "text": "Geometry Color",
                   "iconUrl": "",
-                  "elementType": "coregroup",
+                  "elementType": "group",
                   "include": [
                     {
                       "path": "Modifiers.GeometryColor.ByGeometryColor"
@@ -1369,7 +1369,7 @@
             {
               "text": "Tessellation",
               "iconUrl": "",
-              "elementType": "coregroup",
+              "elementType": "group",
               "include": [
                 {
                   "path": "Tessellation.ConvexHull",
@@ -1397,7 +1397,7 @@
             {
               "text": "Analyze",
               "iconUrl": "",
-              "elementType": "coregroup",
+              "elementType": "group",
               "include": [
                 {
                   "path": "Analysis.Analysis",
@@ -1412,7 +1412,7 @@
                 {
                   "text": "SiteLocation",
                   "iconUrl": "",
-                  "elementType": "coregroup",
+                  "elementType": "group",
                   "include": [
                     {
                       "path": "Analyze.SiteLocation"
@@ -1424,7 +1424,7 @@
             {
                 "text": "Selection",
                 "iconUrl": "",
-                "elementType": "coregroup",
+                "elementType": "group",
                 "include": [
                   {
                     "path": "Revit.Selection",
@@ -1435,7 +1435,7 @@
             {
                 "text": "Analysis",
                 "iconUrl": "",
-                "elementType": "coregroup",
+                "elementType": "group",
                 "include": [
                   {
                     "path": "RevitNodes.Revit.AnalysisDisplay",
@@ -1446,7 +1446,7 @@
             {
                 "text": "Application",
                 "iconUrl": "",
-                "elementType": "coregroup",
+                "elementType": "group",
                 "include": [
                   {
                     "path": "RevitNodes.Revit.Application.Document"
@@ -1456,7 +1456,7 @@
             {
                 "text": "Elements",
                 "iconUrl": "",
-                "elementType": "coregroup",
+                "elementType": "group",
                 "include": [
                   {
                     "path": "RevitNodes.Revit.Elements.AdaptiveComponent"
@@ -1598,7 +1598,7 @@
                   {
                     "text": "DirectShape",
                     "iconUrl": "",
-                    "elementType": "coregroup",
+                    "elementType": "group",
                     "include": [
                       {
                         "path": "RevitNodes.Revit.Elements.DirectShape",
@@ -1613,7 +1613,7 @@
                   {
                     "text": "DividedPath",
                     "iconUrl": "",
-                    "elementType": "coregroup",
+                    "elementType": "group",
                     "include": [
                       {
                         "path": "RevitNodes.Revit.Elements.DividedPath",
@@ -1628,7 +1628,7 @@
                   {
                     "text": "FilledRegionType",
                     "iconUrl": "",
-                    "elementType": "coregroup",
+                    "elementType": "group",
                     "include": [
                       {
                         "path": "RevitNodes.Revit.Elements.FillRegionType",
@@ -1643,7 +1643,7 @@
                   {
                     "text": "FilledPatternElement",
                     "iconUrl": "",
-                    "elementType": "coregroup",
+                    "elementType": "group",
                     "include": [
                       {
                         "path": "RevitNodes.Revit.Elements.FillPatternElement",
@@ -1657,7 +1657,7 @@
                   {
                     "text": "LinePatternElement",
                     "iconUrl": "",
-                    "elementType": "coregroup",
+                    "elementType": "group",
                     "include": [
                       {
                         "path": "RevitNodes.Revit.Elements.LinePatternElement",
@@ -1672,7 +1672,7 @@
                   {
                     "text": "Parameter",
                     "iconUrl": "",
-                    "elementType": "coregroup",
+                    "elementType": "group",
                     "include": [
                       {
                         "path": "RevitNodes.Revit.Elements.Parameter",
@@ -1687,7 +1687,7 @@
                   {
                     "text": "PerformanceAdviserRule",
                     "iconUrl": "",
-                    "elementType": "coregroup",
+                    "elementType": "group",
                     "include": [
                       {
                         "path": "RevitNodes.Revit.Elements.PerformanceAdviserRule",
@@ -1702,7 +1702,7 @@
                   {
                     "text": "Phase",
                     "iconUrl": "",
-                    "elementType": "coregroup",
+                    "elementType": "group",
                     "include": [
                       {
                         "path": "RevitNodes.Revit.Elements.Phase",
@@ -1717,7 +1717,7 @@
                   {
                     "text": "Revision",
                     "iconUrl": "",
-                    "elementType": "coregroup",
+                    "elementType": "group",
                     "include": [
                       {
                         "path": "RevitNodes.Revit.Elements.Revision",
@@ -1732,7 +1732,7 @@
                   {
                     "text": "Text",
                     "iconUrl": "",
-                    "elementType": "coregroup",
+                    "elementType": "group",
                     "include": [
                       {
                         "path": "RevitNodes.Revit.Elements.Text",
@@ -1747,7 +1747,7 @@
                   {
                     "text": "Wall",
                     "iconUrl": "",
-                    "elementType": "coregroup",
+                    "elementType": "group",
                     "include": [
                       {
                         "path": "RevitNodes.Revit.Elements.Wall",
@@ -1764,7 +1764,7 @@
             {
                 "text": "Filter",
                 "iconUrl": "",
-                "elementType": "coregroup",
+                "elementType": "group",
                 "include": [
                   {
                     "path": "RevitNodes.Revit.Filter.FilterRule"
@@ -1777,7 +1777,7 @@
                   {
                     "text":"OverrideGraphicSettings",
                     "iconUrl":"",
-                    "elementType":"coregroup",
+                    "elementType":"group",
                     "include":[
                       {
                         "path": "Revit.Filter.OverrideGraphicSettings.Detail Level"
@@ -1790,7 +1790,7 @@
                   {
                     "text":"RuleType",
                     "iconUrl":"",
-                    "elementType":"coregroup",
+                    "elementType":"group",
                     "include":[
                       {
                         "path": "Revit.Filter.RuleType.Select Rule Type"
@@ -1802,7 +1802,7 @@
             {
                 "text": "References",
                 "iconUrl": "",
-                "elementType": "coregroup",
+                "elementType": "group",
                 "include": [
                   {
                     "path": "RevitNodes.Revit.References",
@@ -1813,7 +1813,7 @@
             {
                 "text": "Schedules",
                 "iconUrl": "",
-                "elementType": "coregroup",
+                "elementType": "group",
                 "include": [
                   {
                     "path": "RevitNodes.Revit.Schedules",
@@ -1824,7 +1824,7 @@
             {
                 "text": "Transaction",
                 "iconUrl": "",
-                "elementType": "coregroup",
+                "elementType": "group",
                 "include": [
                   {
                     "path": "RevitNodes.Revit.Transaction",
@@ -1835,7 +1835,7 @@
             {
                 "text": "Views",
                 "iconUrl": "",
-                "elementType": "coregroup",
+                "elementType": "group",
                 "include": [
                   {
                     "path": "RevitNodes.Revit.Elements.Views.AreaPlanView"
@@ -1872,7 +1872,7 @@
                   {
                     "text": "ScheduleView",
                     "iconUrl": "",
-                    "elementType": "coregroup",
+                    "elementType": "group",
                     "include": [
                       {
                         "path": "RevitNodes.Revit.Elements.Views.ScheduleView",
@@ -1887,7 +1887,7 @@
                   {
                     "text": "View",
                     "iconUrl": "",
-                    "elementType": "coregroup",
+                    "elementType": "group",
                     "include": [
                       {
                         "path": "RevitNodes.Revit.Elements.Views.View",
@@ -1902,7 +1902,7 @@
                   {
                     "text": "SunSettings",
                     "iconUrl": "",
-                    "elementType": "coregroup",
+                    "elementType": "group",
                     "include": [
                       {
                         "path": "Revit.View.SunSettings",

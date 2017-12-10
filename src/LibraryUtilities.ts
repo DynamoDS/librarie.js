@@ -3,7 +3,7 @@
 import * as React from "react";
 
 type MemberType = "none" | "create" | "action" | "query";
-type ElementType = "none" | "section" | "category" | "group";
+type ElementType = "none" | "section" | "category" | "group" | "coregroup" | "class";
 type ItemType = "none" | "section" | "category" | "group" | "create" | "action" | "query" | "class" | "coregroup";
 
 import * as _ from 'underscore';
@@ -487,6 +487,9 @@ export function buildLibrarySectionsFromLayoutSpecs(loadedTypes: any, layoutSpec
         sectionElements.push(new LayoutElement(section));
     }
 
+    //call update category groups.
+    updateCategoryGroups(sectionElements);
+
     let includeItemPairs: IncludeItemPair[] = [];
     let sections = convertLayoutElementToItemData(sectionElements, includeItemPairs);
     let sortedIncludeItemPairs = includeItemPairs.sort((a, b) => a.include.path.localeCompare(b.include.path));
@@ -506,6 +509,37 @@ export function buildLibrarySectionsFromLayoutSpecs(loadedTypes: any, layoutSpec
     removeEmptyNodes(sections);
 
     return sections;
+}
+
+/**
+ * Update the Category Groups to CoreGroup.
+ * This is to achieve the specific design for librarie.
+ * @param elements
+ */
+function updateCategoryGroups(elements: LayoutElement[]) {
+    if(!elements || elements.length == 0) return;
+
+    //filter the section elemens
+    let sectionElements : LayoutElement[] = elements.filter((elem: LayoutElement) => {
+        return elem.elementType == "section";
+    });
+
+    sectionElements.forEach((section: any) => {
+        //get all the category elements
+        let categoryElements = section.childElements.filter((child: LayoutElement) => {
+            return child.elementType == "category";
+        }); 
+
+        //get the first level group elements
+        let groupElements = categoryElements.filter((child: LayoutElement) => {
+            //change the element type of group elements
+            child.childElements.forEach((grp: LayoutElement) => {
+                if(grp.elementType != "class") {
+                    grp.elementType = "coregroup";
+                }
+            });
+        });
+    });
 }
 
 // Remove empty non-leaf nodes from items
