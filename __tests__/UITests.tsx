@@ -55,7 +55,7 @@ describe("LibraryContainer UI", function () {
               "childElements": [{
                 "text": "Core",
                 "iconUrl": "",
-                "elementType": "coregroup",
+                "elementType": "group",
                 "include": [{"path": "Child1" }, { "path": "Child2" }],
                 "childElements":[]
               }]
