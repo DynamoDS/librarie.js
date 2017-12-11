@@ -525,14 +525,17 @@ function updateCategoryGroups(elements: LayoutElement[]) {
     });
 
     sectionElements.forEach((section: any) => {
-        //get all the category elements
+        //get the top level category elements
         let categoryElements = section.childElements.filter((child: LayoutElement) => {
             return child.elementType == "category";
         }); 
 
-        //get the first level group elements
+        //get the top level group elements.
         let groupElements = categoryElements.filter((child: LayoutElement) => {
-            //change the element type of group elements
+            //For the top level group elements, update the element type.
+            //coregroup will be applied only to the top level elements. Not on
+            //the nested categories. This change is made to achieve a particular
+            //tree design (no lines / arrows for top level group).
             child.childElements.forEach((grp: LayoutElement) => {
                 if(grp.elementType != "class") {
                     grp.elementType = "coregroup";
