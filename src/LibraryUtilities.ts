@@ -3,8 +3,8 @@
 import * as React from "react";
 
 type MemberType = "none" | "create" | "action" | "query";
-type ElementType = "none" | "section" | "category" | "group";
-type ItemType = "none" | "section" | "category" | "group" | "create" | "action" | "query";
+type ElementType = "none" | "section" | "category" | "group" | "coregroup" | "class";
+type ItemType = "none" | "section" | "category" | "group" | "create" | "action" | "query" | "class" | "coregroup";
 
 import * as _ from 'underscore';
 
@@ -487,6 +487,9 @@ export function buildLibrarySectionsFromLayoutSpecs(loadedTypes: any, layoutSpec
         sectionElements.push(new LayoutElement(section));
     }
 
+    //call update category groups.
+    updateCategoryGroups(sectionElements);
+
     let includeItemPairs: IncludeItemPair[] = [];
     let sections = convertLayoutElementToItemData(sectionElements, includeItemPairs);
     let sortedIncludeItemPairs = includeItemPairs.sort((a, b) => a.include.path.localeCompare(b.include.path));
@@ -508,6 +511,40 @@ export function buildLibrarySectionsFromLayoutSpecs(loadedTypes: any, layoutSpec
     return sections;
 }
 
+/**
+ * Update the Category Groups to CoreGroup.
+ * This is to achieve the specific design for librarie.
+ * @param elements
+ */
+function updateCategoryGroups(elements: LayoutElement[]) {
+    if(!elements || elements.length == 0) return;
+
+    //filter the section elemens
+    let sectionElements : LayoutElement[] = elements.filter((elem: LayoutElement) => {
+        return elem.elementType == "section";
+    });
+
+    sectionElements.forEach((section: any) => {
+        //get the top level category elements
+        let categoryElements = section.childElements.filter((child: LayoutElement) => {
+            return child.elementType == "category";
+        }); 
+
+        //get the top level group elements.
+        let groupElements = categoryElements.filter((child: LayoutElement) => {
+            //For the top level group elements, update the element type.
+            //coregroup will be applied only to the top level elements. Not on
+            //the nested categories. This change is made to achieve a particular
+            //tree design (no lines / arrows for top level group).
+            child.childElements.forEach((grp: LayoutElement) => {
+                if(grp.elementType != "class") {
+                    grp.elementType = "coregroup";
+                }
+            });
+        });
+    });
+}
+
 // Remove empty non-leaf nodes from items
 export function removeEmptyNodes(items: ItemData[]) {
     let itemRemoved = false;
@@ -518,7 +555,7 @@ export function removeEmptyNodes(items: ItemData[]) {
             if (removeEmptyNodes(item.childItems)) {
                 i--;
             }
-        } else if (item.itemType === "section" || item.itemType === "category" || item.itemType === "group") {
+        } else if (item.itemType === "section" || item.itemType === "category" || item.itemType === "group" || item.itemType === "coregroup") {
             items.splice(i, 1);
             i--;
             itemRemoved = true;
@@ -667,12 +704,17 @@ export function setItemStateRecursive(items: ItemData | ItemData[], visible: boo
             item.expanded = false;
         }
 
+        //All groups defined in layoutspec.json should be expanded by default.
+        if (item.itemType === "coregroup") {
+            item.expanded = true;
+        }
+
         setItemStateRecursive(item.childItems, visible, expanded);
     }
 }
 
 export function search(text: string, item: ItemData) {
-    if (item.itemType !== "group") {
+    if (item.itemType !== "group" && item.itemType !== "coregroup") {
         for (let keyword of item.keywords) {
             if (keyword.includes(text)) {
                 // Show all items recursively if a given text is found in the current 

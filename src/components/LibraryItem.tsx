@@ -109,11 +109,15 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         if (nextProps.data.expanded !== this.state.expanded) {
             this.setState({ expanded: nextProps.data.expanded });
         }
+        //keep the core group defined in layoutspec always expanded.
+        if(nextProps.data.itemType == "coregroup") {
+            this.setState({expanded:true});
+        }
     }
 
     //Afer rendering each Library item, scroll to the expanded item
     componentDidMount() {
-        if (this.props.data.expanded) {
+        if (this.props.data.expanded && this.props.data.itemType !== "coregroup") {
             //scroll to only that element clicked from search. Determining that element from 
             //other elements is little tricky. The idea here is, the element which has
             //its child elements expanded to false is the actual element clicked from search. Scroll
@@ -178,9 +182,12 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
     }
 
     getIconElement(): JSX.Element {
-        let itemType = this.props.data.itemType;
-        // If the element type is a section, group, or none an icon shouldn't be displayed
-        if (itemType !== "group" && itemType !== "section" && itemType !== "none") {
+        // If the element type is a section, group, coregroup, class or none an icon shouldn't be displayed
+        if (this.props.data.itemType !== "group" && 
+        this.props.data.itemType !== "section" && 
+        this.props.data.itemType !== "coregroup" &&
+        this.props.data.itemType !== "class" &&
+        this.props.data.itemType == "none") {
             return <img
                 className={"LibraryItemIcon"}
                 src={this.props.data.iconUrl}
@@ -203,7 +210,8 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
 
     // Show arrow for non-section, non-category and non-leaf items
     getArrowElement(): JSX.Element {
-        if (this.props.data.itemType === "section" || this.props.data.itemType === "category") {
+        //no arrow for groups defined in layout spec
+        if (this.props.data.itemType === "section" || this.props.data.itemType === "coregroup" ) { 
             return null;
         }
 
@@ -221,6 +229,18 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
             }
         } else {
             arrowIcon = require("../resources/ui/indent-arrow-down.svg");
+        }
+
+        if (this.props.data.itemType == "category") {
+            if (!this.state.expanded) {
+                arrowIcon = require("../resources/ui/indent-arrow-right-wo-lines.svg");
+            }
+            else {
+                arrowIcon = require("../resources/ui/indent-arrow-down-wo-lines.svg");
+            }
+
+            return <img className={"CategoryArrow"} src={arrowIcon} onError={this.onImageLoadFail} />;
+
         }
 
         return <img className={"Arrow"} src={arrowIcon} onError={this.onImageLoadFail} />;
@@ -258,6 +278,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
             case "category":
                 return "LibraryItemContainerCategory";
             case "group":
+            case "coregroup":
                 return "LibraryItemContainerGroup";
             default:
                 return "LibraryItemContainerNone";
@@ -276,6 +297,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
     getLibraryItemTextStyle(): string {
         switch (this.props.data.itemType) {
             case "group":
+            case "coregroup":
             case "section":
                 return "LibraryItemGroupText";
             default:
@@ -371,11 +393,21 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
     onLibraryItemClicked() {
         // Toggle expansion state.
         let currentlyExpanded = this.state.expanded;
+
         if (this.props.data.childItems.length > 0 && !currentlyExpanded && this.props.onItemWillExpand) {
             this.props.onItemWillExpand(ReactDOM.findDOMNode(this));
         }
 
         this.setState({ expanded: !currentlyExpanded });
+
+        //auto expand the coregroup elements
+        if(this.props.data.itemType === "category" ) {
+            this.props.data.childItems.forEach((item: any) => {
+                if(item.itemType == "coregroup"){
+                    item.expanded = true;
+                }
+            });
+        }
 
         let libraryContainer = this.props.libraryContainer;
         if (this.props.data.childItems.length == 0) {

@@ -51,8 +51,14 @@ describe("LibraryContainer UI", function () {
               "text": "Parent",
               "iconUrl": "",
               "elementType": "category",
-              "include": [{ "path": "Child1" }, { "path": "Child2" }],
-              "childElements": []
+              "include": [],
+              "childElements": [{
+                "text": "Core",
+                "iconUrl": "",
+                "elementType": "group",
+                "include": [{"path": "Child1" }, { "path": "Child2" }],
+                "childElements":[]
+              }]
             }
           ]
         },
@@ -264,8 +270,6 @@ describe("LibraryContainer UI", function () {
   });
 
   it("search bar should not contain structured view button", function () {
-
-
     let libContainer = mount(
       libController.createLibraryContainer()
     );
@@ -330,4 +334,24 @@ describe("LibraryContainer UI", function () {
       done();
     }, 500);
   });
+
+  it("coregroup items should auto expand", function () {
+        // Test for positive scenario where the node names are correct
+        let libContainer = mount(
+          libController.createLibraryContainer()
+        );
+        // Load the data to libController
+        libController.setLoadedTypesJson(loadedTypesJson, false);
+        libController.setLayoutSpecsJson(layoutSpecsJson, false);
+        libController.refreshLibraryView();
+    
+        let header = libContainer.find('div.LibraryItemHeader').at(0);
+        chai.expect(header).to.have.lengthOf(1);
+        
+        header.simulate('click');
+
+        let libraryItem = libContainer.find('LibraryItem');
+        chai.expect(libraryItem.nodes[2].props.data.expanded).to.be.true; 
+
+      });
 });
