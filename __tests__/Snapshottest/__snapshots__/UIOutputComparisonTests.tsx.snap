@@ -146,11 +146,6 @@ exports[`LibraryContainer Test UI rendering of Library Item and child components
         onError={[Function]}
         src="test-file-stub"
       />
-      <img
-        className="LibraryItemIcon"
-        onError={[Function]}
-        src=""
-      />
       <div
         className="LibraryItemText"
       >
@@ -182,11 +177,6 @@ exports[`LibraryContainer Test UI rendering of single component of Library Item 
       className="Arrow"
       onError={[Function]}
       src="test-file-stub"
-    />
-    <img
-      className="LibraryItemIcon"
-      onError={[Function]}
-      src=""
     />
     <div
       className="LibraryItemText"
