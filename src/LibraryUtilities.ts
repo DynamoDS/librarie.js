@@ -3,8 +3,8 @@
 import * as React from "react";
 
 type MemberType = "none" | "create" | "action" | "query";
-type ElementType = "none" | "section" | "category" | "group" | "coregroup" | "class";
-type ItemType = "none" | "section" | "category" | "group" | "create" | "action" | "query" | "class" | "coregroup";
+type ElementType = "none" | "section" | "category" | "group" | "coregroup" | "classType";
+type ItemType = "none" | "section" | "category" | "group" | "create" | "action" | "query" | "classType" | "coregroup";
 
 import * as _ from 'underscore';
 
@@ -537,7 +537,7 @@ function updateCategoryGroups(elements: LayoutElement[]) {
             //the nested categories. This change is made to achieve a particular
             //tree design (no lines / arrows for top level group).
             child.childElements.forEach((grp: LayoutElement) => {
-                if(grp.elementType != "class") {
+                if(grp.elementType != "classType") {
                     grp.elementType = "coregroup";
                 }
             });

@@ -186,7 +186,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         if (this.props.data.itemType !== "group" && 
         this.props.data.itemType !== "section" && 
         this.props.data.itemType !== "coregroup" &&
-        this.props.data.itemType !== "class" &&
+        this.props.data.itemType !== "classType" &&
         this.props.data.itemType !== "none") {
             return <img
                 className={"LibraryItemIcon"}
