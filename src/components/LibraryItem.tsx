@@ -110,9 +110,10 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
             this.setState({ expanded: nextProps.data.expanded });
         }
         //keep the core group defined in layoutspec always expanded.
-        if(nextProps.data.itemType == "coregroup") {
-            this.setState({expanded:true});
-        }
+        //Commented as part of the task : https://jira.autodesk.com/browse/QNTM-2975
+        // if(nextProps.data.itemType == "coregroup") {
+        //     this.setState({expanded:true});
+        // }
     }
 
     //Afer rendering each Library item, scroll to the expanded item
@@ -391,6 +392,9 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
     }
 
     onLibraryItemClicked() {
+        //https://jira.autodesk.com/browse/QNTM-2975
+        //Add-ons section is always expanded.
+        if(this.props.data.text == "Add-ons") return;
         // Toggle expansion state.
         let currentlyExpanded = this.state.expanded;
 
@@ -401,13 +405,14 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         this.setState({ expanded: !currentlyExpanded });
 
         //auto expand the coregroup elements
-        if(this.props.data.itemType === "category" ) {
-            this.props.data.childItems.forEach((item: any) => {
-                if(item.itemType == "coregroup"){
-                    item.expanded = true;
-                }
-            });
-        }
+        //commenting as part of the task : https://jira.autodesk.com/browse/QNTM-2975
+        // if(this.props.data.itemType === "category" ) {
+        //     this.props.data.childItems.forEach((item: any) => {
+        //         if(item.itemType == "coregroup"){
+        //             item.expanded = true;
+        //         }
+        //     });
+        // }
 
         let libraryContainer = this.props.libraryContainer;
         if (this.props.data.childItems.length == 0) {

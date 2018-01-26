@@ -324,6 +324,11 @@ function convertLayoutElementToItemData(
         if (layoutData.itemType === "section" && !layoutData.showHeader) {
             layoutData.expanded = true;
         }
+        
+        //https://jira.autodesk.com/browse/QNTM-2975
+        if (layoutData.contextData === "Add-ons") {
+            layoutData.expanded = true;
+        }
 
         if (parentItem) {
             parentItem.appendChild(layoutData);
@@ -531,17 +536,18 @@ function updateCategoryGroups(elements: LayoutElement[]) {
         }); 
 
         //get the top level group elements.
-        let groupElements = categoryElements.filter((child: LayoutElement) => {
-            //For the top level group elements, update the element type.
-            //coregroup will be applied only to the top level elements. Not on
-            //the nested categories. This change is made to achieve a particular
-            //tree design (no lines / arrows for top level group).
-            child.childElements.forEach((grp: LayoutElement) => {
-                if(grp.elementType != "classType") {
-                    grp.elementType = "coregroup";
-                }
-            });
-        });
+        //Commented as part of the task :  https://jira.autodesk.com/browse/QNTM-2975
+        // let groupElements = categoryElements.filter((child: LayoutElement) => {
+        //     //For the top level group elements, update the element type.
+        //     //coregroup will be applied only to the top level elements. Not on
+        //     //the nested categories. This change is made to achieve a particular
+        //     //tree design (no lines / arrows for top level group).
+        //     child.childElements.forEach((grp: LayoutElement) => {
+        //         if(grp.elementType != "classType") {
+        //             grp.elementType = "coregroup";
+        //         }
+        //     });
+        // });
     });
 }
 
@@ -705,9 +711,15 @@ export function setItemStateRecursive(items: ItemData | ItemData[], visible: boo
         }
 
         //All groups defined in layoutspec.json should be expanded by default.
-        if (item.itemType === "coregroup") {
+        //Commented as part of the task https://jira.autodesk.com/browse/QNTM-2975
+        // if (item.itemType === "coregroup") {
+        //     item.expanded = true;
+        // }
+
+        if (item.text === "Add-ons") {
             item.expanded = true;
         }
+
 
         setItemStateRecursive(item.childItems, visible, expanded);
     }
