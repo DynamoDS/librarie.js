@@ -34,7 +34,17 @@ describe("LibraryContainer UI", function () {
           "itemType": "action",
           "description": "Second item",
           "keywords": ""
-        }
+        },
+        {
+          "fullyQualifiedName": "pkg://Clockwork.Core.Math.+1",
+          "iconUrl": "/src/resources/icons/ba8cd7c7-346a-45c6-857e-e47800b80818.png",
+          "contextData": "+1",
+          "parameters": null,
+          "itemType": "action",
+          "keywords": "",
+          "weight": 0,
+          "description": null
+        },
       ]
     };
 
@@ -68,6 +78,18 @@ describe("LibraryContainer UI", function () {
           "elementType": "section",
           "showHeader": true,
           "include": [],
+          "childElements": []
+        },
+        {
+          "text": "Add-ons",
+          "iconUrl": "",
+          "elementType": "section",
+          "showHeader": true,
+          "include": [
+            {
+              "path": "pkg://"
+            }
+          ],
           "childElements": []
         }
       ]
@@ -353,5 +375,22 @@ describe("LibraryContainer UI", function () {
         let libraryItem = libContainer.find('LibraryItem');
         chai.expect(libraryItem.nodes[2].props.data.expanded).to.be.true; 
 
+      });
+    
+      it("coregroup items should auto expand", function () {
+        // Test for positive scenario where the node names are correct
+        let libContainer = mount(
+          libController.createLibraryContainer()
+        );
+        // Load the data to libController
+        libController.setLoadedTypesJson(loadedTypesJson, false);
+        libController.setLayoutSpecsJson(layoutSpecsJson, false);
+        libController.refreshLibraryView();
+
+        let generatedSections = libContainer.nodes[0].generatedSections;
+        chai.expect(generatedSections).to.have.lengthOf(2);
+        chai.expect(generatedSections[1].text).to.equal("Add-ons");
+        chai.expect(generatedSections[1].expanded).to.be.true; 
+        
       });
 });
