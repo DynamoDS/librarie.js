@@ -377,7 +377,7 @@ describe("LibraryContainer UI", function () {
 
       });
     
-      it("coregroup items should auto expand", function () {
+      it("add-ons should auto expand", function () {
         // Test for positive scenario where the node names are correct
         let libContainer = mount(
           libController.createLibraryContainer()
