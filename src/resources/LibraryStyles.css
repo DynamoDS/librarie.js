@@ -72,6 +72,10 @@ input {
     cursor: pointer;
 }
 
+.LibrarySectionHeader .LibraryAddOnSectionIcon:hover {
+    opacity: 1.0;
+}
+
 .LibraryItemHeader {
     display: flex;
     flex-direction: row;
@@ -81,7 +85,7 @@ input {
 
 .LibraryItemHeader:hover,
 .LibrarySectionHeader:hover {
-    color: white;
+    /* color: white; */
     background: rgba(255, 255, 255, 0.1);
 }
 
@@ -93,6 +97,7 @@ input {
     display: flex;
     flex-direction: column;
     align-items: stretch;
+    /* padding-left:12px; */
 }
 
 .LibraryItemBodyContainer {
@@ -103,6 +108,14 @@ input {
 }
 
 .LibraryItemContainerSection .LibraryItemIcon {
+    width: 14px;
+    height: 14px;
+    padding-right: 10px;
+    -webkit-user-drag: none;
+}
+
+.LibraryItemContainerSection .LibraryAddOnSectionIcon {
+    opacity: 0.5;
     width: 14px;
     height: 14px;
     padding-right: 10px;
@@ -122,6 +135,7 @@ input {
     height: 28px;
     -webkit-user-drag: none;
 }
+
 
 .Arrow+.LibraryItemIcon {
     padding: 2px 8px 2px 4px;

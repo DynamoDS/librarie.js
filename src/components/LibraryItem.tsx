@@ -196,6 +196,18 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
             />;
         }
 
+         // If it is a section, display the icon (if given) and provide a click interaction.
+         //Add-ons have a different style. The icons opacity changes when hovering
+        if (this.props.data.itemType === "section" && this.props.data.text == "Add-ons" &&
+            this.props.data.iconUrl) {
+            return <img
+                className={"LibraryAddOnSectionIcon"}
+                src={this.props.data.iconUrl}
+                onError={this.onImageLoadFail}
+                onClick={this.onSectionIconClicked}
+            />;
+        }
+
         // If it is a section, display the icon (if given) and provide a click interaction.
         if (this.props.data.itemType === "section" && this.props.data.iconUrl) {
             return <img
