@@ -73,6 +73,7 @@ input {
 }
 
 .LibrarySectionHeader .LibraryAddOnSectionIcon:hover {
+    cursor: pointer;
     opacity: 1.0;
 }
 
