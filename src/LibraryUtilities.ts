@@ -507,9 +507,10 @@ export function buildLibrarySectionsFromLayoutSpecs(loadedTypes: any, layoutSpec
     constructFromIncludeInfo(sortedTypeListNodes, sortedIncludeItemPairs);
 
     // Misc section will take all unprocessed nodes
-    let miscSection = sections.find(section => section.text == miscSectionStr);
-    let unprocessedNodes = sortedTypeListNodes.filter(node => !node.processed);
-    unprocessedNodes.forEach(node => buildLibraryItemsFromName(node, miscSection));
+    //https://jira.autodesk.com/browse/QNTM-2976 - Remove the Miscellaneous section
+    // let miscSection = sections.find(section => section.text == miscSectionStr);
+    // let unprocessedNodes = sortedTypeListNodes.filter(node => !node.processed);
+    // unprocessedNodes.forEach(node => buildLibraryItemsFromName(node, miscSection));
 
     removeEmptyNodes(sections);
 
