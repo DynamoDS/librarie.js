@@ -68,6 +68,10 @@
             let libContainer = libController.createLibraryByElementId(
                 "libraryContainerPlaceholder", layoutSpecsJson, loadedTypesJson);
 
+            libController.on(libController.FilterCategoryEventName, function (item) {
+                console.log(item);
+            });
+
         });
     </script>
 

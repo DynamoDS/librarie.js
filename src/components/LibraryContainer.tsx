@@ -9,6 +9,7 @@ import { LibraryController } from "../entry-point";
 import { LibraryItem } from "./LibraryItem";
 import { Searcher } from "../Searcher";
 import { SearchBar } from "./SearchBar";
+import { CategoryData } from "./SearchBar";
 import { SearchResultItem } from "./SearchResultItem";
 import * as ReactDOM from "react-dom";
 
@@ -225,10 +226,13 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
         this.setState({ detailed: value });
     }
 
-    onCategoriesChanged(categories: string[]) {
+    onCategoriesChanged(categories: string[], categoryData:CategoryData[]) {
         this.searcher.categories = categories;
         this.updateSearchResultItems(true, this.state.structured);
         this.setState({ selectedCategories: categories });
+        //This is used in Dynamo instrumenation. categoryData contains the list of all 
+        //categories in the filter with their state {checked or unchecked}
+        this.raiseEvent(this.props.libraryController.FilterCategoryEventName, categoryData);
     }
 
     onTextChanged(text: string) {

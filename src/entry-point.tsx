@@ -42,6 +42,7 @@ export class LibraryController {
     SectionIconClickedEventName = "sectionIconClicked";
     SearchTextUpdatedEventName = "searchTextUpdated";
     RefreshLibraryViewRequestName = "refreshLibraryView";
+    FilterCategoryEventName = "filterCategoryChange"; 
     DefaultSectionName = "default";
     MiscSectionName = "Miscellaneous";
 
