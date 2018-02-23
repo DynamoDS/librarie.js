@@ -11,7 +11,7 @@ interface DetailedModeChangedFunc {
 }
 
 interface SearchCategoriesChangedFunc {
-    (categories: string[]): void;
+    (categories: string[], categoryData: CategoryData[]): void;
 }
 
 interface SearchTextChangedFunc {
@@ -175,7 +175,7 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
 
     setSelectedCategories(categories: string[]) {
         this.setState({ selectedCategories: categories })
-        this.props.onCategoriesChanged(categories);
+        this.props.onCategoriesChanged(categories, this.categoryData);
     }
 
     getSearchOptionsBtnClass() {
@@ -270,7 +270,7 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
     }
 }
 
-class CategoryData {
+export class CategoryData {
     name: string;
     className: string;
     checked: boolean;

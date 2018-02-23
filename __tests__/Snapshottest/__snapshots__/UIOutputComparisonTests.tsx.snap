@@ -112,6 +112,7 @@ exports[`LibraryContainer Test UI rendering of Library Item and child components
       "RefreshLibraryViewRequestName": "refreshLibraryView",
       "SearchTextUpdatedEventName": "searchTextUpdated",
       "SectionIconClickedEventName": "sectionIconClicked",
+      "FilterCategoryEventName": "filterCategoryChange",
       "createLibraryByElementId": [Function],
       "createLibraryContainer": [Function],
       "on": [Function],
