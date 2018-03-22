@@ -88,13 +88,11 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
     }
 
     handleKeyDown(event: any) {
-        switch (event.code) {
+        switch (event.key) {
             case "ArrowUp":
-                event.preventDefault(); // Prevent arrow key from navigating around search input
                 this.updateSelectionIndex(false);
                 break;
             case "ArrowDown":
-                event.preventDefault();
                 this.updateSelectionIndex(true);
                 break;
             default:
