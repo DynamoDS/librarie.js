@@ -90,7 +90,11 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
     }
 
     handleKeyDown(event: any) {
-        switch (event.code) {
+        switch (event.key) {
+            case "ArrowUp":
+            case "ArrowDown":
+                event.preventDefault();
+               break;
             case "Escape":
                 this.clearInput();
                 break;

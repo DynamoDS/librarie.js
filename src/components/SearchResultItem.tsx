@@ -60,7 +60,7 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
     }
 
     handleKeyDown(event: any) {
-        switch (event.code) {
+        switch (event.key) {
             case "Enter": // Allow node creation by pressing enter key
                 if (this.state.selected) {
                     this.onItemClicked();
