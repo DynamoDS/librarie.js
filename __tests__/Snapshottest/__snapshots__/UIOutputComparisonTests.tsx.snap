@@ -42,6 +42,16 @@ Array [
 >
     String
 </div>,
+  <div
+    className="LibraryItemText"
+>
+    Clockwork
+</div>,
+  <div
+    className="LibraryItemText"
+>
+    DynamoText
+</div>,
 ]
 `;
 
@@ -104,6 +114,7 @@ exports[`LibraryContainer Test UI rendering of Library Item and child components
   libraryContainer={
     LibraryController {
       "DefaultSectionName": "default",
+      "FilterCategoryEventName": "filterCategoryChange",
       "ItemClickedEventName": "itemClicked",
       "ItemMouseEnterEventName": "itemMouseEnter",
       "ItemMouseLeaveEventName": "itemMouseLeave",
@@ -112,7 +123,6 @@ exports[`LibraryContainer Test UI rendering of Library Item and child components
       "RefreshLibraryViewRequestName": "refreshLibraryView",
       "SearchTextUpdatedEventName": "searchTextUpdated",
       "SectionIconClickedEventName": "sectionIconClicked",
-      "FilterCategoryEventName": "filterCategoryChange",
       "createLibraryByElementId": [Function],
       "createLibraryContainer": [Function],
       "on": [Function],
