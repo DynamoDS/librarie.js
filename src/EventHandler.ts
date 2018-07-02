@@ -23,8 +23,8 @@ export class Event {
     executeCallback(params?: any | any[]) {
         this.callbacks.forEach(callback => {
             try {
-                if (params.length == 0) callback();
-                else callback(params);
+                if(!_.isEmpty(params)) callback(params);
+                else if (params.length == 0) callback();
             }
             catch (e) {
                 console.log(e);
