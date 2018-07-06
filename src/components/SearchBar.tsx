@@ -99,7 +99,9 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
                 this.clearInput();
                 break;
             default:
-                this.searchInputField.focus();
+                if (event.target.className == "SearchInputText") {
+                    this.searchInputField.focus();
+                }
                 break;
         }
     }

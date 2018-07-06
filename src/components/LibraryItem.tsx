@@ -129,7 +129,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
             if (isThereChildItemsToExpand.length == 0) {
                 setTimeout(() => {
                     let elem = ReactDOM.findDOMNode(this);
-                    elem.scrollIntoView();
+                    elem.scrollIntoView(false);
                 }, 0);
             }
 
@@ -460,7 +460,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         if (this.props.data.childItems.length == 0) {
             let rec = ReactDOM.findDOMNode(this).getBoundingClientRect();
             let mouseEnterEvent = libraryContainer.props.libraryController.ItemMouseEnterEventName;
-            libraryContainer.raiseEvent(mouseEnterEvent, { data: this.props.data.contextData, rect: rec });
+            libraryContainer.raiseEvent(mouseEnterEvent, { data: this.props.data.contextData, rect: rec, element:  ReactDOM.findDOMNode(this) });
         }
     }
 }

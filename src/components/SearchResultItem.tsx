@@ -1,3 +1,5 @@
+/// <reference path="../../node_modules/@types/node/index.d.ts" />
+
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { LibraryContainer } from "./LibraryContainer";
@@ -150,7 +152,7 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
         if (this.props.data.childItems.length == 0) {
             let rec = ReactDOM.findDOMNode(this).getBoundingClientRect();
             let mouseEnterEvent = libraryContainer.props.libraryController.ItemMouseEnterEventName;
-            libraryContainer.raiseEvent(mouseEnterEvent, { data: this.props.data.contextData, rect: rec });
+            libraryContainer.raiseEvent(mouseEnterEvent, { data: this.props.data.contextData, rect: rec, element: ReactDOM.findDOMNode(this) });
         }
     }
 }
