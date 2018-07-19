@@ -324,7 +324,7 @@ function convertLayoutElementToItemData(
         if (layoutData.itemType === "section" && !layoutData.showHeader) {
             layoutData.expanded = true;
         }
-        
+
         //https://jira.autodesk.com/browse/QNTM-2975
         if (layoutData.contextData === "Add-ons") {
             layoutData.expanded = true;
@@ -523,10 +523,10 @@ export function buildLibrarySectionsFromLayoutSpecs(loadedTypes: any, layoutSpec
  * @param elements
  */
 function updateCategoryGroups(elements: LayoutElement[]) {
-    if(!elements || elements.length == 0) return;
+    if (!elements || elements.length == 0) return;
 
     //filter the section elemens
-    let sectionElements : LayoutElement[] = elements.filter((elem: LayoutElement) => {
+    let sectionElements: LayoutElement[] = elements.filter((elem: LayoutElement) => {
         return elem.elementType == "section";
     });
 
@@ -534,7 +534,7 @@ function updateCategoryGroups(elements: LayoutElement[]) {
         //get the top level category elements
         let categoryElements = section.childElements.filter((child: LayoutElement) => {
             return child.elementType == "category";
-        }); 
+        });
 
         //get the top level group elements.
         //Commented as part of the task :  https://jira.autodesk.com/browse/QNTM-2975
@@ -768,16 +768,25 @@ export function getHighlightedText(text: string, highlightedText: string, matchD
         }
     }
 
-    let regex = new RegExp(highlightedText, 'gi');
-    let segments = text.split(regex);
-    let replacements = text.match(regex);
     let spans: React.DOMElement<React.HTMLAttributes<HTMLSpanElement>, HTMLSpanElement>[] = [];
+    // attempt to escape regex specific characters and return no highlights if
+    // we throw an exception here.
+    try {
+        let escapedRegexCharacters = highlightedText.replace(/[*+?^$.\[\]{}()|\\\/]/g, "\\$&");
+        let regex = new RegExp(escapedRegexCharacters, 'gi');
+        let segments = text.split(regex);
+        let replacements = text.match(regex);
 
-    for (let i = 0; i < segments.length; i++) {
-        spans.push(React.DOM.span({ key: spans.length }, segments[i]));
-        if (i != segments.length - 1) {
-            spans.push(React.DOM.span({ className: "HighlightedText", key: spans.length }, replacements[i]));
+        for (let i = 0; i < segments.length; i++) {
+            spans.push(React.DOM.span({ key: spans.length }, segments[i]));
+            if (i != segments.length - 1) {
+                spans.push(React.DOM.span({ className: "HighlightedText", key: spans.length }, replacements[i]));
+            }
         }
+    }
+    catch (e) {
+        console.log((<Error>e).message);
+        return spans;
     }
 
     return spans;
@@ -803,7 +812,7 @@ export function getHighlightedText(text: string, highlightedText: string, matchD
  */
 export function findAndExpandItemByPath(pathToItem: ItemData[], allItems: ItemData[]): boolean {
 
-   let item: ItemData;
+    let item: ItemData;
     //commented the check for iconUrl. This is false only for static RawDataType files.
     item = allItems.find(item =>
         item.text == pathToItem[0].text //&& item.iconUrl == pathToItem[0].iconUrl
@@ -817,7 +826,7 @@ export function findAndExpandItemByPath(pathToItem: ItemData[], allItems: ItemDa
         item.expanded = result; // Expand only if item is found.
         return result;
     }
-    
+
 }
 
 export function sortItemsByText(items: ItemData[]): ItemData[] {
