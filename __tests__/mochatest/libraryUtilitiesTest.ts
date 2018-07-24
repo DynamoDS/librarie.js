@@ -1285,19 +1285,26 @@ describe('Search function', function () {
   let itemData11: LibraryUtilities.ItemData;
   let itemData12: LibraryUtilities.ItemData;
   let itemData111: LibraryUtilities.ItemData;
+  let itemData112: LibraryUtilities.ItemData;
+
 
   beforeEach(function () {
     itemData1 = new LibraryUtilities.ItemData("Points");
     itemData11 = new LibraryUtilities.ItemData("Point");
     itemData12 = new LibraryUtilities.ItemData("UV");
     itemData111 = new LibraryUtilities.ItemData("Origin");
+    itemData112 = new LibraryUtilities.ItemData(".a name with special characters$");
+
 
     itemData1.itemType = "none";
     itemData11.itemType = "none";
     itemData12.itemType = "none";
     itemData111.itemType = "none";
+    itemData112.itemType = "none";
+
 
     itemData11.appendChild(itemData111);
+    itemData11.appendChild(itemData112);
     itemData1.appendChild(itemData11);
     itemData1.appendChild(itemData12);
   });
@@ -1314,6 +1321,8 @@ describe('Search function', function () {
     expect(itemData12.expanded).to.equal(false);
     expect(itemData111.visible).to.equal(false);
     expect(itemData111.expanded).to.equal(false);
+    expect(itemData112.expanded).to.equal(false);
+
   });
 
   it('should return true when matched items are found', function () {
@@ -1333,6 +1342,7 @@ describe('Search function', function () {
     expect(itemData12.expanded).to.equal(true);
     expect(itemData111.visible).to.equal(true);
     expect(itemData111.expanded).to.equal(true);
+    expect(itemData112.expanded).to.equal(true);
   });
 
   it('should show parent item when some of its child items are matched', function () {
@@ -1347,6 +1357,8 @@ describe('Search function', function () {
     expect(itemData12.expanded).to.equal(true);
     expect(itemData111.visible).to.equal(false);
     expect(itemData111.expanded).to.equal(false);
+    expect(itemData112.expanded).to.equal(false);
+
   });
 
   it('should ignore item of type group', function () {
@@ -1362,6 +1374,25 @@ describe('Search function', function () {
     expect(itemData12.expanded).to.equal(false);
     expect(itemData111.visible).to.equal(false);
     expect(itemData111.expanded).to.equal(false);
+    expect(itemData112.expanded).to.equal(false);
+
+  });
+
+  it('should return results for search text with regex meta characters', function () {
+    let result = LibraryUtilities.search(".a name with special characters$", itemData1);
+    expect(result).to.equal(true);
+  });
+
+  it('should highlight text with regex meta characters', function () {
+    let highlightTextSpans = LibraryUtilities.getHighlightedText(
+      ".a name with special characters$",
+      ".a name with special characters$", false);
+    let highlightTextSpansMatchingDelimeter = LibraryUtilities.getHighlightedText(
+      ".a name with special characters$",
+      ".a name with special characters$", true);
+    //we should get some spans back that are not empty.
+    expect(highlightTextSpans.length).to.equal(3);
+    expect(highlightTextSpansMatchingDelimeter.length).to.equal(3);
   });
 
 });

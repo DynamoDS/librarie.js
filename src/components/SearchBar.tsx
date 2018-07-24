@@ -126,8 +126,7 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
     }
 
     onTextChanged(event: any) {
-        // Escape special chars
-        let text = encodeURIComponent(event.target.value.toLowerCase());
+        let text = event.target.value.toLowerCase();
         let expanded = text.length == 0 ? false : this.state.expanded;
         let hasText = text.length > 0;
 
