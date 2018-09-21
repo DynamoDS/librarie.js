@@ -104,7 +104,7 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
 
         return (
             <div className={ItemContainerStyle} onClick={this.onItemClicked.bind(this)}
-                onMouseOver={this.onLibraryItemMouseEnter.bind(this)} onMouseLeave={this.onLibraryItemMouseLeave.bind(this)}>
+                onMouseEnter={this.onLibraryItemMouseEnter.bind(this)} onMouseLeave={this.onLibraryItemMouseLeave.bind(this)}>
                 <img className={"ItemIcon"} src={iconPath} onError={this.onImageLoadFail.bind(this)} />
                 <div className={"ItemInfo"}>
                     <div className={"ItemTitle"}>{highLightedItemText}

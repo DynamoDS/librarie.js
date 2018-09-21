@@ -271,7 +271,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         if (this.props.data.showHeader) {
             return (
                 <div className={this.getLibraryItemHeaderStyle()} onClick={this.onLibraryItemClicked}
-                    onMouseOver={this.onLibraryItemMouseEnter} onMouseLeave={this.onLibraryItemMouseLeave}>
+                    onMouseEnter={this.onLibraryItemMouseEnter} onMouseLeave={this.onLibraryItemMouseLeave}>
                     {arrow}
                     {this.props.data.itemType === "section" ? null : iconElement}
                     <div className={this.getLibraryItemTextStyle()}>{this.props.data.text}</div>
