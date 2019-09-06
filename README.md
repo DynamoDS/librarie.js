@@ -4,6 +4,7 @@ Reusable lightweight library component based on React.js
 ## Set up
 Installing all dependencies
 
+    $ npm install typescript@3.5.3 --save-dev
     $ npm install
 
 ## Build and run librarie.js
