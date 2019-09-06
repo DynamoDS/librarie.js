@@ -149,8 +149,8 @@ exports[`LibraryContainer Test UI rendering of Library Item and child components
     <div
       className="LibraryItemHeader"
       onClick={[Function]}
+      onMouseEnter={[Function]}
       onMouseLeave={[Function]}
-      onMouseOver={[Function]}
     >
       <img
         className="Arrow"
@@ -181,8 +181,8 @@ exports[`LibraryContainer Test UI rendering of single component of Library Item 
   <div
     className="LibraryItemHeader"
     onClick={[Function]}
+    onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    onMouseOver={[Function]}
   >
     <img
       className="Arrow"
