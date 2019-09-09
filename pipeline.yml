@@ -1,0 +1,22 @@
+version: 0.1.1
+env:
+  - TEST_REPORT_FORMAT : "junit"
+
+check_changelog_updated_on_pr: false
+pipeline_os: "Linux"
+force_slack_notification : true
+language: typescript
+nodejs_version: "10"
+
+build:
+  before_scripts:
+    - "npm install"
+  scripts:
+    - "npm run build"  
+
+ci_test:
+  scripts:
+    - "npm run test"
+    - "npm run utiltest"
+  
+  test_report_dir: TestResults
