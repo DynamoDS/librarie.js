@@ -38,6 +38,7 @@
     "enzyme-to-json": "^1.5.1",
     "file-loader": "^0.10.1",
     "jest": "^20.0.4",
+    "jest-jenkins-reporter": "^1.0.2",
     "mocha": "^3.3.0",
     "react-test-renderer": "^15.5.4",
     "source-map-loader": "^0.1.5",
@@ -71,6 +72,12 @@
     "snapshotSerializers": [
       "<rootDir>/node_modules/enzyme-to-json/serializer"
     ],
-    "mapCoverage": true
+    "mapCoverage": true,
+    "testResultsProcessor": "jest-jenkins-reporter"
+  },
+  "jestSonar": {
+    "reportPath": "TestResults",
+    "reportFile": "TestReport.xml",
+    "indent": 4
   }
 }

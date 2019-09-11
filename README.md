@@ -6,6 +6,8 @@ Installing all dependencies
 
     $ npm install
 
+Note: If you are having trouble running `npm install` and are outside the adsk network, please try removing the `.npmrc` file.
+
 ## Build and run librarie.js
 - Build source scripts
 
