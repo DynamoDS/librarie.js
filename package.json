@@ -76,8 +76,8 @@
     "testResultsProcessor": "jest-jenkins-reporter"
   },
   "jestSonar": {
-    "reportPath": "reports",
-    "reportFile": "report.xml",
+    "reportPath": "TestResults",
+    "reportFile": "TestReport.xml",
     "indent": 4
   }
 }
