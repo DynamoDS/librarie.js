@@ -16,7 +16,7 @@ build:
     registry: artifactory
     url: artifactory.dev.adskengineer.net/autodeskcloud/cloudosv2-base-nodejs-10:latest
   before_scripts:
-    - "sudo npm install --unsafe-perm=true"
+    - "npm install"
   scripts:
     - "npm run build"  
 
