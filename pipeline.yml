@@ -9,7 +9,6 @@ env:
 check_changelog_updated_on_pr: false
 pipeline_os: "Linux"
 force_slack_notification : true
-language: typescript
 nodejs_version: "10"
 
 build:
