@@ -17,7 +17,7 @@ build:
     registry: artifactory
     url: artifactory.dev.adskengineer.net/autodeskcloud/cloudosv2-base-nodejs-10:latest
   before_scripts:
-    - "npm install"
+    - "sudo npm install -g eslint --unsafe-perm=true --allow-root"
   scripts:
     - "npm run build"  
 
