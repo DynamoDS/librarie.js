@@ -14,7 +14,7 @@ nodejs_version: "10"
 build:
   customized_builder_image:
     registry: artifactory
-    url: artifactory.dev.adskengineer.net/autodeskcloud/cloudosv2-base-nodejs-10:latest
+    url: dynamolibrariejs
   before_scripts:
     - "npm install"
   scripts:
@@ -23,7 +23,7 @@ build:
 ci_test:
   customized_builder_image:
     registry: artifactory
-    url: artifactory.dev.adskengineer.net/autodeskcloud/cloudosv2-base-nodejs-10:latest
+    url: dynamolibrariejs
   scripts:
     - "npm run test"
     - "npm run utiltest"
