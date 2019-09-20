@@ -3,18 +3,18 @@ env:
   - SLACK_QUANTUM_BUILD_CHANNEL : "#dynamo-jenkinsbuild"
   - SLACK_QUANTUM_BUILD_CREDENTIAL_ID : "slack-notify-token"
   - MAIL_QUANTUM_BUILD_RECIPIENT : "dynamo.plaid.dev@autodesk.com"
+  - ARTIFACTORY_BOBCAT_DOCKER_REGISTRY : "artifactory.dev.adskengineer.net"
   - TEST_REPORT_FORMAT : "junit"
 
 check_changelog_updated_on_pr: false
 pipeline_os: "Linux"
 force_slack_notification : true
-language: typescript
 nodejs_version: "10"
 
 build:
   customized_builder_image:
     registry: artifactory
-    url: autodesk-docker.art-bobcat.autodesk.com/quantum/hardened-nodejs:latest
+    url: artifactory.dev.adskengineer.net/docker-local-v2/docker-local-v2/dynamo/dynamolibrariejs:latest
   before_scripts:
     - "npm install"
   scripts:
@@ -23,7 +23,7 @@ build:
 ci_test:
   customized_builder_image:
     registry: artifactory
-    url: autodesk-docker.art-bobcat.autodesk.com/quantum/hardened-nodejs:latest
+    url: artifactory.dev.adskengineer.net/docker-local-v2/docker-local-v2/dynamo/dynamolibrariejs:latest
   scripts:
     - "npm run test"
     - "npm run utiltest"
