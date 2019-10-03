@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <Description>Project for nuget pack</Description>
+    <Authors>Autodesk</Authors>
+    <PackageTags>Dynamo;librariejs</PackageTags>
+    <NeutralLanguage>en-US</NeutralLanguage>
+    <versionprefix>1.0.0</versionprefix>
+    <PackProjectInputFile>$(MSBuildProjectFullPath)</PackProjectInputFile>
+    <NoBuild>true</NoBuild>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <TargetFrameworks>netcoreapp2.1</TargetFrameworks>
+    <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ExcludeFromPackage>
+        _mocks_/**/*;
+        _tests_/**/*;
+        docs/**/*;
+        node_modules/**/*;
+        src/**/*;
+        dist/librarie.js;
+        dist/librarie.js.map;
+        dist/librarie.min.js.map;
+    </ExcludeFromPackage>
+</PropertyGroup>
+  <ItemGroup>
+    <Content Include="dist/**/*" Exclude="$(ExcludeFromPackage)" >
+        <PackagePath>\</PackagePath>
+    </Content>
+  </ItemGroup>
+</Project>
