@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Description>Reusable lightweight library component based on React.js</Description>
     <Authors>Autodesk</Authors>
-    <Copyright>Autodesk 2019</Copyright>
+    <Copyright>Copyright Autodesk 2019</Copyright>
     <PackageProjectUrl>https://github.com/DynamoDS/librarie.js</PackageProjectUrl>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <RepositoryUrl>https://github.com/DynamoDS/librarie.js.git</RepositoryUrl>
