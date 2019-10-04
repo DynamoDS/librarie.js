@@ -4,7 +4,7 @@
     <Authors>Autodesk</Authors>
     <Copyright>Autodesk 2019</Copyright>
     <PackageProjectUrl>https://github.com/DynamoDS/librarie.js</PackageProjectUrl>
-    <PackageLicenseFile>https://www.apache.org/licenses/LICENSE-2.0.txt</PackageLicenseFile>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <RepositoryUrl>https://github.com/DynamoDS/librarie.js.git</RepositoryUrl>
     <PackageTags>Dynamo;librariejs</PackageTags>
     <NeutralLanguage>en-US</NeutralLanguage>
@@ -38,6 +38,6 @@
       <Content Include="dist/**/*" Exclude="$(ExcludeFromPackage)" >
           <PackagePath>\</PackagePath>
       </Content>
-      <None Include="License.txt" Pack="false" Visible="false" PackagePath="$(PackageLicenseFile)"/>
+      <None Include="LICENSE" Pack="true" Visible="false" PackagePath=""/>
   </ItemGroup>
 </Project>
