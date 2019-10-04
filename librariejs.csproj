@@ -8,7 +8,7 @@
     <PackProjectInputFile>$(MSBuildProjectFullPath)</PackProjectInputFile>
     <NoBuild>true</NoBuild>
     <IncludeBuildOutput>false</IncludeBuildOutput>
-    <TargetFrameworks>netcoreapp2.1</TargetFrameworks>
+    <TargetFrameworks>net47</TargetFrameworks>
     <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
   </PropertyGroup>
   <PropertyGroup>
@@ -23,7 +23,14 @@
         dist/librarie.min.js.map;
     </ExcludeFromPackage>
 </PropertyGroup>
-  <ItemGroup>
+<PropertyGroup>
+    <RuntimeIdentifier>win10-x64</RuntimeIdentifier>
+    <FrameworkPathOverride>$(NuGetPackageRoot)microsoft.targetingpack.netframework.v4.7\1.0.1\lib\net47\</FrameworkPathOverride>    
+</PropertyGroup>
+<ItemGroup Condition=" '$(TargetFramework)' == 'net47' ">
+    <PackageReference Include="Microsoft.TargetingPack.NETFramework.v4.7" Version="1.0.1" ExcludeAssets="All" PrivateAssets="All" />
+</ItemGroup>
+<ItemGroup>
     <Content Include="dist/**/*" Exclude="$(ExcludeFromPackage)" >
         <PackagePath>\</PackagePath>
     </Content>

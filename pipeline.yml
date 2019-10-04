@@ -36,5 +36,5 @@ deployment:
     registry: artifactory
     url: artifactory.dev.adskengineer.net/docker-local-v2/dynamo/dynamolibrariejs:dotnetcore2
   scripts:
-    - "dotnet pack -c Release -o nuget --version-suffix $BUILD_NUMBER"
+    - "dotnet pack -c Release -o nuget --version-suffix \"release-$BUILD_NUMBER\""
     - "dotnet nuget push \"$(find nuget -type f -name *.nupkg)\" -s https://art-bobcat.autodesk.com/artifactory/api/nuget/team-dynamo-nuget -k $API_KEY"
