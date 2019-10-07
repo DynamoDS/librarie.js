@@ -14,18 +14,27 @@ nodejs_version: "10"
 build:
   customized_builder_image:
     registry: artifactory
-    url: artifactory.dev.adskengineer.net/docker-local-v2/docker-local-v2/dynamo/dynamolibrariejs:latest
+    url: artifactory.dev.adskengineer.net/docker-local-v2/dynamo/dynamolibrariejs:dotnetcore2
   before_scripts:
     - "npm install"
   scripts:
-    - "npm run build"  
+    - "npm run build"
 
 ci_test:
   customized_builder_image:
     registry: artifactory
-    url: artifactory.dev.adskengineer.net/docker-local-v2/docker-local-v2/dynamo/dynamolibrariejs:latest
+    url: artifactory.dev.adskengineer.net/docker-local-v2/dynamo/dynamolibrariejs:dotnetcore2
   scripts:
     - "npm run test"
     - "npm run utiltest"
-  
   test_report_dir: TestResults
+
+deployment:
+-
+  type: customized
+  customized_builder_image:
+    registry: artifactory
+    url: artifactory.dev.adskengineer.net/docker-local-v2/dynamo/dynamolibrariejs:dotnetcore2
+  scripts:
+    - "dotnet pack -c Release -o nuget --version-suffix \"beta$BUILD_NUMBER\""
+    - "dotnet nuget push \"$(find nuget -type f -name *.nupkg)\" -s https://api.nuget.org/v3/index.json -k $API_KEY"
