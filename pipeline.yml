@@ -4,6 +4,7 @@ env:
   - SLACK_QUANTUM_BUILD_CREDENTIAL_ID : "slack-notify-token"
   - MAIL_QUANTUM_BUILD_RECIPIENT : "dynamo.plaid.dev@autodesk.com"
   - ARTIFACTORY_BOBCAT_DOCKER_REGISTRY : "artifactory.dev.adskengineer.net"
+  - NUGET_API_ID : "dynamovisualprogramming_nuget_api_key"
   - TEST_REPORT_FORMAT : "junit"
 
 check_changelog_updated_on_pr: false
