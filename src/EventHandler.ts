@@ -56,6 +56,7 @@ export class Reactor {
         event.registerCallback(callback);
     }
 
+    
     raiseEvent(name: string, params?: any | any[]) {
         let event = this.getEvent(name);
         if (event != null) {
