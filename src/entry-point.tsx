@@ -4,6 +4,8 @@ import * as ReactDOM from "react-dom";
 import { LibraryContainer } from "./components/LibraryContainer";
 import { JsonDownloader } from "./LibraryUtilities";
 import { Reactor, Event } from "./EventHandler";
+import "core-js";
+
 
 export function CreateJsonDownloader(jsonUrls: string[], callback: Function) {
     return new JsonDownloader(jsonUrls, callback);
@@ -36,6 +38,7 @@ interface SearchLibraryItemsFunc {
 export class LibraryController {
 
     ItemClickedEventName = "itemClicked";
+    AnyItemClickedEventName = "anyitemClicked";
     ItemMouseEnterEventName = "itemMouseEnter";
     ItemMouseLeaveEventName = "itemMouseLeave";
     ItemSummaryExpandedEventName = "itemSummaryExpanded";
