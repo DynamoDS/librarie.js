@@ -38,7 +38,6 @@ interface SearchLibraryItemsFunc {
 export class LibraryController {
 
     ItemClickedEventName = "itemClicked";
-    AnyItemClickedEventName = "anyitemClicked";
     ItemMouseEnterEventName = "itemMouseEnter";
     ItemMouseLeaveEventName = "itemMouseLeave";
     ItemSummaryExpandedEventName = "itemSummaryExpanded";
