@@ -179,6 +179,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
     }
 
     onImageLoadFail(event: any) {
+        event.target.orgSrc = event.target.src;
         event.target.src = require("../resources/icons/default-icon.svg");
     }
 
