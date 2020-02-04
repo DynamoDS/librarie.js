@@ -5,7 +5,6 @@ env:
   - MAIL_QUANTUM_BUILD_RECIPIENT : "dynamo.plaid.dev@autodesk.com"
   - ARTIFACTORY_BOBCAT_DOCKER_REGISTRY : "artifactory.dev.adskengineer.net"
   - NUGET_API_ID : "dynamovisualprogramming_nuget_api_key"
-  - TEST_REPORT_FORMAT : "junit"
 
 check_changelog_updated_on_pr: false
 pipeline_os: "Linux"
@@ -13,29 +12,34 @@ force_slack_notification : true
 nodejs_version: "10"
 
 build:
-  customized_builder_image:
-    registry: artifactory
-    url: artifactory.dev.adskengineer.net/docker-local-v2/dynamo/dynamolibrariejs:dotnetcore2
-  before_scripts:
-    - "npm install"
-  scripts:
-    - "npm run build"
+  -
+    customized_builder_image:
+      registry: artifactory
+      url: artifactory.dev.adskengineer.net/docker-local-v2/dynamo/dynamolibrariejs:dotnetcore2
+    scripts:
+      - "npm install"
+      - "npm run build"
 
 ci_test:
-  customized_builder_image:
-    registry: artifactory
-    url: artifactory.dev.adskengineer.net/docker-local-v2/dynamo/dynamolibrariejs:dotnetcore2
-  scripts:
-    - "npm run test"
-    - "npm run utiltest"
+  tests:
+    -
+      customized_builder_image:
+        registry: artifactory
+        url: artifactory.dev.adskengineer.net/docker-local-v2/dynamo/dynamolibrariejs:dotnetcore2
+      scripts:
+        - "npm run test"
+        - "npm run utiltest"
   test_report_dir: TestResults
+  test_report_pattern:
+    format: "junit"
+    pattern: "*.xml"
 
 deployment:
--
-  type: customized
-  customized_builder_image:
-    registry: artifactory
-    url: artifactory.dev.adskengineer.net/docker-local-v2/dynamo/dynamolibrariejs:dotnetcore2
-  scripts:
-    - "dotnet pack -c Release -o nuget --version-suffix \"beta$BUILD_NUMBER\""
-    - "dotnet nuget push \"$(find nuget -type f -name *.nupkg)\" -s https://api.nuget.org/v3/index.json -k $API_KEY"
+  -
+    type: customized
+    customized_builder_image:
+      registry: artifactory
+      url: artifactory.dev.adskengineer.net/docker-local-v2/dynamo/dynamolibrariejs:dotnetcore2
+    scripts:
+      - "dotnet pack -c Release -o nuget --version-suffix \"beta$BUILD_NUMBER\""
+      - "dotnet nuget push \"$(find nuget -type f -name *.nupkg)\" -s https://api.nuget.org/v3/index.json -k $API_KEY"
