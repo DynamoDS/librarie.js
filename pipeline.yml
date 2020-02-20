@@ -11,6 +11,12 @@ pipeline_os: "Linux"
 force_slack_notification : true
 nodejs_version: "10"
 
+jenkins_creds:
+  -
+    type: secretText
+    credentialsId: dynamovisualprogramming_nuget_api_key
+    secretText: API_KEY
+
 build:
   -
     customized_builder_image:
