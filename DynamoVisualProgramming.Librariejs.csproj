@@ -1,0 +1,43 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <Description>Reusable lightweight library component based on React.js</Description>
+    <Authors>Autodesk</Authors>
+    <Copyright>Copyright Autodesk 2019</Copyright>
+    <PackageProjectUrl>https://github.com/DynamoDS/librarie.js</PackageProjectUrl>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <RepositoryUrl>https://github.com/DynamoDS/librarie.js.git</RepositoryUrl>
+    <PackageTags>Dynamo;librariejs</PackageTags>
+    <NeutralLanguage>en-US</NeutralLanguage>
+    <versionprefix>1.0.0</versionprefix>
+    <PackProjectInputFile>$(MSBuildProjectFullPath)</PackProjectInputFile>
+    <NoBuild>true</NoBuild>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <TargetFrameworks>net47</TargetFrameworks>
+    <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ExcludeFromPackage>
+        _mocks_/**/*;
+        _tests_/**/*;
+        docs/**/*;
+        node_modules/**/*;
+        src/**/*;
+        dist/librarie.js;
+        dist/librarie.js.map;
+        dist/librarie.min.js.map;
+    </ExcludeFromPackage>
+  </PropertyGroup>
+  <PropertyGroup>
+      <RuntimeIdentifier>win10-x64</RuntimeIdentifier>
+      <FrameworkPathOverride>$(NuGetPackageRoot)microsoft.targetingpack.netframework.v4.7\1.0.1\lib\net47\</FrameworkPathOverride>    
+  </PropertyGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net47' ">
+      <PackageReference Include="Microsoft.TargetingPack.NETFramework.v4.7" Version="1.0.1" ExcludeAssets="All" PrivateAssets="All" />
+  </ItemGroup>
+  <ItemGroup>
+      <Content Include="dist/**/*" Exclude="$(ExcludeFromPackage)" >
+          <PackagePath>\</PackagePath>
+      </Content>
+      <None Include="LICENSE" Pack="true" Visible="false" PackagePath=""/>
+  </ItemGroup>
+</Project>
