@@ -50,3 +50,13 @@ deployment:
     scripts:
       - "dotnet pack -c Release -o nuget --version-suffix \"beta$BUILD_NUMBER\""
       - "dotnet nuget push \"$(find nuget -type f -name *.nupkg)\" -s https://api.nuget.org/v3/index.json -k $API_KEY"
+soc2:
+  run_on_any_branch : true
+  white_source:    
+    skip: false
+    fail_on_audit_failure: true
+    team: Dynamo
+    project_name: "librarie.js"
+    hidden_email_list: dynamo_ws_access
+    third_party_lib_paths:
+      - "node_modules"
