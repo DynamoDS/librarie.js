@@ -60,3 +60,5 @@ soc2:
     hidden_email_list: dynamo_ws_access
     third_party_lib_paths:
       - "node_modules"
+schedule:
+  cron_schedule: "once_a_month"
