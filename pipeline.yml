@@ -24,7 +24,7 @@ build:
       registry: artifactory
       url: artifactory.dev.adskengineer.net/docker-local-v2/dynamo/dynamolibrariejs:dotnetcore3
     scripts:
-      - "mv /home/administrator/.npmrc $WORKSPACE"
+      - "mv -f /home/administrator/.npmrc $WORKSPACE"
       - "npm install"
       - "npm run build"
 
