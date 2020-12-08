@@ -63,3 +63,14 @@ soc2:
       - "node_modules"
 schedule:
   cron_schedule: "once_a_month"
+
+code_analysis:
+  sonarqube:
+    useCommonSonar: true
+    project_name: librarie.js
+    organization: Dynamo
+    src: "."
+    exclusions:
+      - __tests__/**/*
+      - node_modules/**/*
+      - dist/**/*
