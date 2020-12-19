@@ -67,7 +67,7 @@ schedule:
 code_analysis:
   sonarqube:
     build_image: artifactory.dev.adskengineer.net/docker-local-v2/dynamo/dynamolibrariejs:dotnetcore3
-    useCommonSonar: true
+    useCommonSonar: false
     project_name: librarie.js
     organization: Dynamo
     src: "."
