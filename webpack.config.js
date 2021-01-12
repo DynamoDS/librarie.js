@@ -1,5 +1,6 @@
 "use strict";
 const webpack = require('webpack');
+const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 let productionBuild = (process.env.NODE_ENV == "production");
 let plugins = [];
 
@@ -9,18 +10,6 @@ plugins.push(
         'global': {}
     })
 );
-
-if (productionBuild) {
-    plugins.push(
-        new webpack.optimize.UglifyJsPlugin({
-            minimize: true,
-            sourceMap: true, 
-            mangle: {
-                except: ["on"]
-            }
-        })
-    );
-}
 
 module.exports = {
     entry: [
@@ -49,27 +38,42 @@ module.exports = {
         extensions: [".webpack.js", ".web.js", ".ts", ".tsx", ".js"]
     },
 
+    optimization: {
+        minimizer: [
+            new UglifyJsPlugin({
+                parallel: true,
+                sourceMap: true,
+            }),
+        ],
+    },
+
     module: {
         rules: [
             {
+                // Include all modules that pass test assertion
+                // All files with a '.ts' or '.tsx' extension will be handled by 'awesome-typescript-loader'.
                 test: /\.tsx?$/,
-                loader: ["awesome-typescript-loader"] // All files with a '.ts' or '.tsx' extension will be handled by 'awesome-typescript-loader'.
+                use: 'awesome-typescript-loader'  
             },
             {
                 test: /\.js$/,
                 enforce: "pre",
-                loader: "source-map-loader" // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
+                use: 'source-map-loader' // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
             },
             {
                 test: /\.css$/,
-                loader: ["style-loader", "css-loader"]
+                use: 'css-loader'
             },
             {
                 test: /\.ttf|.otf|.eot|.woff|.svg|.png$/,
-                loader: "file-loader",
-                options: {
-                    name: '/resources/[name].[ext]'
-                }
+                use: [
+                    {
+                        loader: 'file-loader',
+                        options: {
+                            name: '/resources/[name].[ext]'
+                        }
+                    }
+                ]
             }
         ]
     }
