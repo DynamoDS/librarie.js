@@ -17,8 +17,8 @@
   "license": "MIT",
   "dependencies": {
     "express": "^4.14.0",
-    "react": "^15.5.4",
-    "react-dom": "^15.5.4",
+    "react": "^16.14.0",
+    "react-dom": "^16.14.0",
     "underscore": "^1.8.3"
   },
   "devDependencies": {
@@ -42,7 +42,7 @@
     "jest-jenkins-reporter": "^1.0.2",
     "mocha": "^3.3.0",
     "mocha-junit-reporter": "^1.23.1",
-    "react-test-renderer": "^15.5.4",
+    "react-test-renderer": "^16.14.0",
     "source-map-loader": "^0.1.5",
     "style-loader": "^0.15.0",
     "ts-jest": "^20.0.6",
