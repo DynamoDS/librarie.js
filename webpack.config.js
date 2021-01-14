@@ -2,14 +2,6 @@
 const webpack = require('webpack');
 const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 let productionBuild = (process.env.NODE_ENV == "production");
-let plugins = [];
-
-plugins.push(
-    new webpack.DefinePlugin({
-        'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
-        'global': {}
-    })
-);
 
 module.exports = {
     entry: [
@@ -24,7 +16,6 @@ module.exports = {
         libraryTarget: "umd",
         library: "LibraryEntryPoint"
     },
-    plugins: plugins,
 
     // Enable sourcemaps for debugging webpack's output.
     devtool: "source-map",
