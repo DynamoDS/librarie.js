@@ -390,7 +390,7 @@ describe("LibraryContainer UI", function () {
         libController.setLayoutSpecsJson(layoutSpecsJson, false);
         libController.refreshLibraryView();
 
-        let generatedSections = libContainer.nodes[0].generatedSections;
+        let generatedSections = libContainer.instance().generatedSections;
         chai.expect(generatedSections).to.have.lengthOf(2);
         chai.expect(generatedSections[1].text).to.equal("Add-ons");
         chai.expect(generatedSections[1].expanded).to.be.true; 

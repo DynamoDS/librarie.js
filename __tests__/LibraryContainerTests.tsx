@@ -100,14 +100,14 @@ describe("LibraryContainer class", function () {
     );
 
     expect(libContainer).to.not.be.undefined;
-    expect(libContainer.node.loadedTypesJson).to.be.null;
+    expect(libContainer.instance().loadedTypesJson).to.be.null;
 
     libController.setLoadedTypesJson(loadedTypesJson, false);
 
-    expect(libContainer.node.loadedTypesJson).to.not.be.null;
-    expect(libContainer.node.loadedTypesJson.loadedTypes).to.not.be.null;
-    expect(libContainer.node.loadedTypesJson.loadedTypes).to.have.length.of("2");
-    expect(libContainer.node.loadedTypesJson.loadedTypes[1].fullyQualifiedName).to.equal("Child2");
+    expect(libContainer.instance().loadedTypesJson).to.not.be.null;
+    expect(libContainer.instance().loadedTypesJson.loadedTypes).to.not.be.null;
+    expect(libContainer.instance().loadedTypesJson.loadedTypes).to.have.length.of("2");
+    expect(libContainer.instance().loadedTypesJson.loadedTypes[1].fullyQualifiedName).to.equal("Child2");
   });
 
   it("should set the layoutSpecsJson correctly", function () {
@@ -116,14 +116,14 @@ describe("LibraryContainer class", function () {
     );
 
     expect(libContainer).to.not.be.undefined;
-    expect(libContainer.node.layoutSpecsJson).to.be.null;
+    expect(libContainer.instance().layoutSpecsJson).to.be.null;
 
     libController.setLayoutSpecsJson(layoutSpecsJson, false);
 
-    expect(libContainer.node.layoutSpecsJson).to.not.be.null;
-    expect(libContainer.node.layoutSpecsJson.sections).to.not.be.null;
-    expect(libContainer.node.layoutSpecsJson.sections).to.have.length.of("2");
-    expect(libContainer.node.layoutSpecsJson.sections[1].text).to.equal("Miscellaneous");
+    expect(libContainer.instance().layoutSpecsJson).to.not.be.null;
+    expect(libContainer.instance().layoutSpecsJson.sections).to.not.be.null;
+    expect(libContainer.instance().layoutSpecsJson.sections).to.have.length.of("2");
+    expect(libContainer.instance().layoutSpecsJson.sections[1].text).to.equal("Miscellaneous");
   });
 
   //TODO: it("should append the loadedTypesJson correctly");
