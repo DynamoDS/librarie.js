@@ -1,7 +1,7 @@
 import { shallow, mount, configure } from 'enzyme';
 import { expect } from 'chai';
 import * as LibraryEntryPoint from '../src/entry-point';
-import Adapter from 'enzyme-adapter-react-16';
+import * as Adapter from 'enzyme-adapter-react-16';
 
 configure({adapter: new Adapter()});
 

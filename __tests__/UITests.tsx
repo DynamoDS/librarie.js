@@ -4,7 +4,7 @@ import * as LibraryEntryPoint from '../src/entry-point';
 import { LibraryItem } from '../src/components/LibraryItem';
 import { SearchResultItem } from '../src/components/SearchResultItem';
 import { ItemData } from "../src/LibraryUtilities";
-import Adapter from 'enzyme-adapter-react-16';
+import * as Adapter from 'enzyme-adapter-react-16';
 import * as chai from 'chai';
 
 configure({adapter: new Adapter()});

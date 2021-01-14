@@ -6,7 +6,7 @@ import { ItemData } from "../../src/LibraryUtilities";
 import { shallow, configure } from 'enzyme';
 import { mount } from 'enzyme';
 import toJson from 'enzyme-to-json';
-import Adapter from 'enzyme-adapter-react-16';
+import * as Adapter from 'enzyme-adapter-react-16';
 import * as chai from 'chai';
 
 configure({adapter: new Adapter()});
