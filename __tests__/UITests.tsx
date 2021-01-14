@@ -1,10 +1,13 @@
 import * as React from 'react';
-import { shallow, mount } from 'enzyme';
+import { shallow, mount, configure } from 'enzyme';
 import * as LibraryEntryPoint from '../src/entry-point';
 import { LibraryItem } from '../src/components/LibraryItem';
 import { SearchResultItem } from '../src/components/SearchResultItem';
 import { ItemData } from "../src/LibraryUtilities";
+import Adapter from 'enzyme-adapter-react-16';
 import * as chai from 'chai';
+
+configure({adapter: new Adapter()});
 
 describe("sample test", function () {
   it("should add two numbers", function () {

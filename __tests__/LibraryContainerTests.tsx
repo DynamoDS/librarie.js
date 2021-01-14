@@ -1,6 +1,9 @@
-import { shallow, mount } from 'enzyme';
+import { shallow, mount, configure } from 'enzyme';
 import { expect } from 'chai';
 import * as LibraryEntryPoint from '../src/entry-point';
+import Adapter from 'enzyme-adapter-react-16';
+
+configure({adapter: new Adapter()});
 
 describe("LibraryContainer class", function () {
   let loadedTypesJson: any;

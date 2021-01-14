@@ -3,10 +3,13 @@ import * as LibraryEntryPoint from '../../src/entry-point';
 import { LibraryContainer } from '../../src/components/LibraryContainer';
 import { LibraryItem } from '../../src/components/LibraryItem';
 import { ItemData } from "../../src/LibraryUtilities";
-import { shallow } from 'enzyme';
+import { shallow, configure } from 'enzyme';
 import { mount } from 'enzyme';
 import toJson from 'enzyme-to-json';
+import Adapter from 'enzyme-adapter-react-16';
 import * as chai from 'chai';
+
+configure({adapter: new Adapter()});
 
 describe("LibraryContainer", function () {
 
