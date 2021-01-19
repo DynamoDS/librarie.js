@@ -68,7 +68,7 @@ schedule:
 
 code_analysis:
   sonarqube:
-    useCommonSonar: false
+    useCommonSonar: true
     project_name: librarie.js
     organization: Dynamo
     src: "."
