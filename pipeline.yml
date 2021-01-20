@@ -11,6 +11,7 @@ check_changelog_updated_on_pr: false
 pipeline_os: "Linux"
 force_slack_notification : true
 nodejs_version: "10"
+language: typescript
 
 jenkins_creds:
   -
@@ -61,12 +62,12 @@ soc2:
     hidden_email_list: dynamo_ws_access
     third_party_lib_paths:
       - "node_modules"
+      
 schedule:
   cron_schedule: "once_a_month"
 
 code_analysis:
   sonarqube:
-    build_image: artifactory.dev.adskengineer.net/docker-local-v2/dynamo/dynamolibrariejs:dotnetcore3
     useCommonSonar: true
     project_name: librarie.js
     organization: Dynamo
