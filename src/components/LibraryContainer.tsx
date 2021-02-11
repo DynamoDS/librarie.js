@@ -79,7 +79,7 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
         };
     }
 
-    componentWillMount() {
+    UNSAFE_componentWillMount() {
         window.addEventListener("keydown", this.handleKeyDown);
     }
 

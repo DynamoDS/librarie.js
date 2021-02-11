@@ -62,7 +62,7 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
         }.bind(this));
     }
 
-    componentWillReceiveProps(newProps: SearchBarProps) {
+    UNSAFE_componentWillReceiveProps(newProps: SearchBarProps) {
         let oldState = this.state;
         this.setState({ selectedCategories: newProps.categories });
 
@@ -79,7 +79,7 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
         }.bind(this));
     }
 
-    componentWillMount() {
+    UNSAFE_componentWillMount() {
         window.addEventListener("keydown", this.handleKeyDown.bind(this));
         window.addEventListener("click", this.handleGlobalClick.bind(this));
     }
