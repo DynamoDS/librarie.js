@@ -35,7 +35,7 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
         this.handleKeyDown = this.handleKeyDown.bind(this);
     }
 
-    componentWillMount() {
+    UNSAFE_componentWillMount() {
         window.addEventListener("keydown", this.handleKeyDown);
     }
 

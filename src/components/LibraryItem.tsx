@@ -105,7 +105,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
     // user is still able to expand/unexpand the item, which will toggle the 
     // expansion state. This will make sure that the expansion state of an item
     // in search view will not be affected by the previous user click.
-    componentWillReceiveProps(nextProps: LibraryItemProps) {
+    UNSAFE_componentWillReceiveProps(nextProps: LibraryItemProps) {
         if (nextProps.data.expanded !== this.state.expanded) {
             this.setState({ expanded: nextProps.data.expanded });
         }

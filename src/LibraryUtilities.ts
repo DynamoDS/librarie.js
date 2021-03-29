@@ -778,9 +778,9 @@ export function getHighlightedText(text: string, highlightedText: string, matchD
         let replacements = text.match(regex);
 
         for (let i = 0; i < segments.length; i++) {
-            spans.push(React.DOM.span({ key: spans.length }, segments[i]));
+            spans.push(React.createElement('span',{ key: spans.length }, segments[i]));
             if (i != segments.length - 1) {
-                spans.push(React.DOM.span({ className: "HighlightedText", key: spans.length }, replacements[i]));
+                spans.push(React.createElement('span',{ className: "HighlightedText", key: spans.length }, replacements[i]));
             }
         }
     }

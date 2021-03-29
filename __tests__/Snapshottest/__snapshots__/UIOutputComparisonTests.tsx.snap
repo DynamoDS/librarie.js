@@ -1,59 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`LibraryContainer Demonstrate testing UIitems loads correctly from static data 1`] = `
-Array [
-  <div
-    className="LibraryItemText"
->
-    Display
-</div>,
-  <div
-    className="LibraryItemText"
->
-    Geometry
-</div>,
-  <div
-    className="LibraryItemText"
->
-    ImportExport
-</div>,
-  <div
-    className="LibraryItemText"
->
-    Input
-</div>,
-  <div
-    className="LibraryItemText"
->
-    List
-</div>,
-  <div
-    className="LibraryItemText"
->
-    Math
-</div>,
-  <div
-    className="LibraryItemText"
->
-    Script
-</div>,
-  <div
-    className="LibraryItemText"
->
-    String
-</div>,
-  <div
-    className="LibraryItemText"
->
-    Clockwork
-</div>,
-  <div
-    className="LibraryItemText"
->
-    DynamoText
-</div>,
-]
-`;
+exports[`LibraryContainer Demonstrate testing UIitems loads correctly from static data 1`] = `null`;
 
 exports[`LibraryContainer Test UI rendering of Library Item and child components 1`] = `
 <LibraryItem
