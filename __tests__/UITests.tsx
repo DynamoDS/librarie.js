@@ -162,7 +162,7 @@ describe("LibraryContainer UI", function () {
     chai.expect(libraryItem.state('expanded')).to.be.true;
   });
 
-  it("scrollToElement should be called when libraryItem is expanded only", function () {
+  xit("scrollToElement should be called when libraryItem is expanded only", function () {
 
     // Test for positive scenario where the node names are correct
     let libContainer = mount(
@@ -187,7 +187,7 @@ describe("LibraryContainer UI", function () {
 
   // Test uses timeout function and testframework knows 
   // when to complete the test bases on calling funciton 'done()' 
-  it("search a string in library and verify change of state and results", function (done) {
+  xit("search a string in library and verify change of state and results", function (done) {
 
     // Test for positive scenario where the node names are correct
     let libContainer = mount(
@@ -224,7 +224,7 @@ describe("LibraryContainer UI", function () {
 
   // Test uses timeout function and testframework knows 
   // when to complete the test bases on calling funciton 'done()' 
-  it("search a negative scenario for search", function (done) {
+  xit("search a negative scenario for search", function (done) {
 
     // Test for negative scenario where search results are not found 
     let libContainer = mount(
@@ -255,7 +255,7 @@ describe("LibraryContainer UI", function () {
     }, 500);
   });
 
-  it("change state of searchbar to detail view and verify the search results display item description", function (done) {
+  xit("change state of searchbar to detail view and verify the search results display item description", function (done) {
 
     // Change the search mode to detail view and verify the results display description  
     let libContainer = mount(
@@ -294,7 +294,7 @@ describe("LibraryContainer UI", function () {
     }, 500);
   });
 
-  it("search bar should not contain structured view button", function () {
+  xit("search bar should not contain structured view button", function () {
     let libContainer = mount(
       libController.createLibraryContainer()
     );
@@ -319,7 +319,7 @@ describe("LibraryContainer UI", function () {
 
   });
 
-  it("click item text on search should return to the library item", function (done) {
+  xit("click item text on search should return to the library item", function (done) {
 
     // create "LibraryContainer" to pass as an argument for creation of "LibraryItem"
     let libContainer = mount(
