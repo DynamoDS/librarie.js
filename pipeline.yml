@@ -23,7 +23,7 @@ build:
   -
     customized_builder_image:
       registry: artifactory
-      url: artifactory.dev.adskengineer.net/docker-local-v2/dynamo/dynamolibrariejs:dotnetcore3
+      url: artifactory.dev.adskengineer.net/dynamo/dynamolibrariejs:dotnetcore3
     scripts:
       - "mv -f /home/administrator/.npmrc $WORKSPACE"
       - "npm install"
@@ -34,7 +34,7 @@ ci_test:
     -
       customized_builder_image:
         registry: artifactory
-        url: artifactory.dev.adskengineer.net/docker-local-v2/dynamo/dynamolibrariejs:dotnetcore3
+        url: artifactory.dev.adskengineer.net/dynamo/dynamolibrariejs:dotnetcore3
       scripts:
         - "npm run test"
         - "npm run utiltest"
@@ -48,7 +48,7 @@ deployment:
     type: customized
     customized_builder_image:
       registry: artifactory
-      url: artifactory.dev.adskengineer.net/docker-local-v2/dynamo/dynamolibrariejs:dotnetcore3
+      url: artifactory.dev.adskengineer.net/dynamo/dynamolibrariejs:dotnetcore3
     scripts:
       - "dotnet pack -c Release -o nuget --version-suffix \"beta$BUILD_NUMBER\""
       - "dotnet nuget push \"$(find nuget -type f -name *.nupkg)\" -s https://api.nuget.org/v3/index.json -k $API_KEY"
