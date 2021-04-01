@@ -19,7 +19,7 @@
     "express": "^4.14.0",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
-    "underscore": "^1.8.3"
+    "underscore": "^1.12.1"
   },
   "devDependencies": {
     "@types/chai": "^3.4.35",
@@ -30,7 +30,7 @@
     "@types/react": "^15.0.0",
     "@types/react-dom": "^0.14.20",
     "@types/react-test-renderer": "^15.5.0",
-    "@types/underscore": "^1.8.0",
+    "@types/underscore": "^1.11.0",
     "awesome-typescript-loader": "^3.0.0-beta.18",
     "babel-jest": "^21.0.0",
     "chai": "^3.5.0",
