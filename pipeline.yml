@@ -6,6 +6,7 @@ env:
   - ARTIFACTORY_BOBCAT_DOCKER_REGISTRY : "artifactory.dev.adskengineer.net"
   - NUGET_API_ID : "dynamovisualprogramming_nuget_api_key"
   - ARTIFACTORY_DOCKER_CREDENTIALS_ID : "common_service_account"
+  - HARMONY_REPO : "DynamoDS/librarie.js"
 
 check_changelog_updated_on_pr: false
 pipeline_os: "Linux"
@@ -57,6 +58,7 @@ soc2:
   run_on_any_branch : true
   harmony:
     hidden_email_list: dynamo_ws_access
+    repository: env.HARMONY_REPO
     third_party_lib_paths:
       - "node_modules"
       
