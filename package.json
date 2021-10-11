@@ -20,7 +20,7 @@
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
     "underscore": "^1.12.1",
-    "nth-check": "^2.0.0"
+    "eslint": "^7.17.0"
   },
   "devDependencies": {
     "@types/chai": "^3.4.35",
