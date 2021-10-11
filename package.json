@@ -19,10 +19,10 @@
     "express": "^4.14.0",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
-    "underscore": "^1.12.1",
-    "eslint": "^7.17.0"
+    "underscore": "^1.12.1"
   },
   "devDependencies": {
+    "prettier": "^2.0.5",
     "@types/chai": "^3.4.35",
     "@types/enzyme": "^3.10.8",
     "@types/enzyme-adapter-react-16": "^1.0.6",
