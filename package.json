@@ -7,7 +7,8 @@
     "utiltest": "mocha -r ts-node/register __tests__/mochatest/libraryUtilitiesTest.ts --reporter mocha-junit-reporter --reporter-options mochaFile=./TestResults/MochaReport.xml",
     "build": "npm run dev & npm run prod",
     "dev": "cross-env NODE_ENV=development webpack",
-    "prod": "cross-env NODE_ENV=production webpack"
+    "prod": "cross-env NODE_ENV=production webpack",
+    "serve": "npm run prod & node ./index.js"
   },
   "keywords": [
     "Dynamo",

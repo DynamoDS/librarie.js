@@ -12,7 +12,7 @@
 body {
     font-family: "Artifakt Element", "Open Sans";
     -webkit-user-select: none;
-    font-size: 13px;
+    font-size: 16px;
     cursor: default;
 }
 
@@ -77,11 +77,27 @@ input {
     opacity: 1.0;
 }
 
+
 .LibraryItemHeader {
     display: flex;
     flex-direction: row;
     align-items: center;
     transition: 0.15s;
+    position: relative;
+}
+
+.LibraryItemContainerCategory > .LibraryItemHeader{
+    padding: 1.2rem 0;
+}
+
+.LibraryItemContainerGroup > .LibraryItemHeader,
+.LibraryItemContainerNone > .LibraryItemHeader{
+    padding: 0.8rem 0;
+}
+
+.LibraryItemContainerGroup,
+.LibraryItemContainerNone{
+    padding: 0 0.5rem;
 }
 
 .LibraryItemHeader:hover,
@@ -143,11 +159,13 @@ input {
 }
 
 .LibraryItemContainerCategory .LibraryItemText {
-    color: #aaa;
+    color: #ade4de;
+    font-size: 1.2rem;
 }
 
 .LibraryItemContainerNone .LibraryItemText {
-    color: #eee;
+    color: #c6c6c6;
+    font-size: 1.2rem;
 }
 
 .LibraryItemHeader .LibraryItemGroupText,
@@ -156,7 +174,8 @@ input {
 }
 
 .LibraryItemHeader .LibraryItemGroupText {
-    color: #a9a9a9;
+    color: #eeeeee;
+    font-size: 1.2rem;
 }
 
 .LibraryItemParameters {
@@ -170,12 +189,46 @@ input {
 .Arrow {
     height: 32px;
     width: 32px;
+    display: none;
 }
 
 .CategoryArrow {
-    height: 32px;
-    width: 32px;
-    margin-left:-10px;
+    height: 16px;
+    width: 16px;
+    margin: 0 0.5rem;
+}
+
+
+.LibraryItemBody > .LibraryItemContainerGroup > .LibraryItemHeader,
+.LibraryItemBody > .LibraryItemContainerNone > .LibraryItemHeader {
+    border: solid white 1px;
+    border-right: 0px;
+    border-top: 0px;
+    border-bottom: 0px;
+}
+
+.LibraryItemBody > .LibraryItemContainerGroup > .LibraryItemHeader:before,
+.LibraryItemBody > .LibraryItemContainerNone > .LibraryItemHeader:before {
+    content: "";
+    height: 1rem;
+    width: 1.5rem;
+    border: solid white 1px;
+    border-right: 0px;
+    border-top: 0px;
+    border-left: 0px;
+    transform: translateY(-50%);
+}
+
+.LibraryItemBody > .LibraryItemContainerGroup:last-child > .LibraryItemHeader:after,
+.LibraryItemBody > .LibraryItemContainerGroup.expanded > .LibraryItemHeader:after,
+.LibraryItemBody > .LibraryItemContainerNone:last-child > .LibraryItemHeader:after,
+.LibraryItemBody > .LibraryItemContainerNone.expanded > .LibraryItemHeader:after {
+    content: "";
+    height: 55%;
+    width: 0.3rem;
+    position: absolute;
+    transform: translateY(50%) translateX(-50%);
+    background-color: #414141;
 }
 
 .BodyIndentation {
@@ -212,7 +265,6 @@ input {
 
 .SearchBar {
     width: 100%;
-    background: #5b5a5a;
 }
 
 .SearchInput {
@@ -230,7 +282,6 @@ input {
     justify-content: space-between;
     align-items: center;
     padding: 3px 3px 3px 5px;
-    background-color: #414141;
     color: #aaa;
 }
 

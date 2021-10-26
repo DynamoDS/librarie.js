@@ -165,7 +165,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         }
 
         return (
-            <div className={this.getLibraryItemContainerStyle()}>
+            <div className={this.getLibraryItemContainerStyle(this.state.expanded)}>
                 {header}
                 <div className={"LibraryItemBodyContainer"}>
                     {bodyIndentation}
@@ -247,22 +247,21 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
 
         if (this.props.data.itemType == "category") {
             if (!this.state.expanded) {
-                arrowIcon = require("../resources/ui/indent-arrow-right-wo-lines.svg");
+                arrowIcon = require("../resources/ui/indent-arrow-category-right.svg");
             }
             else {
-                arrowIcon = require("../resources/ui/indent-arrow-down-wo-lines.svg");
+                arrowIcon = require("../resources/ui/indent-arrow-category-down.svg");
             }
 
             return <img className={"CategoryArrow"} src={arrowIcon} onError={this.onImageLoadFail} />;
 
         }
 
-        return <img className={"Arrow"} src={arrowIcon} onError={this.onImageLoadFail} />;
+        return <img className={`Arrow`} src={arrowIcon} onError={this.onImageLoadFail} />;
     }
 
     getHeaderElement(): JSX.Element {
         let arrow = this.getArrowElement();
-        let iconElement = this.getIconElement();
         let parameters: JSX.Element = null;
 
         if (this.props.data.parameters && this.props.data.parameters.length > 0 && this.props.data.childItems.length == 0) {
@@ -274,10 +273,8 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
                 <div className={this.getLibraryItemHeaderStyle()} onClick={this.onLibraryItemClicked}
                     onMouseEnter={this.onLibraryItemMouseEnter} onMouseLeave={this.onLibraryItemMouseLeave}>
                     {arrow}
-                    {this.props.data.itemType === "section" ? null : iconElement}
                     <div className={this.getLibraryItemTextStyle()}>{this.props.data.text}</div>
                     {parameters}
-                    {this.props.data.itemType === "section" ? iconElement : null}
                 </div>
             );
         }
@@ -285,18 +282,28 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         return null;
     }
 
-    getLibraryItemContainerStyle(): string {
+    getLibraryItemContainerStyle(isExpanded : boolean): string {
+        let style : string = "";
         switch (this.props.data.itemType) {
             case "section":
-                return "LibraryItemContainerSection";
+                style = "LibraryItemContainerSection";
+                break;
             case "category":
-                return "LibraryItemContainerCategory";
+                style = "LibraryItemContainerCategory";
+                break;
             case "group":
             case "coregroup":
-                return "LibraryItemContainerGroup";
+                style = "LibraryItemContainerGroup";
+                break;
             default:
-                return "LibraryItemContainerNone";
+                style = "LibraryItemContainerNone";
+                break;
         }
+
+        if(isExpanded)
+            style += " expanded";
+
+        return style;
     }
 
     getLibraryItemHeaderStyle(): string {
