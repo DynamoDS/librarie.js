@@ -29,12 +29,12 @@ input {
 .LibraryItemContainer {
     flex-grow: 1;
     overflow-y: auto;
+    padding: 0 0.5rem;
 }
 
 .LibraryItemContainerSection {
     display: flex;
     flex-direction: column;
-    background: #353535;
 }
 
 .LibraryItemContainerCategory {
@@ -120,8 +120,6 @@ input {
 .LibraryItemBodyContainer {
     display: flex;
     align-items: stretch;
-    background: #414141;
-    padding-left:2px;
 }
 
 .LibraryItemContainerSection .LibraryItemIcon {
@@ -195,7 +193,7 @@ input {
 .CategoryArrow {
     height: 16px;
     width: 16px;
-    margin: 0 0.5rem;
+    margin-right: 0.5rem;
 }
 
 
@@ -274,41 +272,71 @@ input {
 }
 
 .SearchBar {
-    width: 100%;
+    padding: 0 0.5rem;
+    margin-bottom: 1.5rem;
 }
 
 .SearchInput {
+    display: flex; 
     padding: 5px 0px;
-    margin: 5px 0px;
-    background-color: #fff;
+    margin: 0.5rem 0 1rem 0;
     width: 100%;
     position: relative;
     white-space: nowrap;
     overflow-x: hidden;
+    border-bottom: solid 2px #ffffff80;
+}
+
+.SearchInput:focus-within{
+    border-bottom-color: #38abdf;
 }
 
 .LibraryHeader {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 3px 3px 3px 5px;
-    color: #aaa;
+    padding: 0.8rem 0;
+    color: #f5f5f5f5;
+    font-size: 1.2rem;
 }
 
-.SearchBar .SearchBarIcon {
-    padding-left: 10px;
+.SearchInput .Icon {
+    width: 1rem;
+    height: 1rem;
+    vertical-align: text-top;
 }
 
-.SearchBar .SearchInputText {
-    padding: 2px 5px 0px 10px;
+.SearchInput .ClearSearch{
+    height: 0.8rem;
+}
+
+.SearchInput .SearchInputText {
+    padding: 0 0.8rem;
     background: none;
     outline: none;
     border: none;
     width: 100%;
+    color: #f5f5f5;
 }
 
-.SearchBar .SearchInputText:focus::-webkit-input-placeholder {
+.SearchInput .SearchInputText:focus{
+    color: #38abdf;
+}
+
+.SearchInput .SearchInputText:focus::-webkit-input-placeholder {
     opacity: 0;
+}
+
+.SearchBar .SearchOptionContainer{
+    display: flex;
+    height: 2rem;
+    justify-content: flex-end;
+    background-color: #3c3c3c;
+    visibility: hidden;
+}
+
+.SearchBar.isSearching .SearchOptionContainer{
+    visibility: visible;
 }
 
 .SearchBar .SearchOptionsBtnEnabled,
@@ -445,18 +473,13 @@ input {
     display: none;
 }
 
-.SearchBar .CancelButton button {
-    font-size: 14px;
-    color: #ccc;
+.SearchBar button.CancelButton {
     background: transparent;
     border: 0px;
     outline: 0px;
-    position: absolute;
-    top: 5px;
-    right: 5px;
 }
 
-.SearchBar .CancelButton button:hover {
+.SearchBar button.CancelButton:hover {
     cursor: pointer;
 }
 

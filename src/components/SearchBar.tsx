@@ -222,16 +222,16 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
         let options = null;
         let checkboxes: JSX.Element[] = [];
         let cancelButton: JSX.Element = null;
+        let searchIcon: string = require("../resources/ui/search-icon.svg");
+        let searchIconClear: string = require("../resources/ui/search-icon-clear.svg");
 
         this.categoryData.forEach(category => checkboxes.push(category.createCheckbox(true)));
 
         if (this.state.hasText) {
             cancelButton = (
-                <div className="CancelButton">
-                    <button onClick={this.clearInput.bind(this)} >
-                        <i className="fa fa-times" aria-hidden="true"></i>
-                    </button>
-                </div>
+                <button className="CancelButton" onClick={this.clearInput.bind(this)} >
+                    <img className="Icon ClearSearch" src={searchIconClear}/>
+                </button>
             );
         }
 
@@ -250,26 +250,26 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
                     </div></div>;
         }
 
+        const isSearchingClass = this.state.hasText ? "isSearching" : "";
+
         return (
-            <div className="SearchBar">
-                <div className="LibraryHeader">
-                    Library
-                    <div>
-                        |{this.createFilterButton()}|{this.createDetailedButton()}
-                    </div>
-                </div>
-                <div className="SearchInput">
-                    <div>
-                        <i className="fa fa-search SearchBarIcon"></i>
-                        <input
-                            className="SearchInputText"
-                            type="input" placeholder="Search..."
-                            onChange={this.onTextChanged.bind(this)}
-                            ref={(field) => { this.searchInputField = field; }}>
-                        </input>
-                    </div>
+            <div className={`SearchBar ${isSearchingClass}`}>
+                <div className="LibraryHeader">Library</div>
+                <div className={`SearchInput ${isSearchingClass}`}>
+                    <img className="Icon SeachBarIcon" src={searchIcon}/>
+                    <input
+                        className="SearchInputText"
+                        type="input" placeholder="Search"
+                        onChange={this.onTextChanged.bind(this)}
+                        ref={(field) => { this.searchInputField = field; }}>
+                    </input>
+            
                     {cancelButton}
                 </div>
+                <div className="SearchOptionContainer">
+                    {this.createFilterButton()}
+                    {this.createDetailedButton()}
+                </div>    
                 {options}
             </div>
         );
