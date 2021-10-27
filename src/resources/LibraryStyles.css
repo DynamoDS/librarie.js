@@ -283,12 +283,20 @@ input {
     width: 100%;
     position: relative;
     white-space: nowrap;
-    overflow-x: hidden;
+    /*overflow: hidden; */
     border-bottom: solid 2px #ffffff80;
 }
 
 .SearchInput:focus-within{
     border-bottom-color: #38abdf;
+}
+
+.SearchInput:focus-within::after{
+    content: "";
+    width: 100%;
+    position: absolute;
+    bottom: -8px;
+    border-bottom: solid 6px #38abdf75;
 }
 
 .LibraryHeader {
