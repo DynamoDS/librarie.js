@@ -243,7 +243,7 @@ input {
 .ClusterLeftPane {
     display: flex;
     padding: 0 1.2rem 0 0.1rem;
-    margin: 2px 0px;
+    margin: 1rem 0;
     border-right: 2px;
     border-right-style: solid;
 }
