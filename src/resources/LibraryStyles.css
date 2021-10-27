@@ -201,7 +201,7 @@ input {
 
 .LibraryItemBody > .LibraryItemContainerGroup > .LibraryItemHeader,
 .LibraryItemBody > .LibraryItemContainerNone > .LibraryItemHeader {
-    border: solid white 1px;
+    border: solid #d9d9d9 2px;
     border-right: 0px;
     border-top: 0px;
     border-bottom: 0px;
@@ -212,7 +212,7 @@ input {
     content: "";
     height: 1rem;
     width: 2rem;
-    border: solid white 1px;
+    border: solid #d9d9d9 2px;
     border-right: 0px;
     border-top: 0px;
     border-left: 0px;
@@ -242,11 +242,23 @@ input {
 
 .ClusterLeftPane {
     display: flex;
-    padding-left: 13px;
+    padding: 0 1.3rem 0 0;
     margin: 2px 0px;
     border-right: 2px;
     border-right-style: solid;
-    margin-left:-26px;
+    margin-left: -0.5rem;
+}
+
+.ClusterLeftPane.create{
+    border-color: #cfe4b3;
+}
+
+.ClusterLeftPane.action{
+    border-color: #fcc776;
+}
+
+.ClusterLeftPane.query{
+    border-color: #9bd5ef;
 }
 
 .ClusterRightPane {

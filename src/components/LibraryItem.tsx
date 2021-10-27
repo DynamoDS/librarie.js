@@ -369,7 +369,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
             createCluster = (<ClusterView
                 libraryContainer={this.props.libraryContainer}
                 icon={require("../resources/icons/library-create.svg")}
-                borderColor="#62895b" /* green */
+                clusterType="create"
                 showItemSummary={this.props.showItemSummary}
                 childItems={createMethods} />);
         }
@@ -379,7 +379,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
             actionCluster = (<ClusterView
                 libraryContainer={this.props.libraryContainer}
                 icon={require("../resources/icons/library-action.svg")}
-                borderColor="#ad5446" /* red */
+                clusterType="action"
                 showItemSummary={this.props.showItemSummary}
                 childItems={actionMethods} />);
         }
@@ -389,7 +389,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
             queryCluster = (<ClusterView
                 libraryContainer={this.props.libraryContainer}
                 icon={require("../resources/icons/library-query.svg")}
-                borderColor="#4b9dbf" /* blue */
+                clusterType="query"
                 showItemSummary={this.props.showItemSummary}
                 childItems={queryMethods} />);
         }
