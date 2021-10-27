@@ -232,7 +232,7 @@ input {
 }
 
 .BodyIndentation {
-    padding-left: 1rem;
+    padding-left: 0.4rem;
 }
 
 .ClusterViewContainer {
@@ -242,11 +242,10 @@ input {
 
 .ClusterLeftPane {
     display: flex;
-    padding: 0 1.3rem 0 0;
+    padding: 0 1.2rem 0 0.1rem;
     margin: 2px 0px;
     border-right: 2px;
     border-right-style: solid;
-    margin-left: -0.5rem;
 }
 
 .ClusterLeftPane.create{
