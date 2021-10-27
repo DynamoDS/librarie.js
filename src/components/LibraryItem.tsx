@@ -236,11 +236,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         let arrowIcon: any = null;
 
         if (!this.state.expanded) {
-            if (this.props.isLastItem) {
-                arrowIcon = require("../resources/ui/indent-arrow-right-last.svg");
-            } else {
-                arrowIcon = require("../resources/ui/indent-arrow-right.svg");
-            }
+            arrowIcon = require("../resources/ui/indent-arrow-right.svg");
         } else {
             arrowIcon = require("../resources/ui/indent-arrow-down.svg");
         }
