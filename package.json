@@ -8,7 +8,7 @@
     "build": "npm run dev & npm run prod",
     "dev": "cross-env NODE_ENV=development webpack",
     "prod": "cross-env NODE_ENV=production webpack",
-    "serve": "npm run prod & node ./index.js"
+    "serve": "npm run dev & node ./index.js"
   },
   "keywords": [
     "Dynamo",
