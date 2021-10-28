@@ -305,13 +305,13 @@ input {
     font-size: 1.2rem;
 }
 
-.SearchInput .Icon {
+.SearchBar .Icon {
     width: 1rem;
     height: 1rem;
     vertical-align: text-top;
 }
 
-.SearchInput .ClearSearch{
+.SearchInp .ClearSearch{
     height: 0.8rem;
 }
 
@@ -338,46 +338,147 @@ input {
     justify-content: flex-end;
     background-color: #3c3c3c;
     visibility: hidden;
+    opacity: 0;
+    transition: ease-in-out 300ms;
 }
 
 .SearchBar.isSearching .SearchOptionContainer{
     visibility: visible;
+    opacity: 1;
 }
 
-.SearchBar .SearchOptionsBtnEnabled,
-.SearchBar .SearchOptionsBtnDisabled {
+.SearchBar button,
+.SearchBar button {
     border: none;
     outline: none;
-    background-color: #414141;
+    height: 100%;
+    background-color: transparent;
     transition: 0.15s;
 }
 
-.SearchBar .SearchOptionsBtnEnabled {
+.SearchBar button {
     color: #ddd;
     transition: 0.15s;
 }
 
-.SearchBar .SearchOptionsBtnDisabled {
+.SearchBar button {
     color: #555;
 }
 
-.SearchBar .SearchOptionsBtnEnabled:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+.SearchBar button{
+    background-color: transparent;
+    border: 0;
+    color: #6DD2FF;
+}
+
+.SearchBar button:active,
+.SearchBar button:hover {
+    color: #38abdf;
+    background-color: rgba(255,255,255,0.1);
     cursor: pointer;
 }
 
-.SearchBar .SearchOptionsContainerArrow {
-    position: absolute;
-    top: 10px;
-    right: 65px;
-    width: 0px;
-    height: 0px;
-    border-bottom: 10px solid #aaa;
-    border-left: 10px solid transparent;
-    border-right: 10px solid transparent;
-    border-top: 10px solid transparent;
-    pointer-events: none;
+.SearchFilterContainer{
+    position: relative;
 }
+
+.SearchFilterPanel{
+    position: absolute;
+    top: 2rem;
+    right: 0;
+    background-color: #535353;
+    color: #ffffff;
+    width: 12rem;
+    text-align: left;
+    font-size: 0.8rem;
+    box-shadow: 0 0 1rem 0 rgba(0,0,0,0.3);
+}
+
+.SearchFilterPanel > div{
+    padding: 1rem;
+}
+
+.SearchFilterPanel > div:first-child{
+    padding-bottom: 0;
+}
+
+/* Custom checkbox */
+.SearchFilterPanel label.Category{
+    position: relative;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.SearchFilterPanel label.Category:hover{
+  cursor: pointer;
+} 
+
+.SearchFilterPanel label.Category > * {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.SearchFilterPanel .body input[type="checkbox"]{
+    visibility: hidden;
+    margin: 0;
+    cursor: pointer;
+}
+
+.SearchFilterPanel .body input[type="checkbox"],
+.SearchFilterPanel .body .checkmark{
+    margin: 0;
+    margin-right: 0.5rem;
+}
+
+.SearchFilterPanel .body .checkmark{
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 0.8rem;
+    width: 0.8rem;
+    background-color: transparent;
+    border: solid 1px rgba(255, 255, 255, 0.5);
+}
+
+.SearchFilterPanel .body input[type="checkbox"]:checked ~ .checkmark{
+  background-color: white; 
+} 
+/* Create the mark/indicator (hidden when not checked) */ 
+.checkmark:after
+{ 
+  content: ""; 
+  position: absolute; 
+  display: none; 
+} 
+
+/* Show the mark when checked */ 
+.SearchFilterPanel .body input[type="checkbox"]:checked ~ .checkmark:after{
+  display: block; 
+} 
+
+/* Style the mark/indicator */ 
+.SearchFilterPanel .body .checkmark:after{
+    left: 0.25rem;
+    top: 0rem;
+    width: 3px;
+    height: 8px;
+    border: solid black;
+    border-width: 0 2px 2px 0; 
+    transform: rotate(45deg);
+} 
+
+.SearchFilterPanel .footer{
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    border-top: solid #999999 1px;
+    padding: 0.5rem;
+}
+
+.SearchFilterPanel .footer > * {
+    padding: 0.5rem;
+}
+
 
 .SearchBar .SearchOptionsContainer {
     font-size: 13px;
@@ -471,11 +572,6 @@ input {
 
 .CheckboxLabelEnabled:hover .CheckboxLabelRightButton {
     display: block;
-}
-
-.SearchCheckbox,
-.CategoryCheckbox {
-    display: none;
 }
 
 .SearchBar button.CancelButton {

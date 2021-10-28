@@ -175,10 +175,6 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
         this.setSelectedCategories([event.target.name]);
     }
 
-    allCategoriesSelected() {
-        return (this.state.selectedCategories.length == this.props.categories.length);
-    }
-
     setSelectedCategories(categories: string[]) {
         this.setState({ selectedCategories: categories })
         this.props.onCategoriesChanged(categories, this.categoryData);
@@ -194,38 +190,80 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
         return searchOptionsDisabled;
     }
 
-    createFilterButton() {
-        // Create the filter button
-        let filterBtn = <button className={this.getSearchOptionsBtnClass()} onClick={this.onExpandButtonClick.bind(this)} disabled={this.getSearchOptionsDisabled()} ref={(button) => { this.filterBtn = button }} title="Filter results"><i className="fa fa-filter"></i></button>;
-        return filterBtn;
+    createClearFiltersButton(){
+
+        const selectedCategoriesCount:number = this.state.selectedCategories.length;
+        if(selectedCategoriesCount === 0)
+            return null;
+
+        const message = `Clear filters (${selectedCategoriesCount})`;
+
+
+        return <button title={message}>
+            {message}
+        </button>
+    }
+    
+    createFilterPanel(){
+        let binIcon: string = require("../resources/ui/bin.svg");
+        let checkboxes: JSX.Element[] = this.categoryData.map(cat => cat.createCheckbox(false))
+
+        return <div className="SearchFilterPanel" ref={(container) => this.searchOptionsContainer = container}>
+            <div className="header">
+                <span>Filter by</span>
+            </div>
+            <div className="body">
+                    {checkboxes}
+            </div>
+            <div className="footer">
+                <button>Apply</button>
+                <button>
+                    <img className="Icon ClearFilters" src={binIcon} />
+                </button>
+            </div>
+        </div>;
     }
 
-    createStructuredButton() {
-        let structuredBtnClass = this.state.structured ? "fa fa-dedent" : "fa fa-indent";
+    createFilterButton() {
+        let searchFilterIcon: string = require("../resources/ui/search-filter.svg");
+        let filterPanel:any = this.state.expanded ? this.createFilterPanel() : null;
 
-        // Create the button to toggle structured state
-        let structuredBtn = <button className={this.getSearchOptionsBtnClass()} onClick={this.onStructuredModeChanged.bind(this)} disabled={this.getSearchOptionsDisabled()} title="Structured view"><i className={structuredBtnClass}></i></button>;
-        return structuredBtn;
+        // Create the filter panel
+        return <div className="SearchFilterContainer">
+        <button 
+                className={this.getSearchOptionsBtnClass()} 
+                onClick={this.onExpandButtonClick.bind(this)} 
+                disabled={this.getSearchOptionsDisabled()} 
+                ref={(button) => { this.filterBtn = button }}
+                title="Filter results">
+                    <img className="Icon SearchFilter" src={searchFilterIcon}/>
+                </button>
+                    {filterPanel}
+        </div>
     }
 
     createDetailedButton() {
+        let searchDetailedIcon: string = require("../resources/ui/search-detailed.svg");
+
         // Create the button to toggle between compact/detailed
         // This button is only enabled when the user is doing search and structured view is not enabled
         let detailedBtnClass = this.state.hasText && !this.state.structured ? "SearchOptionsBtnEnabled" : "SearchOptionsBtnDisabled";
         let detailedBtnDisabled = this.state.hasText && !this.state.structured ? false : true;
-        let detailedBtn = <button className={detailedBtnClass} onClick={this.onDetailedModeChanged.bind(this)} disabled={detailedBtnDisabled} title="Compact/Detailed View"><i className="fa fa-align-justify"></i></button>;
-        return detailedBtn;
+        return <button 
+            className={detailedBtnClass}
+            onClick={this.onDetailedModeChanged.bind(this)} 
+            disabled={detailedBtnDisabled} 
+            title="Compact/Detailed View">
+                 <img className="Icon SearchDetailed" src={searchDetailedIcon}/>
+            </button>;
     }
 
     render() {
 
-        let options = null;
-        let checkboxes: JSX.Element[] = [];
         let cancelButton: JSX.Element = null;
         let searchIcon: string = require("../resources/ui/search-icon.svg");
         let searchIconClear: string = require("../resources/ui/search-icon-clear.svg");
 
-        this.categoryData.forEach(category => checkboxes.push(category.createCheckbox(true)));
 
         if (this.state.hasText) {
             cancelButton = (
@@ -233,21 +271,6 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
                     <img className="Icon ClearSearch" src={searchIconClear}/>
                 </button>
             );
-        }
-
-        if (this.state.expanded) {
-            options =
-                <div className="SearchOptions">
-                    <div className="SearchOptionsContainerArrow"></div>
-                    <div className="SearchOptionsContainer" ref={(container) => this.searchOptionsContainer = container}>
-                        <div className="SearchOptionsHeader">
-                            <span>Filter:</span>
-                            <div className="SelectAllBtn" onClick={this.onAllButtonClicked.bind(this)}>Select All</div>
-                        </div>
-                        <div className="CategoryCheckboxContainer">
-                            {checkboxes}
-                        </div>
-                    </div></div>;
         }
 
         const isSearchingClass = this.state.hasText ? "isSearching" : "";
@@ -267,10 +290,10 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
                     {cancelButton}
                 </div>
                 <div className="SearchOptionContainer">
+                    {this.createClearFiltersButton()}
                     {this.createFilterButton()}
                     {this.createDetailedButton()}
                 </div>    
-                {options}
             </div>
         );
     }
@@ -296,21 +319,12 @@ export class CategoryData {
     }
 
     createCheckbox(enabled: boolean): JSX.Element {
-        let checkSymbol = this.checked ? <i className="fa fa-check CheckboxSymbol"></i> : null;
 
-        let only = null;
-        if (this.onOnlyButtonClicked) {
-            // Show the "only" option if there is a callback function provided
-            only = <label><input type="button" name={this.name} className="CheckboxLabelRightButton" onClick={this.onOnlyButtonClicked} value={"only"} /></label>
-        }
-
-        let checkboxLabelText = enabled ? "CheckboxLabelEnabled" : "CheckboxLabelDisabled";
         let checkbox: JSX.Element =
-            <label className={checkboxLabelText}>
-                {checkSymbol}
-                <input type="checkbox" name={this.name} className={this.className} onChange={this.onCheckboxChanged.bind(this)} checked={this.checked} />
-                <div className="CheckboxLabelText">{this.displayText}</div>
-                {only}
+            <label className={"Category"}>
+                <input type="checkbox" name={this.name} className={this.className} onChange={this.onCheckboxChanged.bind(this)} checked={this.checked}/>
+                <div className="checkmark"/>
+                <div>{this.displayText}</div>
             </label>;
         return checkbox;
     }
