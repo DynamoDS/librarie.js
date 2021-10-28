@@ -49,7 +49,7 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
         super(props);
         this.state = {
             expanded: false,
-            selectedCategories: this.props.categories,
+            selectedCategories: [],
             structured: false,
             detailed: false,
             hasText: false
@@ -57,7 +57,6 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
 
         _.each(this.props.categories, function (c: string) {
             let data = new CategoryData(c, "CategoryCheckbox", true, this.onCategoriesChanged.bind(this));
-            data.onOnlyButtonClicked = this.onOnlyButtonClicked.bind(this);
             this.categoryData.push(data);
         }.bind(this));
     }
@@ -70,8 +69,7 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
         this.categoryData = [];
         _.each(newProps.categories, function (c: string) {
             let oldCategory = oldCategoryData.find(x => x.name === c);
-            let data = new CategoryData(c, "CategoryCheckbox", true, this.onCategoriesChanged.bind(this));
-            data.onOnlyButtonClicked = this.onOnlyButtonClicked.bind(this);
+            let data = new CategoryData(c, "CategoryCheckbox", false, this.onCategoriesChanged.bind(this));
             if (oldCategory) {
                 data.checked = oldCategory.checked;
             }
@@ -160,20 +158,29 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
         this.setSelectedCategories(selectedCategories);
     }
 
-    onAllButtonClicked() {
-        _.each(this.categoryData, function (category) {
-            category.checked = true;
+    onApplyCategoryFilter(){
+        let selectedCategories: string[] = [];
+        _.each(this.categoryData, function (data) {
+            if (data.checked) selectedCategories.push(data.name);
         })
-        this.setSelectedCategories(this.props.categories);
+        this.setSelectedCategories(selectedCategories);
+
     }
 
-    onOnlyButtonClicked(event: any) {
-        _.each(this.categoryData, function (category) {
-            if (category.name == event.target.name) category.checked = true;
-            else category.checked = false;
-        })
-        this.setSelectedCategories([event.target.name]);
-    }
+//    onAllButtonClicked() {
+//        _.each(this.categoryData, function (category) {
+//            category.checked = true;
+//        })
+//        this.setSelectedCategories(this.props.categories);
+//    }
+
+//    onOnlyButtonClicked(event: any): void {
+//        _.each(this.categoryData, function (category) {
+//            if (category.name == event.target.name) category.checked = true;
+//            else category.checked = false;
+//        })
+//        this.setSelectedCategories([event.target.name]);
+//    }
 
     setSelectedCategories(categories: string[]) {
         this.setState({ selectedCategories: categories })
@@ -307,7 +314,6 @@ export class CategoryData {
 
     // Optional attributes
     displayText: string = null;
-    onOnlyButtonClicked: any = null;
 
     constructor(name: string, className: string, checked: boolean, onChangedFunc: any, displayText?: string) {
         this.name = name;

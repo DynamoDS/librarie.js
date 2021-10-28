@@ -52,7 +52,7 @@ input {
 .LibraryItemContainerNone {
     display: flex;
     flex-direction: column;
-    overflow-x: hidden;
+    overflow: hidden;
 }
 
 .LibrarySectionHeader {
@@ -234,12 +234,12 @@ input {
 .ClusterViewContainer {
     display: flex;
     flex-direction: row;
+    margin: 1rem 0;
 }
 
 .ClusterLeftPane {
     display: flex;
     padding: 0 1.2rem 0 0.1rem;
-    margin: 1rem 0;
     border-right: 2px;
     border-right-style: solid;
 }
