@@ -27,12 +27,12 @@ export interface SearchBarProps {
     onStructuredModeChanged: StructuredModeChangedFunc;
     onDetailedModeChanged: DetailedModeChangedFunc;
     onCategoriesChanged: SearchCategoriesChangedFunc;
-    categories: string[];
+    categories: Set<string>;
 }
 
 export interface SearchBarState {
     expanded: boolean;
-    selectedCategories: string[];
+    selectedCategories: Set<string>;
     structured: boolean;
     detailed: boolean;
     hasText: boolean;
@@ -40,7 +40,7 @@ export interface SearchBarState {
 
 export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
 
-    categoryData: CategoryData[] = [];
+    categoryData: {[key: string]: CategoryData} = {};
     searchOptionsContainer: HTMLDivElement = null;
     searchInputField: HTMLInputElement = null;
     filterBtn: HTMLButtonElement = null;
@@ -49,15 +49,15 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
         super(props);
         this.state = {
             expanded: false,
-            selectedCategories: [],
+            selectedCategories: new Set<string>(),
             structured: false,
             detailed: false,
             hasText: false
         };
 
-        _.each(this.props.categories, function (c: string) {
-            let data = new CategoryData(c, "CategoryCheckbox", true, this.onCategoriesChanged.bind(this));
-            this.categoryData.push(data);
+        this.props.categories.forEach(function (name: string) {
+            let data = new CategoryData(name, "CategoryCheckbox", false, this.onCategoryChanged.bind(this));
+            this.categoryData[data.name] = data;
         }.bind(this));
     }
 
@@ -65,16 +65,22 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
         let oldState = this.state;
         this.setState({ selectedCategories: newProps.categories });
 
+        console.log(newProps);
         let oldCategoryData = this.categoryData;
-        this.categoryData = [];
-        _.each(newProps.categories, function (c: string) {
-            let oldCategory = oldCategoryData.find(x => x.name === c);
-            let data = new CategoryData(c, "CategoryCheckbox", false, this.onCategoriesChanged.bind(this));
+        this.categoryData = {};
+        
+        newProps.categories.forEach(function (name: string) {
+            let oldCategory = oldCategoryData[name]
+            let data = new CategoryData(name, "CategoryCheckbox", false, this.onCategoryChanged.bind(this));
             if (oldCategory) {
                 data.checked = oldCategory.checked;
             }
-            this.categoryData.push(data);
+            this.categoryData[name] = data;
         }.bind(this));
+
+        console.log(oldCategoryData)
+        console.log(this.categoryData)
+
     }
 
     UNSAFE_componentWillMount() {
@@ -150,20 +156,30 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
         this.setState({ detailed: value });
     }
 
-    onCategoriesChanged() {
-        let selectedCategories: string[] = [];
-        _.each(this.categoryData, function (data) {
-            if (data.checked) selectedCategories.push(data.name);
-        })
-        this.setSelectedCategories(selectedCategories);
+    onCategoryChanged(name: string, checked:boolean) {
+        
+        let category = this.categoryData[name];
+        if(category === undefined)
+            return;
+
+        if(checked){
+            this.state.selectedCategories.add(name);
+        }
+        else{
+            this.state.selectedCategories.delete(name);
+        }
+
+        category.checked = checked;
+
+        console.log(name, checked, category)
     }
 
     onApplyCategoryFilter(){
-        let selectedCategories: string[] = [];
-        _.each(this.categoryData, function (data) {
-            if (data.checked) selectedCategories.push(data.name);
-        })
-        this.setSelectedCategories(selectedCategories);
+        // let selectedCategories: string[] = [];
+        // _.each(this.categoryData, function (data) {
+        //     if (data.checked) selectedCategories.push(data.name);
+        // })
+        this.setSelectedCategories(this.state.selectedCategories);
 
     }
 
@@ -182,9 +198,9 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
 //        this.setSelectedCategories([event.target.name]);
 //    }
 
-    setSelectedCategories(categories: string[]) {
+    setSelectedCategories(categories: Set<string>) {
         this.setState({ selectedCategories: categories })
-        this.props.onCategoriesChanged(categories, this.categoryData);
+        this.props.onCategoriesChanged(Array.from(categories), Object.values(this.categoryData));
     }
 
     getSearchOptionsBtnClass() {
@@ -199,7 +215,7 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
 
     createClearFiltersButton(){
 
-        const selectedCategoriesCount:number = this.state.selectedCategories.length;
+        const selectedCategoriesCount:number = this.state.selectedCategories.size;
         if(selectedCategoriesCount === 0)
             return null;
 
@@ -213,7 +229,7 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
     
     createFilterPanel(){
         let binIcon: string = require("../resources/ui/bin.svg");
-        let checkboxes: JSX.Element[] = this.categoryData.map(cat => cat.createCheckbox(false))
+        let checkboxes: JSX.Element[] = Object.values(this.categoryData).map(cat => cat.createCheckbox())
 
         return <div className="SearchFilterPanel" ref={(container) => this.searchOptionsContainer = container}>
             <div className="header">
@@ -310,12 +326,13 @@ export class CategoryData {
     name: string;
     className: string;
     checked: boolean;
-    onChangedFunc: any = null;
+    checkboxRef:any;
+    onChangedFunc: (name:string, checked:boolean)=> void = null;
 
     // Optional attributes
     displayText: string = null;
 
-    constructor(name: string, className: string, checked: boolean, onChangedFunc: any, displayText?: string) {
+    constructor(name: string, className: string, checked: boolean, onChangedFunc: (name:string, checked:boolean) => void, displayText?: string) {
         this.name = name;
         this.className = className;
         this.checked = checked;
@@ -324,19 +341,24 @@ export class CategoryData {
         this.displayText = displayText ? displayText : name;
     }
 
-    createCheckbox(enabled: boolean): JSX.Element {
+    createCheckbox(): JSX.Element {
 
         let checkbox: JSX.Element =
             <label className={"Category"} key={this.name}>
-                <input type="checkbox" name={this.name} className={this.className} onChange={this.onCheckboxChanged.bind(this)} checked={this.checked}/>
+                <input type="checkbox" name={this.name} className={this.className} onChange={this.onCheckboxChanged.bind(this)} ref={(cb) => this.checkboxRef = cb}/>
                 <div className="checkmark"/>
                 <div>{this.displayText}</div>
             </label>;
+        
+        if(this.checkboxRef){
+            this.checkboxRef.checked = this.checked;
+        }
         return checkbox;
     }
 
-    onCheckboxChanged() {
-        this.checked = !this.checked;
-        this.onChangedFunc();
+    onCheckboxChanged(event: any) {
+        this.checked = event.target.checked;
+        this.checkboxRef.checked = this.checked;
+        this.onChangedFunc(this.name, this.checked);
     }
 }

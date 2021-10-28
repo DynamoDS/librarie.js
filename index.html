@@ -35,8 +35,7 @@
             }
 
             let libController = LibraryEntryPoint.CreateLibraryController();
-
-            libController.on(libController.ItemClickedEventName, function (item) {
+ /*           libController.on(libController.ItemClickedEventName, function (item) {
                 console.log(item);
             });
 
@@ -63,14 +62,13 @@
                 console.log(sectionText, "icon clicked");
                 return null;
             });
-
-            let libContainer = libController.createLibraryByElementId(
-                "libraryContainerPlaceholder", layoutSpecsJson, loadedTypesJson);
-
             libController.on(libController.FilterCategoryEventName, function (item) {
                 console.log(item);
             });
+*/
 
+            let libContainer = libController.createLibraryByElementId(
+                "libraryContainerPlaceholder", layoutSpecsJson, loadedTypesJson);
         });
     </script>
 
