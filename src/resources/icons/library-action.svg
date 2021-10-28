@@ -1,9 +1,9 @@
-<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-<rect width="16" height="16" fill="url(#pattern0)"/>
-<defs>
-<pattern id="pattern0" patternContentUnits="objectBoundingBox" width="1" height="1">
-<use xlink:href="#image0_581:63858" transform="scale(0.0208333)"/>
-</pattern>
-<image id="image0_581:63858" width="48" height="48" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAACXBIWXMAAAsTAAALEwEAmpwYAAAC10lEQVRogdWYPYgTQRTH4ycqfjQigmihIAg2WljYWQh+NCqINtp5lVfcXWZyghBBsZCrtNHOThDhwEJBkRPMzm7OqIgiCCIogqiICH7ldvX5nxjvdvd2k5mwzjN/GALLJvv757157+2USgUr8uWDSMkTRf+uM4VKvsX6TI3KCm6WnoQI3MWiKJBlbpaeFPriojYQ+vINPa0u5OaxVqTEUCsCeqnyUW4eayECe6YN+PIJUWkON5OVaHJ0fcwAhaq8i5vJSkTVuYjC95k0Ene4maylUycehSklt3EzWQmN7FoyjcQVbiYrAfhMwoAvI6qVN3BzGSsKxJG4gbaJ89xcxtI5P8uAEl+pMbySm81IFAwuTxv4s8RJbjZj6aEuI43ekRpazM1mJNT/icwoBGKAm81If4e6jL3wXDc7br6uSgx1aROe2McChRw+oGs85pv9dK+yrsu9u/MMYNVcMSeEKnI9uSnFe3zezDKVHurSa8qT250b0JNlJ6iEKV+cRSX61eHececGtPDgR91MmCxtjny5yb0BvGUVYaBt4pJzA9QYWID0eFWIAV/+oHp5tXMT+sShwCicdm6AamIZ/r1PBUXhI01Ulzo3gQefKyoK2FeDzg1gKFuD+t/MBxP11jih5P3O97XS6CWiMN+5CQBe7gB2e9osNn5Tia24dizPVBhU9jo30PRGNuc1K1x/3em7CVNKjumIuuJOCEPbjdxGxbE5bRUGYkdeGjW9yhZuPiMhp4McE4e52YyEinMou8aLU9xsRqKrB+ehL7yYvQ/66EBLN6OMXvCQm8tY1KguQeX5kKpEX/rqeF0PZuko0OTwWm4uY5E3sgp74VtqWNvJzWUl/ZKSHNTkcW4mK1F9dCOqz89YKb3AzWQtgI/PREDc4uaxVvx0uttQ998KPcDrq6EuLX182HdDXVy6gWEzP+uroS4tfZTeLqVVbpaehNxfBPjH/7IX/AY+ZPjlz3Aw9QAAAABJRU5ErkJggg=="/>
-</defs>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 25.4.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 16 16" style="enable-background:new 0 0 16 16;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#FCC776;}
+</style>
+<polygon class="st0" points="6.3,0 11.8,10 7.7,9.2 9,16 3.4,6.1 7.7,7 "/>
 </svg>
