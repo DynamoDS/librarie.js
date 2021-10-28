@@ -327,7 +327,7 @@ export class CategoryData {
     createCheckbox(enabled: boolean): JSX.Element {
 
         let checkbox: JSX.Element =
-            <label className={"Category"}>
+            <label className={"Category"} key={this.name}>
                 <input type="checkbox" name={this.name} className={this.className} onChange={this.onCheckboxChanged.bind(this)} checked={this.checked}/>
                 <div className="checkmark"/>
                 <div>{this.displayText}</div>
