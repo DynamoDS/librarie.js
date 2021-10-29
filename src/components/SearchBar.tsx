@@ -40,6 +40,7 @@ export interface SearchBarState {
 
 export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
 
+    preSelectedCategories: Set<string> = new Set();
     categoryData: {[key: string]: CategoryData} = {};
     searchOptionsContainer: HTMLDivElement = null;
     searchInputField: HTMLInputElement = null;
@@ -56,30 +57,20 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
         };
 
         this.props.categories.forEach(function (name: string) {
-            let data = new CategoryData(name, "CategoryCheckbox", false, this.onCategoryChanged.bind(this));
-            this.categoryData[data.name] = data;
+            this.categoryData[name] = new CategoryData(name, "CategoryCheckbox", false, this.onCategoryChanged.bind(this));
         }.bind(this));
     }
 
     UNSAFE_componentWillReceiveProps(newProps: SearchBarProps) {
-        let oldState = this.state;
-        this.setState({ selectedCategories: newProps.categories });
-
-        console.log(newProps);
         let oldCategoryData = this.categoryData;
         this.categoryData = {};
         
         newProps.categories.forEach(function (name: string) {
-            let oldCategory = oldCategoryData[name]
-            let data = new CategoryData(name, "CategoryCheckbox", false, this.onCategoryChanged.bind(this));
-            if (oldCategory) {
-                data.checked = oldCategory.checked;
-            }
-            this.categoryData[name] = data;
+            let previouslyChecked = oldCategoryData[name] 
+                ? oldCategoryData[name].checked 
+                : false;
+            this.categoryData[name] = new CategoryData(name, "CategoryCheckbox", previouslyChecked, this.onCategoryChanged.bind(this));
         }.bind(this));
-
-        console.log(oldCategoryData)
-        console.log(this.categoryData)
 
     }
 
@@ -157,46 +148,47 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
     }
 
     onCategoryChanged(name: string, checked:boolean) {
-        
         let category = this.categoryData[name];
         if(category === undefined)
             return;
 
         if(checked){
-            this.state.selectedCategories.add(name);
+            this.preSelectedCategories.add(name);
         }
         else{
-            this.state.selectedCategories.delete(name);
+            this.preSelectedCategories.delete(name);
         }
 
         category.checked = checked;
-
-        console.log(name, checked, category)
     }
 
     onApplyCategoryFilter(){
-        // let selectedCategories: string[] = [];
-        // _.each(this.categoryData, function (data) {
-        //     if (data.checked) selectedCategories.push(data.name);
-        // })
-        this.setSelectedCategories(this.state.selectedCategories);
-
+        this.setSelectedCategories(this.getPreSelectedCategories());
+        this.setState({expanded: false});
     }
 
-//    onAllButtonClicked() {
-//        _.each(this.categoryData, function (category) {
-//            category.checked = true;
-//        })
-//        this.setSelectedCategories(this.props.categories);
-//    }
+    onClearCategoryFilters(){
+        this.onClearPreSelectedCategories();
+        this.setSelectedCategories(this.getPreSelectedCategories());
+    }
 
-//    onOnlyButtonClicked(event: any): void {
-//        _.each(this.categoryData, function (category) {
-//            if (category.name == event.target.name) category.checked = true;
-//            else category.checked = false;
-//        })
-//        this.setSelectedCategories([event.target.name]);
-//    }
+    onClearPreSelectedCategories(){
+        this.preSelectedCategories.clear();
+        Object.values(this.categoryData).forEach(category => {
+            category.checked = false;
+        });
+    }
+
+    /**
+     * Method to return pre-selected categories.
+     * If no category is pre-selected, no filter is applied so
+     * fallback to show all categories
+     */
+    getPreSelectedCategories(){
+        return this.preSelectedCategories.size > 0
+            ? this.preSelectedCategories
+            : new Set<string>(Object.keys(this.categoryData))
+    }
 
     setSelectedCategories(categories: Set<string>) {
         this.setState({ selectedCategories: categories })
@@ -215,14 +207,12 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
 
     createClearFiltersButton(){
 
-        const selectedCategoriesCount:number = this.state.selectedCategories.size;
+        const selectedCategoriesCount:number = this.preSelectedCategories.size;
         if(selectedCategoriesCount === 0)
             return null;
 
         const message = `Clear filters (${selectedCategoriesCount})`;
-
-
-        return <button title={message}>
+        return <button title={message} onClick={this.onClearCategoryFilters.bind(this)}>
             {message}
         </button>
     }
@@ -239,8 +229,8 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
                     {checkboxes}
             </div>
             <div className="footer">
-                <button>Apply</button>
-                <button>
+                <button onClick={this.onApplyCategoryFilter.bind(this)}>Apply</button>
+                <button onClick={this.onClearPreSelectedCategories.bind(this)}>
                     <img className="Icon ClearFilters" src={binIcon} />
                 </button>
             </div>
