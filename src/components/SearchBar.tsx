@@ -33,14 +33,13 @@ export interface SearchBarProps {
 export interface SearchBarState {
     expanded: boolean;
     selectedCategories: Set<string>;
+    preSelectedCategories: Set<string>;
     structured: boolean;
     detailed: boolean;
     hasText: boolean;
 }
 
 export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
-
-    preSelectedCategories: Set<string> = new Set();
     categoryData: {[key: string]: CategoryData} = {};
     searchOptionsContainer: HTMLDivElement = null;
     searchInputField: HTMLInputElement = null;
@@ -51,6 +50,7 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
         this.state = {
             expanded: false,
             selectedCategories: new Set<string>(),
+            preSelectedCategories: new Set<string>(),
             structured: false,
             detailed: false,
             hasText: false
@@ -82,6 +82,18 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
     componentWillUnmount() {
         window.removeEventListener("keydown", this.handleKeyDown.bind(this));
         window.removeEventListener("click", this.handleGlobalClick.bind(this));
+    }
+
+    componentDidUpdate(prevProps, prevState){
+        if(prevState.expanded !== this.state.expanded){
+            console.log("updated")
+            var preSelectedCategories = this.state.expanded
+                ? new Set<string>(Object.values(this.categoryData).filter(x => x.checked).map(x => x.name))
+                : new Set<string>();
+
+            this.setState({preSelectedCategories});
+        }
+            
     }
 
     handleKeyDown(event: any) {
@@ -131,8 +143,11 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
         }
     }
 
+    
+
     onExpandButtonClick() {
-        this.setState({ expanded: !this.state.expanded });
+        let expanded = !this.state.expanded;
+        this.setState({ expanded });
     }
 
     onStructuredModeChanged(event: any) {
@@ -152,47 +167,46 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
         if(category === undefined)
             return;
 
+        var {preSelectedCategories} = this.state;
         if(checked){
-            this.preSelectedCategories.add(name);
+            preSelectedCategories.add(name);
         }
         else{
-            this.preSelectedCategories.delete(name);
+            preSelectedCategories.delete(name);
         }
 
+        this.setState({preSelectedCategories});
         category.checked = checked;
     }
 
     onApplyCategoryFilter(){
-        this.setSelectedCategories(this.getPreSelectedCategories());
+        this.setSelectedCategories(this.state.preSelectedCategories)
         this.setState({expanded: false});
     }
 
     onClearCategoryFilters(){
-        this.onClearPreSelectedCategories();
-        this.setSelectedCategories(this.getPreSelectedCategories());
+        this.clearPreSelectedCategories();
+        this.setSelectedCategories(this.state.preSelectedCategories);
     }
 
-    onClearPreSelectedCategories(){
-        this.preSelectedCategories.clear();
+    clearPreSelectedCategories(){
+        let preSelectedCategories = new Set<string>();
+        let selectedCategories = new Set<string>();
+        this.setState({preSelectedCategories, selectedCategories});
         Object.values(this.categoryData).forEach(category => {
             category.checked = false;
         });
     }
 
-    /**
-     * Method to return pre-selected categories.
-     * If no category is pre-selected, no filter is applied so
-     * fallback to show all categories
-     */
-    getPreSelectedCategories(){
-        return this.preSelectedCategories.size > 0
-            ? this.preSelectedCategories
-            : new Set<string>(Object.keys(this.categoryData))
-    }
+    setSelectedCategories(selectedCategories: Set<string>) {
+        this.setState({ selectedCategories })
 
-    setSelectedCategories(categories: Set<string>) {
-        this.setState({ selectedCategories: categories })
-        this.props.onCategoriesChanged(Array.from(categories), Object.values(this.categoryData));
+        // If no selected categories, search should default to show all
+        let categories = selectedCategories.size > 0
+            ? Array.from(selectedCategories)
+            : Object.keys(this.categoryData);
+
+        this.props.onCategoriesChanged(categories, Object.values(this.categoryData));
     }
 
     getSearchOptionsBtnClass() {
@@ -207,7 +221,7 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
 
     createClearFiltersButton(){
 
-        const selectedCategoriesCount:number = this.preSelectedCategories.size;
+        const selectedCategoriesCount:number = this.state.selectedCategories.size;
         if(selectedCategoriesCount === 0)
             return null;
 
@@ -219,7 +233,8 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
     
     createFilterPanel(){
         let binIcon: string = require("../resources/ui/bin.svg");
-        let checkboxes: JSX.Element[] = Object.values(this.categoryData).map(cat => cat.createCheckbox())
+        let checkboxes: JSX.Element[] = Object.values(this.categoryData)
+            .map(cat => cat.createCheckbox(this.state.selectedCategories.has(cat.name)))
 
         return <div className="SearchFilterPanel" ref={(container) => this.searchOptionsContainer = container}>
             <div className="header">
@@ -230,7 +245,7 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
             </div>
             <div className="footer">
                 <button onClick={this.onApplyCategoryFilter.bind(this)}>Apply</button>
-                <button onClick={this.onClearPreSelectedCategories.bind(this)}>
+                <button onClick={this.clearPreSelectedCategories.bind(this)}>
                     <img className="Icon ClearFilters" src={binIcon} />
                 </button>
             </div>
@@ -312,17 +327,18 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
     }
 }
 
-export class CategoryData {
+export class CategoryData extends React.Component{
     name: string;
     className: string;
     checked: boolean;
-    checkboxRef:any;
+    checkboxReference:any;
     onChangedFunc: (name:string, checked:boolean)=> void = null;
 
     // Optional attributes
     displayText: string = null;
 
     constructor(name: string, className: string, checked: boolean, onChangedFunc: (name:string, checked:boolean) => void, displayText?: string) {
+        super();
         this.name = name;
         this.className = className;
         this.checked = checked;
@@ -331,24 +347,30 @@ export class CategoryData {
         this.displayText = displayText ? displayText : name;
     }
 
-    createCheckbox(): JSX.Element {
+    createCheckbox(checked: boolean | null = null): JSX.Element {
+        console.log(this.name, this.checked, checked)
+        let isChecked: boolean = checked !== null ? checked : this.checked;
 
-        let checkbox: JSX.Element =
+        let checkbox = <input 
+            type="checkbox"
+            name={this.name}
+            className={this.className}
+            onChange={this.onCheckboxChanged.bind(this)}
+            defaultChecked={isChecked}
+            ref={cb => {this.checkboxReference = cb}}/>
+
+        let categoryElement: JSX.Element =
             <label className={"Category"} key={this.name}>
-                <input type="checkbox" name={this.name} className={this.className} onChange={this.onCheckboxChanged.bind(this)} ref={(cb) => this.checkboxRef = cb}/>
+                {checkbox}
                 <div className="checkmark"/>
                 <div>{this.displayText}</div>
             </label>;
         
-        if(this.checkboxRef){
-            this.checkboxRef.checked = this.checked;
-        }
-        return checkbox;
+        return categoryElement;
     }
 
     onCheckboxChanged(event: any) {
-        this.checked = event.target.checked;
-        this.checkboxRef.checked = this.checked;
-        this.onChangedFunc(this.name, this.checked);
+        this.checkboxReference.checked = this.checked = event.target.checked;
+        this.onChangedFunc(this.name, event.target.checked);
     }
 }
