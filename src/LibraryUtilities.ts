@@ -836,3 +836,17 @@ export function sortItemsByText(items: ItemData[]): ItemData[] {
 
     return sortedItems;
 }
+
+const ObjectExtensions = {
+
+    /**
+     * Extension method to overcome es2015 lack of Object.values method
+     * @param obj Object dictionary
+     * @returns Array of object values
+     */
+    values: function<V>(obj: {[key: string]: V}): V[]{
+        return Object.keys(obj).map(x => obj[x])
+    }
+}
+
+export {ObjectExtensions};

@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import * as _ from 'underscore';
+import { ObjectExtensions } from '../LibraryUtilities'
 
 interface StructuredModeChangedFunc {
     (structured: boolean): void;
@@ -27,12 +28,12 @@ export interface SearchBarProps {
     onStructuredModeChanged: StructuredModeChangedFunc;
     onDetailedModeChanged: DetailedModeChangedFunc;
     onCategoriesChanged: SearchCategoriesChangedFunc;
-    categories: Set<string>;
+    categories: string[];
 }
 
 export interface SearchBarState {
     expanded: boolean;
-    selectedCategories: Set<string>;
+    selectedCategories: string[];
     structured: boolean;
     detailed: boolean;
     hasText: boolean;
@@ -48,13 +49,13 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
         super(props);
         this.state = {
             expanded: false,
-            selectedCategories: new Set<string>(),
+            selectedCategories: [],
             structured: false,
             detailed: false,
             hasText: false
         };
 
-        this.props.categories.forEach(function (name: string) {
+        _.each(this.props.categories, function (name: string) {
             this.categoryData[name] = new CategoryData(name, "CategoryCheckbox");
         }.bind(this));
     }
@@ -63,7 +64,7 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
         let oldCategoryData = this.categoryData;
         this.categoryData = {};
         
-        newProps.categories.forEach(function (name: string) {
+        _.each(newProps.categories, function (name: string) {
             this.categoryData[name] = oldCategoryData[name]
                 ? oldCategoryData[name]
                 : new CategoryData(name, "CategoryCheckbox");
@@ -146,14 +147,10 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
         this.setState({ detailed: value });
     }
 
-    getSelectedCategories(): Set<string>{
-        var set = new Set<string>();
-        for (const name in this.categoryData) {
-            if(this.categoryData[name].isChecked())
-                set.add(name)
-        }
-
-        return set;
+    getSelectedCategories(): string[]{
+        return ObjectExtensions.values(this.categoryData)
+            .filter(x => x.isChecked())
+            .map(x => x.name);
     }
 
     onApplyCategoryFilter(){
@@ -167,20 +164,19 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
     }
 
     clearSelectedCategories(){
-        Object.values(this.categoryData).forEach(category => {
+        _.each(ObjectExtensions.values(this.categoryData), category => {
             category.setChecked(false);
         });
     }
 
-    setSelectedCategories(selectedCategories: Set<string>) {
+    setSelectedCategories(selectedCategories: string[]) {
         this.setState({ selectedCategories })
 
         // If no selected categories, search should default to show all
-        let categories = selectedCategories.size > 0
-            ? Array.from(selectedCategories)
-            : Object.keys(this.categoryData);
+        if(selectedCategories.length === 0)
+            selectedCategories = Object.keys(this.categoryData);
 
-        this.props.onCategoriesChanged(categories, Object.values(this.categoryData));
+        this.props.onCategoriesChanged(selectedCategories, ObjectExtensions.values(this.categoryData));
     }
 
     getSearchOptionsBtnClass() {
@@ -192,7 +188,7 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
     }
 
     getSearchOptionsDisabled() {
-        let searchOptionsDisabled = this.state.hasText && this.props.categories.size > 0
+        let searchOptionsDisabled = this.state.hasText && this.props.categories.length > 0
             ? false
             : true; // Enable the button only when user is doing search
         return searchOptionsDisabled;
@@ -200,7 +196,7 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
 
     createClearFiltersButton(){
 
-        const selectedCategoriesCount:number = this.state.selectedCategories.size;
+        const selectedCategoriesCount:number = this.state.selectedCategories.length;
         if(selectedCategoriesCount === 0)
             return null;
 
@@ -214,8 +210,8 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
         let binIcon: string = require("../resources/ui/bin.svg");
 
         console.log(this.state.selectedCategories)
-        let checkboxes: JSX.Element[] = Object.values(this.categoryData)
-            .map(cat => cat.getCheckbox(this.state.selectedCategories.has(cat.name)))
+        let checkboxes: JSX.Element[] = ObjectExtensions.values(this.categoryData)
+            .map(cat => cat.getCheckbox(this.state.selectedCategories.includes(cat.name)))
 
         return <div className="SearchFilterPanel" ref={(container) => this.searchOptionsContainer = container}>
             <div className="header">

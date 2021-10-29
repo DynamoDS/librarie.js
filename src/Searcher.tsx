@@ -93,7 +93,7 @@ export class Searcher {
 
     // After generated items based on the search text, the categories will be updated as well.
     // This function will be called to the the updated categories.
-    getDisplayedCategories(): Set<string> {
-        return new Set(this.displayedCategories);
+    getDisplayedCategories(): string[] {
+        return this.displayedCategories;
     }
 }
