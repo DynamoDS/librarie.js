@@ -33,7 +33,6 @@ export interface SearchBarProps {
 export interface SearchBarState {
     expanded: boolean;
     selectedCategories: Set<string>;
-    preSelectedCategories: Set<string>;
     structured: boolean;
     detailed: boolean;
     hasText: boolean;
@@ -50,14 +49,13 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
         this.state = {
             expanded: false,
             selectedCategories: new Set<string>(),
-            preSelectedCategories: new Set<string>(),
             structured: false,
             detailed: false,
             hasText: false
         };
 
         this.props.categories.forEach(function (name: string) {
-            this.categoryData[name] = new CategoryData(name, "CategoryCheckbox", false, this.onCategoryChanged.bind(this));
+            this.categoryData[name] = new CategoryData(name, "CategoryCheckbox");
         }.bind(this));
     }
 
@@ -66,10 +64,10 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
         this.categoryData = {};
         
         newProps.categories.forEach(function (name: string) {
-            let previouslyChecked = oldCategoryData[name] 
-                ? oldCategoryData[name].checked 
-                : false;
-            this.categoryData[name] = new CategoryData(name, "CategoryCheckbox", previouslyChecked, this.onCategoryChanged.bind(this));
+            this.categoryData[name] = oldCategoryData[name]
+                ? oldCategoryData[name]
+                : new CategoryData(name, "CategoryCheckbox");
+
         }.bind(this));
 
     }
@@ -82,18 +80,6 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
     componentWillUnmount() {
         window.removeEventListener("keydown", this.handleKeyDown.bind(this));
         window.removeEventListener("click", this.handleGlobalClick.bind(this));
-    }
-
-    componentDidUpdate(prevProps, prevState){
-        if(prevState.expanded !== this.state.expanded){
-            console.log("updated")
-            var preSelectedCategories = this.state.expanded
-                ? new Set<string>(Object.values(this.categoryData).filter(x => x.checked).map(x => x.name))
-                : new Set<string>();
-
-            this.setState({preSelectedCategories});
-        }
-            
     }
 
     handleKeyDown(event: any) {
@@ -143,8 +129,6 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
         }
     }
 
-    
-
     onExpandButtonClick() {
         let expanded = !this.state.expanded;
         this.setState({ expanded });
@@ -162,39 +146,29 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
         this.setState({ detailed: value });
     }
 
-    onCategoryChanged(name: string, checked:boolean) {
-        let category = this.categoryData[name];
-        if(category === undefined)
-            return;
-
-        var {preSelectedCategories} = this.state;
-        if(checked){
-            preSelectedCategories.add(name);
-        }
-        else{
-            preSelectedCategories.delete(name);
+    getSelectedCategories(): Set<string>{
+        var set = new Set<string>();
+        for (const name in this.categoryData) {
+            if(this.categoryData[name].isChecked())
+                set.add(name)
         }
 
-        this.setState({preSelectedCategories});
-        category.checked = checked;
+        return set;
     }
 
     onApplyCategoryFilter(){
-        this.setSelectedCategories(this.state.preSelectedCategories)
+        this.setSelectedCategories(this.getSelectedCategories())
         this.setState({expanded: false});
     }
 
     onClearCategoryFilters(){
-        this.clearPreSelectedCategories();
-        this.setSelectedCategories(this.state.preSelectedCategories);
+        this.clearSelectedCategories();
+        this.setSelectedCategories(this.getSelectedCategories());
     }
 
-    clearPreSelectedCategories(){
-        let preSelectedCategories = new Set<string>();
-        let selectedCategories = new Set<string>();
-        this.setState({preSelectedCategories, selectedCategories});
+    clearSelectedCategories(){
         Object.values(this.categoryData).forEach(category => {
-            category.checked = false;
+            category.setChecked(false);
         });
     }
 
@@ -210,12 +184,17 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
     }
 
     getSearchOptionsBtnClass() {
-        let searchOptionsBtnClass = this.state.hasText ? "SearchOptionsBtnEnabled" : "SearchOptionsBtnDisabled";
+        let searchOptionsBtnClass = this.getSearchOptionsDisabled()
+            ? "SearchOptionsBtnDisabled"
+            : "SearchOptionsBtnEnabled" ;
+            
         return searchOptionsBtnClass;
     }
 
     getSearchOptionsDisabled() {
-        let searchOptionsDisabled = this.state.hasText ? false : true; // Enable the button only when user is doing search
+        let searchOptionsDisabled = this.state.hasText && this.props.categories.size > 0
+            ? false
+            : true; // Enable the button only when user is doing search
         return searchOptionsDisabled;
     }
 
@@ -233,8 +212,10 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
     
     createFilterPanel(){
         let binIcon: string = require("../resources/ui/bin.svg");
+
+        console.log(this.state.selectedCategories)
         let checkboxes: JSX.Element[] = Object.values(this.categoryData)
-            .map(cat => cat.createCheckbox(this.state.selectedCategories.has(cat.name)))
+            .map(cat => cat.getCheckbox(this.state.selectedCategories.has(cat.name)))
 
         return <div className="SearchFilterPanel" ref={(container) => this.searchOptionsContainer = container}>
             <div className="header">
@@ -245,7 +226,7 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
             </div>
             <div className="footer">
                 <button onClick={this.onApplyCategoryFilter.bind(this)}>Apply</button>
-                <button onClick={this.clearPreSelectedCategories.bind(this)}>
+                <button onClick={this.clearSelectedCategories.bind(this)}>
                     <img className="Icon ClearFilters" src={binIcon} />
                 </button>
             </div>
@@ -253,7 +234,9 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
     }
 
     createFilterButton() {
-        let searchFilterIcon: string = require("../resources/ui/search-filter.svg");
+        let searchFilterIcon: string = this.state.expanded
+            ? require("../resources/ui/search-filter-selected.svg")
+            : require("../resources/ui/search-filter.svg");
         let filterPanel:any = this.state.expanded ? this.createFilterPanel() : null;
 
         // Create the filter panel
@@ -275,8 +258,11 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
 
         // Create the button to toggle between compact/detailed
         // This button is only enabled when the user is doing search and structured view is not enabled
-        let detailedBtnClass = this.state.hasText && !this.state.structured ? "SearchOptionsBtnEnabled" : "SearchOptionsBtnDisabled";
-        let detailedBtnDisabled = this.state.hasText && !this.state.structured ? false : true;
+        let detailedBtnDisabled = this.getSearchOptionsDisabled() || this.state.structured;
+        let detailedBtnClass = detailedBtnDisabled
+            ? "SearchOptionsBtnDisabled"
+            : "SearchOptionsBtnEnabled";
+
         return <button 
             className={detailedBtnClass}
             onClick={this.onDetailedModeChanged.bind(this)} 
@@ -330,47 +316,48 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
 export class CategoryData extends React.Component{
     name: string;
     className: string;
-    checked: boolean;
-    checkboxReference:any;
-    onChangedFunc: (name:string, checked:boolean)=> void = null;
+    checkboxReference:HTMLInputElement;
 
     // Optional attributes
     displayText: string = null;
 
-    constructor(name: string, className: string, checked: boolean, onChangedFunc: (name:string, checked:boolean) => void, displayText?: string) {
+    constructor(name: string, className: string, displayText?: string) {
         super();
         this.name = name;
         this.className = className;
-        this.checked = checked;
 
-        this.onChangedFunc = onChangedFunc;
         this.displayText = displayText ? displayText : name;
     }
 
-    createCheckbox(checked: boolean | null = null): JSX.Element {
-        console.log(this.name, this.checked, checked)
-        let isChecked: boolean = checked !== null ? checked : this.checked;
+    getCheckbox(checked: boolean = false): JSX.Element {
 
         let checkbox = <input 
             type="checkbox"
             name={this.name}
             className={this.className}
             onChange={this.onCheckboxChanged.bind(this)}
-            defaultChecked={isChecked}
+            defaultChecked={checked}
             ref={cb => {this.checkboxReference = cb}}/>
 
-        let categoryElement: JSX.Element =
-            <label className={"Category"} key={this.name}>
+        return <label className={"Category"} key={this.name}>
                 {checkbox}
                 <div className="checkmark"/>
                 <div>{this.displayText}</div>
             </label>;
-        
-        return categoryElement;
+    }
+
+    isChecked(){
+        return this.checkboxReference
+            ? this.checkboxReference.checked
+            : false;
+    }
+
+    setChecked(checked:boolean){
+        if(this.checkboxReference)
+            this.checkboxReference.checked = checked;
     }
 
     onCheckboxChanged(event: any) {
-        this.checkboxReference.checked = this.checked = event.target.checked;
-        this.onChangedFunc(this.name, event.target.checked);
+        this.checkboxReference.checked = event.target.checked;
     }
 }
