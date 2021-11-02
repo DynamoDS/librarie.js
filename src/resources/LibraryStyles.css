@@ -284,7 +284,8 @@ input {
     border-bottom: solid 2px #ffffff80;
 }
 
-.SearchInput:focus-within{
+.SearchInput.focus,
+.SearchInput.searching{
     border-bottom-color: #38abdf;
 }
 
@@ -298,7 +299,7 @@ input {
     transition: ease-in-out 300ms;
 }
 
-.SearchInput:focus-within::after{
+.SearchInput.focus:after{
     opacity: 1;
     width: 100%;
 }
@@ -349,7 +350,7 @@ input {
     transition: ease-in-out 300ms;
 }
 
-.SearchBar.isSearching .SearchOptionContainer{
+.SearchBar.searching .SearchOptionContainer{
     visibility: visible;
     opacity: 1;
 }

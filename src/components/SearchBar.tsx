@@ -37,6 +37,7 @@ export interface SearchBarState {
     structured: boolean;
     detailed: boolean;
     hasText: boolean;
+    hasFocus: boolean;
 }
 
 export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
@@ -52,7 +53,8 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
             selectedCategories: [],
             structured: false,
             detailed: false,
-            hasText: false
+            hasText: false,
+            hasFocus: false
         };
 
         _.each(this.props.categories, function (name: string) {
@@ -128,6 +130,11 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
             this.setState({ expanded: expanded, hasText: hasText });
             this.props.onTextChanged(text);
         }
+    }
+
+    onFocusChanged(hasFocus: boolean)
+    {
+        this.setState({hasFocus})
     }
 
     onExpandButtonClick() {
@@ -283,17 +290,20 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
             );
         }
 
-        const isSearchingClass = this.state.hasText ? "isSearching" : "";
+        const isSearchingClass = this.state.hasText ? "searching" : "";
+        const isFocusClass = this.state.hasFocus ? "focus" : "";
 
         return (
             <div className={`SearchBar ${isSearchingClass}`}>
                 <div className="LibraryHeader">Library</div>
-                <div className={`SearchInput ${isSearchingClass}`}>
+                <div className={`SearchInput ${isSearchingClass} ${isFocusClass}`}>
                     <img className="Icon SeachBarIcon" src={searchIcon}/>
                     <input
                         className="SearchInputText"
                         type="input" placeholder="Search"
                         onChange={this.onTextChanged.bind(this)}
+                        onFocus={this.onFocusChanged.bind(this, true)}
+                        onBlur={this.onFocusChanged.bind(this, false)}
                         ref={(field) => { this.searchInputField = field; }}>
                     </input>
             
@@ -309,7 +319,7 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
     }
 }
 
-export class CategoryData extends React.Component{
+export class CategoryData {
     name: string;
     className: string;
     checkboxReference:HTMLInputElement;
@@ -318,7 +328,6 @@ export class CategoryData extends React.Component{
     displayText: string = null;
 
     constructor(name: string, className: string, displayText?: string) {
-        super();
         this.name = name;
         this.className = className;
 
