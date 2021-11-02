@@ -184,6 +184,11 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
     }
 
     getIconElement(): JSX.Element {
+        // Category type don't display any icon
+        if(this.props.data.itemType === "category"){
+            return null;
+        }
+
         // If the element type is a section, group, coregroup, class or none an icon shouldn't be displayed
         if (this.props.data.itemType !== "group" && 
         this.props.data.itemType !== "section" && 
@@ -258,6 +263,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
 
     getHeaderElement(): JSX.Element {
         let arrow = this.getArrowElement();
+        let iconElement = this.getIconElement();
         let parameters: JSX.Element = null;
 
         if (this.props.data.parameters && this.props.data.parameters.length > 0 && this.props.data.childItems.length == 0) {
@@ -269,8 +275,10 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
                 <div className={this.getLibraryItemHeaderStyle()} onClick={this.onLibraryItemClicked}
                     onMouseEnter={this.onLibraryItemMouseEnter} onMouseLeave={this.onLibraryItemMouseLeave}>
                     {arrow}
+                    {this.props.data.itemType === "section" ? null : iconElement}
                     <div className={this.getLibraryItemTextStyle()}>{this.props.data.text}</div>
                     {parameters}
+                    {this.props.data.itemType === "section" ? iconElement : null}
                 </div>
             );
         }
