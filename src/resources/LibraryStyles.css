@@ -145,9 +145,9 @@ input {
 }
 
 .LibraryItemContainerNone .LibraryItemIcon {
-    padding: 2px 8px;
-    width: 1.5rem;
-    height: 1.5rem;
+    padding: 0 0.5rem;
+    width: 2rem;
+    height: 2rem;
     -webkit-user-drag: none;
 }
 
