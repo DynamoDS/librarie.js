@@ -168,7 +168,7 @@ input {
 
 .LibraryItemHeader .LibraryItemGroupText,
 .LibrarySectionHeader .LibraryItemGroupText {
-    padding: 6px 0px;
+    margin: 0.5rem 0;
 }
 
 .LibraryItemHeader .LibraryItemGroupText {
@@ -191,9 +191,10 @@ input {
 }
 
 .CategoryArrow {
-    height: 16px;
     width: 16px;
     margin-right: 0.5rem;
+    margin-top: auto;
+    margin-bottom: auto;
 }
 
 
