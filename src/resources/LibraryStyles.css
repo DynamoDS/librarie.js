@@ -87,12 +87,12 @@ input {
 }
 
 .LibraryItemContainerCategory > .LibraryItemHeader{
-    padding: 1.2rem 0;
+    padding: 1rem 0;
 }
 
 .LibraryItemContainerGroup > .LibraryItemHeader,
 .LibraryItemContainerNone > .LibraryItemHeader{
-    padding: 0.8rem 0;
+    padding: 0.5rem 0;
 }
 
 .LibraryItemContainerGroup,
@@ -123,31 +123,31 @@ input {
 }
 
 .LibraryItemContainerSection .LibraryItemIcon {
-    width: 14px;
-    height: 14px;
+    width: 1rem;
+    height: 1rem;
     padding-right: 10px;
     -webkit-user-drag: none;
 }
 
 .LibraryItemContainerSection .LibraryAddOnSectionIcon {
     opacity: 0.5;
-    width: 14px;
-    height: 14px;
+    width: 1rem;
+    height: 1rem;
     padding-right: 10px;
     -webkit-user-drag: none;
 }
 
 .LibraryItemContainerCategory .LibraryItemIcon {
     padding: 7px 10px;
-    width: 18px;
-    height: 18px;
+    width: 1.2rem;
+    height: 1.2rem;
     -webkit-user-drag: none;
 }
 
 .LibraryItemContainerNone .LibraryItemIcon {
     padding: 2px 8px;
-    width: 28px;
-    height: 28px;
+    width: 1.5rem;
+    height: 1.5rem;
     -webkit-user-drag: none;
 }
 
@@ -205,6 +205,7 @@ input {
     border-top: 0px;
     border-bottom: 0px;
     position: relative;
+    min-height: 3rem;
 }
 
 .LibraryItemBody > .LibraryItemContainerGroup > .LibraryItemHeader:before,
