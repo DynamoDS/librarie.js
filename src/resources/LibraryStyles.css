@@ -12,8 +12,11 @@
 body {
     font-family: "Artifakt Element", "Open Sans";
     -webkit-user-select: none;
-    font-size: 13px;
+    user-select: none;
+    font-size: 16px;
     cursor: default;
+    background-color: #2a2a2a;
+    color: #f5f5f5;
 }
 
 input {
@@ -29,40 +32,37 @@ input {
 .LibraryItemContainer {
     flex-grow: 1;
     overflow-y: auto;
+    padding: 0 0.5rem;
 }
 
 .LibraryItemContainerSection {
     display: flex;
     flex-direction: column;
-    background: #353535;
 }
 
 .LibraryItemContainerCategory {
     display: flex;
     flex-direction: column;
-    background: #353535;
     border-bottom: solid 1px #494949;
 }
 
 .LibraryItemContainerGroup {
     display: flex;
     flex-direction: column;
-    background: #414141;
 }
 
 .LibraryItemContainerNone {
     display: flex;
     flex-direction: column;
-    background: #414141;
-    overflow-x: hidden;
+    overflow: hidden;
 }
 
 .LibrarySectionHeader {
     display: flex;
-    padding: 5px;
-    font-size: 14px;
-    background-color: #464646;
-    color: #888;
+    padding-top: 1rem;
+    margin-top: 0.5rem;
+    font-size: 1.2rem;
+    color: #f5f5f5f5;
     align-items: center;
     justify-content: space-between;
     transition: 0.15s;
@@ -77,11 +77,27 @@ input {
     opacity: 1.0;
 }
 
+
 .LibraryItemHeader {
     display: flex;
     flex-direction: row;
     align-items: center;
     transition: 0.15s;
+    position: relative;
+}
+
+.LibraryItemContainerCategory > .LibraryItemHeader{
+    padding: 1rem 0;
+}
+
+.LibraryItemContainerGroup > .LibraryItemHeader,
+.LibraryItemContainerNone > .LibraryItemHeader{
+    padding: 0.5rem 0;
+}
+
+.LibraryItemContainerGroup,
+.LibraryItemContainerNone{
+    padding: 0 0.5rem;
 }
 
 .LibraryItemHeader:hover,
@@ -104,36 +120,34 @@ input {
 .LibraryItemBodyContainer {
     display: flex;
     align-items: stretch;
-    background: #414141;
-    padding-left:2px;
 }
 
 .LibraryItemContainerSection .LibraryItemIcon {
-    width: 14px;
-    height: 14px;
+    width: 1rem;
+    height: 1rem;
     padding-right: 10px;
     -webkit-user-drag: none;
 }
 
 .LibraryItemContainerSection .LibraryAddOnSectionIcon {
     opacity: 0.5;
-    width: 14px;
-    height: 14px;
+    width: 1rem;
+    height: 1rem;
     padding-right: 10px;
     -webkit-user-drag: none;
 }
 
 .LibraryItemContainerCategory .LibraryItemIcon {
     padding: 7px 10px;
-    width: 18px;
-    height: 18px;
+    width: 1.2rem;
+    height: 1.2rem;
     -webkit-user-drag: none;
 }
 
 .LibraryItemContainerNone .LibraryItemIcon {
-    padding: 2px 8px;
-    width: 28px;
-    height: 28px;
+    padding: 0 0.5rem;
+    width: 2rem;
+    height: 2rem;
     -webkit-user-drag: none;
 }
 
@@ -143,20 +157,23 @@ input {
 }
 
 .LibraryItemContainerCategory .LibraryItemText {
-    color: #aaa;
+    color: #ade4de;
+    font-size: 1.2rem;
 }
 
 .LibraryItemContainerNone .LibraryItemText {
-    color: #eee;
+    color: #c6c6c6;
+    font-size: 1.2rem;
 }
 
 .LibraryItemHeader .LibraryItemGroupText,
 .LibrarySectionHeader .LibraryItemGroupText {
-    padding: 6px 0px;
+    margin: 0.5rem 0;
 }
 
 .LibraryItemHeader .LibraryItemGroupText {
-    color: #a9a9a9;
+    color: #eeeeee;
+    font-size: 1.2rem;
 }
 
 .LibraryItemParameters {
@@ -168,33 +185,80 @@ input {
 }
 
 .Arrow {
-    height: 32px;
-    width: 32px;
+    height: 16px;
+    width: 16px;
+    margin: 0 0.5rem 0 1rem
 }
 
 .CategoryArrow {
-    height: 32px;
-    width: 32px;
-    margin-left:-10px;
+    width: 16px;
+    margin-right: 0.5rem;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+
+.LibraryItemBody > .LibraryItemContainerGroup > .LibraryItemHeader,
+.LibraryItemBody > .LibraryItemContainerNone > .LibraryItemHeader {
+    border: solid #d9d9d9 2px;
+    border-right: 0px;
+    border-top: 0px;
+    border-bottom: 0px;
+    position: relative;
+    min-height: 3rem;
+}
+
+.LibraryItemBody > .LibraryItemContainerGroup > .LibraryItemHeader:before,
+.LibraryItemBody > .LibraryItemContainerNone > .LibraryItemHeader:before {
+    content: "";
+    height: 1rem;
+    width: 2rem;
+    border: solid #d9d9d9 2px;
+    border-right: 0px;
+    border-top: 0px;
+    border-left: 0px;
+    transform: translateY(-50%);
+}
+
+.LibraryItemBody > .LibraryItemContainerGroup:last-child > .LibraryItemHeader:after,
+.LibraryItemBody > .LibraryItemContainerGroup.expanded > .LibraryItemHeader:after,
+.LibraryItemBody > .LibraryItemContainerNone:last-child > .LibraryItemHeader:after,
+.LibraryItemBody > .LibraryItemContainerNone.expanded > .LibraryItemHeader:after {
+    content: "";
+    height: 50%;
+    position: absolute;
+    border-left: solid 4px #2a2a2a;
+    bottom: 0;
+    left: -2px;
 }
 
 .BodyIndentation {
-    margin-bottom: 18px;
-    padding-left: 4px;
+    padding-left: 0.4rem;
 }
 
 .ClusterViewContainer {
     display: flex;
     flex-direction: row;
+    margin: 1rem 0;
 }
 
 .ClusterLeftPane {
     display: flex;
-    padding-left: 13px;
-    margin: 2px 0px;
+    padding: 0 1.2rem 0 0.1rem;
     border-right: 2px;
     border-right-style: solid;
-    margin-left:-26px;
+}
+
+.ClusterLeftPane.create{
+    border-color: #cfe4b3;
+}
+
+.ClusterLeftPane.action{
+    border-color: #fcc776;
+}
+
+.ClusterLeftPane.query{
+    border-color: #9bd5ef;
 }
 
 .ClusterRightPane {
@@ -203,87 +267,245 @@ input {
 }
 
 .ClusterIcon {
-    width: 15px;
-    height: 26px;
-    padding: 0px 6px;
-    margin: 1px 0px;
+    width: 1rem;
+    height: 1rem;
+    padding: 0 0.5rem;
     -webkit-user-drag: none;
 }
 
 .SearchBar {
-    width: 100%;
-    background: #5b5a5a;
+    padding: 0 0.5rem;
+    margin-bottom: 1.5rem;
 }
 
 .SearchInput {
+    display: flex; 
     padding: 5px 0px;
-    margin: 5px 0px;
-    background-color: #fff;
+    margin: 0.5rem 0 1rem 0;
     width: 100%;
     position: relative;
     white-space: nowrap;
-    overflow-x: hidden;
+    border-bottom-color: #ffffff80;
+    border-bottom-style: solid;
+    border-bottom-width: 2px;
+}
+
+.SearchInput.focus,
+.SearchInput.searching{
+    border-bottom-color: #38abdf;
+}
+
+.SearchInput:after{
+    content: "";
+    left: 0;
+    opacity: 0;
+    position: absolute;
+    bottom: -8px;
+    border-bottom-color: #38abdf;
+    border-bottom-style: solid;
+    border-bottom-width: 6px;
+    transition: ease-in-out 300ms;
+}
+
+.SearchInput.focus:after{
+    opacity: 0.5;
+    width: 100%;
 }
 
 .LibraryHeader {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 3px 3px 3px 5px;
-    background-color: #414141;
-    color: #aaa;
+    padding: 0.8rem 0;
+    color: #f5f5f5f5;
+    font-size: 1.2rem;
 }
 
-.SearchBar .SearchBarIcon {
-    padding-left: 10px;
+.SearchBar .Icon {
+    width: 1rem;
+    height: 1rem;
 }
 
-.SearchBar .SearchInputText {
-    padding: 2px 5px 0px 10px;
+.SearchInp .ClearSearch{
+    height: 0.8rem;
+}
+
+.SearchInput .SearchInputText {
+    padding: 0 0.8rem;
     background: none;
     outline: none;
     border: none;
     width: 100%;
+    color: #f5f5f5;
 }
 
-.SearchBar .SearchInputText:focus::-webkit-input-placeholder {
+.SearchInput .SearchInputText:focus{
+    color: #38abdf;
+}
+
+.SearchInput .SearchInputText:focus::-webkit-input-placeholder {
     opacity: 0;
 }
 
-.SearchBar .SearchOptionsBtnEnabled,
-.SearchBar .SearchOptionsBtnDisabled {
+.SearchBar .SearchOptionContainer{
+    display: flex;
+    height: 2rem;
+    justify-content: flex-end;
+    background-color: #3c3c3c;
+    visibility: hidden;
+    opacity: 0;
+    transition: ease-in-out 300ms;
+}
+
+.SearchBar.searching .SearchOptionContainer{
+    visibility: visible;
+    opacity: 1;
+}
+
+.SearchBar button,
+.SearchBar button {
     border: none;
     outline: none;
-    background-color: #414141;
+    height: 100%;
+    background-color: transparent;
     transition: 0.15s;
 }
 
-.SearchBar .SearchOptionsBtnEnabled {
+.SearchBar button {
     color: #ddd;
     transition: 0.15s;
 }
 
-.SearchBar .SearchOptionsBtnDisabled {
+.SearchBar button {
     color: #555;
 }
 
-.SearchBar .SearchOptionsBtnEnabled:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+.SearchBar button{
+    background-color: transparent;
+    border: 0;
+    color: #6DD2FF;
+}
+
+.SearchBar button:active:enabled,
+.SearchBar button:hover:enabled {
+    color: #38abdf;
+    background-color: rgba(255,255,255,0.1);
     cursor: pointer;
 }
 
-.SearchBar .SearchOptionsContainerArrow {
-    position: absolute;
-    top: 10px;
-    right: 65px;
-    width: 0px;
-    height: 0px;
-    border-bottom: 10px solid #aaa;
-    border-left: 10px solid transparent;
-    border-right: 10px solid transparent;
-    border-top: 10px solid transparent;
-    pointer-events: none;
+.SearchBar button:disabled{
+    cursor: not-allowed;
 }
+
+.SearchFilterContainer{
+    position: relative;
+}
+
+.SearchFilterPanel{
+    position: absolute;
+    top: 2rem;
+    right: 0;
+    background-color: #535353;
+    color: #ffffff;
+    width: 12rem;
+    text-align: left;
+    font-size: 0.8rem;
+    box-shadow: 0 0 1rem 0 rgba(0,0,0,0.3);
+}
+
+.SearchFilterPanel > div{
+    padding: 1rem;
+}
+
+.SearchFilterPanel > div:first-child{
+    padding-bottom: 0;
+}
+
+.SearchFilterPanel > .body{
+    padding-top: 0;
+    padding-bottom: 0;
+    margin: 1rem 0;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+/* Custom checkbox */
+.SearchFilterPanel label.Category{
+    position: relative;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.SearchFilterPanel label.Category:hover{
+  cursor: pointer;
+} 
+
+.SearchFilterPanel label.Category > * {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.SearchFilterPanel .body input[type="checkbox"]{
+    visibility: hidden;
+    margin: 0;
+    cursor: pointer;
+}
+
+.SearchFilterPanel .body input[type="checkbox"],
+.SearchFilterPanel .body .checkmark{
+    margin: 0;
+    margin-right: 0.5rem;
+}
+
+.SearchFilterPanel .body .checkmark{
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 0.8rem;
+    width: 0.8rem;
+    background-color: transparent;
+    border: solid 1px rgba(255, 255, 255, 0.5);
+}
+
+.SearchFilterPanel .body input[type="checkbox"]:checked ~ .checkmark{
+  background-color: white; 
+} 
+/* Create the mark/indicator (hidden when not checked) */ 
+.checkmark:after
+{ 
+  content: ""; 
+  position: absolute; 
+  display: none; 
+} 
+
+/* Show the mark when checked */ 
+.SearchFilterPanel .body input[type="checkbox"]:checked ~ .checkmark:after{
+  display: block; 
+} 
+
+/* Style the mark/indicator */ 
+.SearchFilterPanel .body .checkmark:after{
+    left: 0.25rem;
+    top: 0rem;
+    width: 3px;
+    height: 8px;
+    border: solid black;
+    border-width: 0 2px 2px 0; 
+    transform: rotate(45deg);
+} 
+
+.SearchFilterPanel .footer{
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    border-top: solid #999999 1px;
+    padding: 0.5rem;
+}
+
+.SearchFilterPanel .footer > * {
+    padding: 0.5rem;
+}
+
 
 .SearchBar .SearchOptionsContainer {
     font-size: 13px;
@@ -379,23 +601,13 @@ input {
     display: block;
 }
 
-.SearchCheckbox,
-.CategoryCheckbox {
-    display: none;
-}
-
-.SearchBar .CancelButton button {
-    font-size: 14px;
-    color: #ccc;
+.SearchBar button.CancelButton {
     background: transparent;
     border: 0px;
     outline: 0px;
-    position: absolute;
-    top: 5px;
-    right: 5px;
 }
 
-.SearchBar .CancelButton button:hover {
+.SearchBar button.CancelButton:hover {
     cursor: pointer;
 }
 

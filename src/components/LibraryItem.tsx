@@ -165,7 +165,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         }
 
         return (
-            <div className={this.getLibraryItemContainerStyle()}>
+            <div className={this.getLibraryItemContainerStyle(this.state.expanded)}>
                 {header}
                 <div className={"LibraryItemBodyContainer"}>
                     {bodyIndentation}
@@ -184,6 +184,11 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
     }
 
     getIconElement(): JSX.Element {
+        // Category type don't display any icon
+        if(this.props.data.itemType === "category"){
+            return null;
+        }
+
         // If the element type is a section, group, coregroup, class or none an icon shouldn't be displayed
         if (this.props.data.itemType !== "group" && 
         this.props.data.itemType !== "section" && 
@@ -236,28 +241,24 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         let arrowIcon: any = null;
 
         if (!this.state.expanded) {
-            if (this.props.isLastItem) {
-                arrowIcon = require("../resources/ui/indent-arrow-right-last.svg");
-            } else {
-                arrowIcon = require("../resources/ui/indent-arrow-right.svg");
-            }
+            arrowIcon = require("../resources/ui/indent-arrow-right.svg");
         } else {
             arrowIcon = require("../resources/ui/indent-arrow-down.svg");
         }
 
         if (this.props.data.itemType == "category") {
             if (!this.state.expanded) {
-                arrowIcon = require("../resources/ui/indent-arrow-right-wo-lines.svg");
+                arrowIcon = require("../resources/ui/indent-arrow-category-right.svg");
             }
             else {
-                arrowIcon = require("../resources/ui/indent-arrow-down-wo-lines.svg");
+                arrowIcon = require("../resources/ui/indent-arrow-category-down.svg");
             }
 
             return <img className={"CategoryArrow"} src={arrowIcon} onError={this.onImageLoadFail} />;
 
         }
 
-        return <img className={"Arrow"} src={arrowIcon} onError={this.onImageLoadFail} />;
+        return <img className={`Arrow`} src={arrowIcon} onError={this.onImageLoadFail} />;
     }
 
     getHeaderElement(): JSX.Element {
@@ -285,18 +286,28 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         return null;
     }
 
-    getLibraryItemContainerStyle(): string {
+    getLibraryItemContainerStyle(isExpanded : boolean): string {
+        let style : string = "";
         switch (this.props.data.itemType) {
             case "section":
-                return "LibraryItemContainerSection";
+                style = "LibraryItemContainerSection";
+                break;
             case "category":
-                return "LibraryItemContainerCategory";
+                style = "LibraryItemContainerCategory";
+                break;
             case "group":
             case "coregroup":
-                return "LibraryItemContainerGroup";
+                style = "LibraryItemContainerGroup";
+                break;
             default:
-                return "LibraryItemContainerNone";
+                style = "LibraryItemContainerNone";
+                break;
         }
+
+        if(isExpanded)
+            style += " expanded";
+
+        return style;
     }
 
     getLibraryItemHeaderStyle(): string {
@@ -366,7 +377,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
             createCluster = (<ClusterView
                 libraryContainer={this.props.libraryContainer}
                 icon={require("../resources/icons/library-create.svg")}
-                borderColor="#62895b" /* green */
+                clusterType="create"
                 showItemSummary={this.props.showItemSummary}
                 childItems={createMethods} />);
         }
@@ -376,7 +387,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
             actionCluster = (<ClusterView
                 libraryContainer={this.props.libraryContainer}
                 icon={require("../resources/icons/library-action.svg")}
-                borderColor="#ad5446" /* red */
+                clusterType="action"
                 showItemSummary={this.props.showItemSummary}
                 childItems={actionMethods} />);
         }
@@ -386,7 +397,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
             queryCluster = (<ClusterView
                 libraryContainer={this.props.libraryContainer}
                 icon={require("../resources/icons/library-query.svg")}
-                borderColor="#4b9dbf" /* blue */
+                clusterType="query"
                 showItemSummary={this.props.showItemSummary}
                 childItems={queryMethods} />);
         }

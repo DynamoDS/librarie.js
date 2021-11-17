@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import * as _ from 'underscore';
+import { ObjectExtensions } from '../LibraryUtilities'
 
 interface StructuredModeChangedFunc {
     (structured: boolean): void;
@@ -36,11 +37,11 @@ export interface SearchBarState {
     structured: boolean;
     detailed: boolean;
     hasText: boolean;
+    hasFocus: boolean;
 }
 
 export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
-
-    categoryData: CategoryData[] = [];
+    categoryData: {[key: string]: CategoryData} = {};
     searchOptionsContainer: HTMLDivElement = null;
     searchInputField: HTMLInputElement = null;
     filterBtn: HTMLButtonElement = null;
@@ -49,34 +50,29 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
         super(props);
         this.state = {
             expanded: false,
-            selectedCategories: this.props.categories,
+            selectedCategories: [],
             structured: false,
             detailed: false,
-            hasText: false
+            hasText: false,
+            hasFocus: false
         };
 
-        _.each(this.props.categories, function (c: string) {
-            let data = new CategoryData(c, "CategoryCheckbox", true, this.onCategoriesChanged.bind(this));
-            data.onOnlyButtonClicked = this.onOnlyButtonClicked.bind(this);
-            this.categoryData.push(data);
+        _.each(this.props.categories, function (name: string) {
+            this.categoryData[name] = new CategoryData(name, "CategoryCheckbox");
         }.bind(this));
     }
 
     UNSAFE_componentWillReceiveProps(newProps: SearchBarProps) {
-        let oldState = this.state;
-        this.setState({ selectedCategories: newProps.categories });
-
         let oldCategoryData = this.categoryData;
-        this.categoryData = [];
-        _.each(newProps.categories, function (c: string) {
-            let oldCategory = oldCategoryData.find(x => x.name === c);
-            let data = new CategoryData(c, "CategoryCheckbox", true, this.onCategoriesChanged.bind(this));
-            data.onOnlyButtonClicked = this.onOnlyButtonClicked.bind(this);
-            if (oldCategory) {
-                data.checked = oldCategory.checked;
-            }
-            this.categoryData.push(data);
+        this.categoryData = {};
+        
+        _.each(newProps.categories, function (name: string) {
+            this.categoryData[name] = oldCategoryData[name]
+                ? oldCategoryData[name]
+                : new CategoryData(name, "CategoryCheckbox");
+
         }.bind(this));
+
     }
 
     UNSAFE_componentWillMount() {
@@ -136,8 +132,14 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
         }
     }
 
+    onFocusChanged(hasFocus: boolean)
+    {
+        this.setState({hasFocus})
+    }
+
     onExpandButtonClick() {
-        this.setState({ expanded: !this.state.expanded });
+        let expanded = !this.state.expanded;
+        this.setState({ expanded });
     }
 
     onStructuredModeChanged(event: any) {
@@ -152,125 +154,166 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
         this.setState({ detailed: value });
     }
 
-    onCategoriesChanged() {
-        let selectedCategories: string[] = [];
-        _.each(this.categoryData, function (data) {
-            if (data.checked) selectedCategories.push(data.name);
-        })
-        this.setSelectedCategories(selectedCategories);
+    getSelectedCategories(): string[]{
+        return ObjectExtensions.values(this.categoryData)
+            .filter(x => x.isChecked())
+            .map(x => x.name);
     }
 
-    onAllButtonClicked() {
-        _.each(this.categoryData, function (category) {
-            category.checked = true;
-        })
-        this.setSelectedCategories(this.props.categories);
+    onApplyCategoryFilter(){
+        this.setSelectedCategories(this.getSelectedCategories())
+        this.setState({expanded: false});
     }
 
-    onOnlyButtonClicked(event: any) {
-        _.each(this.categoryData, function (category) {
-            if (category.name == event.target.name) category.checked = true;
-            else category.checked = false;
-        })
-        this.setSelectedCategories([event.target.name]);
+    onClearCategoryFilters(){
+        this.clearSelectedCategories();
+        this.setSelectedCategories(this.getSelectedCategories());
     }
 
-    allCategoriesSelected() {
-        return (this.state.selectedCategories.length == this.props.categories.length);
+    clearSelectedCategories(){
+        _.each(ObjectExtensions.values(this.categoryData), category => {
+            category.setChecked(false);
+        });
     }
 
-    setSelectedCategories(categories: string[]) {
-        this.setState({ selectedCategories: categories })
-        this.props.onCategoriesChanged(categories, this.categoryData);
+    setSelectedCategories(selectedCategories: string[]) {
+        this.setState({ selectedCategories })
+
+        // If no selected categories, search should default to show all
+        if(selectedCategories.length === 0)
+            selectedCategories = Object.keys(this.categoryData);
+
+        this.props.onCategoriesChanged(selectedCategories, ObjectExtensions.values(this.categoryData));
     }
 
     getSearchOptionsBtnClass() {
-        let searchOptionsBtnClass = this.state.hasText ? "SearchOptionsBtnEnabled" : "SearchOptionsBtnDisabled";
+        let searchOptionsBtnClass = this.getSearchOptionsDisabled()
+            ? "SearchOptionsBtnDisabled"
+            : "SearchOptionsBtnEnabled" ;
+            
         return searchOptionsBtnClass;
     }
 
     getSearchOptionsDisabled() {
-        let searchOptionsDisabled = this.state.hasText ? false : true; // Enable the button only when user is doing search
+        let searchOptionsDisabled = this.state.hasText && this.props.categories.length > 0
+            ? false
+            : true; // Enable the button only when user is doing search
         return searchOptionsDisabled;
     }
 
-    createFilterButton() {
-        // Create the filter button
-        let filterBtn = <button className={this.getSearchOptionsBtnClass()} onClick={this.onExpandButtonClick.bind(this)} disabled={this.getSearchOptionsDisabled()} ref={(button) => { this.filterBtn = button }} title="Filter results"><i className="fa fa-filter"></i></button>;
-        return filterBtn;
+    createClearFiltersButton(){
+
+        const selectedCategoriesCount:number = this.state.selectedCategories.length;
+        if(selectedCategoriesCount === 0)
+            return null;
+
+        const message = `Clear filters (${selectedCategoriesCount})`;
+        return <button title={message} onClick={this.onClearCategoryFilters.bind(this)}>
+            {message}
+        </button>
+    }
+    
+    createFilterPanel(){
+        let binIcon: string = require("../resources/ui/bin.svg");
+
+        console.log(this.state.selectedCategories)
+        let checkboxes: JSX.Element[] = ObjectExtensions.values(this.categoryData)
+            .map(cat => cat.getCheckbox(this.state.selectedCategories.includes(cat.name)))
+
+        return <div className="SearchFilterPanel" ref={(container) => this.searchOptionsContainer = container}>
+            <div className="header">
+                <span>Filter by</span>
+            </div>
+            <div className="body">
+                    {checkboxes}
+            </div>
+            <div className="footer">
+                <button onClick={this.onApplyCategoryFilter.bind(this)}>Apply</button>
+                <button onClick={this.clearSelectedCategories.bind(this)}>
+                    <img className="Icon ClearFilters" src={binIcon} />
+                </button>
+            </div>
+        </div>;
     }
 
-    createStructuredButton() {
-        let structuredBtnClass = this.state.structured ? "fa fa-dedent" : "fa fa-indent";
+    createFilterButton() {
+        let searchFilterIcon: string = this.state.expanded
+            ? require("../resources/ui/search-filter-selected.svg")
+            : require("../resources/ui/search-filter.svg");
+        let filterPanel:any = this.state.expanded ? this.createFilterPanel() : null;
 
-        // Create the button to toggle structured state
-        let structuredBtn = <button className={this.getSearchOptionsBtnClass()} onClick={this.onStructuredModeChanged.bind(this)} disabled={this.getSearchOptionsDisabled()} title="Structured view"><i className={structuredBtnClass}></i></button>;
-        return structuredBtn;
+        // Create the filter panel
+        return <div className="SearchFilterContainer">
+        <button 
+                className={this.getSearchOptionsBtnClass()} 
+                onClick={this.onExpandButtonClick.bind(this)} 
+                disabled={this.getSearchOptionsDisabled()} 
+                ref={(button) => { this.filterBtn = button }}
+                title="Filter results">
+                    <img className="Icon SearchFilter" src={searchFilterIcon}/>
+                </button>
+                    {filterPanel}
+        </div>
     }
 
     createDetailedButton() {
+        let searchDetailedIcon: string = require("../resources/ui/search-detailed.svg");
+
         // Create the button to toggle between compact/detailed
         // This button is only enabled when the user is doing search and structured view is not enabled
-        let detailedBtnClass = this.state.hasText && !this.state.structured ? "SearchOptionsBtnEnabled" : "SearchOptionsBtnDisabled";
-        let detailedBtnDisabled = this.state.hasText && !this.state.structured ? false : true;
-        let detailedBtn = <button className={detailedBtnClass} onClick={this.onDetailedModeChanged.bind(this)} disabled={detailedBtnDisabled} title="Compact/Detailed View"><i className="fa fa-align-justify"></i></button>;
-        return detailedBtn;
+        let detailedBtnDisabled = this.getSearchOptionsDisabled() || this.state.structured;
+        let detailedBtnClass = detailedBtnDisabled
+            ? "SearchOptionsBtnDisabled"
+            : "SearchOptionsBtnEnabled";
+
+        return <button 
+            className={detailedBtnClass}
+            onClick={this.onDetailedModeChanged.bind(this)} 
+            disabled={detailedBtnDisabled} 
+            title="Compact/Detailed View">
+                 <img className="Icon SearchDetailed" src={searchDetailedIcon}/>
+            </button>;
     }
 
     render() {
 
-        let options = null;
-        let checkboxes: JSX.Element[] = [];
         let cancelButton: JSX.Element = null;
+        let searchIcon: string = require("../resources/ui/search-icon.svg");
+        let searchIconClear: string = require("../resources/ui/search-icon-clear.svg");
 
-        this.categoryData.forEach(category => checkboxes.push(category.createCheckbox(true)));
 
         if (this.state.hasText) {
             cancelButton = (
-                <div className="CancelButton">
-                    <button onClick={this.clearInput.bind(this)} >
-                        <i className="fa fa-times" aria-hidden="true"></i>
-                    </button>
-                </div>
+                <button className="CancelButton" onClick={this.clearInput.bind(this)} >
+                    <img className="Icon ClearSearch" src={searchIconClear}/>
+                </button>
             );
         }
 
-        if (this.state.expanded) {
-            options =
-                <div className="SearchOptions">
-                    <div className="SearchOptionsContainerArrow"></div>
-                    <div className="SearchOptionsContainer" ref={(container) => this.searchOptionsContainer = container}>
-                        <div className="SearchOptionsHeader">
-                            <span>Filter:</span>
-                            <div className="SelectAllBtn" onClick={this.onAllButtonClicked.bind(this)}>Select All</div>
-                        </div>
-                        <div className="CategoryCheckboxContainer">
-                            {checkboxes}
-                        </div>
-                    </div></div>;
-        }
+        const isSearchingClass = this.state.hasText ? "searching" : "";
+        const isFocusClass = this.state.hasFocus ? "focus" : "";
 
         return (
-            <div className="SearchBar">
-                <div className="LibraryHeader">
-                    Library
-                    <div>
-                        |{this.createFilterButton()}|{this.createDetailedButton()}
-                    </div>
-                </div>
-                <div className="SearchInput">
-                    <div>
-                        <i className="fa fa-search SearchBarIcon"></i>
-                        <input
-                            className="SearchInputText"
-                            type="input" placeholder="Search..."
-                            onChange={this.onTextChanged.bind(this)}
-                            ref={(field) => { this.searchInputField = field; }}>
-                        </input>
-                    </div>
+            <div className={`SearchBar ${isSearchingClass}`}>
+                <div className="LibraryHeader">Library</div>
+                <div className={`SearchInput ${isSearchingClass} ${isFocusClass}`}>
+                    <img className="Icon SeachBarIcon" src={searchIcon}/>
+                    <input
+                        className="SearchInputText"
+                        type="input" placeholder="Search"
+                        onChange={this.onTextChanged.bind(this)}
+                        onFocus={this.onFocusChanged.bind(this, true)}
+                        onBlur={this.onFocusChanged.bind(this, false)}
+                        ref={(field) => { this.searchInputField = field; }}>
+                    </input>
+            
                     {cancelButton}
                 </div>
-                {options}
+                <div className="SearchOptionContainer">
+                    {this.createClearFiltersButton()}
+                    {this.createFilterButton()}
+                    {this.createDetailedButton()}
+                </div>    
             </div>
         );
     }
@@ -279,44 +322,47 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
 export class CategoryData {
     name: string;
     className: string;
-    checked: boolean;
-    onChangedFunc: any = null;
+    checkboxReference:HTMLInputElement;
 
     // Optional attributes
     displayText: string = null;
-    onOnlyButtonClicked: any = null;
 
-    constructor(name: string, className: string, checked: boolean, onChangedFunc: any, displayText?: string) {
+    constructor(name: string, className: string, displayText?: string) {
         this.name = name;
         this.className = className;
-        this.checked = checked;
 
-        this.onChangedFunc = onChangedFunc;
         this.displayText = displayText ? displayText : name;
     }
 
-    createCheckbox(enabled: boolean): JSX.Element {
-        let checkSymbol = this.checked ? <i className="fa fa-check CheckboxSymbol"></i> : null;
+    getCheckbox(checked: boolean = false): JSX.Element {
 
-        let only = null;
-        if (this.onOnlyButtonClicked) {
-            // Show the "only" option if there is a callback function provided
-            only = <label><input type="button" name={this.name} className="CheckboxLabelRightButton" onClick={this.onOnlyButtonClicked} value={"only"} /></label>
-        }
+        let checkbox = <input 
+            type="checkbox"
+            name={this.name}
+            className={this.className}
+            onChange={this.onCheckboxChanged.bind(this)}
+            defaultChecked={checked}
+            ref={cb => {this.checkboxReference = cb}}/>
 
-        let checkboxLabelText = enabled ? "CheckboxLabelEnabled" : "CheckboxLabelDisabled";
-        let checkbox: JSX.Element =
-            <label className={checkboxLabelText}>
-                {checkSymbol}
-                <input type="checkbox" name={this.name} className={this.className} onChange={this.onCheckboxChanged.bind(this)} checked={this.checked} />
-                <div className="CheckboxLabelText">{this.displayText}</div>
-                {only}
+        return <label className={"Category"} key={this.name}>
+                {checkbox}
+                <div className="checkmark"/>
+                <div>{this.displayText}</div>
             </label>;
-        return checkbox;
     }
 
-    onCheckboxChanged() {
-        this.checked = !this.checked;
-        this.onChangedFunc();
+    isChecked(){
+        return this.checkboxReference
+            ? this.checkboxReference.checked
+            : false;
+    }
+
+    setChecked(checked:boolean){
+        if(this.checkboxReference)
+            this.checkboxReference.checked = checked;
+    }
+
+    onCheckboxChanged(event: any) {
+        this.checkboxReference.checked = event.target.checked;
     }
 }

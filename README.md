@@ -9,18 +9,22 @@ Installing all dependencies
 Note: If you are having trouble running `npm install` and are outside the adsk network, please try removing the `.npmrc` file.
 
 ## Build and run librarie.js
-- Build source scripts
 
-    `$ npm run build`
+### Development
+- Build and serve development source scripts
+
+    `$ npm run serve`
     
-    Both `librarie.js` (development script) and `librarie.min.js` (production script) will be output in `./dist/` folder. By default `librarie.min.js` will be referenced in index.html.
+    Generates the development script `./dist/librarie.js` and and executes the file `./index.js` using node.
 
-- Serve up the new library view
+- Navigate to http://localhost:3456 in a web browser.
 
-    `$ node ./index.js`
+## Production
 
-- Navigate to `localhost:3456` in Google Chrome browser
-
+- Build production source scripts
+    `npm run build`
+  
+    Generates the development script `./dist/librarie.min.js`, used as prodution artifact in Dynamo.
 
 ## Run Tests
 

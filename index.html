@@ -9,7 +9,6 @@
         body {
             padding: 0;
             margin: 0;
-            background-color: #353535;
         }
     </style>
     </style>
@@ -20,7 +19,7 @@
     <div id="libraryContainerPlaceholder"></div>
 
     <!-- The main library view compoment -->
-    <script src='./dist/librarie.min.js'></script>
+    <script src='./dist/librarie.js'></script>
 
     <script>
         let jsonUrls = ["loadedTypes", "layoutSpecs"];
@@ -36,7 +35,6 @@
             }
 
             let libController = LibraryEntryPoint.CreateLibraryController();
-
             libController.on(libController.ItemClickedEventName, function (item) {
                 console.log(item);
             });
@@ -64,14 +62,13 @@
                 console.log(sectionText, "icon clicked");
                 return null;
             });
-
-            let libContainer = libController.createLibraryByElementId(
-                "libraryContainerPlaceholder", layoutSpecsJson, loadedTypesJson);
-
             libController.on(libController.FilterCategoryEventName, function (item) {
                 console.log(item);
             });
 
+
+            let libContainer = libController.createLibraryByElementId(
+                "libraryContainerPlaceholder", layoutSpecsJson, loadedTypesJson);
         });
     </script>
 
