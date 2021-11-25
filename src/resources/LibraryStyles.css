@@ -9,11 +9,14 @@
     src: url("fonts/ArtifaktElement-Bold.woff") format("woff");
 }
 
+html{
+    font-size: 12px;
+}
+
 body {
     font-family: "Artifakt Element", "Open Sans";
     -webkit-user-select: none;
     user-select: none;
-    font-size: 16px;
     cursor: default;
     background-color: #2a2a2a;
     color: #f5f5f5;
@@ -32,7 +35,8 @@ input {
 .LibraryItemContainer {
     flex-grow: 1;
     overflow-y: auto;
-    padding: 0 0.5rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
 }
 
 .LibraryItemContainerSection {
@@ -87,17 +91,21 @@ input {
 }
 
 .LibraryItemContainerCategory > .LibraryItemHeader{
-    padding: 1rem 0;
+    padding-top: 1rem ;
+    padding-bottom: 1rem;
 }
 
 .LibraryItemContainerGroup > .LibraryItemHeader,
 .LibraryItemContainerNone > .LibraryItemHeader{
-    padding: 0.5rem 0;
+    padding-top: 0.5rem ;
+    padding-bottom: 0.5rem;
+    height: 2.5rem;
 }
 
 .LibraryItemContainerGroup,
 .LibraryItemContainerNone{
-    padding: 0 0.5rem;
+    padding-left: 0.5rem ;
+    padding-right: 0.5rem;
 }
 
 .LibraryItemHeader:hover,
@@ -123,16 +131,16 @@ input {
 }
 
 .LibraryItemContainerSection .LibraryItemIcon {
-    width: 1rem;
-    height: 1rem;
+    width: 1.2rem;
+    height: 1.2rem;
     padding-right: 10px;
     -webkit-user-drag: none;
 }
 
 .LibraryItemContainerSection .LibraryAddOnSectionIcon {
     opacity: 0.5;
-    width: 1rem;
-    height: 1rem;
+    width: 1.4rem;
+    height: 1.4rem;
     padding-right: 10px;
     -webkit-user-drag: none;
 }
@@ -145,7 +153,8 @@ input {
 }
 
 .LibraryItemContainerNone .LibraryItemIcon {
-    padding: 0 0.5rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
     width: 2rem;
     height: 2rem;
     -webkit-user-drag: none;
@@ -168,12 +177,13 @@ input {
 
 .LibraryItemHeader .LibraryItemGroupText,
 .LibrarySectionHeader .LibraryItemGroupText {
-    margin: 0.5rem 0;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
 }
 
 .LibraryItemHeader .LibraryItemGroupText {
     color: #eeeeee;
-    font-size: 1.2rem;
+    font-size: 1.4rem;
 }
 
 .LibraryItemParameters {
@@ -187,7 +197,8 @@ input {
 .Arrow {
     height: 16px;
     width: 16px;
-    margin: 0 0.5rem 0 1rem
+    margin-left: 0.5rem;
+    margin-right: 1rem;
 }
 
 .CategoryArrow {
@@ -205,7 +216,7 @@ input {
     border-top: 0px;
     border-bottom: 0px;
     position: relative;
-    min-height: 3rem;
+    height: 2.5rem;
 }
 
 .LibraryItemBody > .LibraryItemContainerGroup > .LibraryItemHeader:before,
@@ -239,12 +250,14 @@ input {
 .ClusterViewContainer {
     display: flex;
     flex-direction: row;
-    margin: 1rem 0;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
 }
 
 .ClusterLeftPane {
     display: flex;
-    padding: 0 1.2rem 0 0.1rem;
+    padding-left: 1.2rem;
+    padding-right: 0.1rem;
     border-right: 2px;
     border-right-style: solid;
 }
@@ -269,30 +282,42 @@ input {
 .ClusterIcon {
     width: 1rem;
     height: 1rem;
-    padding: 0 0.5rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
     -webkit-user-drag: none;
 }
 
 .SearchBar {
-    padding: 0 0.5rem;
-    margin-bottom: 1.5rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}
+
+.SearchBar.searching{
+    margin-bottom: 1rem;
 }
 
 .SearchInput {
     display: flex; 
     padding: 5px 0px;
-    margin: 0.5rem 0 1rem 0;
+    margin-top: 0.5rem;
+    margin-bottom: 0;
     width: 100%;
     position: relative;
     white-space: nowrap;
     border-bottom-color: #ffffff80;
     border-bottom-style: solid;
     border-bottom-width: 2px;
+    font-size: 1rem;
+    transition: ease-in-out 300ms;
 }
 
 .SearchInput.focus,
 .SearchInput.searching{
     border-bottom-color: #38abdf;
+}
+
+.SearchInput.searching{
+    margin-bottom: 1rem;
 }
 
 .SearchInput:after{
@@ -316,13 +341,14 @@ input {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0.8rem 0;
+    padding-top: 0.8rem;
+    padding-bottom: 0.8rem;
     color: #f5f5f5f5;
-    font-size: 1.2rem;
+    font-size: 1.4rem;
 }
 
 .SearchBar .Icon {
-    width: 1rem;
+    width: 1.2rem;
     height: 1rem;
 }
 
@@ -331,7 +357,8 @@ input {
 }
 
 .SearchInput .SearchInputText {
-    padding: 0 0.8rem;
+    padding-left: 0.8rem;
+    padding-right: 0.8rem;
     background: none;
     outline: none;
     border: none;
@@ -349,7 +376,7 @@ input {
 
 .SearchBar .SearchOptionContainer{
     display: flex;
-    height: 2rem;
+    height: 2.5rem;
     justify-content: flex-end;
     background-color: #3c3c3c;
     visibility: hidden;
@@ -414,7 +441,10 @@ input {
 }
 
 .SearchFilterPanel > div{
-    padding: 1rem;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
 }
 
 .SearchFilterPanel > div:first-child{
@@ -424,7 +454,8 @@ input {
 .SearchFilterPanel > .body{
     padding-top: 0;
     padding-bottom: 0;
-    margin: 1rem 0;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
     max-height: 400px;
     overflow-y: auto;
 }
@@ -499,11 +530,17 @@ input {
     justify-content: flex-end;
     align-items: center;
     border-top: solid #999999 1px;
-    padding: 0.5rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
 }
 
 .SearchFilterPanel .footer > * {
-    padding: 0.5rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
 }
 
 
@@ -648,11 +685,12 @@ input {
 .SearchResultItemContainer .ItemTitle,
 .SearchResultItemContainerSelected .ItemTitle {
     margin-bottom: 2px;
+    font-size: 1.2rem;
 }
 
 .SearchResultItemContainer .ItemDescription,
 .SearchResultItemContainerSelected .ItemDescription {
-    font-size: 11px;
+    font-size: 1rem;
     padding: 2px 0px;
     color: #aaa;
 }
