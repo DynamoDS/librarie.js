@@ -35,8 +35,8 @@ input {
 .LibraryItemContainer {
     flex-grow: 1;
     overflow-y: auto;
-    padding-left: 0.5rem;
-    padding-right: 0.5rem;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
 }
 
 .LibraryItemContainerSection {
@@ -65,7 +65,7 @@ input {
     display: flex;
     padding-top: 1rem;
     margin-top: 0.5rem;
-    font-size: 1.2rem;
+    font-size: 1.4rem;
     color: #f5f5f5f5;
     align-items: center;
     justify-content: space-between;
@@ -167,12 +167,13 @@ input {
 
 .LibraryItemContainerCategory .LibraryItemText {
     color: #ade4de;
-    font-size: 1.2rem;
+    font-size: 1rem;
+    margin-top: 0.2rem;
 }
 
 .LibraryItemContainerNone .LibraryItemText {
     color: #c6c6c6;
-    font-size: 1.2rem;
+    font-size: 1rem;
 }
 
 .LibraryItemHeader .LibraryItemGroupText,
@@ -183,26 +184,27 @@ input {
 
 .LibraryItemHeader .LibraryItemGroupText {
     color: #eeeeee;
-    font-size: 1.4rem;
+    font-size: 1rem;
 }
 
 .LibraryItemParameters {
     color: #888;
-    font-size: 11px;
+    font-size: 1rem;
     margin-left: 5px;
     display: inline-block;
     white-space: nowrap;
 }
 
 .Arrow {
-    height: 16px;
-    width: 16px;
+    height: 1rem;
+    width: 1rem;
     margin-left: 0.5rem;
     margin-right: 1rem;
 }
 
 .CategoryArrow {
-    width: 16px;
+    width: 1rem;
+    height: 1rem;
     margin-right: 0.5rem;
     margin-top: auto;
     margin-bottom: auto;
@@ -288,8 +290,8 @@ input {
 }
 
 .SearchBar {
-    padding-left: 0.5rem;
-    padding-right: 0.5rem;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
 }
 
 .SearchBar.searching{
@@ -299,12 +301,10 @@ input {
 .SearchInput {
     display: flex; 
     padding: 5px 0px;
-    margin-top: 0.5rem;
-    margin-bottom: 0;
     width: 100%;
     position: relative;
     white-space: nowrap;
-    border-bottom-color: #ffffff80;
+    border-bottom-color: #dadada;
     border-bottom-style: solid;
     border-bottom-width: 2px;
     font-size: 1rem;
@@ -341,15 +341,15 @@ input {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-top: 0.8rem;
-    padding-bottom: 0.8rem;
+    padding-top: 1.2rem;
+    padding-bottom: 1.2rem;
     color: #f5f5f5f5;
     font-size: 1.4rem;
 }
 
 .SearchBar .Icon {
     width: 1.2rem;
-    height: 1rem;
+    height: 1.2rem;
 }
 
 .SearchInp .ClearSearch{
@@ -364,7 +364,15 @@ input {
     border: none;
     width: 100%;
     color: #f5f5f5;
+    font-size: 1rem;
 }
+
+.SearchInput .SearchInputText::-webkit-input-placeholder{ color: #dadada; }
+.SearchInput .SearchInputText:-moz-placeholder{ color: #dadada; }
+.SearchInput .SearchInputText::-moz-placeholder{ color: #dadada; }
+.SearchInput .SearchInputText:-ms-input-placeholder{ color: #dadada; }
+.SearchInput .SearchInputText::-ms-input-placeholder{ color: #dadada; }
+.SearchInput .SearchInputText::placeholder{ color: #dadada; }
 
 .SearchInput .SearchInputText:focus{
     color: #38abdf;
@@ -420,6 +428,10 @@ input {
     cursor: pointer;
 }
 
+.SearchBar button.CancelButton:hover{
+    background-color: transparent;
+}
+
 .SearchBar button:disabled{
     cursor: not-allowed;
 }
@@ -436,7 +448,7 @@ input {
     color: #ffffff;
     width: 12rem;
     text-align: left;
-    font-size: 0.8rem;
+    font-size: 1rem;
     box-shadow: 0 0 1rem 0 rgba(0,0,0,0.3);
 }
 
@@ -516,8 +528,8 @@ input {
 
 /* Style the mark/indicator */ 
 .SearchFilterPanel .body .checkmark:after{
-    left: 0.25rem;
-    top: 0rem;
+    left: 2.5px;
+    top: -1px;
     width: 3px;
     height: 8px;
     border: solid black;
@@ -545,7 +557,7 @@ input {
 
 
 .SearchBar .SearchOptionsContainer {
-    font-size: 13px;
+    font-size: 1rem;
     color: #fff;
     margin: 0px 0px 5px 0px;
     background-color: #606060;
@@ -626,7 +638,7 @@ input {
     display: none;
     margin: 0px;
     padding: 0px;
-    font-size: 12px;
+    font-size: 1rem;
 }
 
 .CheckboxLabelEnabled .CheckboxLabelRightButton:hover {
@@ -699,7 +711,7 @@ input {
 .SearchResultItemContainerSelected .ItemDetails {
     display: flex;
     align-items: center;
-    font-size: 12px;
+    font-size: 1rem;
     color: #aaaaaa;
 }
 
