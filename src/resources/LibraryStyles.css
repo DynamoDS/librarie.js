@@ -26,6 +26,10 @@ input {
     font-family: "Artifakt Element", "Open Sans";
 }
 
+button{
+    font-size: 1rem;
+}
+
 .LibraryContainer {
     max-height: 100vh;
     display: flex;
@@ -428,8 +432,15 @@ input {
     cursor: pointer;
 }
 
+.SearchBar button.CancelButton {
+    background: transparent;
+    border: 0px;
+    outline: 0px;
+}
+
 .SearchBar button.CancelButton:hover{
     background-color: transparent;
+    cursor: pointer;
 }
 
 .SearchBar button:disabled{
@@ -490,20 +501,17 @@ input {
 
 .SearchFilterPanel .body input[type="checkbox"]{
     visibility: hidden;
-    margin: 0;
     cursor: pointer;
+    position: absolute;
 }
 
 .SearchFilterPanel .body input[type="checkbox"],
 .SearchFilterPanel .body .checkmark{
-    margin: 0;
     margin-right: 0.5rem;
 }
 
 .SearchFilterPanel .body .checkmark{
-    position: absolute;
-    top: 0;
-    left: 0;
+    position: relative;
     height: 0.8rem;
     width: 0.8rem;
     background-color: transparent;
@@ -528,13 +536,14 @@ input {
 
 /* Style the mark/indicator */ 
 .SearchFilterPanel .body .checkmark:after{
-    left: 2.5px;
-    top: -1px;
-    width: 3px;
-    height: 8px;
+    left: 0.4rem;
+    top: 0;
+    width: 0.2rem;
+    height: 0.6rem;
     border: solid black;
-    border-width: 0 2px 2px 0; 
-    transform: rotate(45deg);
+    border-width: 0 0.2rem 0.2rem 0;
+    transform: translateY(0.2rem) rotate(45deg);
+    transform-origin: top right;
 } 
 
 .SearchFilterPanel .footer{
@@ -648,16 +657,6 @@ input {
 
 .CheckboxLabelEnabled:hover .CheckboxLabelRightButton {
     display: block;
-}
-
-.SearchBar button.CancelButton {
-    background: transparent;
-    border: 0px;
-    outline: 0px;
-}
-
-.SearchBar button.CancelButton:hover {
-    cursor: pointer;
 }
 
 .SearchResultItemContainer,
