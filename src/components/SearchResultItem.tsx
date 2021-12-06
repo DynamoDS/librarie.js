@@ -5,12 +5,6 @@ import * as ReactDOM from "react-dom";
 import { LibraryContainer } from "./LibraryContainer";
 import * as LibraryUtilities from "../LibraryUtilities";
 
-const libraryCategoryIcons: Map<string, string> = new Map([
-    ["query", require("../resources/icons/library-query.svg")],
-    ["create", require("../resources/icons/library-create.svg")],
-    ["action", require("../resources/icons/library-action.svg")]
-]);
-
 interface ParentTextClickedFunc {
     (pathToItem: LibraryUtilities.ItemData[]): void;
 }
@@ -96,9 +90,7 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
         let highLightedItemText = LibraryUtilities.getHighlightedText(this.props.data.text, this.props.highlightedText, true);
         let highLightedParentText = LibraryUtilities.getHighlightedText(parentText, this.props.highlightedText, false);
         let highLightedCategoryText = LibraryUtilities.getHighlightedText(categoryText, this.props.highlightedText, false);
-        let itemTypeIconPath = libraryCategoryIcons.has(this.props.data.itemType) 
-            ? libraryCategoryIcons.get(this.props.data.itemType)
-            : null;
+        let itemTypeIconPath = require(`../resources/icons/library-${this.props.data.itemType}.svg`)
         let itemDescription: JSX.Element = null;
 
         if (this.props.detailed) {
