@@ -666,6 +666,7 @@ button{
     padding: 3px;
     color: white;
     transition: 0.15s;
+    padding-left: 0.8rem;
 }
 
 .SearchResultItemContainerSelected {
