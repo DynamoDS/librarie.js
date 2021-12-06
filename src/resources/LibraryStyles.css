@@ -39,8 +39,6 @@ button{
 .LibraryItemContainer {
     flex-grow: 1;
     overflow-y: auto;
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
 }
 
 .LibraryItemContainerSection {
@@ -68,6 +66,7 @@ button{
 .LibrarySectionHeader {
     display: flex;
     padding-top: 1rem;
+    padding-left: 1.5rem;
     margin-top: 0.5rem;
     font-size: 1.4rem;
     color: #f5f5f5f5;
@@ -97,12 +96,11 @@ button{
 .LibraryItemContainerCategory > .LibraryItemHeader{
     padding-top: 1rem ;
     padding-bottom: 1rem;
+    padding-left: 1.5rem;
 }
 
 .LibraryItemContainerGroup > .LibraryItemHeader,
 .LibraryItemContainerNone > .LibraryItemHeader{
-    padding-top: 0.5rem ;
-    padding-bottom: 0.5rem;
     height: 2.5rem;
 }
 
@@ -250,7 +248,7 @@ button{
 }
 
 .BodyIndentation {
-    padding-left: 0.4rem;
+    padding-left: 1.5rem;
 }
 
 .ClusterViewContainer {
@@ -258,6 +256,7 @@ button{
     flex-direction: row;
     margin-top: 1rem;
     margin-bottom: 1rem;
+    margin-left: -1.5rem;
 }
 
 .ClusterLeftPane {
