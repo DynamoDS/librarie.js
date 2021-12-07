@@ -90,7 +90,7 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
         let highLightedItemText = LibraryUtilities.getHighlightedText(this.props.data.text, this.props.highlightedText, true);
         let highLightedParentText = LibraryUtilities.getHighlightedText(parentText, this.props.highlightedText, false);
         let highLightedCategoryText = LibraryUtilities.getHighlightedText(categoryText, this.props.highlightedText, false);
-        let itemTypeIconPath = "./dist/resources/library-" + this.props.data.itemType + ".svg";
+        let itemTypeIconPath = require(`../resources/icons/library-${this.props.data.itemType}.svg`)
         let itemDescription: JSX.Element = null;
 
         if (this.props.detailed) {
