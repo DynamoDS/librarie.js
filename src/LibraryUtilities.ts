@@ -553,6 +553,7 @@ function updateCategoryGroups(elements: LayoutElement[]) {
 }
 
 // Remove empty non-leaf nodes from items
+// Ignore the Add-ons section when removing the empty non-leaf nodes because we want to show that section always. 
 export function removeEmptyNodes(items: ItemData[]) {
     let itemRemoved = false;
 
