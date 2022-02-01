@@ -116,21 +116,26 @@ describe("removeEmptyNodes function", function () {
     expect(items.length).to.equal(0);
   });
 
-  it("should remove all items for an array of sections with no childItems", function () {
+  it("should remove all items for an array of sections(except Add-ons section) with no childItems", function () {
     let section1 = new LibraryUtilities.ItemData("section1");
     let section2 = new LibraryUtilities.ItemData("section2");
     let section3 = new LibraryUtilities.ItemData("section3");
+	let AddOnsSection = new LibraryUtilities.ItemData("Add-ons");
+		
     let items: LibraryUtilities.ItemData[] = [];
 
     section1.itemType = "section";
     section2.itemType = "section";
     section3.itemType = "section";
+	AddOnsSection.itemType = "section";
+	AddOnsSection.contextData = "Add-ons";
 
-    items = [section1, section2, section3];
+    items = [section1, section2, section3, AddOnsSection];
 
     LibraryUtilities.removeEmptyNodes(items);
 
-    expect(items.length).to.equal(0);
+    //The Add-ons section should be present.
+    expect(items.length).to.equal(1);
   });
 
   it("should remove all items from an array of sections with childItems but no leaf items", function () {
