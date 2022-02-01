@@ -566,7 +566,7 @@ export function removeEmptyNodes(items: ItemData[]) {
             items.splice(i, 1);
             i--;
             itemRemoved = true;
-        }// Do not remove the Add-ons section even when it has no child elements, as we want to show this section all times.
+        }// Do not remove the Add-ons section even when it has no child elements, as we want to show this section at all times.
     }
 
     return itemRemoved;
