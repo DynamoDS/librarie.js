@@ -562,8 +562,7 @@ export function removeEmptyNodes(items: ItemData[]) {
             if (removeEmptyNodes(item.childItems)) {
                 i--;
             }
-        } 
-		// Do not remove the Add-ons section even when it has no child elements, as we want to show this section all times.
+        }// Do not remove the Add-ons section even when it has no child elements, as we want to show this section all times.
 		else if ( (item.itemType === "section" && item.contextData !== "Add-ons") || item.itemType === "category" || item.itemType === "group" || item.itemType === "coregroup") {
             items.splice(i, 1);
             i--;
