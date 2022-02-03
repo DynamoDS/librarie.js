@@ -553,6 +553,7 @@ function updateCategoryGroups(elements: LayoutElement[]) {
 }
 
 // Remove empty non-leaf nodes from items
+// Ignore the Add-ons section when removing the empty non-leaf nodes because we want to show that section always. 
 export function removeEmptyNodes(items: ItemData[]) {
     let itemRemoved = false;
 
@@ -562,11 +563,11 @@ export function removeEmptyNodes(items: ItemData[]) {
             if (removeEmptyNodes(item.childItems)) {
                 i--;
             }
-        } else if (item.itemType === "section" || item.itemType === "category" || item.itemType === "group" || item.itemType === "coregroup") {
+        }else if ( (item.itemType === "section" && item.contextData !== "Add-ons") || item.itemType === "category" || item.itemType === "group" || item.itemType === "coregroup") {
             items.splice(i, 1);
             i--;
             itemRemoved = true;
-        }
+        }// Do not remove the Add-ons section even when it has no child elements, as we want to show this section at all times.
     }
 
     return itemRemoved;
