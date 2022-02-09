@@ -81,6 +81,8 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
         let ItemContainerStyle = this.state.selected ? "SearchResultItemContainerSelected" : "SearchResultItemContainer";
         let iconPath = this.props.data.iconUrl;
 
+		// Render the element only if the search element is a not a library section.
+		// In the case where the search element is a library section, the pathToItem list may not have any child elements and should not displayed in search results.
         if(this.props.data.itemType !== "section" && this.props.data.pathToItem.length - 2 > 0)
 		{
 			// The parent of a search result item is the second last entry in 'pathToItem'
