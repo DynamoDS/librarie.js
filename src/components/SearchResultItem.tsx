@@ -81,46 +81,57 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
         let ItemContainerStyle = this.state.selected ? "SearchResultItemContainerSelected" : "SearchResultItemContainer";
         let iconPath = this.props.data.iconUrl;
 
-        // The parent of a search result item is the second last entry in 'pathToItem'
-        let parentText = this.props.data.pathToItem[this.props.data.pathToItem.length - 2].text;
+		// Render the element only if the search element is a not a library section.
+		// In the case where the search element is a library section, the pathToItem list may not have any child elements and should not displayed in search results.
+        if(this.props.data.itemType !== "section" && this.props.data.pathToItem.length - 2 > 0)
+		{
+			// The parent of a search result item is the second last entry in 'pathToItem'
+			let parentText = this.props.data.pathToItem[this.props.data.pathToItem.length - 2].text;
+			
+			// Category of the item is the item with type category in the array pathToItem
+			let categoryText = this.props.data.pathToItem.find(item => item.itemType === "category").text;
+			let parameters = this.props.data.parameters;
+			let highLightedItemText = LibraryUtilities.getHighlightedText(this.props.data.text, this.props.highlightedText, true);
+			let highLightedParentText = LibraryUtilities.getHighlightedText(parentText, this.props.highlightedText, false);
+			let highLightedCategoryText = LibraryUtilities.getHighlightedText(categoryText, this.props.highlightedText, false);
+			let itemTypeIconPath = require(`../resources/icons/library-${this.props.data.itemType}.svg`)
+			let itemDescription: JSX.Element = null;
+				
+			if (this.props.detailed) {
+					let description = "No description available";
+					if (this.props.data.description && this.props.data.description.length > 0) {
+						description = this.props.data.description;
+					}
 
-        // Category of the item is the item with type category in the array pathToItem
-        let categoryText = this.props.data.pathToItem.find(item => item.itemType === "category").text;
-        let parameters = this.props.data.parameters;
-        let highLightedItemText = LibraryUtilities.getHighlightedText(this.props.data.text, this.props.highlightedText, true);
-        let highLightedParentText = LibraryUtilities.getHighlightedText(parentText, this.props.highlightedText, false);
-        let highLightedCategoryText = LibraryUtilities.getHighlightedText(categoryText, this.props.highlightedText, false);
-        let itemTypeIconPath = require(`../resources/icons/library-${this.props.data.itemType}.svg`)
-        let itemDescription: JSX.Element = null;
+					itemDescription = <div className={"ItemDescription"}>{description}</div>;
+				}
 
-        if (this.props.detailed) {
-            let description = "No description available";
-            if (this.props.data.description && this.props.data.description.length > 0) {
-                description = this.props.data.description;
-            }
-
-            itemDescription = <div className={"ItemDescription"}>{description}</div>;
-        }
-
-        return (
-            <div className={ItemContainerStyle} onClick={this.onItemClicked.bind(this)}
-                onMouseEnter={this.onLibraryItemMouseEnter.bind(this)} onMouseLeave={this.onLibraryItemMouseLeave.bind(this)}>
-                <img className={"ItemIcon"} src={iconPath} onError={this.onImageLoadFail.bind(this)} />
-                <div className={"ItemInfo"}>
-                    <div className={"ItemTitle"}>{highLightedItemText}
-                        <div className={"LibraryItemParameters"}>{parameters}</div>
-                    </div>
-                    {itemDescription}
-                    <div className={"ItemDetails"}>
-                        <div className={"ItemParent"} onClick={this.onParentTextClicked.bind(this)}>
-                            {highLightedParentText}
-                        </div>
-                        <img className={"ItemTypeIcon"} src={itemTypeIconPath} onError={this.onImageLoadFail.bind(this)} />
-                        <div className={"ItemCategory"}>{highLightedCategoryText}</div>
-                    </div>
-                </div>
-            </div>
-        );
+			return (
+				<div className={ItemContainerStyle} onClick={this.onItemClicked.bind(this)}
+					onMouseEnter={this.onLibraryItemMouseEnter.bind(this)} onMouseLeave={this.onLibraryItemMouseLeave.bind(this)}>
+					<img className={"ItemIcon"} src={iconPath} onError={this.onImageLoadFail.bind(this)} />
+					<div className={"ItemInfo"}>
+						<div className={"ItemTitle"}>{highLightedItemText}
+							<div className={"LibraryItemParameters"}>{parameters}</div>
+						</div>
+						{itemDescription}
+						<div className={"ItemDetails"}>
+							<div className={"ItemParent"} onClick={this.onParentTextClicked.bind(this)}>
+								{highLightedParentText}
+							</div>
+							<img className={"ItemTypeIcon"} src={itemTypeIconPath} onError={this.onImageLoadFail.bind(this)} />
+							<div className={"ItemCategory"}>{highLightedCategoryText}</div>
+						</div>
+					</div>
+				</div>
+			);	
+		}
+		else
+		{
+			return (
+				<div></div>
+			);
+		}
     }
 
     onImageLoadFail(event: any) {
