@@ -48,7 +48,7 @@
     "enzyme-to-json": "^3.6.1",
     "file-loader": "^0.10.1",
     "jest": "^27.5.1",
-    "jest-jenkins-reporter": "^1.0.2",
+    "jest-junit": "^13.0.0",
     "mocha": "^8.0.0",
     "mocha-junit-reporter": "^1.23.1",
     "react-test-renderer": "^16.1.0",
@@ -84,11 +84,12 @@
       "<rootDir>/node_modules/enzyme-to-json/serializer"
     ],
     "mapCoverage": true,
-    "testResultsProcessor": "jest-jenkins-reporter"
-  },
-  "jestSonar": {
-    "reportPath": "TestResults",
-    "reportFile": "TestReport.xml",
-    "indent": 4
+    "reporters": [ "default",
+      ["jest-junit",{
+       "outputDirectory":"TestResults",
+       "outputName":"TestReport.xml",
+       "classNameTemplate": "{classname}",
+       "titleTemplate": "{title}"
+       } ]]
   }
 }
