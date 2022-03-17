@@ -1,5 +1,6 @@
 "use strict";
 const webpack = require('webpack');
+const TerserPlugin = require("terser-webpack-plugin");
 let productionBuild = (process.env.NODE_ENV == "production");
 let plugins = [];
 
@@ -10,17 +11,6 @@ plugins.push(
     })
 );
 
-if (productionBuild) {
-    plugins.push(
-        new webpack.optimize.UglifyJsPlugin({
-            minimize: true,
-            sourceMap: true, 
-            mangle: {
-                except: ["on"]
-            }
-        })
-    );
-}
 
 module.exports = {
     entry: [
@@ -34,6 +24,10 @@ module.exports = {
         publicPath: "./dist",
         libraryTarget: "umd",
         library: "LibraryEntryPoint"
+    },
+    optimization:{
+        minimize: productionBuild ? true : false,
+        minimizer: [new TerserPlugin({terserOptions:{mangle:{reserved:["on"]}}})],
     },
     plugins: plugins,
 
@@ -53,7 +47,7 @@ module.exports = {
         rules: [
             {
                 test: /\.tsx?$/,
-                loader: ["awesome-typescript-loader"] // All files with a '.ts' or '.tsx' extension will be handled by 'awesome-typescript-loader'.
+                use: 'ts-loader' // All files with a '.ts' or '.tsx' extension will be handled by 'ts-loader'.
             },
             {
                 test: /\.js$/,
@@ -62,7 +56,7 @@ module.exports = {
             },
             {
                 test: /\.css$/,
-                loader: ["style-loader", "css-loader"]
+                use: ["style-loader", "css-loader"]
             },
             {
                 test: /\.ttf|.otf|.eot|.woff|.svg|.png$/,

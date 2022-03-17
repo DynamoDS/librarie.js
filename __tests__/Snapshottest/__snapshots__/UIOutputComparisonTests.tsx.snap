@@ -89,6 +89,7 @@ exports[`LibraryContainer Test UI rendering of Library Item and child components
       "setLoadedTypesJsonHandler": null,
     }
   }
+  showItemSummary={false}
 >
   <div
     className="LibraryItemContainerNone"
