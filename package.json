@@ -20,7 +20,6 @@
     "express": "^4.14.0",
     "hosted-git-info": "^3.0.8",
     "kind-of": "^6.0.3",
-    "merge": "^2.1.0",
     "node-notifier": "^9.0.0",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
@@ -84,12 +83,17 @@
       "<rootDir>/node_modules/enzyme-to-json/serializer"
     ],
     "mapCoverage": true,
-    "reporters": [ "default",
-      ["jest-junit",{
-       "outputDirectory":"TestResults",
-       "outputName":"TestReport.xml",
-       "classNameTemplate": "{classname}",
-       "titleTemplate": "{title}"
-       } ]]
+    "reporters": [
+      "default",
+      [
+        "jest-junit",
+        {
+          "outputDirectory": "TestResults",
+          "outputName": "TestReport.xml",
+          "classNameTemplate": "{classname}",
+          "titleTemplate": "{title}"
+        }
+      ]
+    ]
   }
 }
