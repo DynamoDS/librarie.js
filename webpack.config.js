@@ -7,7 +7,6 @@ let plugins = [];
 plugins.push(
     new webpack.DefinePlugin({
         'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
-        'global': {}
     })
 );
 
@@ -17,13 +16,13 @@ module.exports = {
         "./src/LibraryUtilities.ts",
         "./src/entry-point.tsx"
     ],
-    target: "node",
+    target: "web",
     output: {
         filename: productionBuild ? "librarie.min.js" : "librarie.js",
         path: __dirname + "/dist/",
         publicPath: "./dist",
         libraryTarget: "umd",
-        library: "LibraryEntryPoint"
+        library: "LibraryEntryPoint",
     },
     optimization:{
         minimize: productionBuild ? true : false,
@@ -62,7 +61,8 @@ module.exports = {
                 test: /\.ttf|.otf|.eot|.woff|.svg|.png$/,
                 loader: "file-loader",
                 options: {
-                    name: '/resources/[name].[ext]'
+                    name: '/resources/[name].[ext]',
+                    esModule:false
                 }
             }
         ]
