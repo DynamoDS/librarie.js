@@ -19,11 +19,9 @@
   "dependencies": {
     "express": "^4.14.0",
     "hosted-git-info": "^3.0.8",
-    "kind-of": "^6.0.3",
     "node-notifier": "^9.0.0",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
-    "set-value": "^4.0.1",
     "underscore": "^1.12.1"
   },
   "devDependencies": {
