@@ -1,20 +1,22 @@
 "use strict";
 const webpack = require('webpack');
 const TerserPlugin = require("terser-webpack-plugin");
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 let productionBuild = (process.env.NODE_ENV == "production");
 let plugins = [];
 
 plugins.push(
     new webpack.DefinePlugin({
         'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
-    })
+    }),
+    //uncomment to analyze what is bundled.
+    //new BundleAnalyzerPlugin(),
 );
 
 
 module.exports = {
     entry: [
         "core-js/actual/url",
-        "./src/LibraryUtilities.ts",
         "./src/entry-point.tsx"
     ],
     target: ["web","es5"],
@@ -28,7 +30,6 @@ module.exports = {
     optimization:{
         minimize: productionBuild ? true : false,
         minimizer: [new TerserPlugin({terserOptions:{mangle:{reserved:["on","__webpack_require__"]}}})],
-        usedExports: true,
     },
     mode:productionBuild? "production":"development",
     plugins: plugins,

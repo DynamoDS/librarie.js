@@ -7,9 +7,6 @@ import { Reactor, Event } from "./EventHandler";
 import "core-js/actual/string/starts-with";
 import "core-js/actual/string/includes";
 import "core-js/actual/array/";
-import "core-js/actual/dom-collections/for-each";
-import "core-js/actual/dom-collections/iterator";
-import "core-js/features/iterator/for-each";
 
 export function CreateJsonDownloader(jsonUrls: string[], callback: Function) {
     return new JsonDownloader(jsonUrls, callback);
