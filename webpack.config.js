@@ -13,21 +13,24 @@ plugins.push(
 
 module.exports = {
     entry: [
+        "core-js/actual/url",
         "./src/LibraryUtilities.ts",
         "./src/entry-point.tsx"
     ],
-    target: "web",
+    target: ["web","es5"],
     output: {
         filename: productionBuild ? "librarie.min.js" : "librarie.js",
         path: __dirname + "/dist/",
-        publicPath: "./dist",
+        publicPath: "./dist/",
         libraryTarget: "umd",
         library: "LibraryEntryPoint",
     },
     optimization:{
         minimize: productionBuild ? true : false,
-        minimizer: [new TerserPlugin({terserOptions:{mangle:{reserved:["on"]}}})],
+        minimizer: [new TerserPlugin({terserOptions:{mangle:{reserved:["on","__webpack_require__"]}}})],
+        usedExports: true,
     },
+    mode:productionBuild? "production":"development",
     plugins: plugins,
 
     // Enable sourcemaps for debugging webpack's output.
@@ -59,10 +62,9 @@ module.exports = {
             },
             {
                 test: /\.ttf|.otf|.eot|.woff|.svg|.png$/,
-                loader: "file-loader",
-                options: {
-                    name: '/resources/[name].[ext]',
-                    esModule:false
+                type: 'asset/resource',
+                generator:{
+                    filename:'resources/[name][ext][query]'
                 }
             }
         ]
