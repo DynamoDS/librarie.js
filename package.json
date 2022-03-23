@@ -19,7 +19,6 @@
   "dependencies": {
     "core-js": "^3.21.1",
     "express": "^4.14.0",
-    "hosted-git-info": "^3.0.8",
     "node-notifier": "^9.0.0",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
