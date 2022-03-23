@@ -29,10 +29,9 @@
   </PropertyGroup>
   <PropertyGroup>
       <RuntimeIdentifier>win10-x64</RuntimeIdentifier>
-      <FrameworkPathOverride>$(NuGetPackageRoot)microsoft.targetingpack.netframework.v4.7\1.0.1\lib\net47\</FrameworkPathOverride>    
   </PropertyGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'net47' ">
-      <PackageReference Include="Microsoft.TargetingPack.NETFramework.v4.7" Version="1.0.1" ExcludeAssets="All" PrivateAssets="All" />
+      <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.2" PrivateAssets="All" />
   </ItemGroup>
   <ItemGroup>
       <Content Include="dist/**/*" Exclude="$(ExcludeFromPackage)" >
