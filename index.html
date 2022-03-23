@@ -20,7 +20,10 @@
 
     <!-- The main library view compoment -->
     <script src='./dist/librarie.js'></script>
-
+    <!-- uncomment to debug in IE11 (polyfill fetch and promise)
+    <script src="//cdn.jsdelivr.net/npm/bluebird@3.7.2/js/browser/bluebird.min.js"></script>
+    <script src='https://unpkg.com/whatwg-fetch@3.6.2/dist/fetch.umd.js'></script>
+    -->
     <script>
         let jsonUrls = ["loadedTypes", "layoutSpecs"];
         let downloader = LibraryEntryPoint.CreateJsonDownloader(jsonUrls, function (jsonUrl, jsonObject) {

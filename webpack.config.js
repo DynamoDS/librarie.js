@@ -16,10 +16,9 @@ plugins.push(
 
 module.exports = {
     entry: [
-        "core-js/actual/url",
         "./src/entry-point.tsx"
     ],
-    target: ["web","es5"],
+    target: "web",
     output: {
         filename: productionBuild ? "librarie.min.js" : "librarie.js",
         path: __dirname + "/dist/",
@@ -63,9 +62,9 @@ module.exports = {
             },
             {
                 test: /\.ttf|.otf|.eot|.woff|.svg|.png$/,
-                type: 'asset/resource',
-                generator:{
-                    filename:'resources/[name][ext][query]'
+                loader: 'file-loader',
+                options:{
+                    name:'/resources/[name].[ext][query]'
                 }
             }
         ]
