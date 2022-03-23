@@ -1,11 +1,16 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import * as React from 'react';
-import { shallow, mount, configure } from 'enzyme';
+import { shallow, mount, configure, ReactWrapper } from 'enzyme';
 import * as LibraryEntryPoint from '../src/entry-point';
 import { LibraryItem } from '../src/components/LibraryItem';
 import { SearchResultItem } from '../src/components/SearchResultItem';
 import { ItemData } from "../src/LibraryUtilities";
 import * as Adapter from 'enzyme-adapter-react-16';
 import * as chai from 'chai';
+import { LibraryContainer } from '../src/components/LibraryContainer';
 
 configure({adapter: new Adapter()});
 
@@ -177,7 +182,7 @@ describe("LibraryContainer UI", function () {
     chai.expect(header).to.have.lengthOf(1);
     var count = 0;
     //replace the scroll method with a method which ends the test.
-    libContainer.getNode().scrollToExpandedItem = () => { count = count + 1; }
+    (libContainer.getNode() as unknown as LibraryContainer).scrollToExpandedItem = () => { count = count + 1; }
     header.simulate('click');
     header.simulate('click');
     chai.assert.equal(count, 1);
@@ -216,8 +221,8 @@ describe("LibraryContainer UI", function () {
       // Verify the search results are correct
       let value = libContainer.find('SearchResultItem');
       chai.expect(value).to.have.lengthOf(2);
-      chai.expect(value.at(0).props().data.text).to.equal("Child1");
-      chai.expect(value.at(1).props().data.text).to.equal("Child2");
+      chai.expect((value.at(0).props() as any).data.text).to.equal("Child1");
+      chai.expect((value.at(1).props() as any).data.text).to.equal("Child2");
       done();// For testframework to figure out when to complete this test
     }, 500);
   });
@@ -283,8 +288,8 @@ describe("LibraryContainer UI", function () {
       // Get the search results   
       let value = libContainer.find('SearchResultItem');
       chai.expect(value).to.have.lengthOf(2);
-      chai.expect(value.at(0).props().data.text).to.equal("Child1");
-      chai.expect(value.at(1).props().data.text).to.equal("Child2");
+      chai.expect((value.at(0).props() as any).data.text).to.equal("Child1");
+      chai.expect((value.at(1).props()as any).data.text).to.equal("Child2");
       // Make sure the search results has correct item description
       let describe = libContainer.find('div.ItemDescription');
       chai.expect(describe).to.have.lengthOf(2);
@@ -346,16 +351,16 @@ describe("LibraryContainer UI", function () {
       // Get the search results   
       let value = libContainer.find('SearchResultItem');
       chai.expect(value).to.have.lengthOf(2);
-      chai.expect(value.at(0).props().data.text).to.equal("Child1");
-      chai.expect(value.at(1).props().data.text).to.equal("Child2");
+      chai.expect((value.at(0).props() as any).data.text).to.equal("Child1");
+      chai.expect((value.at(1).props() as any).data.text).to.equal("Child2");
 
       //make the library item expanded to false.
-      value.at(0).props().data.pathToItem[0].expanded = false;
+      (value.at(0).props() as any).data.pathToItem[0].expanded = false;
       
       let detials = libContainer.find('div.ItemParent');
       //click the item text
       detials.at(0).simulate('click');
-      chai.expect(value.at(0).props().data.pathToItem[0].expanded).to.be.true;
+      chai.expect((value.at(0).props() as any).data.pathToItem[0].expanded).to.be.true;
       done();
     }, 500);
   });
@@ -375,7 +380,7 @@ describe("LibraryContainer UI", function () {
         
         header.simulate('click');
 
-        let libraryItem = libContainer.find('LibraryItem');
+        let libraryItem = libContainer.find('LibraryItem') as any;
         chai.expect(libraryItem.nodes[2].props.data.expanded).to.be.true; 
 
       });
@@ -384,7 +389,7 @@ describe("LibraryContainer UI", function () {
         // Test for positive scenario where the node names are correct
         let libContainer = mount(
           libController.createLibraryContainer()
-        );
+        ) as unknown as ReactWrapper<{},{},LibraryContainer>;;
         // Load the data to libController
         libController.setLoadedTypesJson(loadedTypesJson, false);
         libController.setLayoutSpecsJson(layoutSpecsJson, false);

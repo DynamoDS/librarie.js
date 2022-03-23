@@ -4,8 +4,9 @@ import * as ReactDOM from "react-dom";
 import { LibraryContainer } from "./components/LibraryContainer";
 import { JsonDownloader } from "./LibraryUtilities";
 import { Reactor, Event } from "./EventHandler";
-import "core-js";
-
+import "core-js/actual/string/starts-with";
+import "core-js/actual/string/includes";
+import "core-js/actual/array/";
 
 export function CreateJsonDownloader(jsonUrls: string[], callback: Function) {
     return new JsonDownloader(jsonUrls, callback);

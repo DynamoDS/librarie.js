@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import * as React from 'react';
 import * as LibraryEntryPoint from '../../src/entry-point';
 import { LibraryContainer } from '../../src/components/LibraryContainer';
@@ -30,7 +34,7 @@ describe("LibraryContainer", function () {
 
     // Create "LibraryContainer" to pass as an argument for creation of "LibraryItem"
     let libContainer = LibraryEntryPoint.CreateLibraryController();
-    let libraryItem = shallow(<LibraryItem libraryContainer={libContainer} data={data} />);
+    let libraryItem = shallow(<LibraryItem libraryContainer={libContainer} data={data} showItemSummary={false} />);
     // When running for the first time creates a snapshot in __snapshots__ folder
     // To compare with the existing snapshot for subsequent running. 
     expect(toJson(libraryItem)).toMatchSnapshot();
@@ -53,7 +57,7 @@ describe("LibraryContainer", function () {
     // Create "LibraryContainer" to pass as an argument for creation of "LibraryItem"
     let libContainer = LibraryEntryPoint.CreateLibraryController();
     // Render with mount to test child components
-    let libraryItem = mount(<LibraryItem libraryContainer={libContainer} data={data} />);
+    let libraryItem = mount(<LibraryItem libraryContainer={libContainer} data={data} showItemSummary={false} />);
     expect(toJson(libraryItem)).toMatchSnapshot();  // toJson serializes the output    
   });
   it("Demonstrate testing UIitems loads correctly from static data", function () {
