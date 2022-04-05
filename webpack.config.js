@@ -1,40 +1,36 @@
 "use strict";
 const webpack = require('webpack');
+const TerserPlugin = require("terser-webpack-plugin");
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 let productionBuild = (process.env.NODE_ENV == "production");
 let plugins = [];
 
 plugins.push(
     new webpack.DefinePlugin({
         'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
-        'global': {}
-    })
+    }),
+    //uncomment to analyze what is bundled.
+    //new BundleAnalyzerPlugin(),
 );
 
-if (productionBuild) {
-    plugins.push(
-        new webpack.optimize.UglifyJsPlugin({
-            minimize: true,
-            sourceMap: true, 
-            mangle: {
-                except: ["on"]
-            }
-        })
-    );
-}
 
 module.exports = {
     entry: [
-        "./src/LibraryUtilities.ts",
         "./src/entry-point.tsx"
     ],
-    target: "node",
+    target: "web",
     output: {
         filename: productionBuild ? "librarie.min.js" : "librarie.js",
         path: __dirname + "/dist/",
-        publicPath: "./dist",
+        publicPath: "./dist/",
         libraryTarget: "umd",
-        library: "LibraryEntryPoint"
+        library: "LibraryEntryPoint",
     },
+    optimization:{
+        minimize: productionBuild ? true : false,
+        minimizer: [new TerserPlugin({terserOptions:{mangle:{reserved:["on","__webpack_require__"]}}})],
+    },
+    mode:productionBuild? "production":"development",
     plugins: plugins,
 
     // Enable sourcemaps for debugging webpack's output.
@@ -53,7 +49,7 @@ module.exports = {
         rules: [
             {
                 test: /\.tsx?$/,
-                loader: ["awesome-typescript-loader"] // All files with a '.ts' or '.tsx' extension will be handled by 'awesome-typescript-loader'.
+                use: 'ts-loader' // All files with a '.ts' or '.tsx' extension will be handled by 'ts-loader'.
             },
             {
                 test: /\.js$/,
@@ -62,13 +58,13 @@ module.exports = {
             },
             {
                 test: /\.css$/,
-                loader: ["style-loader", "css-loader"]
+                use: ["style-loader", "css-loader"]
             },
             {
                 test: /\.ttf|.otf|.eot|.woff|.svg|.png$/,
-                loader: "file-loader",
-                options: {
-                    name: '/resources/[name].[ext]'
+                loader: 'file-loader',
+                options:{
+                    name:'/resources/[name].[ext][query]'
                 }
             }
         ]

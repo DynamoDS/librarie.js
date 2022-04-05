@@ -1,8 +1,12 @@
-import { shallow, mount, configure } from 'enzyme';
+/**
+ * @jest-environment jsdom
+ */
+import { shallow, mount, configure, ReactWrapper } from 'enzyme';
 import { expect } from 'chai';
 import * as LibraryEntryPoint from '../src/entry-point';
 import * as Adapter from 'enzyme-adapter-react-16';
-
+import { LibraryContainer } from '../src/components/LibraryContainer';
+import { ItemData } from '../src/LibraryUtilities';
 configure({adapter: new Adapter()});
 
 describe("LibraryContainer class", function () {
@@ -100,20 +104,20 @@ describe("LibraryContainer class", function () {
     );
 
     expect(libContainer).to.not.be.undefined;
-    expect(libContainer.instance().loadedTypesJson).to.be.null;
+    expect((libContainer.instance() as LibraryContainer).loadedTypesJson).to.be.null;
 
     libController.setLoadedTypesJson(loadedTypesJson, false);
 
-    expect(libContainer.instance().loadedTypesJson).to.not.be.null;
-    expect(libContainer.instance().loadedTypesJson.loadedTypes).to.not.be.null;
-    expect(libContainer.instance().loadedTypesJson.loadedTypes).to.have.length.of("2");
-    expect(libContainer.instance().loadedTypesJson.loadedTypes[1].fullyQualifiedName).to.equal("Child2");
+    expect((libContainer.instance() as LibraryContainer)).to.not.be.null;
+    expect((libContainer.instance() as LibraryContainer).loadedTypesJson.loadedTypes).to.not.be.null;
+    expect((libContainer.instance() as LibraryContainer).loadedTypesJson.loadedTypes).to.have.length.of("2");
+    expect((libContainer.instance() as LibraryContainer).loadedTypesJson.loadedTypes[1].fullyQualifiedName).to.equal("Child2");
   });
 
   it("should set the layoutSpecsJson correctly", function () {
     let libContainer = mount(
       libController.createLibraryContainer()
-    );
+    ) as unknown as ReactWrapper<{},{},LibraryContainer>;
 
     expect(libContainer).to.not.be.undefined;
     expect(libContainer.instance().layoutSpecsJson).to.be.null;
@@ -149,12 +153,12 @@ describe("LibraryContainer class", function () {
 
     let libraryItem = libContainer.find('LibraryItem');
     expect(libraryItem).to.have.lengthOf(1);
-    expect(libraryItem.prop('data').childItems).to.have.lengthOf(1);
-    expect(libraryItem.prop('data').childItems[0].text).to.equal("Parent");
-    expect(libraryItem.prop('data').childItems[0].itemType).to.equal("category");
-    expect(libraryItem.prop('data').childItems[0].childItems).to.have.lengthOf(2);
-    expect(libraryItem.prop('data').childItems[0].childItems[0].text).to.equal("Child1");
-    expect(libraryItem.prop('data').childItems[0].childItems[1].text).to.equal("Child2");
+    expect((libraryItem.prop<ItemData>('data')).childItems).to.have.lengthOf(1);
+    expect((libraryItem.prop<ItemData>('data')).childItems[0].text).to.equal("Parent");
+    expect((libraryItem.prop<ItemData>('data')).childItems[0].itemType).to.equal("category");
+    expect((libraryItem.prop<ItemData>('data')).childItems[0].childItems).to.have.lengthOf(2);
+    expect((libraryItem.prop<ItemData>('data')).childItems[0].childItems[0].text).to.equal("Child1");
+    expect((libraryItem.prop<ItemData>('data')).childItems[0].childItems[1].text).to.equal("Child2");
   });
 
 });
