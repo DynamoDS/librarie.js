@@ -60,7 +60,7 @@ soc2:
     repository: env.HARMONY_REPO
     third_party_lib_paths:
       - "node_modules"
-    timeout: 600
+    timeout: 3000
       
 schedule:
   cron_schedule: "once_a_month"
