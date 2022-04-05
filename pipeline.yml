@@ -11,7 +11,6 @@ env:
 check_changelog_updated_on_pr: false
 pipeline_os: "Linux"
 force_slack_notification : true
-nodejs_version: "10"
 language: typescript
 
 jenkins_creds:
@@ -24,10 +23,10 @@ build:
   -
     customized_builder_image:
       registry: artifactory
-      url: artifactory.dev.adskengineer.net/dynamo/dynamolibrariejs:dotnetcore3
+      url: artifactory.dev.adskengineer.net/dynamo/dynamolibrariejs:dotnetcore3_node16
     scripts:
-      - "mv -f /home/administrator/.npmrc $WORKSPACE"
-      - "npm install"
+      - "mv -f /home/ctr-user/.npmrc $WORKSPACE"
+      - "npm ci"
       - "npm run build"
 
 ci_test:
@@ -35,7 +34,7 @@ ci_test:
     -
       customized_builder_image:
         registry: artifactory
-        url: artifactory.dev.adskengineer.net/dynamo/dynamolibrariejs:dotnetcore3
+        url: artifactory.dev.adskengineer.net/dynamo/dynamolibrariejs:dotnetcore3_node16
       scripts:
         - "npm run test"
         - "npm run utiltest"
@@ -49,7 +48,7 @@ deployment:
     type: customized
     customized_builder_image:
       registry: artifactory
-      url: artifactory.dev.adskengineer.net/dynamo/dynamolibrariejs:dotnetcore3
+      url: artifactory.dev.adskengineer.net/dynamo/dynamolibrariejs:dotnetcore3_node16
     scripts:
       - "dotnet pack -c Release -o nuget --version-suffix \"beta$BUILD_NUMBER\""
       - "dotnet nuget push \"$(find nuget -type f -name *.nupkg)\" -s https://api.nuget.org/v3/index.json -k $API_KEY"
