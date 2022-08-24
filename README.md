@@ -56,6 +56,10 @@ Note: If you are having trouble running `npm install` and are outside the adsk n
  ```
 - Instructions to write a tests are found at https://github.com/DynamoDS/librarie.js/wiki/Author-and-run-tests-for-librarie.js
 
+### Generate Third Party License Info
+* to generate about box html files use `npm run generate_license`, this will output alternative about box files to `license_output/` One will contain the full transitive production dep list, the other will contain the direct production deps.
+
+
 ## Usage
 There are few ways in which library view (i.e. `LibraryContainer` object) can be constructed. Regardless of which method is used, the caller should first call `LibraryEntryPoint.CreateLibraryController` method to create `LibraryController` before obtaining an instance of `LibraryContainer` object.
 
