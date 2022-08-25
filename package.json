@@ -11,7 +11,7 @@
     "serve": "npm run dev & node ./index.js",
     "lic_direct": "npx adsk-npm-license-puller --path . --app-name 'librarieJS' --verbose --about-box ./license_output/about-box_direct.html --about-box-type desktop --year 2022 --paos ./license_output/paos_direct.csv",
     "lic_transitive": "npx adsk-npm-license-puller --path . --app-name 'librarieJS' --verbose --about-box ./license_output/about-box_transitive.html --about-box-type desktop --transitive  --year 2022 --paos ./license_output/paos_transitive.csv",
-    "generate_license":"npm run lic_direct && npm run lic_transitive"
+    "generate_license": "npm install @adsk/adsk-npm-license-puller --no-save --force && npm run lic_direct && npm run lic_transitive"
   },
   "keywords": [
     "Dynamo",
@@ -28,7 +28,6 @@
     "underscore": "^1.12.1"
   },
   "devDependencies": {
-    "@adsk/adsk-npm-license-puller": "^3.7.0",
     "@types/chai": "^3.4.35",
     "@types/enzyme": "^3.10.8",
     "@types/enzyme-adapter-react-16": "^1.0.6",
