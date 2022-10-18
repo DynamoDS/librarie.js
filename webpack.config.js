@@ -62,9 +62,9 @@ module.exports = {
             },
             {
                 test: /\.ttf|.otf|.eot|.woff|.svg|.png$/,
-                loader: 'file-loader',
-                options:{
-                    name:'/resources/[name].[ext][query]'
+                type: 'asset/resource',
+                generator:{
+                    filename:'resources/[name][ext][query]'
                 }
             }
         ]
