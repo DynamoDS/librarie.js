@@ -804,4 +804,5 @@ button {
   padding: 5px;
   font-family: "Artifakt Element";
   font-weight: 700;
+  z-index: 9;
 }

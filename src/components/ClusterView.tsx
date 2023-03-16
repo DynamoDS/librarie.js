@@ -20,7 +20,7 @@
 import * as React from "react";
 import { LibraryContainer } from "./LibraryContainer";
 import { LibraryItem } from "./LibraryItem";
-import { ItemData } from "../LibraryUtilities";
+import { ItemData, TooltipText } from "../LibraryUtilities";
 import { Tooltip } from "react-tooltip";
 require("react-tooltip/dist/react-tooltip.css");
 
@@ -33,12 +33,8 @@ export interface ClusterViewProps {
 }
 
 export class ClusterView extends React.Component<ClusterViewProps> {
-  readableClusterType (clusterType:string): string {
-    return clusterType.charAt(0).toUpperCase()
-          + clusterType.slice(1);
-  };
-
-  render() {
+    render() {
+      const tooltipContent = TooltipText[this.props.clusterType as keyof typeof TooltipText]
     return (
       <div className={"ClusterViewContainer"}>
         <div className={`ClusterLeftPane ${this.props.clusterType}`}>
@@ -48,7 +44,7 @@ export class ClusterView extends React.Component<ClusterViewProps> {
           <Tooltip
             anchorSelect={`#${this.props.clusterType}`}
             place="bottom"
-            content={this.readableClusterType(this.props.clusterType)}
+            content={tooltipContent}
             className={"customTooltip"}
           />
         </div>
