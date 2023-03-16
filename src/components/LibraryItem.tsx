@@ -141,9 +141,9 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
             return null;
         }
 
-        let nestedElements: JSX.Element = null;
-        let clusteredElements: JSX.Element = null;
-        let bodyIndentation: JSX.Element = null;
+        let nestedElements: JSX.Element | null = null;
+        let clusteredElements: JSX.Element | null = null;
+        let bodyIndentation: JSX.Element | null = null;
         let header = this.getHeaderElement();
 
         // visible only nested elements when expanded.
@@ -183,7 +183,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         event.target.src = require("../resources/icons/default-icon.svg");
     }
 
-    getIconElement(): JSX.Element {
+    getIconElement(): JSX.Element | null {
         // Category type don't display any icon
         if(this.props.data.itemType === "category"){
             return null;
@@ -228,7 +228,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
     }
 
     // Show arrow for non-section, non-category and non-leaf items
-    getArrowElement(): JSX.Element {
+    getArrowElement(): JSX.Element | null {
         //no arrow for groups defined in layout spec
         if (this.props.data.itemType === "section" || this.props.data.itemType === "coregroup" ) { 
             return null;
@@ -261,10 +261,10 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         return <img className={`Arrow`} src={arrowIcon} onError={this.onImageLoadFail} />;
     }
 
-    getHeaderElement(): JSX.Element {
+    getHeaderElement(): JSX.Element | null {
         let arrow = this.getArrowElement();
         let iconElement = this.getIconElement();
-        let parameters: JSX.Element = null;
+        let parameters: JSX.Element | null = null;
 
         if (this.props.data.parameters && this.props.data.parameters.length > 0 && this.props.data.childItems.length == 0) {
             parameters = <div className="LibraryItemParameters">{this.props.data.parameters}</div>;
@@ -330,7 +330,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         }
     }
 
-    getNestedElements(groupedItems: GroupedItems): JSX.Element {
+    getNestedElements(groupedItems: GroupedItems): JSX.Element | null {
 
         let regularItems = groupedItems.getOtherItems();
         if (regularItems.length <= 0) {
@@ -366,13 +366,13 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         );
     }
 
-    getClusteredElements(groupedItems: GroupedItems): JSX.Element {
+    getClusteredElements(groupedItems: GroupedItems): JSX.Element | null {
 
-        let createMethods = groupedItems.getCreateItems();
-        let actionMethods = groupedItems.getActionItems();
-        let queryMethods = groupedItems.getQueryItems();
+        const createMethods = groupedItems.getCreateItems();
+        const actionMethods = groupedItems.getActionItems();
+        const queryMethods = groupedItems.getQueryItems();
 
-        let createCluster = null;
+        let createCluster: JSX.Element | null = null;
         if (createMethods.length > 0 && createMethods.some(item => item.visible)) {
             createCluster = (<ClusterView
                 libraryContainer={this.props.libraryContainer}
@@ -382,7 +382,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
                 childItems={createMethods} />);
         }
 
-        let actionCluster = null;
+        let actionCluster: JSX.Element | null = null;
         if (actionMethods.length > 0 && actionMethods.some(item => item.visible)) {
             actionCluster = (<ClusterView
                 libraryContainer={this.props.libraryContainer}
@@ -392,7 +392,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
                 childItems={actionMethods} />);
         }
 
-        let queryCluster = null;
+        let queryCluster: JSX.Element | null = null;
         if (queryMethods.length > 0 && queryMethods.some(item => item.visible)) {
             queryCluster = (<ClusterView
                 libraryContainer={this.props.libraryContainer}

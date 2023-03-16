@@ -49,16 +49,16 @@ export class LibraryController {
     DefaultSectionName = "default";
     MiscSectionName = "Miscellaneous";
 
-    reactor: Reactor = null;
+    reactor: Reactor | null = null;
     requestHandler: any = {};
-    setLoadedTypesJsonHandler: SetLoadedTypesJsonFunc = null;
-    setLayoutSpecsJsonHandler: SetLayoutSpecsJsonFunc = null;
-    refreshLibraryViewHandler: RefreshLibraryViewFunc = null;
+    setLoadedTypesJsonHandler: SetLoadedTypesJsonFunc | null = null;
+    setLayoutSpecsJsonHandler: SetLayoutSpecsJsonFunc | null = null;
+    refreshLibraryViewHandler: RefreshLibraryViewFunc | null = null;
 
     // This is to make it possible to set an external search handler.
     // Given a search text, it will call the callback function with search result.
     // The search result will be in the same format as the first parameter for setLoadedTypesJsonHandler.
-    searchLibraryItemsHandler: SearchLibraryItemsFunc = null;
+    searchLibraryItemsHandler: SearchLibraryItemsFunc | null = null;
 
     constructor() {
         this.on = this.on.bind(this);
@@ -75,11 +75,11 @@ export class LibraryController {
     }
 
     on(eventName: string, callback: Function) {
-        this.reactor.registerEvent(eventName, callback);
+        this.reactor?.registerEvent(eventName, callback);
     }
 
     raiseEvent(name: string, params?: any | any[]) {
-        this.reactor.raiseEvent(name, params);
+        this.reactor?.raiseEvent(name, params);
     }
 
     /**
