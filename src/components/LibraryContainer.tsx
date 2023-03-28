@@ -12,6 +12,10 @@ import { CategoryData } from "./SearchBar";
 import { SearchResultItem } from "./SearchResultItem";
 import * as ReactDOM from "react-dom";
 
+declare global {
+    interface Window { setTooltipText: any; }
+}
+
 declare var boundContainer: any; // Object set from C# side.
 
 export interface LibraryContainerProps {
@@ -25,8 +29,9 @@ export interface LibraryContainerStates {
     searchText: string,
     selectedCategories: string[],
     structured: boolean,
-    detailed: boolean
-    showItemSummary: boolean
+    detailed: boolean,
+    showItemSummary: boolean,
+    tooltipContent: string
 }
 
 export class LibraryContainer extends React.Component<LibraryContainerProps, LibraryContainerStates> {
@@ -57,7 +62,8 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
         this.onCategoriesChanged = this.onCategoriesChanged.bind(this);
         this.onTextChanged = this.onTextChanged.bind(this);
         this.handleKeyDown = this.handleKeyDown.bind(this);
-        this.scrollToExpandedItem = this.scrollToExpandedItem.bind(this)
+        this.scrollToExpandedItem = this.scrollToExpandedItem.bind(this);
+        this.setTooltipText = this.setTooltipText.bind(this);
 
         // Set handlers after methods are bound.
         this.props.libraryController.setLoadedTypesJsonHandler = this.setLoadedTypesJson;
@@ -74,8 +80,10 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
             selectedCategories: [],
             structured: false,
             detailed: false,
-            showItemSummary: false // disable expandable tool tip by default
+            showItemSummary: false, // disable expandable tool tip by default
+            tooltipContent: JSON.parse('{"create":"Nodes that create data", "action":"Nodes that execute an action", "query":"Nodes that query data"}')
         };
+        window.setTooltipText = this.setTooltipText;
     }
 
     UNSAFE_componentWillMount() {
@@ -330,6 +338,10 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
         }
     }
 
+    setTooltipText(content: string){
+        this.setState({tooltipContent: JSON.parse(content)});
+    }
+
     render() {
         if (!this.generatedSections) {
             let eventName = this.props.libraryController.RefreshLibraryViewRequestName;
@@ -347,12 +359,13 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
                         libraryContainer={this}
                         data={data}
                         showItemSummary={this.state.showItemSummary}
+                        tooltipContent={this.state.tooltipContent}
                     />
                 }
                 );
             } else if (this.state.structured) {
                 sections = this.searchResultItems.map(item =>
-                    <LibraryItem key={index++} data={item} libraryContainer={this} showItemSummary={this.state.showItemSummary} />
+                    <LibraryItem key={index++} data={item} libraryContainer={this} showItemSummary={this.state.showItemSummary} tooltipContent={this.state.tooltipContent} />
                 );
             } else {
                 sections = this.searchResultItems.map(item =>

@@ -6,13 +6,6 @@ type MemberType = "none" | "create" | "action" | "query";
 type ElementType = "none" | "section" | "category" | "group" | "coregroup" | "classType";
 type ItemType = "none" | "section" | "category" | "group" | "create" | "action" | "query" | "classType" | "coregroup";
 
-export enum TooltipText {
-    none = "",
-    create = "Nodes that create data",
-    action = "Nodes that execute an action",
-    query = "Nodes that query data"
-}
-
 import * as _ from 'underscore';
 
 export class TypeListNode {

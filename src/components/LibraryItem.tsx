@@ -27,7 +27,8 @@ export interface LibraryItemProps {
     data: LibraryUtilities.ItemData,
     showItemSummary: boolean,
     isLastItem?: boolean,
-    onItemWillExpand?: Function
+    onItemWillExpand?: Function,
+    tooltipContent: any
 }
 
 export interface LibraryItemState {
@@ -359,6 +360,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
                                 this.onSingleChildItemWillExpand();
                                 this.props.libraryContainer.scrollToExpandedItem(args)
                             }}
+                            tooltipContent={this.props.tooltipContent}
                         />);
                     })
                 }
@@ -373,13 +375,16 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         const queryMethods = groupedItems.getQueryItems();
 
         let createCluster: JSX.Element | null = null;
+
         if (createMethods.length > 0 && createMethods.some(item => item.visible)) {
             createCluster = (<ClusterView
                 libraryContainer={this.props.libraryContainer}
                 icon={require("../resources/icons/library-create.svg")}
                 clusterType="create"
                 showItemSummary={this.props.showItemSummary}
-                childItems={createMethods} />);
+                childItems={createMethods} 
+                tooltipContent={this.props.tooltipContent && this.props.tooltipContent["create"]}
+                />);
         }
 
         let actionCluster: JSX.Element | null = null;
@@ -389,7 +394,9 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
                 icon={require("../resources/icons/library-action.svg")}
                 clusterType="action"
                 showItemSummary={this.props.showItemSummary}
-                childItems={actionMethods} />);
+                childItems={actionMethods} 
+                tooltipContent={this.props.tooltipContent && this.props.tooltipContent["action"]}
+                />);
         }
 
         let queryCluster: JSX.Element | null = null;
@@ -399,7 +406,9 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
                 icon={require("../resources/icons/library-query.svg")}
                 clusterType="query"
                 showItemSummary={this.props.showItemSummary}
-                childItems={queryMethods} />);
+                childItems={queryMethods} 
+                tooltipContent={this.props.tooltipContent && this.props.tooltipContent["query"]}
+                />);
         }
 
         if ((!createCluster) && (!actionCluster) && (!queryCluster)) {
