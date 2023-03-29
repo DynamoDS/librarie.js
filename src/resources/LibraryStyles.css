@@ -1,808 +1,814 @@
 @font-face {
-  font-family: "Artifakt Element";
-  src: url("fonts/ArtifaktElement-Regular.woff") format("woff");
+	font-family: "Artifakt Element";
+	src: url("fonts/ArtifaktElement-Regular.woff") format("woff");
 }
 
 @font-face {
-  font-family: "Artifakt Element";
-  font-weight: 700;
-  src: url("fonts/ArtifaktElement-Bold.woff") format("woff");
+	font-family: "Artifakt Element";
+	font-weight: 700;
+	src: url("fonts/ArtifaktElement-Bold.woff") format("woff");
 }
 
 html {
-  font-size: 12px;
+	font-size: 12px;
 }
 
 body {
-  font-family: "Artifakt Element", "Open Sans";
-  -webkit-user-select: none;
-  user-select: none;
-  cursor: default;
-  background-color: #2a2a2a;
-  color: #f5f5f5;
+	font-family: "Artifakt Element", "Open Sans";
+	-webkit-user-select: none;
+	user-select: none;
+	cursor: default;
+	background-color: #2a2a2a;
+	color: #f5f5f5;
 }
 
 input {
-  font-family: "Artifakt Element", "Open Sans";
+	font-family: "Artifakt Element", "Open Sans";
 }
 
 button {
-  font-size: 1rem;
+	font-size: 1rem;
 }
 
 .LibraryContainer {
-  max-height: 100vh;
-  display: flex;
-  flex-direction: column;
+	max-height: 100vh;
+	display: flex;
+	flex-direction: column;
 }
 
 .LibraryItemContainer {
-  flex-grow: 1;
-  overflow-y: auto;
+	flex-grow: 1;
+	overflow-y: auto;
 }
 
 .LibraryItemContainerSection {
-  display: flex;
-  flex-direction: column;
+	display: flex;
+	flex-direction: column;
 }
 
 .LibraryItemContainerCategory {
-  display: flex;
-  flex-direction: column;
-  border-bottom: solid 1px #494949;
+	display: flex;
+	flex-direction: column;
+	border-bottom: solid 1px #494949;
 }
 
 .LibraryItemContainerGroup {
-  display: flex;
-  flex-direction: column;
+	display: flex;
+	flex-direction: column;
 }
 
 .LibraryItemContainerNone {
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
 }
 
 .LibrarySectionHeader {
-  display: flex;
-  padding-top: 1rem;
-  padding-left: 1.5rem;
-  margin-top: 0.5rem;
-  font-size: 1.4rem;
-  color: #f5f5f5f5;
-  align-items: center;
-  justify-content: space-between;
-  transition: 0.15s;
+	display: flex;
+	padding-top: 1rem;
+	padding-left: 1.5rem;
+	margin-top: 0.5rem;
+	font-size: 1.4rem;
+	color: #f5f5f5f5;
+	align-items: center;
+	justify-content: space-between;
+	transition: 0.15s;
 }
 
 .LibrarySectionHeader .LibraryItemIcon:hover {
-  cursor: pointer;
+	cursor: pointer;
 }
 
 .LibrarySectionHeader .LibraryAddOnSectionIcon:hover {
-  cursor: pointer;
-  opacity: 1;
+	cursor: pointer;
+	opacity: 1;
 }
 
 .LibraryItemHeader {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  transition: 0.15s;
-  position: relative;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	transition: 0.15s;
+	position: relative;
 }
 
 .LibraryItemContainerCategory > .LibraryItemHeader {
-  padding-top: 1rem;
-  padding-bottom: 1rem;
-  padding-left: 1.5rem;
+	padding-top: 1rem;
+	padding-bottom: 1rem;
+	padding-left: 1.5rem;
 }
 
 .LibraryItemContainerGroup > .LibraryItemHeader,
 .LibraryItemContainerNone > .LibraryItemHeader {
-  height: 2.5rem;
+	height: 2.5rem;
 }
 
 .LibraryItemContainerGroup,
 .LibraryItemContainerNone {
-  padding-left: 0.5rem;
-  padding-right: 0.5rem;
+	padding-left: 0.5rem;
+	padding-right: 0.5rem;
 }
 
 .LibraryItemHeader:hover,
 .LibrarySectionHeader:hover {
-  /* color: white; */
-  background: rgba(255, 255, 255, 0.1);
+	/* color: white; */
+	background: rgba(255, 255, 255, 0.1);
 }
 
 .LibraryItemBodyElements {
-  width: 100%;
+	width: 100%;
 }
 
 .LibraryItemBody {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  /* padding-left:12px; */
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
+	/* padding-left:12px; */
 }
 
 .LibraryItemBodyContainer {
-  display: flex;
-  align-items: stretch;
+	display: flex;
+	align-items: stretch;
 }
 
 .LibraryItemContainerSection .LibraryItemIcon {
-  width: 1.2rem;
-  height: 1.2rem;
-  padding-right: 10px;
-  -webkit-user-drag: none;
+	width: 1.2rem;
+	height: 1.2rem;
+	padding-right: 10px;
+	-webkit-user-drag: none;
 }
 
 .LibraryItemContainerSection .LibraryAddOnSectionIcon {
-  opacity: 0.5;
-  width: 1.4rem;
-  height: 1.4rem;
-  padding-right: 10px;
-  -webkit-user-drag: none;
+	opacity: 0.5;
+	width: 1.4rem;
+	height: 1.4rem;
+	padding-right: 10px;
+	-webkit-user-drag: none;
 }
 
 .LibraryItemContainerCategory .LibraryItemIcon {
-  padding: 7px 10px;
-  width: 1.2rem;
-  height: 1.2rem;
-  -webkit-user-drag: none;
+	padding: 7px 10px;
+	width: 1.2rem;
+	height: 1.2rem;
+	-webkit-user-drag: none;
 }
 
 .LibraryItemContainerNone .LibraryItemIcon {
-  padding-left: 0.5rem;
-  padding-right: 0.5rem;
-  width: 2rem;
-  height: 2rem;
-  -webkit-user-drag: none;
+	padding-left: 0.5rem;
+	padding-right: 0.5rem;
+	width: 2rem;
+	height: 2rem;
+	-webkit-user-drag: none;
 }
 
 .Arrow + .LibraryItemIcon {
-  padding: 2px 8px 2px 4px;
+	padding: 2px 8px 2px 4px;
 }
 
 .LibraryItemContainerCategory .LibraryItemText {
-  color: #ade4de;
-  font-size: 1rem;
-  margin-top: 0.2rem;
+	color: #ade4de;
+	font-size: 1rem;
+	margin-top: 0.2rem;
 }
 
 .LibraryItemContainerNone .LibraryItemText {
-  color: #c6c6c6;
-  font-size: 1rem;
+	color: #c6c6c6;
+	font-size: 1rem;
 }
 
 .LibraryItemHeader .LibraryItemGroupText,
 .LibrarySectionHeader .LibraryItemGroupText {
-  margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
+	margin-top: 0.5rem;
+	margin-bottom: 0.5rem;
 }
 
 .LibraryItemHeader .LibraryItemGroupText {
-  color: #eeeeee;
-  font-size: 1rem;
+	color: #eeeeee;
+	font-size: 1rem;
 }
 
 .LibraryItemParameters {
-  color: #888;
-  font-size: 1rem;
-  margin-left: 5px;
-  display: inline-block;
-  white-space: nowrap;
+	color: #888;
+	font-size: 1rem;
+	margin-left: 5px;
+	display: inline-block;
+	white-space: nowrap;
 }
 
 .Arrow {
-  width: 1rem;
-  min-width: 1rem;
-  height: 1rem;
-  min-height: 1rem;
-  margin-left: 0.5rem;
-  margin-right: 1rem;
+	width: 1rem;
+	min-width: 1rem;
+	height: 1rem;
+	min-height: 1rem;
+	margin-left: 0.5rem;
+	margin-right: 1rem;
 }
 
 .CategoryArrow {
-  width: 1rem;
-  min-width: 1rem;
-  height: 1rem;
-  min-height: 1rem;
-  margin-right: 0.5rem;
-  margin-top: auto;
-  margin-bottom: auto;
+	width: 1rem;
+	min-width: 1rem;
+	height: 1rem;
+	min-height: 1rem;
+	margin-right: 0.5rem;
+	margin-top: auto;
+	margin-bottom: auto;
 }
 
 .LibraryItemBody > .LibraryItemContainerGroup > .LibraryItemHeader,
 .LibraryItemBody > .LibraryItemContainerNone > .LibraryItemHeader {
-  border: solid #d9d9d9 2px;
-  border-right: 0px;
-  border-top: 0px;
-  border-bottom: 0px;
-  position: relative;
-  height: 2.5rem;
+	border: solid #d9d9d9 2px;
+	border-right: 0px;
+	border-top: 0px;
+	border-bottom: 0px;
+	position: relative;
+	height: 2.5rem;
 }
 
 .LibraryItemBody > .LibraryItemContainerGroup > .LibraryItemHeader:before,
 .LibraryItemBody > .LibraryItemContainerNone > .LibraryItemHeader:before {
-  content: "";
-  height: 1rem;
-  width: 2rem;
-  min-width: 2rem;
-  border: solid #d9d9d9 2px;
-  border-right: 0px;
-  border-top: 0px;
-  border-left: 0px;
-  transform: translateY(-50%);
+	content: "";
+	height: 1rem;
+	width: 2rem;
+	min-width: 2rem;
+	border: solid #d9d9d9 2px;
+	border-right: 0px;
+	border-top: 0px;
+	border-left: 0px;
+	transform: translateY(-50%);
 }
 
 .LibraryItemBody
-  > .LibraryItemContainerGroup:last-child
-  > .LibraryItemHeader:after,
+	> .LibraryItemContainerGroup:last-child
+	> .LibraryItemHeader:after,
 .LibraryItemBody
-  > .LibraryItemContainerGroup.expanded
-  > .LibraryItemHeader:after,
+	> .LibraryItemContainerGroup.expanded
+	> .LibraryItemHeader:after,
 .LibraryItemBody
-  > .LibraryItemContainerNone:last-child
-  > .LibraryItemHeader:after,
+	> .LibraryItemContainerNone:last-child
+	> .LibraryItemHeader:after,
 .LibraryItemBody
-  > .LibraryItemContainerNone.expanded
-  > .LibraryItemHeader:after {
-  content: "";
-  height: 50%;
-  position: absolute;
-  border-left: solid 4px #2a2a2a;
-  bottom: 0;
-  left: -2px;
+	> .LibraryItemContainerNone.expanded
+	> .LibraryItemHeader:after {
+	content: "";
+	height: 50%;
+	position: absolute;
+	border-left: solid 4px #2a2a2a;
+	bottom: 0;
+	left: -2px;
 }
 
 .BodyIndentation {
-  padding-left: 1.5rem;
+	padding-left: 1.5rem;
 }
 
 .ClusterViewContainer {
-  display: flex;
-  flex-direction: row;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-  margin-left: -1.5rem;
+	display: flex;
+	flex-direction: row;
+	margin-top: 1rem;
+	margin-bottom: 1rem;
+	margin-left: -1.5rem;
 }
 
 .ClusterLeftPane {
-  display: flex;
-  padding-left: 1.2rem;
-  padding-right: 0.1rem;
-  border-right: 2px;
-  border-right-style: solid;
+	display: flex;
+	padding-left: 1.2rem;
+	padding-right: 0.1rem;
+	border-right: 2px;
+	border-right-style: solid;
 }
 
 .ClusterLeftPane.create {
-  border-color: #cfe4b3;
+	border-color: #cfe4b3;
 }
 
 .ClusterLeftPane.action {
-  border-color: #fcc776;
+	border-color: #fcc776;
 }
 
 .ClusterLeftPane.query {
-  border-color: #9bd5ef;
+	border-color: #9bd5ef;
 }
 
 .ClusterRightPane {
-  flex-grow: 2;
-  padding-left: 4px;
+	flex-grow: 2;
+	padding-left: 4px;
 }
 
 .ClusterIcon {
-  width: 1rem;
-  min-width: 1rem;
-  height: 1rem;
-  min-height: 1rem;
-  padding-left: 0.5rem;
-  padding-right: 0.5rem;
-  -webkit-user-drag: none;
+	width: 1rem;
+	min-width: 1rem;
+	height: 1rem;
+	min-height: 1rem;
+	padding-left: 0.5rem;
+	padding-right: 0.5rem;
+	-webkit-user-drag: none;
 }
 
 .SearchBar {
-  padding-left: 1.5rem;
-  padding-right: 1.5rem;
+	padding-left: 1.5rem;
+	padding-right: 1.5rem;
 }
 
 .SearchBar.searching {
-  margin-bottom: 1rem;
+	margin-bottom: 1rem;
 }
 
 .SearchInput {
-  display: flex;
-  padding: 5px 0px;
-  width: 100%;
-  position: relative;
-  white-space: nowrap;
-  border-bottom-color: #dadada;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  font-size: 1rem;
-  transition: ease-in-out 300ms;
+	display: flex;
+	padding: 5px 0px;
+	width: 100%;
+	position: relative;
+	white-space: nowrap;
+	border-bottom-color: #dadada;
+	border-bottom-style: solid;
+	border-bottom-width: 2px;
+	font-size: 1rem;
+	transition: ease-in-out 300ms;
 }
 
 .SearchInput.focus,
 .SearchInput.searching {
-  border-bottom-color: #38abdf;
+	border-bottom-color: #38abdf;
 }
 
 .SearchInput.searching {
-  margin-bottom: 1rem;
+	margin-bottom: 1rem;
 }
 
 .SearchInput:after {
-  content: "";
-  left: 0;
-  opacity: 0;
-  position: absolute;
-  bottom: -8px;
-  border-bottom-color: #38abdf;
-  border-bottom-style: solid;
-  border-bottom-width: 6px;
-  transition: ease-in-out 300ms;
+	content: "";
+	left: 0;
+	opacity: 0;
+	position: absolute;
+	bottom: -8px;
+	border-bottom-color: #38abdf;
+	border-bottom-style: solid;
+	border-bottom-width: 6px;
+	transition: ease-in-out 300ms;
 }
 
 .SearchInput.focus:after {
-  opacity: 0.5;
-  width: 100%;
+	opacity: 0.5;
+	width: 100%;
 }
 
 .LibraryHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-top: 1.2rem;
-  padding-bottom: 1.2rem;
-  color: #f5f5f5f5;
-  font-size: 1.4rem;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding-top: 1.2rem;
+	padding-bottom: 1.2rem;
+	color: #f5f5f5f5;
+	font-size: 1.4rem;
 }
 
 .SearchBar .Icon {
-  width: 1.2rem;
-  height: 1.2rem;
+	width: 1.2rem;
+	height: 1.2rem;
 }
 
 .SearchInp .ClearSearch {
-  height: 0.8rem;
+	height: 0.8rem;
 }
 
 .SearchInput .SearchInputText {
-  padding-left: 0.8rem;
-  padding-right: 0.8rem;
-  background: none;
-  outline: none;
-  border: none;
-  width: 100%;
-  color: #f5f5f5;
-  font-size: 1rem;
+	padding-left: 0.8rem;
+	padding-right: 0.8rem;
+	background: none;
+	outline: none;
+	border: none;
+	width: 100%;
+	color: #f5f5f5;
+	font-size: 1rem;
 }
 
 .SearchInput .SearchInputText::-webkit-input-placeholder {
-  color: #dadada;
+	color: #dadada;
 }
+
 .SearchInput .SearchInputText:-moz-placeholder {
-  color: #dadada;
+	color: #dadada;
 }
+
 .SearchInput .SearchInputText::-moz-placeholder {
-  color: #dadada;
+	color: #dadada;
 }
+
 .SearchInput .SearchInputText:-ms-input-placeholder {
-  color: #dadada;
+	color: #dadada;
 }
+
 .SearchInput .SearchInputText::-ms-input-placeholder {
-  color: #dadada;
+	color: #dadada;
 }
+
 .SearchInput .SearchInputText::placeholder {
-  color: #dadada;
+	color: #dadada;
 }
 
 .SearchInput .SearchInputText:focus {
-  color: #38abdf;
+	color: #38abdf;
 }
 
 .SearchInput .SearchInputText:focus::-webkit-input-placeholder {
-  opacity: 0;
+	opacity: 0;
 }
 
 .SearchBar .SearchOptionContainer {
-  display: flex;
-  height: 2.5rem;
-  justify-content: flex-end;
-  background-color: #3c3c3c;
-  visibility: hidden;
-  opacity: 0;
-  transition: ease-in-out 300ms;
+	display: flex;
+	height: 2.5rem;
+	justify-content: flex-end;
+	background-color: #3c3c3c;
+	visibility: hidden;
+	opacity: 0;
+	transition: ease-in-out 300ms;
 }
 
 .SearchBar.searching .SearchOptionContainer {
-  visibility: visible;
-  opacity: 1;
+	visibility: visible;
+	opacity: 1;
 }
 
 .SearchBar button,
 .SearchBar button {
-  border: none;
-  outline: none;
-  height: 100%;
-  background-color: transparent;
-  transition: 0.15s;
+	border: none;
+	outline: none;
+	height: 100%;
+	background-color: transparent;
+	transition: 0.15s;
 }
 
 .SearchBar button {
-  color: #ddd;
-  transition: 0.15s;
+	color: #ddd;
+	transition: 0.15s;
 }
 
 .SearchBar button {
-  color: #555;
+	color: #555;
 }
 
 .SearchBar button {
-  background-color: transparent;
-  border: 0;
-  color: #6dd2ff;
+	background-color: transparent;
+	border: 0;
+	color: #6dd2ff;
 }
 
 .SearchBar button:active:enabled,
 .SearchBar button:hover:enabled {
-  color: #38abdf;
-  background-color: rgba(255, 255, 255, 0.1);
-  cursor: pointer;
+	color: #38abdf;
+	background-color: rgba(255, 255, 255, 0.1);
+	cursor: pointer;
 }
 
 .SearchBar button.CancelButton {
-  background: transparent;
-  border: 0px;
-  outline: 0px;
+	background: transparent;
+	border: 0px;
+	outline: 0px;
 }
 
 .SearchBar button.CancelButton:hover {
-  background-color: transparent;
-  cursor: pointer;
+	background-color: transparent;
+	cursor: pointer;
 }
 
 .SearchBar button:disabled {
-  cursor: not-allowed;
+	cursor: not-allowed;
 }
 
 .SearchFilterContainer {
-  position: relative;
+	position: relative;
 }
 
 .SearchFilterPanel {
-  position: absolute;
-  top: 2rem;
-  right: 0;
-  background-color: #535353;
-  color: #ffffff;
-  width: 12rem;
-  text-align: left;
-  font-size: 1rem;
-  box-shadow: 0 0 1rem 0 rgba(0, 0, 0, 0.3);
+	position: absolute;
+	top: 2rem;
+	right: 0;
+	background-color: #535353;
+	color: #ffffff;
+	width: 12rem;
+	text-align: left;
+	font-size: 1rem;
+	box-shadow: 0 0 1rem 0 rgba(0, 0, 0, 0.3);
 }
 
 .SearchFilterPanel > div {
-  padding-top: 1rem;
-  padding-bottom: 1rem;
-  padding-left: 1rem;
-  padding-right: 1rem;
+	padding-top: 1rem;
+	padding-bottom: 1rem;
+	padding-left: 1rem;
+	padding-right: 1rem;
 }
 
 .SearchFilterPanel > div:first-child {
-  padding-bottom: 0;
+	padding-bottom: 0;
 }
 
 .SearchFilterPanel > .body {
-  padding-top: 0;
-  padding-bottom: 0;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-  max-height: 400px;
-  overflow-y: auto;
+	padding-top: 0;
+	padding-bottom: 0;
+	margin-top: 1rem;
+	margin-bottom: 1rem;
+	max-height: 400px;
+	overflow-y: auto;
 }
 
 /* Custom checkbox */
 .SearchFilterPanel label.Category {
-  position: relative;
-  display: block;
-  margin-bottom: 0.5rem;
+	position: relative;
+	display: block;
+	margin-bottom: 0.5rem;
 }
 
 .SearchFilterPanel label.Category:hover {
-  cursor: pointer;
+	cursor: pointer;
 }
 
 .SearchFilterPanel label.Category > * {
-  display: inline-block;
-  vertical-align: middle;
+	display: inline-block;
+	vertical-align: middle;
 }
 
 .SearchFilterPanel .body input[type="checkbox"] {
-  visibility: hidden;
-  cursor: pointer;
-  position: absolute;
+	visibility: hidden;
+	cursor: pointer;
+	position: absolute;
 }
 
 .SearchFilterPanel .body input[type="checkbox"],
 .SearchFilterPanel .body .checkmark {
-  margin-right: 0.5rem;
+	margin-right: 0.5rem;
 }
 
 .SearchFilterPanel .body .checkmark {
-  position: relative;
-  height: 0.8rem;
-  width: 0.8rem;
-  background-color: transparent;
-  border: solid 1px rgba(255, 255, 255, 0.5);
+	position: relative;
+	height: 0.8rem;
+	width: 0.8rem;
+	background-color: transparent;
+	border: solid 1px rgba(255, 255, 255, 0.5);
 }
 
 .SearchFilterPanel .body input[type="checkbox"]:checked ~ .checkmark {
-  background-color: white;
+	background-color: white;
 }
+
 /* Create the mark/indicator (hidden when not checked) */
 .checkmark:after {
-  content: "";
-  position: absolute;
-  display: none;
+	content: "";
+	position: absolute;
+	display: none;
 }
 
 /* Show the mark when checked */
 .SearchFilterPanel .body input[type="checkbox"]:checked ~ .checkmark:after {
-  display: block;
+	display: block;
 }
 
 /* Style the mark/indicator */
 .SearchFilterPanel .body .checkmark:after {
-  left: 0.4rem;
-  top: 0;
-  width: 0.2rem;
-  height: 0.6rem;
-  border: solid black;
-  border-width: 0 0.2rem 0.2rem 0;
-  transform: translateY(0.2rem) rotate(45deg);
-  transform-origin: top right;
+	left: 0.4rem;
+	top: 0;
+	width: 0.2rem;
+	height: 0.6rem;
+	border: solid black;
+	border-width: 0 0.2rem 0.2rem 0;
+	transform: translateY(0.2rem) rotate(45deg);
+	transform-origin: top right;
 }
 
 .SearchFilterPanel .footer {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  border-top: solid #999999 1px;
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
-  padding-left: 0.5rem;
-  padding-right: 0.5rem;
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+	border-top: solid #999999 1px;
+	padding-top: 0.5rem;
+	padding-bottom: 0.5rem;
+	padding-left: 0.5rem;
+	padding-right: 0.5rem;
 }
 
 .SearchFilterPanel .footer > * {
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
-  padding-left: 0.5rem;
-  padding-right: 0.5rem;
+	padding-top: 0.5rem;
+	padding-bottom: 0.5rem;
+	padding-left: 0.5rem;
+	padding-right: 0.5rem;
 }
 
 .SearchBar .SearchOptionsContainer {
-  font-size: 1rem;
-  color: #fff;
-  margin: 0px 0px 5px 0px;
-  background-color: #606060;
-  overflow-x: hidden;
-  overflow-y: hidden;
-  position: absolute;
-  top: 26px;
-  right: 10px;
-  border: 1px solid #aaa;
+	font-size: 1rem;
+	color: #fff;
+	margin: 0px 0px 5px 0px;
+	background-color: #606060;
+	overflow-x: hidden;
+	overflow-y: hidden;
+	position: absolute;
+	top: 26px;
+	right: 10px;
+	border: 1px solid #aaa;
 }
 
 .SearchBar .SearchOptionsHeader {
-  padding: 5px;
+	padding: 5px;
 }
 
 .SearchBar .SearchOptionsHeader span {
-  font-weight: 700;
+	font-weight: 700;
 }
 
 .SearchBar .SearchOptionsHeader .SelectAllBtn {
-  color: #aaa;
-  background: transparent;
-  border: none;
-  outline: none;
-  float: right;
+	color: #aaa;
+	background: transparent;
+	border: none;
+	outline: none;
+	float: right;
 }
 
 .SearchBar .SearchOptionsHeader .SelectAllBtn:hover {
-  cursor: pointer;
-  color: white;
+	cursor: pointer;
+	color: white;
 }
 
 .SearchBar .CategoryCheckboxContainer {
-  overflow-x: hidden;
+	overflow-x: hidden;
 }
 
 .CheckboxLabelEnabled,
 .CheckboxLabelDisabled {
-  position: relative;
-  width: 100%;
-  display: block;
-  padding: 4px 3px;
-  transition: 0.15s;
+	position: relative;
+	width: 100%;
+	display: block;
+	padding: 4px 3px;
+	transition: 0.15s;
 }
 
 .CheckboxLabelDisabled {
-  color: #aaa;
+	color: #aaa;
 }
 
 .CheckboxLabelEnabled:hover {
-  background-color: #555;
-  cursor: pointer;
+	background-color: #555;
+	cursor: pointer;
 }
 
 .CheckboxLabelEnabled .CheckboxSymbol,
 .CheckboxLabelDisabled .CheckboxSymbol {
-  position: absolute;
-  left: 5px;
+	position: absolute;
+	left: 5px;
 }
 
 .CheckboxLabelEnabled .CheckboxLabelText,
 .CheckboxLabelDisabled .CheckboxLabelText {
-  padding-left: 20px;
-  padding-right: 40px;
-  /* for the "only" text */
+	padding-left: 20px;
+	padding-right: 40px;
+	/* for the "only" text */
 }
 
 .CheckboxLabelEnabled .CheckboxLabelRightButton,
 .CheckboxLabelDisabled .CheckboxLabelRightButton {
-  position: absolute;
-  transform: translate(-50%, 20%);
-  top: 0px;
-  right: 0px;
-  color: #aaa;
-  background: transparent;
-  border: none;
-  outline: none;
-  display: none;
-  margin: 0px;
-  padding: 0px;
-  font-size: 1rem;
+	position: absolute;
+	transform: translate(-50%, 20%);
+	top: 0px;
+	right: 0px;
+	color: #aaa;
+	background: transparent;
+	border: none;
+	outline: none;
+	display: none;
+	margin: 0px;
+	padding: 0px;
+	font-size: 1rem;
 }
 
 .CheckboxLabelEnabled .CheckboxLabelRightButton:hover {
-  color: white;
-  cursor: pointer;
+	color: white;
+	cursor: pointer;
 }
 
 .CheckboxLabelEnabled:hover .CheckboxLabelRightButton {
-  display: block;
+	display: block;
 }
 
 .SearchResultItemContainer,
 .SearchResultItemContainerSelected {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  padding: 3px;
-  color: white;
-  transition: 0.15s;
-  padding-left: 0.8rem;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	padding: 3px;
+	color: white;
+	transition: 0.15s;
+	padding-left: 0.8rem;
 }
 
 .SearchResultItemContainerSelected {
-  background-color: #444;
+	background-color: #444;
 }
 
 .SearchResultItemContainer:hover,
 .SearchResultItemContainerSelected:hover {
-  color: white;
-  background: rgba(255, 255, 255, 0.1);
+	color: white;
+	background: rgba(255, 255, 255, 0.1);
 }
 
 .SearchResultItemContainer .ItemInfo,
 .SearchResultItemContainerSelected .ItemInfo {
-  padding: 5px 0px 5px 0px;
+	padding: 5px 0px 5px 0px;
 }
 
 .SearchResultItemContainer .ItemIcon,
 .SearchResultItemContainerSelected .ItemIcon {
-  padding: 2px 8px;
-  min-width: 32px;
-  width: 32px;
-  min-height: 32px;
-  height: 32px;
+	padding: 2px 8px;
+	min-width: 32px;
+	width: 32px;
+	min-height: 32px;
+	height: 32px;
 }
 
 .SearchResultItemContainer .ItemTitle,
 .SearchResultItemContainerSelected .ItemTitle {
-  margin-bottom: 2px;
-  font-size: 1.2rem;
+	margin-bottom: 2px;
+	font-size: 1.2rem;
 }
 
 .SearchResultItemContainer .ItemDescription,
 .SearchResultItemContainerSelected .ItemDescription {
-  font-size: 1rem;
-  padding: 2px 0px;
-  color: #aaa;
+	font-size: 1rem;
+	padding: 2px 0px;
+	color: #aaa;
 }
 
 .SearchResultItemContainer .ItemDetails,
 .SearchResultItemContainerSelected .ItemDetails {
-  display: flex;
-  align-items: center;
-  font-size: 1rem;
-  color: #aaaaaa;
+	display: flex;
+	align-items: center;
+	font-size: 1rem;
+	color: #aaaaaa;
 }
 
 .SearchResultItemContainer .ItemParent,
 .SearchResultItemContainerSelected .ItemParent {
-  display: inline-block;
-  padding-right: 5px;
-  transition: 0.15s;
-  text-decoration: underline;
+	display: inline-block;
+	padding-right: 5px;
+	transition: 0.15s;
+	text-decoration: underline;
 }
 
 .SearchResultItemContainer .ItemParent:hover,
 .SearchResultItemContainerSelected .ItemParent:hover {
-  cursor: pointer;
-  color: white;
+	cursor: pointer;
+	color: white;
 }
 
 .SearchResultItemContainer .ItemCategory,
 .SearchResultItemContainerSelected .ItemCategory {
-  display: inline-block;
-  color: #ddd;
-  padding-left: 5px;
+	display: inline-block;
+	color: #ddd;
+	padding-left: 5px;
 }
 
 .SearchResultItemContainer .ItemTypeIcon,
 .SearchResultItemContainerSelected .ItemTypeIcon {
-  width: 1rem;
-  height: 1rem;
-  margin-top: auto;
-  margin-bottom: auto;
+	width: 1rem;
+	height: 1rem;
+	margin-top: auto;
+	margin-bottom: auto;
 }
 
 .HighlightedText {
-  font-weight: 700;
-  color: #4ac8ef;
+	font-weight: 700;
+	color: #4ac8ef;
 }
 
 .SearchResultItemContainer .ItemParent:hover .HighlightedText {
-  color: white;
+	color: white;
 }
 
 ::-webkit-input-placeholder {
-  color: #aaaaaa;
+	color: #aaaaaa;
 }
 
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-  background-color: #414141;
+	width: 6px;
+	height: 6px;
+	background-color: #414141;
 }
 
 ::-webkit-scrollbar-thumb {
-  width: 6px;
-  border-radius: 3px;
-  background-color: rgba(136, 136, 136, 0.8);
+	width: 6px;
+	border-radius: 3px;
+	background-color: rgba(136, 136, 136, 0.8);
 }
 
 ::-webkit-scrollbar-corner {
-  background-color: inherit;
+	background-color: inherit;
 }
 
 .tooltipWrapper {
-  height: fit-content;
+	height: fit-content;
 }
 
 .ClusterLeftPane .customTooltip {
-  background: #d9d9d9;
-  color: #2a2a2a;
-  padding: 5px;
-  font-family: "Artifakt Element", sans-serif; 
-  font-weight: 700;
-  z-index: 9;
+	background: #d9d9d9;
+	color: #2a2a2a;
+	padding: 5px;
+	font-family: "Artifakt Element", sans-serif;
+	font-weight: 700;
+	z-index: 9;
 }
