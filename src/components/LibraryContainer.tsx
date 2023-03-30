@@ -18,6 +18,12 @@ declare global {
 
 declare var boundContainer: any; // Object set from C# side.
 
+enum ClusterTypeDescription {
+    create = "Nodes that create data", 
+    action = "Nodes that execute an action", 
+    query = "Nodes that query data"
+}
+
 export interface LibraryContainerProps {
     libraryController: LibraryController,
     defaultSectionString: string,
@@ -31,7 +37,11 @@ export interface LibraryContainerStates {
     structured: boolean,
     detailed: boolean,
     showItemSummary: boolean,
-    tooltipContent: string
+    tooltipContent: {
+        create: string;
+        action: string;
+        query: string;
+    }
 }
 
 export class LibraryContainer extends React.Component<LibraryContainerProps, LibraryContainerStates> {
@@ -81,7 +91,11 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
             structured: false,
             detailed: false,
             showItemSummary: false, // disable expandable tool tip by default
-            tooltipContent: JSON.parse('{"create":"Nodes that create data", "action":"Nodes that execute an action", "query":"Nodes that query data"}')
+            tooltipContent: {
+                create: ClusterTypeDescription.create, 
+                action: ClusterTypeDescription.action, 
+                query: ClusterTypeDescription.query
+            }
         };
         window.setTooltipText = this.setTooltipText;
     }
