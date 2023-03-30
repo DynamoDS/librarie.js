@@ -25,6 +25,7 @@
     "node-notifier": "^9.0.0",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
+    "react-tooltip": "^5.10.0",
     "underscore": "^1.12.1"
   },
   "devDependencies": {
