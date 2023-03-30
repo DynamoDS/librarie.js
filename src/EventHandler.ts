@@ -43,7 +43,7 @@ export class Reactor {
         this.events = [];
     }
 
-    getEvent(eventName: string): Event {
+    getEvent(eventName: string): Event | undefined {
         return _.find(this.events, function (event) { return event.name == eventName });
     }
 
