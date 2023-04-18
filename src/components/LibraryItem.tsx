@@ -28,7 +28,7 @@ export interface LibraryItemProps {
     showItemSummary: boolean,
     isLastItem?: boolean,
     onItemWillExpand?: Function,
-    tooltipContent: any
+    tooltipContent?: any
 }
 
 export interface LibraryItemState {
