@@ -99,7 +99,6 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
             case EventKey.ARROW_DOWN:
                 event.preventDefault();
                break;
-            break;
             case EventKey.ESCAPE:
                 this.clearInput();
                 break;
