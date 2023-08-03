@@ -40,6 +40,14 @@ export interface SearchBarState {
     hasFocus: boolean;
 }
 
+enum EventKey {
+    ARROW_DOWN = "ArrowDown",
+    ARROW_LEFT = "ArrowLeft",
+    ARROW_RIGHT = "ArrowRight",
+    DELETE = "Delete",
+    ESCAPE =  "Escape"
+};
+
 export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
     categoryData: {[key: string]: CategoryData} = {};
     searchOptionsContainer: HTMLDivElement = null;
@@ -76,6 +84,7 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
     }
 
     UNSAFE_componentWillMount() {
+        // window.handleKeyDown = this.handleKeyDown();
         window.addEventListener("keydown", this.handleKeyDown.bind(this));
         window.addEventListener("click", this.handleGlobalClick.bind(this));
     }
@@ -87,12 +96,14 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
 
     handleKeyDown(event: any) {
         switch (event.key) {
-            case "ArrowUp":
-            case "ArrowDown":
+            case EventKey.ARROW_DOWN:
                 event.preventDefault();
                break;
-            case "Escape":
+            case EventKey.ESCAPE:
                 this.clearInput();
+                break;
+            case EventKey.DELETE:
+                this.forwardDelete(event);
                 break;
             default:
                 if (event.target.className == "SearchInputText") {
@@ -119,6 +130,17 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
             this.props.onTextChanged(this.searchInputField.value);
             this.setState({ hasText: false });
         }
+    }
+
+    forwardDelete(event: any) {
+        if (!this.searchInputField) return;
+        let cursor = this.searchInputField.selectionStart ?? 0;
+        const searchValueCopy = this.searchInputField.value.split("");
+        searchValueCopy.splice(cursor, 1);
+        this.searchInputField.value = searchValueCopy.join("");
+        this.searchInputField.focus();
+        this.searchInputField.setSelectionRange(cursor, cursor);
+        this.props.onTextChanged(this.searchInputField.value);
     }
 
     onTextChanged(event: any) {
