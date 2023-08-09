@@ -42,8 +42,6 @@ export interface SearchBarState {
 
 enum EventKey {
     ARROW_DOWN = "ArrowDown",
-    ARROW_LEFT = "ArrowLeft",
-    ARROW_RIGHT = "ArrowRight",
     DELETE = "Delete",
     ESCAPE =  "Escape"
 };
@@ -139,6 +137,13 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
         this.searchInputField.value = searchValueCopy.join("");
         this.searchInputField.focus();
         this.searchInputField.setSelectionRange(cursor, cursor);
+        let hasText = this.searchInputField.value.length > 0;
+        let expanded = !hasText ? false : this.state.expanded;
+        
+        if (this.state.hasText || hasText) {
+            this.setState({ expanded: expanded, hasText: hasText });
+            this.props.onTextChanged(this.searchInputField.value);
+        }
     }
 
     onTextChanged(event: any) {
