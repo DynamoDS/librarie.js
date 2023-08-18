@@ -7,8 +7,7 @@ import * as LibraryUtilities from "../LibraryUtilities";
 import { LibraryController } from "../entry-point";
 import { LibraryItem } from "./LibraryItem";
 import { Searcher } from "../Searcher";
-import { SearchBar } from "./SearchBar";
-import { CategoryData } from "./SearchBar";
+import { SearchBar, CategoryData } from "./SearchBar";
 import { SearchResultItem } from "./SearchResultItem";
 import * as ReactDOM from "react-dom";
 
@@ -16,7 +15,7 @@ declare global {
     interface Window { setTooltipText: any; }
 }
 
-declare var boundContainer: any; // Object set from C# side.
+declare let boundContainer: any; // Object set from C# side.
 
 enum ClusterTypeDescription {
     create = "Nodes that create data", 
@@ -122,7 +121,7 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
     }
 
     private offset(el: any) {
-        var rect = el.getBoundingClientRect(),
+        const rect = el.getBoundingClientRect(),
             scrollLeft = window.pageXOffset || document.documentElement.scrollLeft,
             scrollTop = window.pageYOffset || document.documentElement.scrollTop;
         return { top: rect.top + scrollTop, left: rect.left + scrollLeft }
@@ -136,13 +135,13 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
     scrollToExpandedItem(element: HTMLElement) {
         if (element) {
             
-            var currentElement = ReactDOM.findDOMNode(this).querySelector(".LibraryItemContainer");
+            const currentElement = ReactDOM.findDOMNode(this).querySelector(".LibraryItemContainer");
             //get the offset for the element we care about scrolling to.
-            var offsetOldElement = this.offset(element);
+            const offsetOldElement = this.offset(element);
             //now we wait until the expansion and re-render occurs,
             setTimeout(() => {
                 //measure the distance between the old element and the new position post expansion
-                var distance = offsetOldElement.top - this.offset(element).top;
+                const distance = offsetOldElement.top - this.offset(element).top;
                 //scroll back up by that distance.
                 currentElement.scrollTop = currentElement.scrollTop - distance;
 
