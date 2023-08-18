@@ -3,7 +3,7 @@ import * as ReactDOM from "react-dom";
 
 import { LibraryContainer } from "./components/LibraryContainer";
 import { JsonDownloader } from "./LibraryUtilities";
-import { Reactor, Event } from "./EventHandler";
+import { Reactor } from "./EventHandler";
 import "core-js/actual/string/starts-with";
 import "core-js/actual/string/includes";
 import "core-js/actual/array/";
@@ -16,25 +16,15 @@ export function CreateLibraryController() {
     return new LibraryController();
 }
 
-interface SetLoadedTypesJsonFunc {
-    (loadedTypesJson: any, append: boolean): void;
-}
+type SetLoadedTypesJsonFunc = (loadedTypesJson: any, append: boolean) => void;
 
-interface SetLayoutSpecsJsonFunc {
-    (layoutSpecsJson: any, append: boolean): void;
-}
+type SetLayoutSpecsJsonFunc = (layoutSpecsJson: any, append: boolean) => void;
 
-interface RefreshLibraryViewFunc {
-    (): void;
-}
+type RefreshLibraryViewFunc = () => void;
 
-interface SearchLibraryItemsCallbackFunc {
-    (loadedTypesJsonOnSearch: any): void;
-}
+type SearchLibraryItemsCallbackFunc = (loadedTypesJsonOnSearch: any) => void;
 
-interface SearchLibraryItemsFunc {
-    (text: string, callback: SearchLibraryItemsCallbackFunc): void;
-}
+type SearchLibraryItemsFunc = (text: string, callback: SearchLibraryItemsCallbackFunc) => void;
 
 export class LibraryController {
 
