@@ -6,8 +6,6 @@ type MemberType = "none" | "create" | "action" | "query";
 type ElementType = "none" | "section" | "category" | "group" | "coregroup" | "classType";
 type ItemType = "none" | "section" | "category" | "group" | "create" | "action" | "query" | "classType" | "coregroup";
 
-import * as _ from 'underscore';
-
 export class TypeListNode {
 
     fullyQualifiedName: string = "";
@@ -64,12 +62,12 @@ export class LayoutElement {
         this.include = data.include;
 
         if (data.childElements) {
-            for (let i = 0; i < data.childElements.length; i++) {
-                this.childElements.push(new LayoutElement(data.childElements[i]));
+            for (const element of data.childElements) {
+                this.childElements.push(new LayoutElement(element));
             }
         }
 
-        if (data.showHeader == false) {
+        if (data.showHeader === false) {
             this.showHeader = data.hideSectionHeader;
         }
     }
@@ -116,7 +114,6 @@ export class ItemData {
         }
 
         // Get keywords from typeListNode and push them into itemData
-        let keywords = typeListNode.keywords.split(",");
         this.keywords.forEach(keyword => {
             this.keywords.push(keyword.toLowerCase().replace(/ /g, ''));
         });
@@ -441,7 +438,7 @@ export function constructFromIncludeInfo(typeListNodes: TypeListNode[], includeI
         } else if (compareResult > 0) {
             nodeInculde = true;
             let newNameParts = -compareResult - 1;
-            if (include.inclusive == false) {
+            if (include.inclusive === false) {
                 newNameParts = -compareResult;
             }
 
@@ -492,13 +489,10 @@ export function buildLibrarySectionsFromLayoutSpecs(loadedTypes: any, layoutSpec
         sectionElements.push(new LayoutElement(section));
     }
 
-    //call update category groups.
-    updateCategoryGroups(sectionElements);
-
     let includeItemPairs: IncludeItemPair[] = [];
     let sections = convertLayoutElementToItemData(sectionElements, includeItemPairs);
-    let sortedIncludeItemPairs = includeItemPairs.sort((a, b) => a.include.path.localeCompare(b.include.path));
-    let sortedTypeListNodes = typeListNodes.sort((a, b) => a.fullyQualifiedName.localeCompare(b.fullyQualifiedName));
+    let sortedIncludeItemPairs = [...includeItemPairs].sort((a, b) => a.include.path.localeCompare(b.include.path));
+    let sortedTypeListNodes = [...typeListNodes].sort((a, b) => a.fullyQualifiedName.localeCompare(b.fullyQualifiedName));
 
     if (!isValidIncludeInfo(sortedIncludeItemPairs)) {
         console.error("Invalid layoutSpecs: include info is not unique");
@@ -515,41 +509,6 @@ export function buildLibrarySectionsFromLayoutSpecs(loadedTypes: any, layoutSpec
     removeEmptyNodes(sections);
 
     return sections;
-}
-
-/**
- * Update the Category Groups to CoreGroup.
- * This is to achieve the specific design for librarie.
- * @param elements
- */
-function updateCategoryGroups(elements: LayoutElement[]) {
-    if (!elements || elements.length == 0) return;
-
-    //filter the section elemens
-    let sectionElements: LayoutElement[] = elements.filter((elem: LayoutElement) => {
-        return elem.elementType == "section";
-    });
-
-    sectionElements.forEach((section: any) => {
-        //get the top level category elements
-        let categoryElements = section.childElements.filter((child: LayoutElement) => {
-            return child.elementType == "category";
-        });
-
-        //get the top level group elements.
-        //Commented as part of the task :  https://jira.autodesk.com/browse/QNTM-2975
-        // let groupElements = categoryElements.filter((child: LayoutElement) => {
-        //     //For the top level group elements, update the element type.
-        //     //coregroup will be applied only to the top level elements. Not on
-        //     //the nested categories. This change is made to achieve a particular
-        //     //tree design (no lines / arrows for top level group).
-        //     child.childElements.forEach((grp: LayoutElement) => {
-        //         if(grp.elementType != "classType") {
-        //             grp.elementType = "coregroup";
-        //         }
-        //     });
-        // });
-    });
 }
 
 // Remove empty non-leaf nodes from items
@@ -778,10 +737,10 @@ export function getHighlightedText(text: string, highlightedText: string, matchD
     // attempt to escape regex specific characters and return no highlights if
     // we throw an exception here.
     try {
-        let escapedRegexCharacters = highlightedText.replace(/[*+?^$.\[\]{}()|\\\/]/g, "\\$&");
+        let escapedRegexCharacters = highlightedText.replace(/[*+?^$.[\]{}()|\\/]/g, "\\$&");
         let regex = new RegExp(escapedRegexCharacters, 'gi');
         let segments = text.split(regex);
-        let replacements = text.match(regex);
+        let replacements = RegExp(regex).exec(text);
 
         for (let i = 0; i < segments.length; i++) {
             spans.push(React.createElement('span',{ key: spans.length }, segments[i]));
@@ -825,7 +784,7 @@ export function findAndExpandItemByPath(pathToItem: ItemData[], allItems: ItemDa
     );
 
     if (pathToItem.length == 1) {
-        return item ? true : false;
+        return !!item;
     } else {
         pathToItem.shift();
         let result = findAndExpandItemByPath(pathToItem, item.childItems);
@@ -836,7 +795,7 @@ export function findAndExpandItemByPath(pathToItem: ItemData[], allItems: ItemDa
 }
 
 export function sortItemsByText(items: ItemData[]): ItemData[] {
-    let sortedItems = items.sort(function (item1: ItemData, item2: ItemData) {
+    let sortedItems = [...items].sort(function (item1: ItemData, item2: ItemData) {
         return item1.text.localeCompare(item2.text);
     })
 
