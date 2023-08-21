@@ -1,10 +1,6 @@
-import * as React from "react";
 import * as _ from "underscore";
-import { LibraryItem } from "./components/LibraryItem";
-import { SearchResultItem } from "./components/SearchResultItem";
 import { LibraryContainer } from "./components/LibraryContainer";
 import * as LibraryUtilities from "./LibraryUtilities";
-import { SearchBar } from "./components/SearchBar";
 
 export class Searcher {
     libraryContainer: LibraryContainer = null;
@@ -15,9 +11,6 @@ export class Searcher {
     // at the time search is performed. It will be a subset of 'props.categories', 
     // that are most relevant to the current search results.
     displayedCategories: string[];
-
-    constructor() {
-    }
 
     // To set the categories and displayedCategories
     initializeCategories(categories: string[]) {

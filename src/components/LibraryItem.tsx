@@ -19,7 +19,6 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { ClusterView } from "./ClusterView";
-import { LibraryContainer } from "./LibraryContainer";
 import * as LibraryUtilities from "../LibraryUtilities";
 
 export interface LibraryItemProps {
@@ -45,31 +44,15 @@ class GroupedItems {
 
     constructor(items: LibraryUtilities.ItemData[]) {
 
-        for (let i = 0; i < items.length; i++) {
+        for (const element of items) {
 
-            switch (items[i].itemType) {
-                case "create": this.creates.push(items[i]); break;
-                case "action": this.actions.push(items[i]); break;
-                case "query": this.queries.push(items[i]); break;
-                default: this.others.push(items[i]); break;
+            switch (element.itemType) {
+                case "create": this.creates.push(element); break;
+                case "action": this.actions.push(element); break;
+                case "query": this.queries.push(element); break;
+                default: this.others.push(element); break;
             }
 
-            var finalData = {
-                "inputParameters": [
-                    {
-                        "name": "c1",
-                        "type": "Color"
-                    },
-                    {
-                        "name": "c2",
-                        "type": "Color"
-                    }
-                ],
-                "outputParameters": [
-                    "Color"
-                ],
-                "description": "Construct a Color by combining two input Colors."
-            };
         }
 
         this.creates = LibraryUtilities.sortItemsByText(this.creates);
@@ -292,11 +275,10 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
     }
 
     getLibraryItemHeaderStyle(): string {
-        switch (this.props.data.itemType) {
-            case "section":
-                return "LibrarySectionHeader";
-            default:
-                return "LibraryItemHeader";
+        if (this.props.data.itemType === "section") {
+            return "LibrarySectionHeader";
+        } else {
+            return "LibraryItemHeader";
         }
     }
 
@@ -363,7 +345,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
                 clusterType="create"
                 showItemSummary={this.props.showItemSummary}
                 childItems={createMethods} 
-                tooltipContent={this.props.tooltipContent && this.props.tooltipContent["create"]}
+                tooltipContent={this.props?.tooltipContent["create"]}
                 />);
         }
 
@@ -375,7 +357,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
                 clusterType="action"
                 showItemSummary={this.props.showItemSummary}
                 childItems={actionMethods} 
-                tooltipContent={this.props.tooltipContent && this.props.tooltipContent["action"]}
+                tooltipContent={this.props?.tooltipContent["action"]}
                 />);
         }
 
@@ -387,7 +369,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
                 clusterType="query"
                 showItemSummary={this.props.showItemSummary}
                 childItems={queryMethods} 
-                tooltipContent={this.props.tooltipContent && this.props.tooltipContent["query"]}
+                tooltipContent={this.props?.tooltipContent["query"]}
                 />);
         }
 

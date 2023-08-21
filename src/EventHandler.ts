@@ -1,7 +1,6 @@
 
 import * as React from "react";
 import * as _ from "underscore";
-import { LibraryItem } from "./components/LibraryItem";
 
 /**
  * The Event class stores the callback function together with a name

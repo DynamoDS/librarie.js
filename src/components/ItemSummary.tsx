@@ -123,7 +123,7 @@ export class ItemSummary extends React.Component<ItemSummaryProps, ItemSummarySt
      */
     setItemSummary(data: any) {
         let summaryData = JSON.parse(data);
-        if (summaryData && summaryData.inputParameters && summaryData.outputParameters && summaryData.description) {
+        if (summaryData.inputParameters && summaryData.outputParameters && summaryData.description) {
             this.summaryData = summaryData;
             this.setState({ hasSummaryData: true });
         }

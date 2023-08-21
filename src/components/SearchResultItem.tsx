@@ -5,9 +5,7 @@ import * as ReactDOM from "react-dom";
 import { LibraryContainer } from "./LibraryContainer";
 import * as LibraryUtilities from "../LibraryUtilities";
 
-interface ParentTextClickedFunc {
-    (pathToItem: LibraryUtilities.ItemData[]): void;
-}
+type ParentTextClickedFunc = (pathToItem: LibraryUtilities.ItemData[]) => void;
 
 interface SearchResultItemProps {
     index: number,
@@ -33,6 +31,7 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
             itemSummaryExpanded: false
         };
         this.handleKeyDown = this.handleKeyDown.bind(this);
+        this.setSelected = this.setSelected.bind(this);
     }
 
     UNSAFE_componentWillMount() {
@@ -62,22 +61,17 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
     }
 
     handleKeyDown(event: any) {
-        switch (event.key) {
-            case "Enter": // Allow node creation by pressing enter key
-                if (this.state.selected) {
-                    this.onItemClicked();
-                }
-            default:
-                break;
+        if(event.key !== "Enter") return;
+        // Allow node creation by pressing enter key
+        if (this.state.selected) {
+            this.onItemClicked();
         }
     }
-
     setSelected(selected: boolean) {
         this.setState({ selected: selected });
     }
 
     render() {
-        // console.log("render SearchResultItem");
         let ItemContainerStyle = this.state.selected ? "SearchResultItemContainerSelected" : "SearchResultItemContainer";
         let iconPath = this.props.data.iconUrl;
 

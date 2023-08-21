@@ -3,25 +3,15 @@ import * as ReactDOM from 'react-dom';
 import * as _ from 'underscore';
 import { ObjectExtensions } from '../LibraryUtilities'
 
-interface StructuredModeChangedFunc {
-    (structured: boolean): void;
-}
+type StructuredModeChangedFunc = (structured: boolean) => void;
 
-interface DetailedModeChangedFunc {
-    (detailed: boolean): void;
-}
+type DetailedModeChangedFunc = (detailed: boolean) => void;
 
-interface SearchCategoriesChangedFunc {
-    (categories: string[], categoryData: CategoryData[]): void;
-}
+type SearchCategoriesChangedFunc = (categories: string[], categoryData: CategoryData[]) => void;
 
-interface SearchTextChangedFunc {
-    (event: any): void;
-}
+type SearchTextChangedFunc = (event: any) => void;
 
-interface SearchBarExpandedFunc {
-    (event: any): void;
-}
+type SearchBarExpandedFunc = (event: any) => void;
 
 export interface SearchBarProps {
     onTextChanged: SearchTextChangedFunc;
@@ -167,12 +157,6 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
         this.setState({ expanded });
     }
 
-    onStructuredModeChanged(event: any) {
-        let value = !this.state.structured;
-        this.props.onStructuredModeChanged(value);
-        this.setState({ structured: value });
-    }
-
     onDetailedModeChanged(event: any) {
         let value = !this.state.detailed;
         this.props.onDetailedModeChanged(value);
@@ -220,10 +204,9 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
     }
 
     getSearchOptionsDisabled() {
-        let searchOptionsDisabled = this.state.hasText && this.props.categories.length > 0
-            ? false
-            : true; // Enable the button only when user is doing search
-        return searchOptionsDisabled;
+        // Enable the button only when user is doing search
+        let searchOptionsDisabled = this.state.hasText && this.props.categories.length > 0;
+        return !searchOptionsDisabled;
     }
 
     createClearFiltersButton(){
@@ -356,7 +339,7 @@ export class CategoryData {
         this.name = name;
         this.className = className;
 
-        this.displayText = displayText ? displayText : name;
+        this.displayText = displayText ?? name;
     }
 
     getCheckbox(checked: boolean = false): JSX.Element {
