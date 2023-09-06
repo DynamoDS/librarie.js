@@ -22,7 +22,6 @@
   "dependencies": {
     "core-js": "^3.21.1",
     "express": "^4.17.3",
-    "node-notifier": "^9.0.0",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
     "react-tooltip": "^5.10.0",
