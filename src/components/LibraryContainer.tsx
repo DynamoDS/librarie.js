@@ -263,7 +263,7 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
         if (hasText) {
             // Starting searching immediately after user input, 
             // but only show change on ui after 300ms
-            this.timeout = setTimeout(function () {
+            setTimeout(function () {
                 if (this.props.libraryController.searchLibraryItemsHandler) {
                     this.props.libraryController.searchLibraryItemsHandler(text, function (loadedTypesJsonOnSearch: any) {
                         // Generate sections based on layout specification and loaded types filtered by search string

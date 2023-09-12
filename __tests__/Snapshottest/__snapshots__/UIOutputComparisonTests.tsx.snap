@@ -6,36 +6,36 @@ exports[`LibraryContainer Test UI rendering of Library Item and child components
 <LibraryItem
   data={
     ItemData {
-      "childItems": Array [
+      "childItems": [
         ItemData {
-          "childItems": Array [],
+          "childItems": [],
           "contextData": "",
           "description": "",
           "expanded": false,
           "iconUrl": "",
           "itemType": "category",
-          "keywords": Array [
+          "keywords": [
             "",
           ],
           "parameters": "",
-          "pathToItem": Array [],
+          "pathToItem": [],
           "showHeader": true,
           "text": "Child0",
           "visible": true,
           "weight": 0,
         },
         ItemData {
-          "childItems": Array [],
+          "childItems": [],
           "contextData": "",
           "description": "",
           "expanded": false,
           "iconUrl": "",
           "itemType": "category",
-          "keywords": Array [
+          "keywords": [
             "",
           ],
           "parameters": "",
-          "pathToItem": Array [],
+          "pathToItem": [],
           "showHeader": true,
           "text": "Child1",
           "visible": true,
@@ -47,11 +47,11 @@ exports[`LibraryContainer Test UI rendering of Library Item and child components
       "expanded": false,
       "iconUrl": "",
       "itemType": "none",
-      "keywords": Array [
+      "keywords": [
         "",
       ],
       "parameters": "",
-      "pathToItem": Array [],
+      "pathToItem": [],
       "showHeader": true,
       "text": "TestItem",
       "visible": true,
@@ -75,13 +75,13 @@ exports[`LibraryContainer Test UI rendering of Library Item and child components
       "on": [Function],
       "raiseEvent": [Function],
       "reactor": Reactor {
-        "events": Array [],
+        "events": [],
       },
       "refreshLibraryView": [Function],
       "refreshLibraryViewHandler": null,
       "registerRequestHandler": [Function],
       "request": [Function],
-      "requestHandler": Object {},
+      "requestHandler": {},
       "searchLibraryItemsHandler": null,
       "setLayoutSpecsJson": [Function],
       "setLayoutSpecsJsonHandler": null,
