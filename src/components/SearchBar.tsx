@@ -3,8 +3,6 @@ import * as ReactDOM from 'react-dom';
 import * as _ from 'underscore';
 import { ObjectExtensions } from '../LibraryUtilities'
 
-type StructuredModeChangedFunc = (structured: boolean) => void;
-
 type DetailedModeChangedFunc = (detailed: boolean) => void;
 
 type SearchCategoriesChangedFunc = (categories: string[], categoryData: CategoryData[]) => void;
@@ -15,7 +13,6 @@ type SearchBarExpandedFunc = (event: any) => void;
 
 export interface SearchBarProps {
     onTextChanged: SearchTextChangedFunc;
-    onStructuredModeChanged: StructuredModeChangedFunc;
     onDetailedModeChanged: DetailedModeChangedFunc;
     onCategoriesChanged: SearchCategoriesChangedFunc;
     categories: string[];
