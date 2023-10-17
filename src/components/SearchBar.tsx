@@ -33,7 +33,9 @@ export interface SearchBarState {
 enum EventKey {
     ARROW_DOWN = "ArrowDown",
     DELETE = "Delete",
-    ESCAPE =  "Escape"
+    ESCAPE =  "Escape",
+    KEYC = "C",
+    KEYV = "V"
 };
 
 export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
@@ -92,6 +94,12 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
             case EventKey.DELETE:
                 this.forwardDelete(event);
                 break;
+            case EventKey.KEYC:
+                this.copyToClipboard();
+                break;
+            case EventKey.KEYV:
+                this.pasteFromClipboard();
+            break;
             default:
                 if (event.target.className == "SearchInputText") {
                     this.searchInputField.focus();
@@ -130,6 +138,40 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
         let hasText = this.searchInputField.value.length > 0;
         let expanded = !hasText ? false : this.state.expanded;
         
+        if (this.state.hasText || hasText) {
+            this.setState({ expanded: expanded, hasText: hasText });
+            this.props.onTextChanged(this.searchInputField.value);
+        }
+    }
+
+    async copyToClipboard() {
+        if(!document.getSelection) return;
+        let text =  document.getSelection()?.toString();
+        
+        //@ts-ignore
+        if(chrome.webview === undefined) return;
+        //@ts-ignore
+        await chrome.webview.hostObjects.scriptObject.CopyToClipboard(text);
+    }
+
+    async pasteFromClipboard () {
+        //@ts-ignore
+        if(chrome.webview === undefined) return;
+        //@ts-ignore
+        let text = await chrome.webview.hostObjects.scriptObject.PasteFromClipboard();
+        //@ts-ignore
+
+        let cursor = this.searchInputField.selectionStart ?? 0;
+        const searchValueCopy = this.searchInputField.value.split("");
+        searchValueCopy.splice(cursor, 0, text);
+        this.searchInputField.value = searchValueCopy.join("");
+        this.searchInputField.focus();
+
+        this.searchInputField.setSelectionRange(cursor + text.length, cursor + text.length);
+
+        let hasText = this.searchInputField.value.length > 0;
+        let expanded = !hasText ? false : this.state.expanded;
+
         if (this.state.hasText || hasText) {
             this.setState({ expanded: expanded, hasText: hasText });
             this.props.onTextChanged(this.searchInputField.value);
