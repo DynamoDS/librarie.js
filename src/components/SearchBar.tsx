@@ -195,14 +195,12 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
     }
 
     onExpandButtonClick() {
-        let expanded = !this.state.expanded;
-        this.setState({ expanded });
+        this.setState(prevState => ({expanded: !prevState.expanded}));
     }
 
     onDetailedModeChanged(event: any) {
-        let value = !this.state.detailed;
-        this.props.onDetailedModeChanged(value);
-        this.setState({ detailed: value });
+        this.setState(prevState => ({detailed: !prevState.detailed}));
+        this.props.onDetailedModeChanged(this.state.detailed);
     }
 
     getSelectedCategories(): string[]{
