@@ -160,21 +160,28 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
         //@ts-ignore
         let text = await chrome.webview.hostObjects.scriptObject.PasteFromClipboard();
         //@ts-ignore
+        
+        const field = this.searchInputField;
+        const searchValueCopy = field.value.split("");
+        let cursor = field.selectionStart ?? 0;
+        let selectionLength = 0;
 
-        let cursor = this.searchInputField.selectionStart ?? 0;
-        const searchValueCopy = this.searchInputField.value.split("");
-        searchValueCopy.splice(cursor, 0, text);
-        this.searchInputField.value = searchValueCopy.join("");
-        this.searchInputField.focus();
+        if(document.getSelection()) {
+            selectionLength = document.getSelection()?.toString().length ?? 0;
+        }
+        
+        searchValueCopy.splice(cursor, selectionLength, text);
+        field.value = searchValueCopy.join("");
+        field.focus();
 
-        this.searchInputField.setSelectionRange(cursor + text.length, cursor + text.length);
+        field.setSelectionRange(cursor + text.length, cursor + text.length);
 
-        let hasText = this.searchInputField.value.length > 0;
+        let hasText = field.value.length > 0;
         let expanded = !hasText ? false : this.state.expanded;
 
         if (this.state.hasText || hasText) {
             this.setState({ expanded: expanded, hasText: hasText });
-            this.props.onTextChanged(this.searchInputField.value);
+            this.props.onTextChanged(field.value);
         }
     }
 
