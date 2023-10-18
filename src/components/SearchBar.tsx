@@ -33,7 +33,9 @@ export interface SearchBarState {
 enum EventKey {
     ARROW_DOWN = "ArrowDown",
     DELETE = "Delete",
-    ESCAPE =  "Escape"
+    ESCAPE =  "Escape",
+    KEYC = "C",
+    KEYV = "V"
 };
 
 export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
@@ -92,6 +94,12 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
             case EventKey.DELETE:
                 this.forwardDelete(event);
                 break;
+            case EventKey.KEYC:
+                this.copyToClipboard();
+                break;
+            case EventKey.KEYV:
+                this.pasteFromClipboard();
+            break;
             default:
                 if (event.target.className == "SearchInputText") {
                     this.searchInputField.focus();
@@ -136,6 +144,47 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
         }
     }
 
+    async copyToClipboard() {
+        if(!document.getSelection) return;
+        let text =  document.getSelection()?.toString();
+        
+        //@ts-ignore
+        if(chrome.webview === undefined) return;
+        //@ts-ignore
+        await chrome.webview.hostObjects.scriptObject.CopyToClipboard(text);
+    }
+
+    async pasteFromClipboard () {
+        //@ts-ignore
+        if(chrome.webview === undefined) return;
+        //@ts-ignore
+        let text = await chrome.webview.hostObjects.scriptObject.PasteFromClipboard();
+        //@ts-ignore
+        
+        const field = this.searchInputField;
+        const searchValueCopy = field.value.split("");
+        let cursor = field.selectionStart ?? 0;
+        let selectionLength = 0;
+
+        if(document.getSelection()) {
+            selectionLength = document.getSelection()?.toString().length ?? 0;
+        }
+        
+        searchValueCopy.splice(cursor, selectionLength, text);
+        field.value = searchValueCopy.join("");
+        field.focus();
+
+        field.setSelectionRange(cursor + text.length, cursor + text.length);
+
+        let hasText = field.value.length > 0;
+        let expanded = !hasText ? false : this.state.expanded;
+
+        if (this.state.hasText || hasText) {
+            this.setState({ expanded: expanded, hasText: hasText });
+            this.props.onTextChanged(field.value);
+        }
+    }
+
     onTextChanged(event: any) {
         let text = event.target.value.toLowerCase();
         let expanded = text.length == 0 ? false : this.state.expanded;
@@ -153,14 +202,12 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
     }
 
     onExpandButtonClick() {
-        let expanded = !this.state.expanded;
-        this.setState({ expanded });
+        this.setState(prevState => ({expanded: !prevState.expanded}));
     }
 
     onDetailedModeChanged(event: any) {
-        let value = !this.state.detailed;
-        this.props.onDetailedModeChanged(value);
-        this.setState({ detailed: value });
+        this.setState(prevState => ({detailed: !prevState.detailed}));
+        this.props.onDetailedModeChanged(this.state.detailed);
     }
 
     getSelectedCategories(): string[]{
