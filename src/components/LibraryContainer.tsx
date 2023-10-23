@@ -133,20 +133,19 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
      * @param element 
      */
     scrollToExpandedItem(element: HTMLElement) {
-        if (element) {
-            
-            const currentElement = ReactDOM.findDOMNode(this).querySelector(".LibraryItemContainer");
-            //get the offset for the element we care about scrolling to.
-            const offsetOldElement = this.offset(element);
-            //now we wait until the expansion and re-render occurs,
-            setTimeout(() => {
-                //measure the distance between the old element and the new position post expansion
-                const distance = offsetOldElement.top - this.offset(element).top;
-                //scroll back up by that distance.
-                currentElement.scrollTop = currentElement.scrollTop - distance;
+        if(!element) return;
+        const currentElement = ReactDOM.findDOMNode(this).querySelector(".LibraryItemContainer");
+        //get the offset for the element we care about scrolling to.
+        const offsetOldElement = this.offset(element);
+        //now we wait until the expansion and re-render occurs,
+        setTimeout(() => {
+            //measure the distance between the old element and the new position post expansion
+            const distance = offsetOldElement.top - this.offset(element).top;
+            //scroll back up by that distance.
+            if(!currentElement) return;
+            currentElement.scrollTop = currentElement.scrollTop - distance;
 
-            }, 0);
-        }
+        }, 0);
     }
 
 
@@ -210,8 +209,10 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
         }
 
         // Update the properties in searcher
-        this.searcher.sections = sections;
-        this.searcher.initializeCategories(this.searchCategories);
+        if(this.searcher) {
+            this.searcher.sections = sections;
+            this.searcher.initializeCategories(this.searchCategories);
+        }
 
         // Just to force a refresh of UI.
         this.setState({ inSearchMode: this.state.inSearchMode });
@@ -245,7 +246,10 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
     }
 
     onCategoriesChanged(categories: string[], categoryData:CategoryData[]) {
-        this.searcher.categories = categories;
+        if(this.searcher) {
+            this.searcher.categories = categories;
+        }
+
         this.updateSearchResultItems(true, this.state.structured);
         this.setState({ selectedCategories: categories });
         //This is used in Dynamo instrumenation. categoryData contains the list of all 
@@ -306,12 +310,13 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
 
         let index = 0;
         let data: LibraryUtilities.ItemData[] | null = null;
+        
         if (structured) {
-            this.searchResultItems = this.searcher.generateStructuredItems();
+            this.searchResultItems = this.searcher?.generateStructuredItems() ?? null;
         } else {
-            this.searchResultItems = this.searcher.generateListItems(
-                this.props.libraryController.searchLibraryItemsHandler ? this.generatedSectionsOnSearch : this.generatedSections
-            );
+            this.searchResultItems = this.searcher?.generateListItems(
+                (this.props.libraryController.searchLibraryItemsHandler ? this.generatedSectionsOnSearch : this.generatedSections)
+            ) ?? null;
         }
     }
 
@@ -323,7 +328,11 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
         }
 
         let nextIndex = selectNextItem ? this.selectionIndex + 1 : this.selectionIndex - 1;
-        let maxSelectionIndex = this.searchResultItems.length - 1;
+        let maxSelectionIndex;
+
+        if(this.searchResultItems) {
+            maxSelectionIndex = this.searchResultItems.length - 1;
+        }
 
         if (nextIndex < 0 && maxSelectionIndex >= 0) {
             nextIndex = 0;
@@ -338,8 +347,11 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
 
     // Set item at index to be selected, and the previous selected item will be unselected.
     setSelection(index: number) {
-        this.searchResultItemRefs[this.selectionIndex].setSelected(false);
-        this.searchResultItemRefs[index].setSelected(true);
+        if(this.searchResultItemRefs) {
+            this.searchResultItemRefs[this.selectionIndex].setSelected(false);
+            this.searchResultItemRefs[index].setSelected(true);
+        }
+
         this.selectionIndex = index;
     }
 
@@ -377,13 +389,13 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
                 }
                 );
             } else if (this.state.structured) {
-                sections = this.searchResultItems.map(item =>
+                sections = this.searchResultItems?.map(item =>
                     <LibraryItem key={index++} data={item} libraryContainer={this} showItemSummary={this.state.showItemSummary} tooltipContent={this.state.tooltipContent} />
-                );
+                ) ?? null;
             } else {
-                sections = this.searchResultItems.map(item =>
+                sections = this.searchResultItems?.map(item =>
                     <SearchResultItem
-                        ref={item => { if (item) this.searchResultItemRefs.push(item); }}
+                        ref={item => { if (item) this.searchResultItemRefs?.push(item); }}
                         index={index}
                         key={index++}
                         data={item}
@@ -393,7 +405,7 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
                         showItemSummary={this.state.showItemSummary}
                         onParentTextClicked={this.directToLibrary.bind(this)}
                     />
-                );
+                ) ?? null;
             }
 
             const searchBar = <SearchBar
@@ -401,7 +413,7 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
                 onDetailedModeChanged={this.onDetailedModeChanged}
                 onStructuredModeChanged={this.onStructuredModeChanged}
                 onTextChanged={this.onTextChanged}
-                categories={this.searcher.getDisplayedCategories()}
+                categories={this.searcher?.getDisplayedCategories() ?? [""]}
             />;
 
             return (
