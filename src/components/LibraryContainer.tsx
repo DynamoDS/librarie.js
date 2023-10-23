@@ -48,12 +48,12 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
     loadedTypesJson: any = null;
     layoutSpecsJson: any = null;
 
-    generatedSections: LibraryUtilities.ItemData[] = null;
-    generatedSectionsOnSearch: LibraryUtilities.ItemData[] = null;
-    searchResultItemRefs: SearchResultItem[] = [];
-    searchResultItems: LibraryUtilities.ItemData[] = [];
+    generatedSections: LibraryUtilities.ItemData[] | null = null;
+    generatedSectionsOnSearch: LibraryUtilities.ItemData[] | null = null;
+    searchResultItemRefs: SearchResultItem[] | null = [];
+    searchResultItems: LibraryUtilities.ItemData[] | null = [];
 
-    searcher: Searcher = null;
+    searcher: Searcher | null = null;
     searchCategories: string[] = [];
     timeout: number;
     selectionIndex: number = 0;
@@ -305,7 +305,7 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
         }
 
         let index = 0;
-        let data: LibraryUtilities.ItemData[] = null;
+        let data: LibraryUtilities.ItemData[] | null = null;
         if (structured) {
             this.searchResultItems = this.searcher.generateStructuredItems();
         } else {
@@ -363,7 +363,7 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
         }
 
         try {
-            let sections: JSX.Element[] = null;
+            let sections: JSX.Element[] | null = null;
             let index = 0;
             if (!this.state.inSearchMode) {
                 sections = this.generatedSections.map(data => {
