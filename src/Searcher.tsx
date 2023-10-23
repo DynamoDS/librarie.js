@@ -3,7 +3,7 @@ import { LibraryContainer } from "./components/LibraryContainer";
 import * as LibraryUtilities from "./LibraryUtilities";
 
 export class Searcher {
-    libraryContainer: LibraryContainer = null;
+    libraryContainer: LibraryContainer | null = null;
     sections: LibraryUtilities.ItemData[] = [];
     categories: string[] = [];
 
