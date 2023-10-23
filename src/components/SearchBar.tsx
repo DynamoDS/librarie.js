@@ -102,7 +102,7 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
             break;
             default:
                 if (event.target.className == "SearchInputText") {
-                    this.searchInputField.focus();
+                    this.searchInputField?.focus();
                 }
                 break;
         }
@@ -160,6 +160,8 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
         //@ts-ignore
         let text = await chrome.webview.hostObjects.scriptObject.PasteFromClipboard();
         //@ts-ignore
+        
+        if(!this.searchInputField) return;
         
         const field = this.searchInputField;
         const searchValueCopy = field.value.split("");
