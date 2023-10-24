@@ -34,6 +34,7 @@ enum EventKey {
     ARROW_DOWN = "ArrowDown",
     DELETE = "Delete",
     ESCAPE =  "Escape",
+    KEYA = "A",
     KEYC = "C",
     KEYV = "V"
 };
@@ -94,6 +95,9 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
             case EventKey.DELETE:
                 this.forwardDelete(event);
                 break;
+            case EventKey.KEYA:
+                this.fullTextSelection();
+            break;
             case EventKey.KEYC:
                 this.copyToClipboard();
                 break;
@@ -142,6 +146,13 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
             this.setState({ expanded: expanded, hasText: hasText });
             this.props.onTextChanged(this.searchInputField.value);
         }
+    }
+
+    fullTextSelection() {
+        if (!this.searchInputField) return;
+
+        this.searchInputField.focus();
+        this.searchInputField.setSelectionRange(0, this.searchInputField.value.length);
     }
 
     async copyToClipboard() {
