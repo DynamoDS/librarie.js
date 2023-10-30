@@ -375,7 +375,7 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
         }
 
         try {
-            let sections: JSX.Element[] | null = null;
+            let sections: React.ReactNode = null;
             let index = 0;
             if (!this.state.inSearchMode) {
                 sections = this.generatedSections.map(data => {
