@@ -41,9 +41,9 @@ enum EventKey {
 
 export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
     categoryData: {[key: string]: CategoryData} = {};
-    searchOptionsContainer: HTMLDivElement = null;
-    searchInputField: HTMLInputElement = null;
-    filterBtn: HTMLButtonElement = null;
+    searchOptionsContainer: HTMLDivElement | null = null;
+    searchInputField: HTMLInputElement | null = null;
+    filterBtn: HTMLButtonElement | null = null;
 
     constructor(props: SearchBarProps) {
         super(props);
@@ -106,7 +106,7 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
             break;
             default:
                 if (event.target.className == "SearchInputText") {
-                    this.searchInputField.focus();
+                    this.searchInputField?.focus();
                 }
                 break;
         }
@@ -171,6 +171,8 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
         //@ts-ignore
         let text = await chrome.webview.hostObjects.scriptObject.PasteFromClipboard();
         //@ts-ignore
+        
+        if(!this.searchInputField) return;
         
         const field = this.searchInputField;
         const searchValueCopy = field.value.split("");
@@ -343,7 +345,7 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
 
     render() {
 
-        let cancelButton: JSX.Element = null;
+        let cancelButton: JSX.Element | null = null;
         let searchIcon: string = require("../resources/ui/search-icon.svg");
         let searchIconClear: string = require("../resources/ui/search-icon-clear.svg");
 
@@ -391,7 +393,7 @@ export class CategoryData {
     checkboxReference:HTMLInputElement;
 
     // Optional attributes
-    displayText: string = null;
+    displayText: string | null = null;
 
     constructor(name: string, className: string, displayText?: string) {
         this.name = name;

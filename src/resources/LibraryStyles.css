@@ -14,7 +14,7 @@ html {
 }
 
 body {
-	font-family: "Artifakt Element", "Open Sans";
+	font-family: "Artifakt Element", "Open Sans", sans-serif;
 	-webkit-user-select: none;
 	user-select: none;
 	cursor: default;
@@ -23,7 +23,7 @@ body {
 }
 
 input {
-	font-family: "Artifakt Element", "Open Sans";
+	font-family: "Artifakt Element", "Open Sans", sans-serif;
 }
 
 button {
@@ -429,27 +429,12 @@ button {
 	opacity: 1;
 }
 
-.SearchBar button,
 .SearchBar button {
-	border: none;
+	border: 0;
 	outline: none;
 	height: 100%;
 	background-color: transparent;
 	transition: 0.15s;
-}
-
-.SearchBar button {
-	color: #ddd;
-	transition: 0.15s;
-}
-
-.SearchBar button {
-	color: #555;
-}
-
-.SearchBar button {
-	background-color: transparent;
-	border: 0;
 	color: #6dd2ff;
 }
 

@@ -83,13 +83,13 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
 			let parentText = this.props.data.pathToItem[this.props.data.pathToItem.length - 2].text;
 			
 			// Category of the item is the item with type category in the array pathToItem
-			let categoryText = this.props.data.pathToItem.find(item => item.itemType === "category").text;
+			let categoryText = this.props.data.pathToItem.find(item => item.itemType === "category")?.text ?? "";
 			let parameters = this.props.data.parameters;
 			let highLightedItemText = LibraryUtilities.getHighlightedText(this.props.data.text, this.props.highlightedText, true);
 			let highLightedParentText = LibraryUtilities.getHighlightedText(parentText, this.props.highlightedText, false);
 			let highLightedCategoryText = LibraryUtilities.getHighlightedText(categoryText, this.props.highlightedText, false);
 			let itemTypeIconPath = require(`../resources/icons/library-${this.props.data.itemType}.svg`)
-			let itemDescription: JSX.Element = null;
+			let itemDescription: JSX.Element | null = null;
 				
 			if (this.props.detailed) {
 					let description = "No description available";
@@ -101,8 +101,12 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
 				}
 
 			return (
-				<div className={ItemContainerStyle} onClick={this.onItemClicked.bind(this)}
-					onMouseEnter={this.onLibraryItemMouseEnter.bind(this)} onMouseLeave={this.onLibraryItemMouseLeave.bind(this)}>
+				<div className={ItemContainerStyle} 
+                    onClick={this.onItemClicked.bind(this)}
+                    onKeyDown={this.onItemClicked.bind(this)}
+					onMouseEnter={this.onLibraryItemMouseEnter.bind(this)}
+                    onMouseLeave={this.onLibraryItemMouseLeave.bind(this)}
+                >
 					<img className={"ItemIcon"} src={iconPath} onError={this.onImageLoadFail.bind(this)} />
 					<div className={"ItemInfo"}>
 						<div className={"ItemTitle"}>{highLightedItemText}
@@ -110,7 +114,10 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
 						</div>
 						{itemDescription}
 						<div className={"ItemDetails"}>
-							<div className={"ItemParent"} onClick={this.onParentTextClicked.bind(this)}>
+							<div className={"ItemParent"} 
+                                onClick={this.onParentTextClicked.bind(this)}
+                                onKeyDown={this.onParentTextClicked.bind(this)}
+                            >
 								{highLightedParentText}
 							</div>
 							<img className={"ItemTypeIcon"} src={itemTypeIconPath} onError={this.onImageLoadFail.bind(this)} />
