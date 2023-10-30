@@ -101,8 +101,12 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
 				}
 
 			return (
-				<div className={ItemContainerStyle} onClick={this.onItemClicked.bind(this)}
-					onMouseEnter={this.onLibraryItemMouseEnter.bind(this)} onMouseLeave={this.onLibraryItemMouseLeave.bind(this)}>
+				<div className={ItemContainerStyle} 
+                    onClick={this.onItemClicked.bind(this)}
+                    onKeyDown={this.onItemClicked.bind(this)}
+					onMouseEnter={this.onLibraryItemMouseEnter.bind(this)}
+                    onMouseLeave={this.onLibraryItemMouseLeave.bind(this)}
+                >
 					<img className={"ItemIcon"} src={iconPath} onError={this.onImageLoadFail.bind(this)} />
 					<div className={"ItemInfo"}>
 						<div className={"ItemTitle"}>{highLightedItemText}
@@ -110,7 +114,10 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
 						</div>
 						{itemDescription}
 						<div className={"ItemDetails"}>
-							<div className={"ItemParent"} onClick={this.onParentTextClicked.bind(this)}>
+							<div className={"ItemParent"} 
+                                onClick={this.onParentTextClicked.bind(this)}
+                                onKeyDown={this.onParentTextClicked.bind(this)}
+                            >
 								{highLightedParentText}
 							</div>
 							<img className={"ItemTypeIcon"} src={itemTypeIconPath} onError={this.onImageLoadFail.bind(this)} />
