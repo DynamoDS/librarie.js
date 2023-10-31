@@ -67,7 +67,7 @@ describe("LibraryContainer class", function () {
   });
 
   it("should throw exception if set with an invalid loadedTypesJson", function () {
-    let libContainer = shallow(
+    shallow(
       libController.createLibraryContainer()
     );
 
@@ -83,7 +83,7 @@ describe("LibraryContainer class", function () {
   });
 
   it("should throw exception if set with an invalid layoutSpecsJson", function () {
-    let libContainer = shallow(
+    shallow(
       libController.createLibraryContainer()
     );
 
