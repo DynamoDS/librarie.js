@@ -4,14 +4,11 @@
 
 import * as React from 'react';
 import * as LibraryEntryPoint from '../../src/entry-point';
-import { LibraryContainer } from '../../src/components/LibraryContainer';
 import { LibraryItem } from '../../src/components/LibraryItem';
 import { ItemData } from "../../src/LibraryUtilities";
-import { shallow, configure } from 'enzyme';
-import { mount } from 'enzyme';
+import { mount, shallow, configure } from 'enzyme';
 import toJson from 'enzyme-to-json';
 import * as Adapter from 'enzyme-adapter-react-16';
-import * as chai from 'chai';
 
 configure({adapter: new Adapter()});
 
@@ -25,7 +22,7 @@ describe("LibraryContainer", function () {
     data.itemType = "none";
 
     // Create child items and link with parent
-    for (var i = 0; i < 2; i++) {
+    for (let i = 0; i < 2; i++) {
       let item = new ItemData("");
       item.text = "Child" + i;
       item.itemType = "category";
@@ -48,7 +45,7 @@ describe("LibraryContainer", function () {
     data.itemType = "none";
 
     // create child items and link with parent
-    for (var i = 0; i < 2; i++) {
+    for (let i = 0; i < 2; i++) {
       let item = new ItemData("");
       item.text = "Child" + i;
       item.itemType = "category";
@@ -74,7 +71,6 @@ describe("LibraryContainer", function () {
     libController.setLoadedTypesJson(loadedTypesJson, false);
     libController.setLayoutSpecsJson(layoutSpecsJson, false);
     libController.refreshLibraryView();
-    let libContainer = LibraryEntryPoint.CreateLibraryController();
     // Search for all LibraryItems      
     let text = tree.find('div.LibraryItemText');
     expect(toJson(text)).toMatchSnapshot();
