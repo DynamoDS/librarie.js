@@ -108,7 +108,7 @@ export class LibraryController {
      * @param {any[]} argsArray Zero or more argument values to be passed to the 
      * subscribed handler for this named variable.
      */
-    request(variableName: string, callback: Function, ...argsArray: any[]) {
+    request(variableName: string, callback?: Function, ...argsArray: any[]) {
 
         // Invokve handler if there's one registered.
         let requestHandler = this.requestHandler[variableName];
