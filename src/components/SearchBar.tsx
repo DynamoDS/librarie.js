@@ -387,10 +387,12 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
     }
 }
 
+
 export class CategoryData {
     name: string;
     className: string;
-    checkboxReference:HTMLInputElement;
+    checkboxReference: HTMLInputElement;
+    setInputRef: (element: HTMLInputElement) => void;
 
     // Optional attributes
     displayText: string | null = null;
@@ -398,7 +400,9 @@ export class CategoryData {
     constructor(name: string, className: string, displayText?: string) {
         this.name = name;
         this.className = className;
-
+        this.setInputRef = element => {
+            this.checkboxReference = element;
+        };
         this.displayText = displayText ?? name;
     }
 
@@ -410,7 +414,8 @@ export class CategoryData {
             className={this.className}
             onChange={this.onCheckboxChanged.bind(this)}
             defaultChecked={checked}
-            ref={cb => {this.checkboxReference = cb}}/>
+            ref={this.setInputRef}
+            />
 
         return <label className={"Category"} key={this.name}>
                 {checkbox}
