@@ -3,10 +3,9 @@
  */
 
 import * as React from 'react';
-import { shallow, mount, configure, ReactWrapper } from 'enzyme';
+import { mount, configure, ReactWrapper } from 'enzyme';
 import * as LibraryEntryPoint from '../src/entry-point';
 import { LibraryItem } from '../src/components/LibraryItem';
-import { SearchResultItem } from '../src/components/SearchResultItem';
 import { ItemData } from "../src/LibraryUtilities";
 import * as Adapter from 'enzyme-adapter-react-16';
 import * as chai from 'chai';
@@ -113,7 +112,7 @@ describe("LibraryContainer UI", function () {
     data.itemType = "none";
 
     // create child items and link with parent
-    for (var i = 0; i < 2; i++) {
+    for (let i = 0; i < 2; i++) {
       let item = new ItemData("");
       item.text = "Child" + i;
       item.itemType = "category";
@@ -149,7 +148,7 @@ describe("LibraryContainer UI", function () {
     data.itemType = "none";
 
     // create child items and link with parent
-    for (var i = 0; i < 2; i++) {
+    for (let i = 0; i < 2; i++) {
       let item = new ItemData("");
       item.text = "Child" + i;
       item.itemType = "category";
@@ -180,7 +179,7 @@ describe("LibraryContainer UI", function () {
 
     let header = libContainer.find('div.LibraryItemHeader').at(0);
     chai.expect(header).to.have.lengthOf(1);
-    var count = 0;
+    let count = 0;
     //replace the scroll method with a method which ends the test.
     (libContainer.getNode() as unknown as LibraryContainer).scrollToExpandedItem = () => { count = count + 1; }
     header.simulate('click');
@@ -397,6 +396,7 @@ describe("LibraryContainer UI", function () {
 
         let generatedSections = libContainer.instance().generatedSections;
         chai.expect(generatedSections).to.have.lengthOf(2);
+        if(!generatedSections) return;
         chai.expect(generatedSections[1].text).to.equal("Add-ons");
         chai.expect(generatedSections[1].expanded).to.be.true; 
         

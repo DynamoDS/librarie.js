@@ -1011,7 +1011,7 @@ describe("updateSections function", function () {
 
 describe('listNode Class', function () {
 
-  var testData: any;
+  let testData: any;
 
   beforeEach(function () {
     testData = new testClasses.TypeListNodeData();
@@ -1045,7 +1045,7 @@ describe('listNode Class', function () {
 
 describe("LayoutElement class", function () {
 
-  var testData: any;
+  let testData: any;
 
   beforeEach(function () {
     testData = new testClasses.LayoutElementData();
@@ -1084,8 +1084,8 @@ describe("LayoutElement class", function () {
 
 describe('ItemData class', function () {
 
-  var testData: any;
-  var emptyString = '';
+  let testData: any;
+  const emptyString = '';
 
   beforeEach(function () {
     testData = new LibraryUtilities.LayoutElement(new testClasses.LayoutElementData());
@@ -1130,8 +1130,8 @@ describe('ItemData class', function () {
 });
 
 describe('buildLibraryItemsFromName function', function () {
-  var typeListNodes: LibraryUtilities.TypeListNode[];
-  var result: LibraryUtilities.ItemData;
+  let typeListNodes: LibraryUtilities.TypeListNode[];
+  let result: LibraryUtilities.ItemData;
 
   beforeEach(function () {
     typeListNodes = [];
@@ -1214,7 +1214,7 @@ describe('buildLibraryItemsFromName function', function () {
 });
 
 describe('setItemStateRecursive function', function () {
-  var itemArray: LibraryUtilities.ItemData[];
+  let itemArray: LibraryUtilities.ItemData[];
   let itemData1 = new LibraryUtilities.ItemData("1");
   let itemData2 = new LibraryUtilities.ItemData("2");
   let itemData3 = new LibraryUtilities.ItemData("3");

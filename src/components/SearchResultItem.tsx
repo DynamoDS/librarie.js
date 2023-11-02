@@ -13,7 +13,6 @@ interface SearchResultItemProps {
     libraryContainer: LibraryContainer,
     highlightedText: string;
     detailed: boolean;
-    showItemSummary: boolean;
     onParentTextClicked: ParentTextClickedFunc,
 }
 
