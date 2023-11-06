@@ -36,14 +36,18 @@ describe("isValidIncludeInfo function", function () {
   let includeItemPair2: LibraryUtilities.IncludeItemPair;
   let includeItemPair3: LibraryUtilities.IncludeItemPair;
 
+  const includeInfo = {
+    path: ""
+  }
+
   beforeEach(function () {
     includeItemPairs = [];
     owningItem1 = new LibraryUtilities.ItemData("1");
     owningItem2 = new LibraryUtilities.ItemData("2");
     owningItem3 = new LibraryUtilities.ItemData("3");
-    includeItemPair1 = new LibraryUtilities.IncludeItemPair(null, owningItem1);
-    includeItemPair2 = new LibraryUtilities.IncludeItemPair(null, owningItem2);
-    includeItemPair3 = new LibraryUtilities.IncludeItemPair(null, owningItem3);
+    includeItemPair1 = new LibraryUtilities.IncludeItemPair(includeInfo, owningItem1);
+    includeItemPair2 = new LibraryUtilities.IncludeItemPair(includeInfo, owningItem2);
+    includeItemPair3 = new LibraryUtilities.IncludeItemPair(includeInfo, owningItem3);
   });
 
   it("should return true if includeItemPairs is empty", function () {
@@ -287,10 +291,14 @@ describe("constructFromIncludeInfo function", function () {
     owningItem3 = new LibraryUtilities.ItemData("3");
     owningItem4 = new LibraryUtilities.ItemData("4");
 
-    pair1 = new LibraryUtilities.IncludeItemPair(null, owningItem1);
-    pair2 = new LibraryUtilities.IncludeItemPair(null, owningItem2);
-    pair3 = new LibraryUtilities.IncludeItemPair(null, owningItem3);
-    pair4 = new LibraryUtilities.IncludeItemPair(null, owningItem4);
+    const includeInfo = {
+      path: ""
+    }
+
+    pair1 = new LibraryUtilities.IncludeItemPair(includeInfo, owningItem1);
+    pair2 = new LibraryUtilities.IncludeItemPair(includeInfo, owningItem2);
+    pair3 = new LibraryUtilities.IncludeItemPair(includeInfo, owningItem3);
+    pair4 = new LibraryUtilities.IncludeItemPair(includeInfo, owningItem4);
 
     node1 = new LibraryUtilities.TypeListNode(new testClasses.TypeListNodeData());
     node2 = new LibraryUtilities.TypeListNode(new testClasses.TypeListNodeData());
