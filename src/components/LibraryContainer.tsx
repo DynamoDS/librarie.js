@@ -217,7 +217,7 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
         }
 
         // Just to force a refresh of UI.
-        this.setState({ inSearchMode: this.state.inSearchMode });
+        this.setState(prevState => ({inSearchMode: prevState.inSearchMode}));
     }
 
     raiseEvent(name: string, params?: any | any[]) {
