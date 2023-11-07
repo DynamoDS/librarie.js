@@ -6,35 +6,17 @@ import * as React from 'react';
 import * as LibraryEntryPoint from '../../src/entry-point';
 import { LibraryItem } from '../../src/components/LibraryItem';
 import { ItemData } from "../../src/LibraryUtilities";
+import { createLibraryItem } from "../../src/utils";
 import { mount, shallow, configure } from 'enzyme';
 import toJson from 'enzyme-to-json';
 import * as Adapter from 'enzyme-adapter-react-16';
 
 configure({adapter: new Adapter()});
 
-// Test data to create LibraryItem  
-const createLibraryItem = () => {
-
-  // Parent item that will hold the child items
-  let data = new ItemData("");
-  data.text = "TestItem";
-  data.itemType = "none";
-  
-  // Create child items and link with parent
-  for (let i = 0; i < 2; i++) {
-    let item = new ItemData("");
-    item.text = "Child" + i;
-    item.itemType = "category";
-    data.appendChild(item);
-  }
-  return data;
-}
-
-
 describe("LibraryContainer", function () {
   // Test data to create LibraryItem  
     // Parent item that will hold the child items
-  let data = createLibraryItem();
+  let data = createLibraryItem(ItemData);
 
   // Create "LibraryContainer" to pass as an argument for creation of "LibraryItem"
   const libContainer = LibraryEntryPoint.CreateLibraryController();
