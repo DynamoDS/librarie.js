@@ -27,7 +27,7 @@ module.exports = {
         library: "LibraryEntryPoint",
     },
     optimization:{
-        minimize: productionBuild ? true : false,
+        minimize: !!productionBuild,
         minimizer: [new TerserPlugin({terserOptions:{mangle:{reserved:["on","__webpack_require__"]}}})],
     },
     mode:productionBuild? "production":"development",
@@ -61,7 +61,7 @@ module.exports = {
                 use: ["style-loader", "css-loader"]
             },
             {
-                test: /\.ttf|.otf|.eot|.woff|.svg|.png$/,
+                test: /\^(?:.ttf|.otf|.eot|.woff|.svg|.png)$/,
                 type: 'asset/resource',
                 generator:{
                     filename:'resources/[name][ext][query]'
