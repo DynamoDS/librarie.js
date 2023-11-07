@@ -175,6 +175,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
                 src={this.props.data.iconUrl}
                 onError={this.onImageLoadFail}
                 onClick={this.onSectionIconClicked}
+                onKeyDown={this.onSectionIconClicked}
             />;
         }
 
@@ -185,6 +186,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
                 src={this.props.data.iconUrl}
                 onError={this.onImageLoadFail}
                 onClick={this.onSectionIconClicked}
+                onKeyDown={this.onSectionIconClicked}
             />;
         }
 
@@ -236,7 +238,9 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
 
         if (this.props.data.showHeader) {
             return (
-                <div className={this.getLibraryItemHeaderStyle()} onClick={this.onLibraryItemClicked}
+                <div className={this.getLibraryItemHeaderStyle()} 
+                    onClick={this.onLibraryItemClicked}
+                    onKeyDown={this.onLibraryItemClicked}
                     onMouseEnter={this.onLibraryItemMouseEnter} onMouseLeave={this.onLibraryItemMouseLeave}>
                     {arrow}
                     {this.props.data.itemType === "section" ? null : iconElement}
