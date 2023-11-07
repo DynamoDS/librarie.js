@@ -15,7 +15,7 @@ configure({adapter: new Adapter()});
 
 describe("sample test", function () {
   it("should add two numbers", function () {
-    chai.expect(1 + 2).to.equal(3);
+    expect(1 + 2).to.equal(3);
   });
 });
 
