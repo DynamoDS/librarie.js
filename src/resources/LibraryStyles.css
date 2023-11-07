@@ -111,7 +111,6 @@ button {
 
 .LibraryItemHeader:hover,
 .LibrarySectionHeader:hover {
-	/* color: white; */
 	background: rgba(255, 255, 255, 0.1);
 }
 
@@ -123,7 +122,6 @@ button {
 	display: flex;
 	flex-direction: column;
 	align-items: stretch;
-	/* padding-left:12px; */
 }
 
 .LibraryItemBodyContainer {
