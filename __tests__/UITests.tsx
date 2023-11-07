@@ -106,9 +106,6 @@ describe("LibraryContainer UI", function () {
     };
 
     libController = LibraryEntryPoint.CreateLibraryController();
-    // libContainer = mount(
-    //   libController.createLibraryContainer()
-    // );
   });
 
   it("should recognize mouse click event and change expand state", function () {
