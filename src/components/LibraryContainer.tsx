@@ -66,7 +66,6 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
         this.setLayoutSpecsJson = this.setLayoutSpecsJson.bind(this);
         this.refreshLibraryView = this.refreshLibraryView.bind(this);
         this.onSearchModeChanged = this.onSearchModeChanged.bind(this);
-        this.onStructuredModeChanged = this.onStructuredModeChanged.bind(this);
         this.onDetailedModeChanged = this.onDetailedModeChanged.bind(this);
         this.onCategoriesChanged = this.onCategoriesChanged.bind(this);
         this.onTextChanged = this.onTextChanged.bind(this);
@@ -238,11 +237,6 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
         }
     }
 
-    onStructuredModeChanged(value: boolean) {
-        this.updateSearchResultItems(true, value); // generate structured items 
-        this.setState({ structured: value });
-    }
-
     onDetailedModeChanged(value: boolean) {
         this.setState({ detailed: value });
     }
@@ -402,7 +396,6 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
             const searchBar = <SearchBar
                 onCategoriesChanged={this.onCategoriesChanged}
                 onDetailedModeChanged={this.onDetailedModeChanged}
-                onStructuredModeChanged={this.onStructuredModeChanged}
                 onTextChanged={this.onTextChanged}
                 categories={this.searcher?.getDisplayedCategories() ?? []}
             />;
