@@ -1,7 +1,7 @@
 
-var fs = require("fs");
-var express = require("express");
-var app = express();
+const fs = require("fs");
+const express = require("express");
+const app = express();
 
 function loadJsonFromFile(jsonPath, req, res) {
 

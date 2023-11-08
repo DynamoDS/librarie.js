@@ -15,7 +15,6 @@ type SearchBarExpandedFunc = (event: any) => void;
 
 export interface SearchBarProps {
     onTextChanged: SearchTextChangedFunc;
-    onStructuredModeChanged: StructuredModeChangedFunc;
     onDetailedModeChanged: DetailedModeChangedFunc;
     onCategoriesChanged: SearchCategoriesChangedFunc;
     categories: string[];

@@ -97,6 +97,7 @@ exports[`LibraryContainer Test UI rendering of Library Item and child components
     <div
       className="LibraryItemHeader"
       onClick={[Function]}
+      onKeyDown={[Function]}
       onMouseEnter={[Function]}
       onMouseLeave={[Function]}
     >
@@ -129,6 +130,7 @@ exports[`LibraryContainer Test UI rendering of single component of Library Item 
   <div
     className="LibraryItemHeader"
     onClick={[Function]}
+    onKeyDown={[Function]}
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
   >

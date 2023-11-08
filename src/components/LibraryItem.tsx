@@ -25,7 +25,6 @@ export interface LibraryItemProps {
     libraryContainer: any,
     data: LibraryUtilities.ItemData,
     showItemSummary: boolean,
-    isLastItem?: boolean,
     onItemWillExpand?: Function,
     tooltipContent?: any
 }
@@ -175,6 +174,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
                 src={this.props.data.iconUrl}
                 onError={this.onImageLoadFail}
                 onClick={this.onSectionIconClicked}
+                onKeyDown={this.onSectionIconClicked}
             />;
         }
 
@@ -185,6 +185,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
                 src={this.props.data.iconUrl}
                 onError={this.onImageLoadFail}
                 onClick={this.onSectionIconClicked}
+                onKeyDown={this.onSectionIconClicked}
             />;
         }
 
@@ -236,7 +237,9 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
 
         if (this.props.data.showHeader) {
             return (
-                <div className={this.getLibraryItemHeaderStyle()} onClick={this.onLibraryItemClicked}
+                <div className={this.getLibraryItemHeaderStyle()} 
+                    onClick={this.onLibraryItemClicked}
+                    onKeyDown={this.onLibraryItemClicked}
                     onMouseEnter={this.onLibraryItemMouseEnter} onMouseLeave={this.onLibraryItemMouseLeave}>
                     {arrow}
                     {this.props.data.itemType === "section" ? null : iconElement}
@@ -307,17 +310,11 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
                     // 'getNestedElements' method is meant to render all other 
                     // types of items except ones of type create/action/query.
                     regularItems.map((item, i) => {
-                        let isLastItem = false;
-
-                        if (i == regularItems.length - 1) {
-                            isLastItem = true;
-                        }
                         return (<LibraryItem
                             key={index++}
                             libraryContainer={this.props.libraryContainer}
                             data={item}
                             showItemSummary={this.props.showItemSummary}
-                            isLastItem={isLastItem}
                             onItemWillExpand={(args: any) => {
                                 this.onSingleChildItemWillExpand();
                                 this.props.libraryContainer.scrollToExpandedItem(args)
