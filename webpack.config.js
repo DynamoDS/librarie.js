@@ -61,7 +61,7 @@ module.exports = {
                 use: ["style-loader", "css-loader"]
             },
             {
-                test: /\^(?:.ttf|.otf|.eot|.woff|.svg|.png)$/,
+                test: /\.(?:ttf|otf|eot|woff|svg|png)$/,
                 type: 'asset/resource',
                 generator:{
                     filename:'resources/[name][ext][query]'
