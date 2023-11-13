@@ -134,7 +134,8 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
         if (!this.searchInputField) return;
         let cursor = this.searchInputField.selectionStart ?? 0;
         const searchValueCopy = this.searchInputField.value.split("");
-        searchValueCopy.splice(cursor, 1);
+        const selectionLength = window.getSelection()?.toString().length === 0 ? 1 : window.getSelection()?.toString().length;
+        searchValueCopy.splice(cursor, selectionLength);
         this.searchInputField.value = searchValueCopy.join("");
         this.searchInputField.focus();
         this.searchInputField.setSelectionRange(cursor, cursor);
