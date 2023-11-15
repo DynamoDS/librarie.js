@@ -224,11 +224,11 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
     }
 
     onSearchModeChanged(inSearchMode: boolean, searchText?: string) {
-        // Reset selectionIndex when serach mode changed
+                // Reset selectionIndex when serach mode changed
         this.selectionIndex = 0;
         this.updateSearchResultItems(inSearchMode, this.state.structured);
         if (searchText) {
-            this.setState({
+                        this.setState({
                 inSearchMode: inSearchMode,
                 searchText: searchText
             });
@@ -260,7 +260,7 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
         let hasText = text.length > 0;
 
         if (hasText) {
-            // Starting searching immediately after user input, 
+                        // Starting searching immediately after user input, 
             // but only show change on ui after 300ms
             setTimeout(function () {
                 if (this.props.libraryController.searchLibraryItemsHandler) {
@@ -274,18 +274,16 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
 
                         // Set all categories and groups to be expanded
                         LibraryUtilities.setItemStateRecursive(this.generatedSectionsOnSearch, true, true);
-                        this.updateSearchViewDelayed(text);
                     }.bind(this));
                 } else {
                     LibraryUtilities.searchItemResursive(this.generatedSections, text);
-                    this.updateSearchViewDelayed(text);
                 }
             }.bind(this), 300);
         } else {
             // Show change on ui immediately if search text is cleared
             LibraryUtilities.setItemStateRecursive(this.generatedSections, true, false);
-            this.updateSearchViewDelayed(text);
         }
+        this.updateSearchViewDelayed(text);
     }
 
     updateSearchViewDelayed(text: string) {
