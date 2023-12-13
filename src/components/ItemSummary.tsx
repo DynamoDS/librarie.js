@@ -33,10 +33,10 @@ export class ItemSummary extends React.Component<ItemSummaryProps, ItemSummarySt
         this.fetchMissingItemSummary();
 
         let descriptionText = this.props.data.description;
-        let input: JSX.Element[] = [];
-        let output: JSX.Element | null = null;
-        let description: JSX.Element | null = null;
-        let icon: JSX.Element | null = null;
+        let input: React.ReactNode[] = [];
+        let output: React.ReactNode = null;
+        let description: React.ReactNode = null;
+        let icon: React.ReactNode = null;
 
         if (this.state.hasSummaryData) {
             let inputParameters = this.summaryData.InputParameters;

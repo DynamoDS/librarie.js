@@ -285,7 +285,7 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
         let binIcon: string = require("../resources/ui/bin.svg");
 
         console.log(this.state.selectedCategories)
-        let checkboxes: JSX.Element[] = ObjectExtensions.values(this.categoryData)
+        let checkboxes: React.ReactNode[] = ObjectExtensions.values(this.categoryData)
             .map(cat => cat.getCheckbox(this.state.selectedCategories.includes(cat.name)))
 
         return <div className="SearchFilterPanel" ref={(container) => this.searchOptionsContainer = container}>
@@ -345,7 +345,7 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
 
     render() {
 
-        let cancelButton: JSX.Element | null = null;
+        let cancelButton: React.ReactNode = null;
         let searchIcon: string = require("../resources/ui/search-icon.svg");
         let searchIconClear: string = require("../resources/ui/search-icon-clear.svg");
 
@@ -406,7 +406,7 @@ export class CategoryData {
         this.displayText = displayText ?? name;
     }
 
-    getCheckbox(checked: boolean = false): JSX.Element {
+    getCheckbox(checked: boolean = false): React.ReactNode {
 
         let checkbox = <input 
             type="checkbox"

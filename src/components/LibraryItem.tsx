@@ -104,9 +104,9 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
             return null;
         }
 
-        let nestedElements: JSX.Element | null = null;
-        let clusteredElements: JSX.Element | null = null;
-        let bodyIndentation: JSX.Element | null = null;
+        let nestedElements: React.ReactNode = null;
+        let clusteredElements: React.ReactNode = null;
+        let bodyIndentation: React.ReactNode = null;
         let header = this.getHeaderElement();
 
         // visible only nested elements when expanded.
@@ -146,7 +146,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         event.target.src = require("../resources/icons/default-icon.svg");
     }
 
-    getIconElement(): JSX.Element | null {
+    getIconElement(): React.ReactNode {
         // Category type don't display any icon
         if(this.props.data.itemType === "category"){
             return null;
@@ -193,7 +193,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
     }
 
     // Show arrow for non-section, non-category and non-leaf items
-    getArrowElement(): JSX.Element | null {
+    getArrowElement(): React.ReactNode {
         //no arrow for groups defined in layout spec
         if (this.props.data.itemType === "section" || this.props.data.itemType === "coregroup" ) { 
             return null;
@@ -226,10 +226,10 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         return <img className={`Arrow`} src={arrowIcon} onError={this.onImageLoadFail} />;
     }
 
-    getHeaderElement(): JSX.Element | null {
+    getHeaderElement(): React.ReactNode {
         let arrow = this.getArrowElement();
         let iconElement = this.getIconElement();
-        let parameters: JSX.Element | null = null;
+        let parameters: React.ReactNode = null;
 
         if (this.props.data.parameters && this.props.data.parameters.length > 0 && this.props.data.childItems.length == 0) {
             parameters = <div className="LibraryItemParameters">{this.props.data.parameters}</div>;
@@ -296,7 +296,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         }
     }
 
-    getNestedElements(groupedItems: GroupedItems): JSX.Element | null {
+    getNestedElements(groupedItems: GroupedItems): React.ReactNode {
 
         let regularItems = groupedItems.getOtherItems();
         if (regularItems.length <= 0) {
@@ -327,13 +327,13 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         );
     }
 
-    getClusteredElements(groupedItems: GroupedItems): JSX.Element | null {
+    getClusteredElements(groupedItems: GroupedItems): React.ReactNode {
 
         const createMethods = groupedItems.getCreateItems();
         const actionMethods = groupedItems.getActionItems();
         const queryMethods = groupedItems.getQueryItems();
 
-        let createCluster: JSX.Element | null = null;
+        let createCluster: React.ReactNode = null;
 
         if (createMethods.length > 0 && createMethods.some(item => item.visible)) {
             createCluster = (<ClusterView
@@ -346,7 +346,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
                 />);
         }
 
-        let actionCluster: JSX.Element | null = null;
+        let actionCluster: React.ReactNode = null;
         if (actionMethods.length > 0 && actionMethods.some(item => item.visible)) {
             actionCluster = (<ClusterView
                 libraryContainer={this.props.libraryContainer}
@@ -358,7 +358,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
                 />);
         }
 
-        let queryCluster: JSX.Element | null = null;
+        let queryCluster: React.ReactNode = null;
         if (queryMethods.length > 0 && queryMethods.some(item => item.visible)) {
             queryCluster = (<ClusterView
                 libraryContainer={this.props.libraryContainer}

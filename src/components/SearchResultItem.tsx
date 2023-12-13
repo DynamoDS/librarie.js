@@ -88,7 +88,7 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
 			let highLightedParentText = LibraryUtilities.getHighlightedText(parentText, this.props.highlightedText, false);
 			let highLightedCategoryText = LibraryUtilities.getHighlightedText(categoryText, this.props.highlightedText, false);
 			let itemTypeIconPath = require(`../resources/icons/library-${this.props.data.itemType}.svg`)
-			let itemDescription: JSX.Element | null = null;
+			let itemDescription: React.ReactNode = null;
 				
 			if (this.props.detailed) {
 					let description = "No description available";
