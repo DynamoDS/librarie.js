@@ -214,7 +214,8 @@ button {
 
 .LibraryItemBody > .LibraryItemContainerGroup > .LibraryItemHeader,
 .LibraryItemBody > .LibraryItemContainerNone > .LibraryItemHeader {
-	border: solid #d9d9d9 2px;
+	border: solid #999999 2px;
+	border-style: dashed;
 	border-right: 0px;
 	border-top: 0px;
 	border-bottom: 0px;
@@ -228,7 +229,8 @@ button {
 	height: 1rem;
 	width: 2rem;
 	min-width: 2rem;
-	border: solid #d9d9d9 2px;
+	border: solid #999999 2px;
+	border-style: dashed;
 	border-right: 0px;
 	border-top: 0px;
 	border-left: 0px;
