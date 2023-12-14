@@ -49,7 +49,28 @@ button {
 .LibraryItemContainerCategory {
 	display: flex;
 	flex-direction: column;
-	border-bottom: solid 1px #494949;
+	/* border-bottom: solid 1px #494949; */
+	margin: 0rem 1.5rem;
+}
+.LibraryItemContainerCategory.expanded > .LibraryItemBodyContainer {
+	margin: 1rem 0rem 1.5rem 0rem;
+}
+
+.LibraryItemContainerCategory .LibraryItemHeader svg.ArrowIcon {
+	margin: 0px 14px 0px 0px;
+}
+
+.LibraryItemContainerCategory.expanded .LibraryItemBodyElements svg.ArrowIcon {
+	margin: 0px 14px 0px 14px;
+}
+
+
+.LibraryItemContainer .LibraryItemBodyElements svg.ArrowIcon.Right {
+	rotate: 0deg;
+}
+
+.LibraryItemContainer .LibraryItemBodyElements svg.ArrowIcon.Down {
+	rotate: 90deg;
 }
 
 .LibraryItemContainerGroup {
@@ -65,9 +86,8 @@ button {
 
 .LibrarySectionHeader {
 	display: flex;
-	padding-top: 1rem;
-	padding-left: 1.5rem;
-	margin-top: 0.5rem;
+	padding: 0rem 1.5rem;
+	margin-top: 1.5rem;
 	font-size: 1.4rem;
 	color: #f5f5f5f5;
 	align-items: center;
@@ -90,12 +110,11 @@ button {
 	align-items: center;
 	transition: 0.15s;
 	position: relative;
+	border-bottom: solid 1px #494949;
 }
 
 .LibraryItemContainerCategory > .LibraryItemHeader {
-	padding-top: 1rem;
-	padding-bottom: 1rem;
-	padding-left: 1.5rem;
+	padding: .85rem 0rem;
 }
 
 .LibraryItemContainerGroup > .LibraryItemHeader,
@@ -117,6 +136,18 @@ button {
 .LibraryItemBodyElements {
 	width: 100%;
 }
+
+/* .LibraryItemBodyElements svg.ArrowIcon {
+	margin: 0px 14px 0px 0px;
+}
+
+.LibraryItemBodyElements svg.ArrowIcon.Right {
+	rotate: 0deg;
+}
+
+.LibraryItemBodyElements svg.ArrowIcon.Down {
+	rotate: 90deg;
+} */
 
 .LibraryItemBody {
 	display: flex;
@@ -140,7 +171,6 @@ button {
 	opacity: 0.5;
 	width: 1.4rem;
 	height: 1.4rem;
-	padding-right: 10px;
 	-webkit-user-drag: none;
 }
 
@@ -154,8 +184,8 @@ button {
 .LibraryItemContainerNone .LibraryItemIcon {
 	padding-left: 0.5rem;
 	padding-right: 0.5rem;
-	width: 2rem;
-	height: 2rem;
+	width: 2.5rem;
+	height: 2.5rem;
 	-webkit-user-drag: none;
 }
 
@@ -165,13 +195,12 @@ button {
 
 .LibraryItemContainerCategory .LibraryItemText {
 	color: #ade4de;
-	font-size: 1rem;
-	margin-top: 0.2rem;
+	font-size: 1.2rem;
 }
 
 .LibraryItemContainerNone .LibraryItemText {
 	color: #c6c6c6;
-	font-size: 1rem;
+	font-size: 1.2rem;
 }
 
 .LibraryItemHeader .LibraryItemGroupText,
@@ -182,7 +211,7 @@ button {
 
 .LibraryItemHeader .LibraryItemGroupText {
 	color: #eeeeee;
-	font-size: 1rem;
+	font-size: 1.2rem;
 }
 
 .LibraryItemParameters {
@@ -227,8 +256,8 @@ button {
 .LibraryItemBody > .LibraryItemContainerNone > .LibraryItemHeader:before {
 	content: "";
 	height: 1rem;
-	width: 2rem;
-	min-width: 2rem;
+	width: 2.8rem;
+	min-width: 2.8rem;
 	border: solid #999999 2px;
 	border-style: dashed;
 	border-right: 0px;
@@ -264,14 +293,17 @@ button {
 .ClusterViewContainer {
 	display: flex;
 	flex-direction: row;
-	margin-top: 1rem;
-	margin-bottom: 1rem;
+	margin: .6rem 0rem;
 	margin-left: -1.5rem;
 }
 
 .ClusterLeftPane {
 	display: flex;
-	padding-left: 1.2rem;
+	width: 4.2rem;
+    padding: 25px 0px 0px 0px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
 	padding-right: 0.1rem;
 	border-right: 2px;
 	border-right-style: solid;
@@ -292,6 +324,13 @@ button {
 .ClusterRightPane {
 	flex-grow: 2;
 	padding-left: 4px;
+}
+.ClusterRightPane .LibraryItemHeader {
+	border-bottom: none;
+}
+
+.ClusterRightPane .LibraryItemText{
+	font-size: 1.1rem;
 }
 
 .ClusterIcon {
