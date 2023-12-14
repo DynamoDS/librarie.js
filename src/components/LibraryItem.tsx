@@ -20,6 +20,7 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { ClusterView } from "./ClusterView";
 import * as LibraryUtilities from "../LibraryUtilities";
+import { Arrow } from "./icons";
 
 export interface LibraryItemProps {
     libraryContainer: any,
@@ -203,27 +204,22 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
             return null;
         };
 
-        let arrowIcon: any = null;
-
-        if (!this.state.expanded) {
-            arrowIcon = require("../resources/ui/indent-arrow-right.svg");
-        } else {
-            arrowIcon = require("../resources/ui/indent-arrow-down.svg");
+        enum ArrowPositions {
+            "RIGTH" = "Right",
+            "DOWN" = "Down"
         }
 
+        let arrowPosition = ArrowPositions.RIGTH;
+
+        if (this.state.expanded) {
+            arrowPosition = ArrowPositions.DOWN;
+        }
+        
         if (this.props.data.itemType == "category") {
-            if (!this.state.expanded) {
-                arrowIcon = require("../resources/ui/indent-arrow-category-right.svg");
-            }
-            else {
-                arrowIcon = require("../resources/ui/indent-arrow-category-down.svg");
-            }
-
-            return <img className={"CategoryArrow"} src={arrowIcon} onError={this.onImageLoadFail} />;
-
+            return <Arrow position={arrowPosition} />;
         }
 
-        return <img className={`Arrow`} src={arrowIcon} onError={this.onImageLoadFail} />;
+        return <Arrow color="#D8D8D8" position={arrowPosition}/>;
     }
 
     getHeaderElement(): React.ReactNode {
