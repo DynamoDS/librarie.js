@@ -49,8 +49,8 @@ button {
 .LibraryItemContainerCategory {
 	display: flex;
 	flex-direction: column;
-	margin: 0rem 1.5rem;
 }
+
 .LibraryItemContainerCategory.expanded > .LibraryItemBodyContainer {
 	margin: 1rem 0rem 1.5rem 0rem;
 }
@@ -113,7 +113,8 @@ button {
 }
 
 .LibraryItemContainerCategory > .LibraryItemHeader {
-	padding: .85rem 0rem;
+	padding: .85rem 1.5rem;
+	width: calc(100% - 3rem);
 }
 
 .LibraryItemContainerGroup > .LibraryItemHeader,
