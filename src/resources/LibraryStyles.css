@@ -344,6 +344,7 @@ button {
 
 .SearchInput {
 	display: flex;
+	align-items: center;
 	padding: 5px 0px;
 	width: 100%;
 	position: relative;
@@ -498,7 +499,7 @@ button {
 	top: 2rem;
 	right: 0;
 	background-color: #535353;
-	color: #ffffff;
+	color:#F5F5F5;
 	width: 12rem;
 	text-align: left;
 	font-size: 1rem;
@@ -592,7 +593,6 @@ button {
 	display: flex;
 	justify-content: flex-end;
 	align-items: center;
-	border-top: solid #999999 1px;
 	padding-top: 0.5rem;
 	padding-bottom: 0.5rem;
 	padding-left: 0.5rem;
@@ -706,7 +706,7 @@ button {
 	flex-direction: row;
 	align-items: center;
 	padding: 3px;
-	color: white;
+	color: #C6C6C6;
 	transition: 0.15s;
 	padding-left: 0.8rem;
 }
