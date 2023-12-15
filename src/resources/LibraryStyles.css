@@ -334,6 +334,10 @@ button {
 	padding-right: 1.5rem;
 }
 
+.SearchBar .LibraryHeader {
+	padding: 1rem 0rem;
+}
+
 .SearchBar.searching {
 	margin-bottom: 1rem;
 }
@@ -344,9 +348,9 @@ button {
 	width: 100%;
 	position: relative;
 	white-space: nowrap;
-	border-bottom-color: #dadada;
+	border-bottom-color: #999999;
 	border-bottom-style: solid;
-	border-bottom-width: 2px;
+	border-bottom-width: 1px;
 	font-size: 1rem;
 	transition: ease-in-out 300ms;
 }
@@ -388,8 +392,8 @@ button {
 }
 
 .SearchBar .Icon {
-	width: 1.2rem;
-	height: 1.2rem;
+	width: 1rem;
+	height: 1rem;
 }
 
 .SearchInp .ClearSearch {
@@ -403,32 +407,32 @@ button {
 	outline: none;
 	border: none;
 	width: 100%;
-	color: #f5f5f5;
+	color: #999999;
 	font-size: 1rem;
 }
 
 .SearchInput .SearchInputText::-webkit-input-placeholder {
-	color: #dadada;
+	color: #999999;
 }
 
 .SearchInput .SearchInputText:-moz-placeholder {
-	color: #dadada;
+	color: #999999;
 }
 
 .SearchInput .SearchInputText::-moz-placeholder {
-	color: #dadada;
+	color: #999999;
 }
 
 .SearchInput .SearchInputText:-ms-input-placeholder {
-	color: #dadada;
+	color: #999999;
 }
 
 .SearchInput .SearchInputText::-ms-input-placeholder {
-	color: #dadada;
+	color: #999999;
 }
 
 .SearchInput .SearchInputText::placeholder {
-	color: #dadada;
+	color: #999999;
 }
 
 .SearchInput .SearchInputText:focus {

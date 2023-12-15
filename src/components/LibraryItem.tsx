@@ -20,7 +20,7 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { ClusterView } from "./ClusterView";
 import * as LibraryUtilities from "../LibraryUtilities";
-import { Arrow } from "./icons";
+import { ArrowIcon } from "./icons";
 
 export interface LibraryItemProps {
     libraryContainer: any,
@@ -216,10 +216,10 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         }
         
         if (this.props.data.itemType == "category") {
-            return <Arrow position={arrowPosition} />;
+            return <ArrowIcon position={arrowPosition} />;
         }
 
-        return <Arrow color="#D8D8D8" position={arrowPosition}/>;
+        return <ArrowIcon color="#D8D8D8" position={arrowPosition}/>;
     }
 
     getHeaderElement(): React.ReactNode {

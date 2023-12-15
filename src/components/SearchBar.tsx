@@ -2,6 +2,7 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import * as _ from 'underscore';
 import { ObjectExtensions } from '../LibraryUtilities'
+import { SearchIcon, ClearIcon } from './icons';
 
 type StructuredModeChangedFunc = (structured: boolean) => void;
 
@@ -346,14 +347,11 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
     render() {
 
         let cancelButton: React.ReactNode = null;
-        let searchIcon: string = require("../resources/ui/search-icon.svg");
-        let searchIconClear: string = require("../resources/ui/search-icon-clear.svg");
-
 
         if (this.state.hasText) {
             cancelButton = (
                 <button className="CancelButton" onClick={this.clearInput.bind(this)} >
-                    <img className="Icon ClearSearch" src={searchIconClear}/>
+                    <ClearIcon />
                 </button>
             );
         }
@@ -365,7 +363,7 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
             <div className={`SearchBar ${isSearchingClass}`}>
                 <div className="LibraryHeader">Library</div>
                 <div className={`SearchInput ${isSearchingClass} ${isFocusClass}`}>
-                    <img className="Icon SeachBarIcon" src={searchIcon}/>
+                    <SearchIcon />
                     <input
                         className="SearchInputText"
                         type="input" placeholder="Search"
