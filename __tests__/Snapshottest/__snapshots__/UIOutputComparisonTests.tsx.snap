@@ -101,22 +101,50 @@ exports[`LibraryContainer Test UI rendering of Library Item and child components
       onMouseEnter={[Function]}
       onMouseLeave={[Function]}
     >
-      <img
-        className="Arrow"
-        onError={[Function]}
-        src="test-file-stub"
-      />
-      <div
-        className="LibraryItemText"
+      <ArrowIcon
+        color="#D8D8D8"
+        position="Right"
       >
-        TestItem
+        <svg
+          className="ArrowIcon Right"
+          fill="none"
+          height="7"
+          viewBox="0 0 4 8"
+          width="4"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <g
+            id="icon-wrapper"
+          >
+            <path
+              clipRule="evenodd"
+              d="M4 4L0 7.5L0 0.5L4 4Z"
+              fill="#D8D8D8"
+              fillRule="evenodd"
+              id="ð  icon-color"
+            />
+          </g>
+        </svg>
+      </ArrowIcon>
+      <div
+        className="LibraryItemTextWrapper"
+      >
+        <div
+          className="TextBox"
+        >
+          <span
+            className="LibraryItemText"
+          >
+            TestItem
+          </span>
+        </div>
       </div>
     </div>
     <div
       className="LibraryItemBodyContainer"
     >
       <div
-        className="LibraryItemBodyElements"
+        className="LibraryItemBodyElements "
       />
     </div>
   </div>
@@ -134,22 +162,29 @@ exports[`LibraryContainer Test UI rendering of single component of Library Item 
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
   >
-    <img
-      className="Arrow"
-      onError={[Function]}
-      src="test-file-stub"
+    <ArrowIcon
+      color="#D8D8D8"
+      position="Right"
     />
     <div
-      className="LibraryItemText"
+      className="LibraryItemTextWrapper"
     >
-      TestItem
+      <div
+        className="TextBox"
+      >
+        <span
+          className="LibraryItemText"
+        >
+          TestItem
+        </span>
+      </div>
     </div>
   </div>
   <div
     className="LibraryItemBodyContainer"
   >
     <div
-      className="LibraryItemBodyElements"
+      className="LibraryItemBodyElements "
     />
   </div>
 </div>
