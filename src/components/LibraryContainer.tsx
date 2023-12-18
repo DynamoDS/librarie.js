@@ -402,7 +402,9 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
                 <div className="LibraryContainer">
                     {searchBar}
                     <div className="LibraryItemContainer">
-                        {sections}
+                        <div className="SearchResultsWrapper">
+                            {sections}
+                        </div>
                     </div>
                 </div>
             );

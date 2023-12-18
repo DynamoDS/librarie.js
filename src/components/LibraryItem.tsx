@@ -107,7 +107,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
 
         let nestedElements: React.ReactNode = null;
         let clusteredElements: React.ReactNode = null;
-        let bodyIndentation: React.ReactNode = null;
+        let bodyIndentation: string = "";
         let header = this.getHeaderElement();
 
         // visible only nested elements when expanded.
@@ -125,15 +125,16 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
 
         // Indent one level for clustered and nested elements
         if (this.props.data.itemType !== "section" && (nestedElements || clusteredElements)) {
-            bodyIndentation = <div className={"BodyIndentation"} />;
+            // bodyIndentation = <div className={"BodyIndentation"} />;
+            bodyIndentation = "BodyIndentation";
         }
 
         return (
             <div className={this.getLibraryItemContainerStyle(this.state.expanded)}>
                 {header}
                 <div className={"LibraryItemBodyContainer"}>
-                    {bodyIndentation}
-                    <div className={"LibraryItemBodyElements"}>
+                    
+                    <div className={`LibraryItemBodyElements ${bodyIndentation}`} >
                         {clusteredElements}
                         {nestedElements}
                     </div>
@@ -228,7 +229,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         let parameters: React.ReactNode = null;
 
         if (this.props.data.parameters && this.props.data.parameters.length > 0 && this.props.data.childItems.length == 0) {
-            parameters = <div className="LibraryItemParameters">{this.props.data.parameters}</div>;
+            parameters = <span className="LibraryItemParameters">{this.props.data.parameters}</span>;
         }
 
         if (this.props.data.showHeader) {
@@ -239,8 +240,12 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
                     onMouseEnter={this.onLibraryItemMouseEnter} onMouseLeave={this.onLibraryItemMouseLeave}>
                     {arrow}
                     {this.props.data.itemType === "section" ? null : iconElement}
-                    <div className={this.getLibraryItemTextStyle()}>{this.props.data.text}</div>
-                    {parameters}
+                    <div className="LibraryItemTextWrapper">
+                    <div className="TextBox">
+                        <span className={this.getLibraryItemTextStyle()}>{this.props.data.text}</span>
+                        {parameters}
+                    </div>
+                    </div>
                     {this.props.data.itemType === "section" ? iconElement : null}
                 </div>
             );
