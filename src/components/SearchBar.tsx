@@ -2,6 +2,7 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import * as _ from 'underscore';
 import { ObjectExtensions } from '../LibraryUtilities'
+import { SearchIcon, ClearIcon } from './icons';
 
 type StructuredModeChangedFunc = (structured: boolean) => void;
 
@@ -285,7 +286,7 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
         let binIcon: string = require("../resources/ui/bin.svg");
 
         console.log(this.state.selectedCategories)
-        let checkboxes: JSX.Element[] = ObjectExtensions.values(this.categoryData)
+        let checkboxes: React.ReactNode[] = ObjectExtensions.values(this.categoryData)
             .map(cat => cat.getCheckbox(this.state.selectedCategories.includes(cat.name)))
 
         return <div className="SearchFilterPanel" ref={(container) => this.searchOptionsContainer = container}>
@@ -345,15 +346,12 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
 
     render() {
 
-        let cancelButton: JSX.Element | null = null;
-        let searchIcon: string = require("../resources/ui/search-icon.svg");
-        let searchIconClear: string = require("../resources/ui/search-icon-clear.svg");
-
+        let cancelButton: React.ReactNode = null;
 
         if (this.state.hasText) {
             cancelButton = (
                 <button className="CancelButton" onClick={this.clearInput.bind(this)} >
-                    <img className="Icon ClearSearch" src={searchIconClear}/>
+                    <ClearIcon />
                 </button>
             );
         }
@@ -365,7 +363,7 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
             <div className={`SearchBar ${isSearchingClass}`}>
                 <div className="LibraryHeader">Library</div>
                 <div className={`SearchInput ${isSearchingClass} ${isFocusClass}`}>
-                    <img className="Icon SeachBarIcon" src={searchIcon}/>
+                    <SearchIcon />
                     <input
                         className="SearchInputText"
                         type="input" placeholder="Search"
@@ -406,7 +404,7 @@ export class CategoryData {
         this.displayText = displayText ?? name;
     }
 
-    getCheckbox(checked: boolean = false): JSX.Element {
+    getCheckbox(checked: boolean = false): React.ReactNode {
 
         let checkbox = <input 
             type="checkbox"

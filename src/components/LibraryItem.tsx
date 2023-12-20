@@ -20,6 +20,7 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { ClusterView } from "./ClusterView";
 import * as LibraryUtilities from "../LibraryUtilities";
+import { ArrowIcon } from "./icons";
 
 export interface LibraryItemProps {
     libraryContainer: any,
@@ -104,9 +105,9 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
             return null;
         }
 
-        let nestedElements: JSX.Element | null = null;
-        let clusteredElements: JSX.Element | null = null;
-        let bodyIndentation: JSX.Element | null = null;
+        let nestedElements: React.ReactNode = null;
+        let clusteredElements: React.ReactNode = null;
+        let bodyIndentation: string = "";
         let header = this.getHeaderElement();
 
         // visible only nested elements when expanded.
@@ -124,15 +125,15 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
 
         // Indent one level for clustered and nested elements
         if (this.props.data.itemType !== "section" && (nestedElements || clusteredElements)) {
-            bodyIndentation = <div className={"BodyIndentation"} />;
+            bodyIndentation = "BodyIndentation";
         }
 
         return (
             <div className={this.getLibraryItemContainerStyle(this.state.expanded)}>
                 {header}
                 <div className={"LibraryItemBodyContainer"}>
-                    {bodyIndentation}
-                    <div className={"LibraryItemBodyElements"}>
+                    
+                    <div className={`LibraryItemBodyElements ${bodyIndentation}`} >
                         {clusteredElements}
                         {nestedElements}
                     </div>
@@ -146,7 +147,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         event.target.src = require("../resources/icons/default-icon.svg");
     }
 
-    getIconElement(): JSX.Element | null {
+    getIconElement(): React.ReactNode {
         // Category type don't display any icon
         if(this.props.data.itemType === "category"){
             return null;
@@ -193,7 +194,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
     }
 
     // Show arrow for non-section, non-category and non-leaf items
-    getArrowElement(): JSX.Element | null {
+    getArrowElement(): React.ReactNode {
         //no arrow for groups defined in layout spec
         if (this.props.data.itemType === "section" || this.props.data.itemType === "coregroup" ) { 
             return null;
@@ -203,36 +204,31 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
             return null;
         };
 
-        let arrowIcon: any = null;
-
-        if (!this.state.expanded) {
-            arrowIcon = require("../resources/ui/indent-arrow-right.svg");
-        } else {
-            arrowIcon = require("../resources/ui/indent-arrow-down.svg");
+        enum ArrowPositions {
+            "RIGTH" = "Right",
+            "DOWN" = "Down"
         }
 
+        let arrowPosition = ArrowPositions.RIGTH;
+
+        if (this.state.expanded) {
+            arrowPosition = ArrowPositions.DOWN;
+        }
+        
         if (this.props.data.itemType == "category") {
-            if (!this.state.expanded) {
-                arrowIcon = require("../resources/ui/indent-arrow-category-right.svg");
-            }
-            else {
-                arrowIcon = require("../resources/ui/indent-arrow-category-down.svg");
-            }
-
-            return <img className={"CategoryArrow"} src={arrowIcon} onError={this.onImageLoadFail} />;
-
+            return <ArrowIcon position={arrowPosition} />;
         }
 
-        return <img className={`Arrow`} src={arrowIcon} onError={this.onImageLoadFail} />;
+        return <ArrowIcon color="#D8D8D8" position={arrowPosition}/>;
     }
 
-    getHeaderElement(): JSX.Element | null {
+    getHeaderElement(): React.ReactNode {
         let arrow = this.getArrowElement();
         let iconElement = this.getIconElement();
-        let parameters: JSX.Element | null = null;
+        let parameters: React.ReactNode = null;
 
         if (this.props.data.parameters && this.props.data.parameters.length > 0 && this.props.data.childItems.length == 0) {
-            parameters = <div className="LibraryItemParameters">{this.props.data.parameters}</div>;
+            parameters = <span className="LibraryItemParameters">{this.props.data.parameters}</span>;
         }
 
         if (this.props.data.showHeader) {
@@ -243,8 +239,12 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
                     onMouseEnter={this.onLibraryItemMouseEnter} onMouseLeave={this.onLibraryItemMouseLeave}>
                     {arrow}
                     {this.props.data.itemType === "section" ? null : iconElement}
-                    <div className={this.getLibraryItemTextStyle()}>{this.props.data.text}</div>
-                    {parameters}
+                    <div className="LibraryItemTextWrapper">
+                    <div className="TextBox">
+                        <span className={this.getLibraryItemTextStyle()}>{this.props.data.text}</span>
+                        {parameters}
+                    </div>
+                    </div>
                     {this.props.data.itemType === "section" ? iconElement : null}
                 </div>
             );
@@ -296,7 +296,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         }
     }
 
-    getNestedElements(groupedItems: GroupedItems): JSX.Element | null {
+    getNestedElements(groupedItems: GroupedItems): React.ReactNode {
 
         let regularItems = groupedItems.getOtherItems();
         if (regularItems.length <= 0) {
@@ -327,13 +327,13 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         );
     }
 
-    getClusteredElements(groupedItems: GroupedItems): JSX.Element | null {
+    getClusteredElements(groupedItems: GroupedItems): React.ReactNode {
 
         const createMethods = groupedItems.getCreateItems();
         const actionMethods = groupedItems.getActionItems();
         const queryMethods = groupedItems.getQueryItems();
 
-        let createCluster: JSX.Element | null = null;
+        let createCluster: React.ReactNode = null;
 
         if (createMethods.length > 0 && createMethods.some(item => item.visible)) {
             createCluster = (<ClusterView
@@ -346,7 +346,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
                 />);
         }
 
-        let actionCluster: JSX.Element | null = null;
+        let actionCluster: React.ReactNode = null;
         if (actionMethods.length > 0 && actionMethods.some(item => item.visible)) {
             actionCluster = (<ClusterView
                 libraryContainer={this.props.libraryContainer}
@@ -358,7 +358,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
                 />);
         }
 
-        let queryCluster: JSX.Element | null = null;
+        let queryCluster: React.ReactNode = null;
         if (queryMethods.length > 0 && queryMethods.some(item => item.visible)) {
             queryCluster = (<ClusterView
                 libraryContainer={this.props.libraryContainer}

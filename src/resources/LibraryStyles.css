@@ -31,14 +31,12 @@ button {
 }
 
 .LibraryContainer {
-	max-height: 100vh;
-	display: flex;
-	flex-direction: column;
+    max-height: 100vh;
+    overflow: hidden;
 }
 
 .LibraryItemContainer {
-	flex-grow: 1;
-	overflow-y: auto;
+    height: calc(100vh - 132px);
 }
 
 .LibraryItemContainerSection {
@@ -49,12 +47,36 @@ button {
 .LibraryItemContainerCategory {
 	display: flex;
 	flex-direction: column;
-	border-bottom: solid 1px #494949;
+}
+
+.LibraryItemContainerCategory.expanded > .LibraryItemBodyContainer {
+	margin: 1rem 0rem 1.5rem 0rem;
+}
+
+.LibraryItemContainerCategory .LibraryItemHeader svg.ArrowIcon {
+	margin: 0px 14px 0px 0px;
+}
+
+.LibraryItemContainerCategory.expanded .LibraryItemBodyElements svg.ArrowIcon {
+	margin: 0px 14px 0px 14px;
+}
+
+
+.LibraryItemContainer .LibraryItemBodyElements svg.ArrowIcon.Right {
+	rotate: 0deg;
+}
+
+.LibraryItemContainer .LibraryItemBodyElements svg.ArrowIcon.Down {
+	rotate: 90deg;
 }
 
 .LibraryItemContainerGroup {
 	display: flex;
 	flex-direction: column;
+}
+
+.LibraryItemContainerGroup.expanded .LibraryItemBodyContainer .LibraryItemBodyElements.BodyIndentation{
+	padding-left: 0px;
 }
 
 .LibraryItemContainerNone {
@@ -63,11 +85,15 @@ button {
 	overflow: hidden;
 }
 
+.LibraryItemContainerNone.expanded .LibraryItemBodyContainer .LibraryItemBodyElements.BodyIndentation{
+	padding-left: 0px;
+	width: 100%;
+}
+
 .LibrarySectionHeader {
 	display: flex;
-	padding-top: 1rem;
-	padding-left: 1.5rem;
-	margin-top: 0.5rem;
+	padding: 0rem 1.5rem;
+	margin-top: 1.5rem;
 	font-size: 1.4rem;
 	color: #f5f5f5f5;
 	align-items: center;
@@ -87,15 +113,16 @@ button {
 .LibraryItemHeader {
 	display: flex;
 	flex-direction: row;
+	flex-wrap: wrap;
 	align-items: center;
 	transition: 0.15s;
 	position: relative;
+	border-bottom: solid 1px #494949;
 }
 
 .LibraryItemContainerCategory > .LibraryItemHeader {
-	padding-top: 1rem;
-	padding-bottom: 1rem;
-	padding-left: 1.5rem;
+	padding: .85rem 1.5rem;
+	width: calc(100% - 3rem);
 }
 
 .LibraryItemContainerGroup > .LibraryItemHeader,
@@ -105,6 +132,7 @@ button {
 
 .LibraryItemContainerGroup,
 .LibraryItemContainerNone {
+	width: calc(100% - 1rem);
 	padding-left: 0.5rem;
 	padding-right: 0.5rem;
 }
@@ -118,6 +146,10 @@ button {
 	width: 100%;
 }
 
+.LibraryItemBodyElements.BodyIndentation {
+	width: calc(100% - 1.5rem);
+}
+
 .LibraryItemBody {
 	display: flex;
 	flex-direction: column;
@@ -127,6 +159,7 @@ button {
 .LibraryItemBodyContainer {
 	display: flex;
 	align-items: stretch;
+	width: 100%;
 }
 
 .LibraryItemContainerSection .LibraryItemIcon {
@@ -140,22 +173,21 @@ button {
 	opacity: 0.5;
 	width: 1.4rem;
 	height: 1.4rem;
-	padding-right: 10px;
 	-webkit-user-drag: none;
 }
 
 .LibraryItemContainerCategory .LibraryItemIcon {
-	padding: 7px 10px;
 	width: 1.2rem;
 	height: 1.2rem;
 	-webkit-user-drag: none;
 }
 
 .LibraryItemContainerNone .LibraryItemIcon {
+	align-self: flex-start;
 	padding-left: 0.5rem;
 	padding-right: 0.5rem;
-	width: 2rem;
-	height: 2rem;
+	width: 2.5rem;
+	height: 2.5rem;
 	-webkit-user-drag: none;
 }
 
@@ -165,13 +197,12 @@ button {
 
 .LibraryItemContainerCategory .LibraryItemText {
 	color: #ade4de;
-	font-size: 1rem;
-	margin-top: 0.2rem;
+	font-size: 1.2rem;
 }
 
 .LibraryItemContainerNone .LibraryItemText {
-	color: #c6c6c6;
-	font-size: 1rem;
+	color: #eeeeee;
+	font-size: 1.2rem;
 }
 
 .LibraryItemHeader .LibraryItemGroupText,
@@ -182,7 +213,7 @@ button {
 
 .LibraryItemHeader .LibraryItemGroupText {
 	color: #eeeeee;
-	font-size: 1rem;
+	font-size: 1.2rem;
 }
 
 .LibraryItemParameters {
@@ -190,7 +221,6 @@ button {
 	font-size: 1rem;
 	margin-left: 5px;
 	display: inline-block;
-	white-space: nowrap;
 }
 
 .Arrow {
@@ -214,7 +244,8 @@ button {
 
 .LibraryItemBody > .LibraryItemContainerGroup > .LibraryItemHeader,
 .LibraryItemBody > .LibraryItemContainerNone > .LibraryItemHeader {
-	border: solid #d9d9d9 2px;
+	border: solid #999999 2px;
+	border-style: dashed;
 	border-right: 0px;
 	border-top: 0px;
 	border-bottom: 0px;
@@ -226,9 +257,10 @@ button {
 .LibraryItemBody > .LibraryItemContainerNone > .LibraryItemHeader:before {
 	content: "";
 	height: 1rem;
-	width: 2rem;
-	min-width: 2rem;
-	border: solid #d9d9d9 2px;
+	width: 2.8rem;
+	min-width: 2.8rem;
+	border: solid #999999 2px;
+	border-style: dashed;
 	border-right: 0px;
 	border-top: 0px;
 	border-left: 0px;
@@ -262,14 +294,16 @@ button {
 .ClusterViewContainer {
 	display: flex;
 	flex-direction: row;
-	margin-top: 1rem;
-	margin-bottom: 1rem;
-	margin-left: -1.5rem;
+	margin: .6rem 0rem;
 }
 
 .ClusterLeftPane {
 	display: flex;
-	padding-left: 1.2rem;
+	width: 4.2rem;
+	min-width: 4.2rem;
+    padding: 25px 0px 0px 0px;
+    align-items: flex-start;
+    justify-content: center;
 	padding-right: 0.1rem;
 	border-right: 2px;
 	border-right-style: solid;
@@ -290,6 +324,29 @@ button {
 .ClusterRightPane {
 	flex-grow: 2;
 	padding-left: 4px;
+	width: calc(100% - 4px);
+}
+
+.ClusterRightPane .LibraryItemTextWrapper {
+	width: calc(100% - 44px);
+	display: flex;
+    flex-direction: column;
+}
+
+.ClusterRightPane .LibraryItemTextWrapper .TextBox {
+	width: 100%;
+}
+
+.ClusterRightPane .LibraryItemHeader {
+	border-bottom: none;
+	height: fit-content;
+	padding: 0.5rem 0rem;
+}
+
+.ClusterRightPane .LibraryItemText{
+	font-size: 1.1rem;
+	width: calc(100% - 44px);
+	color: #C6C6C6;
 }
 
 .ClusterIcon {
@@ -307,19 +364,24 @@ button {
 	padding-right: 1.5rem;
 }
 
+.SearchBar .LibraryHeader {
+	padding: 1rem 0rem;
+}
+
 .SearchBar.searching {
 	margin-bottom: 1rem;
 }
 
 .SearchInput {
 	display: flex;
+	align-items: center;
 	padding: 5px 0px;
 	width: 100%;
 	position: relative;
 	white-space: nowrap;
-	border-bottom-color: #dadada;
+	border-bottom-color: #999999;
 	border-bottom-style: solid;
-	border-bottom-width: 2px;
+	border-bottom-width: 1px;
 	font-size: 1rem;
 	transition: ease-in-out 300ms;
 }
@@ -361,8 +423,8 @@ button {
 }
 
 .SearchBar .Icon {
-	width: 1.2rem;
-	height: 1.2rem;
+	width: 1rem;
+	height: 1rem;
 }
 
 .SearchInp .ClearSearch {
@@ -376,32 +438,32 @@ button {
 	outline: none;
 	border: none;
 	width: 100%;
-	color: #f5f5f5;
+	color: #999999;
 	font-size: 1rem;
 }
 
 .SearchInput .SearchInputText::-webkit-input-placeholder {
-	color: #dadada;
+	color: #999999;
 }
 
 .SearchInput .SearchInputText:-moz-placeholder {
-	color: #dadada;
+	color: #999999;
 }
 
 .SearchInput .SearchInputText::-moz-placeholder {
-	color: #dadada;
+	color: #999999;
 }
 
 .SearchInput .SearchInputText:-ms-input-placeholder {
-	color: #dadada;
+	color: #999999;
 }
 
 .SearchInput .SearchInputText::-ms-input-placeholder {
-	color: #dadada;
+	color: #999999;
 }
 
 .SearchInput .SearchInputText::placeholder {
-	color: #dadada;
+	color: #999999;
 }
 
 .SearchInput .SearchInputText:focus {
@@ -467,7 +529,7 @@ button {
 	top: 2rem;
 	right: 0;
 	background-color: #535353;
-	color: #ffffff;
+	color:#F5F5F5;
 	width: 12rem;
 	text-align: left;
 	font-size: 1rem;
@@ -561,7 +623,6 @@ button {
 	display: flex;
 	justify-content: flex-end;
 	align-items: center;
-	border-top: solid #999999 1px;
 	padding-top: 0.5rem;
 	padding-bottom: 0.5rem;
 	padding-left: 0.5rem;
@@ -669,13 +730,19 @@ button {
 	display: block;
 }
 
+.SearchResultsWrapper {
+	height: 100%;
+    width: 100%;
+    overflow: auto;
+}
+
 .SearchResultItemContainer,
 .SearchResultItemContainerSelected {
 	display: flex;
 	flex-direction: row;
 	align-items: center;
 	padding: 3px;
-	color: white;
+	color: #C6C6C6;
 	transition: 0.15s;
 	padding-left: 0.8rem;
 }
