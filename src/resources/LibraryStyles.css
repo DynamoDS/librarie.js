@@ -177,7 +177,6 @@ button {
 }
 
 .LibraryItemContainerCategory .LibraryItemIcon {
-	padding: 7px 10px;
 	width: 1.2rem;
 	height: 1.2rem;
 	-webkit-user-drag: none;
@@ -202,7 +201,7 @@ button {
 }
 
 .LibraryItemContainerNone .LibraryItemText {
-	color: #c6c6c6;
+	color: #eeeeee;
 	font-size: 1.2rem;
 }
 
@@ -341,11 +340,13 @@ button {
 .ClusterRightPane .LibraryItemHeader {
 	border-bottom: none;
 	height: fit-content;
+	padding: 0.5rem 0rem;
 }
 
 .ClusterRightPane .LibraryItemText{
 	font-size: 1.1rem;
 	width: calc(100% - 44px);
+	color: #C6C6C6;
 }
 
 .ClusterIcon {
