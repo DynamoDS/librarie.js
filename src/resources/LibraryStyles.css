@@ -76,7 +76,7 @@ button {
 }
 
 .LibraryItemContainerGroup.expanded .LibraryItemBodyContainer .LibraryItemBodyElements.BodyIndentation{
-	padding-left: 0px;
+	padding-left: 45px;
 }
 
 .LibraryItemContainerNone {
@@ -147,7 +147,7 @@ button {
 }
 
 .LibraryItemBodyElements.BodyIndentation {
-	width: calc(100% - 1.5rem);
+	width: calc(100% - 1.2rem);
 }
 
 .LibraryItemBody {
@@ -288,7 +288,7 @@ button {
 }
 
 .BodyIndentation {
-	padding-left: 1.5rem;
+	padding-left: 1.2rem;
 }
 
 .ClusterViewContainer {
