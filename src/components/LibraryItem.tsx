@@ -124,8 +124,8 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         }
 
         // Indent one level for clustered and nested elements
-        if (this.props.data.itemType !== "section" && (nestedElements || clusteredElements)) {
-            bodyIndentation = "BodyIndentation";
+        if (nestedElements && ["group", "category"].includes(this.props.data.itemType)) {
+            bodyIndentation = `BodyIndentation`;
         }
 
         return (
