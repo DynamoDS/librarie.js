@@ -44,6 +44,11 @@ button {
 	flex-direction: column;
 }
 
+.LibraryItemContainerSection.expanded > .LibrarySectionHeader{
+	padding: 0.85rem 1.5rem;
+    width: calc(100% - 3rem);
+}
+
 .LibraryItemContainerCategory {
 	display: flex;
 	flex-direction: column;
@@ -53,6 +58,10 @@ button {
 	margin: 1rem 0rem 1.5rem 0rem;
 }
 
+.LibraryItemContainerCategory.expanded .LibraryItemBodyContainer .LibraryItemBodyElements.BodyIndentation .LibraryItemBody .LibraryItemContainerGroup.expanded .LibraryItemHeader {
+	padding-right: 0rem;
+}
+
 .LibraryItemContainerCategory .LibraryItemHeader svg.ArrowIcon {
 	margin: 0px 14px 0px 0px;
 }
@@ -60,7 +69,6 @@ button {
 .LibraryItemContainerCategory.expanded .LibraryItemBodyElements svg.ArrowIcon {
 	margin: 0px 14px 0px 14px;
 }
-
 
 .LibraryItemContainer .LibraryItemBodyElements svg.ArrowIcon.Right {
 	rotate: 0deg;
@@ -74,6 +82,19 @@ button {
 	display: flex;
 	flex-direction: column;
 }
+.expanded > .LibraryItemHeader {
+	padding-right: 0rem;
+}
+
+.LibraryItemContainerGroup.expanded .LibraryItemBodyContainer .LibraryItemBodyElements.BodyIndentation .LibraryItemBody .LibraryItemContainerNone {
+	padding-right: 0rem;
+    width: calc(100% - 0.5rem);
+}
+
+.LibraryItemContainerGroup.expanded .LibraryItemBodyContainer .LibraryItemBodyElements.BodyIndentation .LibraryItemBody .LibraryItemContainerNone .ClusterRightPane .LibraryItemContainerNone {
+	width: 100%;
+	padding-right: 0.5rem;
+}
 
 .LibraryItemContainerGroup.expanded .LibraryItemBodyContainer .LibraryItemBodyElements.BodyIndentation{
 	padding-left: 45px;
@@ -82,12 +103,7 @@ button {
 .LibraryItemContainerNone {
 	display: flex;
 	flex-direction: column;
-	overflow: hidden;
-}
-
-.LibraryItemContainerNone.expanded .LibraryItemBodyContainer .LibraryItemBodyElements.BodyIndentation{
-	padding-left: 0px;
-	width: 100%;
+	min-width: fit-content;
 }
 
 .LibrarySectionHeader {
@@ -113,11 +129,11 @@ button {
 .LibraryItemHeader {
 	display: flex;
 	flex-direction: row;
-	flex-wrap: wrap;
 	align-items: center;
 	transition: 0.15s;
 	position: relative;
 	border-bottom: solid 1px #494949;
+	min-width: max-content;
 }
 
 .LibraryItemContainerCategory > .LibraryItemHeader {
@@ -158,8 +174,8 @@ button {
 
 .LibraryItemBodyContainer {
 	display: flex;
-	align-items: stretch;
-	width: 100%;
+	max-width: fit-content;
+	min-width: 100%;
 }
 
 .LibraryItemContainerSection .LibraryItemIcon {
@@ -251,6 +267,7 @@ button {
 	border-bottom: 0px;
 	position: relative;
 	height: 2.5rem;
+	width: 100%;
 }
 
 .LibraryItemBody > .LibraryItemContainerGroup > .LibraryItemHeader:before,
@@ -295,6 +312,7 @@ button {
 	display: flex;
 	flex-direction: row;
 	margin: .6rem 0rem;
+	width: 100%;
 }
 
 .ClusterLeftPane {
@@ -322,30 +340,40 @@ button {
 }
 
 .ClusterRightPane {
-	flex-grow: 2;
-	padding-left: 4px;
-	width: calc(100% - 4px);
+	display: flex;
+	flex-direction: column;
+    min-width: calc(100% - 4.4rem);
+    width: fit-content;
+}
+
+.ClusterRightPane > .LibraryItemContainerNone {
+	width: 100%;
+    padding-right: 0rem;
+    padding-left: 0rem;
 }
 
 .ClusterRightPane .LibraryItemTextWrapper {
-	width: calc(100% - 44px);
+	width: 100%;
 	display: flex;
     flex-direction: column;
 }
 
 .ClusterRightPane .LibraryItemTextWrapper .TextBox {
 	width: 100%;
+	display: flex;
+	flex-direction: column;
 }
 
 .ClusterRightPane .LibraryItemHeader {
 	border-bottom: none;
 	height: fit-content;
-	padding: 0.5rem 0rem;
+	padding-top: 0.1rem;
+	padding-bottom: 0.1rem;
 }
 
 .ClusterRightPane .LibraryItemText{
 	font-size: 1.1rem;
-	width: calc(100% - 44px);
+	width: 100%;
 	color: #C6C6C6;
 }
 
