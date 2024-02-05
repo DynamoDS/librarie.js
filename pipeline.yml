@@ -62,7 +62,7 @@ soc2:
     timeout: 3000
 
 schedule:
-  cron_schedule: "once_a_month"
+  cron_schedule: "once_a_week"
 
 code_analysis:
   sonarqube:
