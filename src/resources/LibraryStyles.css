@@ -97,7 +97,7 @@ button {
 }
 
 .LibraryItemContainerGroup.expanded .LibraryItemBodyContainer .LibraryItemBodyElements.BodyIndentation{
-	padding-left: 45px;
+	padding-left: 28px;
 }
 
 .LibraryItemContainerNone {
@@ -274,8 +274,7 @@ button {
 .LibraryItemBody > .LibraryItemContainerNone > .LibraryItemHeader:before {
 	content: "";
 	height: 1rem;
-	width: 2.8rem;
-	min-width: 2.8rem;
+	width: 1.4rem;
 	border: solid #999999 2px;
 	border-style: dashed;
 	border-right: 0px;
@@ -317,8 +316,8 @@ button {
 
 .ClusterLeftPane {
 	display: flex;
-	width: 4.2rem;
-	min-width: 4.2rem;
+	width: 2.75rem;
+	min-width: 2.75rem;
     padding: 25px 0px 0px 0px;
     align-items: flex-start;
     justify-content: center;
@@ -382,9 +381,9 @@ button {
 	min-width: 1rem;
 	height: 1rem;
 	min-height: 1rem;
-	padding-left: 0.5rem;
-	padding-right: 0.5rem;
 	-webkit-user-drag: none;
+	position: relative;
+    left: -15px;
 }
 
 .SearchBar {
