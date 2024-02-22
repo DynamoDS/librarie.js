@@ -57,6 +57,9 @@ soc2:
   run_on_any_branch : true
   harmony:
     product_name: Dynamo
+    exclude:
+      - "harmony"
+      - ".tools"
     hidden_email_list: dynamo_ws_access
     repository: env.HARMONY_REPO
     timeout: 3000
