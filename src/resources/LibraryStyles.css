@@ -97,7 +97,7 @@ button {
 }
 
 .LibraryItemContainerGroup.expanded .LibraryItemBodyContainer .LibraryItemBodyElements.BodyIndentation{
-	padding-left: 28px;
+	padding-left: 2.9rem;
 }
 
 .LibraryItemContainerNone {
@@ -149,7 +149,6 @@ button {
 .LibraryItemContainerGroup,
 .LibraryItemContainerNone {
 	width: calc(100% - 1rem);
-	padding-left: 0.5rem;
 	padding-right: 0.5rem;
 }
 
@@ -163,7 +162,7 @@ button {
 }
 
 .LibraryItemBodyElements.BodyIndentation {
-	width: calc(100% - 1.2rem);
+	width: calc(100% - 1.5rem);
 }
 
 .LibraryItemBody {
@@ -304,7 +303,7 @@ button {
 }
 
 .BodyIndentation {
-	padding-left: 1.2rem;
+	padding-left: 1.5rem;
 }
 
 .ClusterViewContainer {
@@ -314,10 +313,19 @@ button {
 	width: 100%;
 }
 
+.LibraryItemContainerNone.expanded .LibraryItemBodyContainer .LibraryItemBodyElements .LibraryItemBody .ClusterViewContainer .ClusterLeftPane, .LibraryItemContainerGroup.expanded .LibraryItemBodyContainer .LibraryItemBodyElements .LibraryItemBody .ClusterViewContainer .ClusterLeftPane{
+	width: 2.75rem;
+	justify-content: center;
+	margin-left: 0px;
+}
+
+.LibraryItemBodyContainer .LibraryItemBodyElements .LibraryItemBody .ClusterViewContainer .ClusterLeftPane {
+	width: 2.75rem;
+	margin-left: 1.5rem;
+}
+
 .ClusterLeftPane {
 	display: flex;
-	width: 2.75rem;
-	min-width: 2.75rem;
     padding: 25px 0px 0px 0px;
     align-items: flex-start;
     justify-content: center;
@@ -383,7 +391,7 @@ button {
 	min-height: 1rem;
 	-webkit-user-drag: none;
 	position: relative;
-    left: -15px;
+    left: -14px;
 }
 
 .SearchBar {
@@ -879,6 +887,10 @@ button {
 
 .tooltipWrapper {
 	height: fit-content;
+	width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .ClusterLeftPane .customTooltip {
