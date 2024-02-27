@@ -85,6 +85,20 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
     }
 
     handleKeyDown(event: any) {
+        if(event.ctrlKey === true) {
+            switch (event.key) {
+                case EventKey.KEYA:
+                this.fullTextSelection();
+                break;
+                case (EventKey.KEYC):
+                    this.copyToClipboard();
+                    break;
+                case (EventKey.KEYV):
+                    this.pasteFromClipboard();
+                break;
+            }
+        }
+
         switch (event.key) {
             case EventKey.ARROW_DOWN:
                 event.preventDefault();
@@ -95,15 +109,6 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
             case EventKey.DELETE:
                 this.forwardDelete(event);
                 break;
-            case EventKey.KEYA:
-                this.fullTextSelection();
-            break;
-            case EventKey.KEYC:
-                this.copyToClipboard();
-                break;
-            case EventKey.KEYV:
-                this.pasteFromClipboard();
-            break;
             default:
                 if (event.target.className == "SearchInputText") {
                     this.searchInputField?.focus();
