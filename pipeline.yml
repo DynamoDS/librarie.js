@@ -43,16 +43,6 @@ ci_test:
     format: "junit"
     pattern: "*.xml"
 
-deployment:
-  -
-    type: customized
-    customized_builder_image:
-      registry: artifactory
-      url: artifactory.dev.adskengineer.net/dynamo/dynamolibrariejs:dotnetcore3_node16_v2
-    scripts:
-      - "dotnet pack -c Release -o nuget --version-suffix \"beta$BUILD_NUMBER\""
-      - "dotnet nuget push \"$(find nuget -type f -name *.nupkg)\" -s https://api.nuget.org/v3/index.json -k $API_KEY"
-      
 soc2:
   run_on_any_branch : true
   harmony:
