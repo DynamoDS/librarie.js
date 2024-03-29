@@ -361,6 +361,10 @@ button {
     padding-left: 0rem;
 }
 
+.ClusterRightPane .LibraryItemContainerNone .LibraryItemHeader {
+	padding: 1px 0px;
+}
+
 .ClusterRightPane .LibraryItemTextWrapper {
 	width: 100%;
 	display: flex;
