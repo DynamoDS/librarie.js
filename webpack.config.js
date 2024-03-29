@@ -2,6 +2,7 @@
 const webpack = require('webpack');
 const TerserPlugin = require("terser-webpack-plugin");
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const path = require('path');
 let productionBuild = (process.env.NODE_ENV == "production");
 let plugins = [];
 
@@ -21,7 +22,7 @@ module.exports = {
     target: "web",
     output: {
         filename: productionBuild ? "librarie.min.js" : "librarie.js",
-        path: __dirname + "/dist/",
+        path: path.join(__dirname, '/dist'),
         publicPath: "./dist/",
         libraryTarget: "umd",
         library: "LibraryEntryPoint",
