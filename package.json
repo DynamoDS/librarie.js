@@ -21,7 +21,7 @@
   "author": "Dynamo Team",
   "license": "MIT",
   "dependencies": {
-    "core-js": "^3.21.1",
+    "core-js": "^3.36.1",
     "express": "^4.19.2",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
