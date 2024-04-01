@@ -1,9 +1,9 @@
 "use strict";
 const webpack = require('webpack');
 const TerserPlugin = require("terser-webpack-plugin");
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const path = require('path');
-let productionBuild = (process.env.NODE_ENV == "production");
+const productionBuild = (process.env.NODE_ENV == "production");
 let plugins = [];
 
 plugins.push(
