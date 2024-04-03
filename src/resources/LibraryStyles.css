@@ -197,12 +197,19 @@ button {
 	-webkit-user-drag: none;
 }
 
-.LibraryItemContainerNone .LibraryItemIcon {
-	align-self: flex-start;
-	padding-left: 0.5rem;
-	padding-right: 0.5rem;
+.LibraryItemContainerNone .LibraryItemIconWrapper {
 	width: 2.5rem;
 	height: 2.5rem;
+	margin: 0rem 0.3rem;
+}
+
+.LibraryItemContainerNone .LibraryItemIcon {
+	align-self: flex-start;
+	height: 100%;
+	width: 100%;
+	object-fit: scale-down;
+	padding: 0rem;
+	padding-right: 0.5rem;
 	-webkit-user-drag: none;
 }
 
