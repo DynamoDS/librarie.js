@@ -159,11 +159,15 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         this.props.data.itemType !== "coregroup" &&
         this.props.data.itemType !== "classType" &&
         this.props.data.itemType !== "none") {
-            return <img
-                className={"LibraryItemIcon"}
-                src={this.props.data.iconUrl}
-                onError={this.onImageLoadFail}
-            />;
+            return (
+                <div className="LibraryItemIconWrapper">
+                    <img
+                        className={"LibraryItemIcon"}
+                        src={this.props.data.iconUrl}
+                        onError={this.onImageLoadFail}
+                    />
+                </div>
+            );
         }
 
          // If it is a section, display the icon (if given) and provide a click interaction.
