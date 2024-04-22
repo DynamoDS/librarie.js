@@ -260,7 +260,7 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
         let hasText = text.length > 0;
 
         if (hasText) {
-                        // Starting searching immediately after user input, 
+            // Starting searching immediately after user input, 
             // but only show change on ui after 300ms
             setTimeout(function () {
                 if (this.props.libraryController.searchLibraryItemsHandler) {
@@ -274,6 +274,12 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
 
                         // Set all categories and groups to be expanded
                         LibraryUtilities.setItemStateRecursive(this.generatedSectionsOnSearch, true, true);
+
+                        //Due that we are using the React debouncing pattern that using the timeout we need to call the updateSearchViewDelayed() method immediately
+                        //The updateSearchViewDelayed update the Library with the Search results got from callback (search engine results)
+                        //If we don't call it here the call below will be executed firts without the results ready then will be showing wrong results.
+                        this.updateSearchViewDelayed(text);
+                        
                     }.bind(this));
                 } else {
                     LibraryUtilities.searchItemResursive(this.generatedSections, text);
