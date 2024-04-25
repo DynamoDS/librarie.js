@@ -24,9 +24,7 @@
         -moz-user-select: none; /* Firefox */
         -ms-user-select: none; /* Internet */
         user-select: none;
-        user-drag: none;
         scrollbar-base-color: #353535;
-        scrollbar-3dlight-color: #202020;
         scrollbar-highlight-color: #202020;
         scrollbar-track-color: #202020;
         scrollbar-arrow-color: #353535;
@@ -121,9 +119,9 @@
     <script>
         let jsonUrls = ["loadedTypes", "layoutSpecs"];
         let libController = LibraryEntryPoint.CreateLibraryController();
-        let downloader = LibraryEntryPoint.CreateJsonDownloader(jsonUrls, function (jsonUrl, jsonObject) {
+        LibraryEntryPoint.CreateJsonDownloader(jsonUrls, function (jsonUrl, jsonObject) {
 
-            let downloaded = downloader.getDownloadedJsonObjects();
+            let downloaded = this.getDownloadedJsonObjects();
             let loadedTypesJson = downloaded["loadedTypes"];
             let layoutSpecsJson = downloaded["layoutSpecs"];
 
@@ -178,9 +176,7 @@
 
             async function replaceImages() {
                 var allimages = document.getElementsByTagName("img");
-                for(var j = 0; j < allimages.length; j++){
-    
-                    var element = allimages[j];
+                for(const element of allimages){
                     let currentImage = element;
                     var src = element.src
                     if (element.orgSrc != null) {
@@ -284,14 +280,14 @@
         function highlightLibraryItem(itemName, enableHighlight) {
             var found_div = null;
             var libraryItemsText = document.getElementsByClassName("LibraryItemText");
-            for (var i = 0; i < libraryItemsText.length; i++) {
-                if (libraryItemsText[i].textContent == itemName) {
-                    found_div = libraryItemsText[i].parentNode;
+            for (const libraryItem of libraryItemsText) {
+                if (libraryItem.textContent == itemName) {
+                    found_div = libraryItem.parentNode;
                     break;
                 }
             }
             if (found_div != null) {
-                if (enableHighlight == true) {
+                if (enableHighlight) {
                     //Validates that the div is not already highlighted
                     var currentAttibute = found_div.getAttribute("id");
                     if (currentAttibute == null || !currentAttibute.includes("glow_")) {
@@ -344,9 +340,9 @@
         function findPackageDiv(packageName, libraryClassName) {
             var found_div = null;
             var libraryItemsText = document.getElementsByClassName(libraryClassName);
-            for (var i = 0; i < libraryItemsText.length; i++) {
-                if (libraryItemsText[i].textContent.toLowerCase() == packageName.toLowerCase()) {
-                    found_div = libraryItemsText[i];
+            for (const libraryItem of libraryItemsText) {
+                if (libraryItem.textContent.toLowerCase() == packageName.toLowerCase()) {
+                    found_div = libraryItem;
                     break;
                 }
             }
