@@ -256,15 +256,14 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
         if (!this.generatedSections) return;
 
         clearTimeout(this.timeout);
-
-        let hasText = text.length > 0;
-
-        if (hasText) {
-            // Starting searching immediately after user input, 
-            // but only show change on ui after 300ms
-            setTimeout(function () {
-                if (this.props.libraryController.searchLibraryItemsHandler) {
-                    this.props.libraryController.searchLibraryItemsHandler(text, function (loadedTypesJsonOnSearch: any) {
+        
+        // Starting searching immediately after user input, 
+        // but only show change on ui after 300ms
+        setTimeout( function () {
+            let hasText = text.length > 0;
+            if (this.props.libraryController.searchLibraryItemsHandler) {
+                this.props.libraryController.searchLibraryItemsHandler(text.length === 0? "r":text, function (loadedTypesJsonOnSearch: any) {
+                    if (hasText) {
                         // Generate sections based on layout specification and loaded types filtered by search string
                         this.generatedSectionsOnSearch = LibraryUtilities.buildLibrarySectionsFromLayoutSpecs(
                             loadedTypesJsonOnSearch, this.layoutSpecsJson,
@@ -273,23 +272,23 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
                         this.updateSections(this.generatedSectionsOnSearch);
 
                         // Set all categories and groups to be expanded
+                        //this.generatedSectionsOnSearch will contain all the search result nodes in a tree structure
                         LibraryUtilities.setItemStateRecursive(this.generatedSectionsOnSearch, true, true);
-
-                        //Due that we are using the React debouncing pattern that using the timeout we need to call the updateSearchViewDelayed() method immediately
-                        //The updateSearchViewDelayed update the Library with the Search results got from callback (search engine results)
-                        //If we don't call it here the call below will be executed firts without the results ready then will be showing wrong results.
-                        this.updateSearchViewDelayed(text);
-                        
-                    }.bind(this));
-                } else {
-                    LibraryUtilities.searchItemResursive(this.generatedSections, text);
-                }
-            }.bind(this), 300);
-        } else {
-            // Show change on ui immediately if search text is cleared
-            LibraryUtilities.setItemStateRecursive(this.generatedSections, true, false);
-        }
-        this.updateSearchViewDelayed(text);
+                    }
+                    else {
+                        // Show change on ui immediately if search text is cleared (shows Library with the default UI)
+                        LibraryUtilities.setItemStateRecursive(this.generatedSections, true, false);
+                    }   
+                    //The updateSearchViewDelayed updates the Library with the content of this.searchResultItems   
+                    // when using this.generatedSectionsOnSearch will set this.searchResultItems with the results from the external search engine
+                    // when using this.generatedSections will set this.searchResultItems to empty so will show the default UI view for Library
+                    this.updateSearchViewDelayed(text);
+                }.bind(this));
+            } else {
+                LibraryUtilities.searchItemResursive(this.generatedSections, text);
+                this.updateSearchViewDelayed(text);
+            }
+        }.bind(this), 300);
     }
 
     updateSearchViewDelayed(text: string) {
