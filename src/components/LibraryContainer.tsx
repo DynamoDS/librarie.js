@@ -262,6 +262,7 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
         setTimeout( function () {
             let hasText = text.length > 0;
             if (this.props.libraryController.searchLibraryItemsHandler) {
+                //searchLibraryItemsHandler is the callback that needs to be set when creating the library
                 this.props.libraryController.searchLibraryItemsHandler(text.length === 0? "r":text, function (loadedTypesJsonOnSearch: any) {
                     if (hasText) {
                         // Generate sections based on layout specification and loaded types filtered by search string
@@ -279,9 +280,8 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
                         // Show change on ui immediately if search text is cleared (shows Library with the default UI)
                         LibraryUtilities.setItemStateRecursive(this.generatedSections, true, false);
                     }   
-                    //The updateSearchViewDelayed updates the Library with the content of this.searchResultItems   
-                    // when using this.generatedSectionsOnSearch will set this.searchResultItems with the results from the external search engine
-                    // when using this.generatedSections will set this.searchResultItems to empty so will show the default UI view for Library
+                    //The updateSearchViewDelayed() method updates the Library with the search results
+                    //Needs to be done inside the callback because the callback is executed in a async way otherwise we don't have control when this method will be executed
                     this.updateSearchViewDelayed(text);
                 }.bind(this));
             } else {
