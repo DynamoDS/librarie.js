@@ -186,6 +186,8 @@
                     if (src.startsWith("data:image")) {
                         continue;
                     }
+
+                    if(window.chrome.webview === undefined) return;
                     //request the icon from the extension.
                     var base64String = await window.chrome.webview.hostObjects.bridgeTwoWay.GetBase64StringFromPath(src);
                     if (currentImage != null) {
@@ -195,6 +197,7 @@
             }
 
             function refreshLibraryView(libraryController) {
+                if(window.chrome.webview === undefined) return;
                 window.chrome.webview.postMessage("RefreshLibrary");
             }
 
@@ -203,6 +206,7 @@
                 var encodedText = encodeURIComponent(text);
                 //save the callback so we can access from our completion function
                 searchCallback = callback;
+                if(window.chrome.webview === undefined) return;
                 window.chrome.webview.postMessage(JSON.stringify({"func":"performSearch","data":encodedText}));
                 window.chrome.webview.postMessage(JSON.stringify({"func":"logEventsToInstrumentation","data":["Search",encodedText]}));
             }
@@ -210,6 +214,7 @@
             // Register event handlers for various events on library controller and package controller.
             libController.on(libController.ItemClickedEventName, function (nodeCreationName) {
                 console.log('Library Node Clicked: ' + nodeCreationName);
+                if(window.chrome.webview === undefined) return;
                 window.chrome.webview.postMessage(JSON.stringify({"func":"createNode","data":nodeCreationName}));
             });
 
@@ -225,15 +230,18 @@
             }, true);
 
             libController.on(libController.ItemMouseEnterEventName, function (arg) {
+                if(window.chrome.webview === undefined) return;
                 window.chrome.webview.postMessage(JSON.stringify({"func":"showNodeTooltip","data":[arg.data,arg.rect.top]}));
             });
 
             libController.on(libController.ItemMouseLeaveEventName, function (arg) {
+                if(window.chrome.webview === undefined) return;
                 window.chrome.webview.postMessage(JSON.stringify({"func":"closeNodeTooltip","data":true}));
             });
 
             libController.on(libController.SectionIconClickedEventName, function (section) {
                 console.log("Section clicked: " + section);
+                if(window.chrome.webview === undefined) return;
                 if (section == "Add-ons") {
                     window.chrome.webview.postMessage(JSON.stringify({"func":"importLibrary","data":""}));
                 }
@@ -245,11 +253,13 @@
                         var catString = elem.name + ":" + (elem.checked ? "Selected" : "Unselected");
                         categories.push(catString);
                     });
+                    if(window.chrome.webview === undefined) return;
                     window.chrome.webview.postMessage(JSON.stringify({"func":"logEventsToInstrumentation","data":["Filter-Categories",categories.join(",")]}));
             });
 
             //This will call the NextStep() function located in the LibraryViewController
             function nextStepInGuide() {
+                if(window.chrome.webview === undefined) return;
                 window.chrome.webview.postMessage(JSON.stringify({ "func": "NextStep", "data": "" }));
             }
 
@@ -436,6 +446,7 @@
 
         //This method will be executed when the WebBrowser change its size, so we can update the Popup vertical location that is over the library
         function bodyResizeEvent() {
+            if(window.chrome.webview === undefined) return;
             window.chrome.webview.postMessage(JSON.stringify({ "func": "ResizedEvent", "data": "" }));
         }
 
