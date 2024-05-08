@@ -22,6 +22,8 @@ import { ClusterView } from "./ClusterView";
 import * as LibraryUtilities from "../LibraryUtilities";
 import { ArrowIcon } from "./icons";
 import { LibraryContainer } from "./LibraryContainer";
+import { HostingContextType } from "../sharedTypes";
+import { setItemStateRecursive } from "../LibraryUtilities";
 
 export interface LibraryItemProps {
     libraryContainer: LibraryContainer,
@@ -88,6 +90,10 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
 
 
     render() {
+        if ((this.props.libraryContainer.state.hostingContext == "home" as HostingContextType)
+            && this.props.data.hiddenInWorkspaceContext){
+              return null;  
+        }
         if (!this.props.data.visible) {
             return null;
         }

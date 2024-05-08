@@ -7,6 +7,7 @@ import { Reactor } from "./EventHandler";
 import "core-js/actual/string/starts-with";
 import "core-js/actual/string/includes";
 import "core-js/actual/array/";
+import { HostingContextType } from "./sharedTypes";
 
 export function CreateJsonDownloader(jsonUrls: string[], callback: Function) {
     return new JsonDownloader(jsonUrls, callback);
@@ -45,6 +46,7 @@ export class LibraryController {
     setLayoutSpecsJsonHandler: SetLayoutSpecsJsonFunc | null = null;
     refreshLibraryViewHandler: RefreshLibraryViewFunc | null = null;
     modifyItemHandler:((contextDataToMatch:any, dataToModify:ItemData)=> boolean) | null = null;
+    setContextHandler:((context:HostingContextType)=> void) | null = null;
 
     // This is to make it possible to set an external search handler.
     // Given a search text, it will call the callback function with search result.
@@ -62,6 +64,7 @@ export class LibraryController {
         this.setLayoutSpecsJson = this.setLayoutSpecsJson.bind(this);
         this.refreshLibraryView = this.refreshLibraryView.bind(this);
         this.modifyLibraryItemData = this.modifyLibraryItemData.bind(this);
+        this.setContext = this.setContext.bind(this);
 
         this.reactor = new Reactor();
     }
@@ -174,5 +177,13 @@ export class LibraryController {
             return this.modifyItemHandler(context,data);
         }
        return false;
+    }
+    //TODO summary
+    setContext(context:HostingContextType):void{
+        console.log("I AM HERE")
+        if(this.setContextHandler){
+            console.log("set context to",context)
+            return this.setContextHandler(context);
+        }
     }
 }

@@ -10,6 +10,7 @@ import { Searcher } from "../Searcher";
 import { SearchBar, CategoryData } from "./SearchBar";
 import { SearchResultItem } from "./SearchResultItem";
 import * as ReactDOM from "react-dom";
+import { HostingContextType } from "../sharedTypes";
 
 declare global {
     interface Window { setTooltipText: any; }
@@ -41,6 +42,7 @@ export interface LibraryContainerStates {
         action: string;
         query: string;
     }
+    hostingContext:HostingContextType
 }
 
 export class LibraryContainer extends React.Component<LibraryContainerProps, LibraryContainerStates> {
@@ -73,13 +75,14 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
         this.scrollToExpandedItem = this.scrollToExpandedItem.bind(this);
         this.setTooltipText = this.setTooltipText.bind(this);
         this.modifyLibraryItemData = this.modifyLibraryItemData.bind(this);
+        this.setContext = this.setContext.bind(this);
 
         // Set handlers after methods are bound.
         this.props.libraryController.setLoadedTypesJsonHandler = this.setLoadedTypesJson;
         this.props.libraryController.setLayoutSpecsJsonHandler = this.setLayoutSpecsJson;
         this.props.libraryController.refreshLibraryViewHandler = this.refreshLibraryView;
         this.props.libraryController.modifyItemHandler = this.modifyLibraryItemData;
-
+        this.props.libraryController.setContextHandler = this.setContext;
 
         // Initialize the search utilities with empty data
         this.searcher = new Searcher();
@@ -95,7 +98,8 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
                 create: ClusterTypeDescription.create, 
                 action: ClusterTypeDescription.action, 
                 query: ClusterTypeDescription.query
-            }
+            },
+            hostingContext: "none" as HostingContextType
         };
         window.setTooltipText = this.setTooltipText;
     }
@@ -202,6 +206,11 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
             this.props.defaultSectionString, this.props.miscSectionString);
 
         this.updateSections(this.generatedSections);
+    }
+
+    setContext(context:HostingContextType){
+        this.setState({hostingContext:context})
+        this.forceUpdate();
     }
 
     modifyLibraryItemData(contextDataToMatch:any, dataToModify:LibraryUtilities.ItemData) : boolean{

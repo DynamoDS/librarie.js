@@ -17,6 +17,7 @@ export class TypeListNode {
     description: string = "";
     processed: boolean = false;
     weight: number = 0;
+    hiddenInWorkspaceContext:boolean
 
     constructor(data: any) {
         this.fullyQualifiedName = data.fullyQualifiedName;
@@ -27,6 +28,7 @@ export class TypeListNode {
         this.parameters = data.parameters;
         this.description = data.description;
         this.weight = data.weight;
+        this.hiddenInWorkspaceContext = data.hiddenInWorkspaceContext;
     }
 }
 
@@ -34,6 +36,7 @@ export interface IncludeInfo {
     path: string;
     iconUrl?: string;
     inclusive?: boolean;
+    hiddenInWorkspaceContext?:boolean
 }
 
 export class IncludeItemPair {
@@ -92,6 +95,7 @@ export class ItemData {
     pathToItem: ItemData[] = [];
     weight: number = 0;
     fullyQualifiedName:string = ""
+    hiddenInWorkspaceContext:boolean = false
 
     constructor(public text: string) {
         this.keywords.push(text ? text.toLowerCase() : text);
@@ -120,6 +124,7 @@ export class ItemData {
         });
         this.keywords.push(typeListNode.fullyQualifiedName.toLowerCase().replace(/ /g, ''));
         this.fullyQualifiedName = typeListNode.fullyQualifiedName;
+        this.hiddenInWorkspaceContext = typeListNode.hiddenInWorkspaceContext;
     }
 
     appendChild(childItem: ItemData) {

@@ -4,6 +4,7 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { LibraryContainer } from "./LibraryContainer";
 import * as LibraryUtilities from "../LibraryUtilities";
+import { HostingContextType } from "../sharedTypes";
 
 type ParentTextClickedFunc = (pathToItem: LibraryUtilities.ItemData[]) => void;
 
@@ -72,8 +73,11 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
 
     render() {
 
-        if (!this.props.data.visible) {
-            return null;
+        if ((this.props.libraryContainer.state.hostingContext == "home" as HostingContextType)
+            && this.props.data.hiddenInWorkspaceContext){
+                console.log("we should have hidden this lib item",this.props.data.contextData)
+
+              return null;  
         }
 
         let ItemContainerStyle = this.state.selected ? "SearchResultItemContainerSelected" : "SearchResultItemContainer";
