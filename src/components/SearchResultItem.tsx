@@ -46,14 +46,14 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
         if (this.state.selected) {
             let container = ReactDOM.findDOMNode(this.props.libraryContainer);
             let currentItem = ReactDOM.findDOMNode(this);
-            let containerRect = container.getBoundingClientRect();
-            let currentRect = currentItem.getBoundingClientRect();
+            let containerRect = container?.getBoundingClientRect();
+            let currentRect = currentItem?.getBoundingClientRect();
 
-            if (currentRect.top < currentRect.height) {
+            if (currentRect?.top < currentRect?.height) {
                 currentItem.scrollIntoView();
             }
 
-            if (currentRect.bottom > containerRect.bottom) {
+            if (currentRect?.bottom > containerRect?.bottom) {
                 currentItem.scrollIntoView(false);
             }
         }
@@ -71,6 +71,11 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
     }
 
     render() {
+
+        if (!this.props.data.visible) {
+            return null;
+        }
+
         let ItemContainerStyle = this.state.selected ? "SearchResultItemContainerSelected" : "SearchResultItemContainer";
         let iconPath = this.props.data.iconUrl;
 

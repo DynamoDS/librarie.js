@@ -221,8 +221,6 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
     }
     searchForLeafLibItem(contextData:any,items:LibraryUtilities.ItemData[]) : LibraryUtilities.ItemData|null{
         for(let item of items){
-            console.log(item.contextData)
-            console.log(item.pathToItem)
             if (item.contextData == contextData && item.childItems.length ==0){
                 return item;
             }
