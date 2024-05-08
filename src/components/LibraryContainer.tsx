@@ -72,11 +72,13 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
         this.handleKeyDown = this.handleKeyDown.bind(this);
         this.scrollToExpandedItem = this.scrollToExpandedItem.bind(this);
         this.setTooltipText = this.setTooltipText.bind(this);
+        this.modifyLibraryItemData = this.modifyLibraryItemData.bind(this);
 
         // Set handlers after methods are bound.
         this.props.libraryController.setLoadedTypesJsonHandler = this.setLoadedTypesJson;
         this.props.libraryController.setLayoutSpecsJsonHandler = this.setLayoutSpecsJson;
         this.props.libraryController.refreshLibraryViewHandler = this.refreshLibraryView;
+        this.props.libraryController.modifyItemHandler = this.modifyLibraryItemData;
 
 
         // Initialize the search utilities with empty data
@@ -202,6 +204,40 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
         this.updateSections(this.generatedSections);
     }
 
+    modifyLibraryItemData(contextDataToMatch:any, dataToModify:LibraryUtilities.ItemData) : boolean{
+        if(this.generatedSections){
+        let searchResult = this.searchForLeafLibItem(contextDataToMatch,this.generatedSections)
+
+        if(searchResult){
+            searchResult.visible = dataToModify.visible
+            // Just to force a refresh of UI.
+        this.forceUpdate()
+            return true
+        }
+
+        return false;
+        }
+        return false;
+    }
+    searchForLeafLibItem(contextData:any,items:LibraryUtilities.ItemData[]) : LibraryUtilities.ItemData|null{
+        for(let item of items){
+            console.log(item.contextData)
+            console.log(item.pathToItem)
+            if (item.contextData == contextData && item.childItems.length ==0){
+                return item;
+            }
+            else{
+                if(item.childItems.length > 0){
+                var res = this.searchForLeafLibItem(contextData,item.childItems)
+                if(res){
+                return res
+                }
+                }
+            }
+        }
+        return null;
+    }
+
     updateSections(sections: any): void {
         // Obtain the categories from each section to be added into the filtering options for search
         for (let section of sections) {
@@ -293,6 +329,7 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
 
     updateSearchViewDelayed(text: string) {
         if (text.length == 0) {
+            LibraryUtilities.setItemStateRecursive(this.generatedSections, true, false);
             this.onSearchModeChanged(false);
         } else if (!this.state.structured) {
             this.raiseEvent(this.props.libraryController.SearchTextUpdatedEventName, text);

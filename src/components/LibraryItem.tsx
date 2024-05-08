@@ -21,9 +21,10 @@ import * as ReactDOM from "react-dom";
 import { ClusterView } from "./ClusterView";
 import * as LibraryUtilities from "../LibraryUtilities";
 import { ArrowIcon } from "./icons";
+import { LibraryContainer } from "./LibraryContainer";
 
 export interface LibraryItemProps {
-    libraryContainer: any,
+    libraryContainer: LibraryContainer,
     data: LibraryUtilities.ItemData,
     showItemSummary: boolean,
     onItemWillExpand?: Function,
@@ -85,20 +86,6 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         this.onSingleChildItemWillExpand = this.onSingleChildItemWillExpand.bind(this);
     }
 
-    // By default all items in search view will be expanded. In search view, 
-    // user is still able to expand/unexpand the item, which will toggle the 
-    // expansion state. This will make sure that the expansion state of an item
-    // in search view will not be affected by the previous user click.
-    UNSAFE_componentWillReceiveProps(nextProps: LibraryItemProps) {
-        if (nextProps.data.expanded !== this.state.expanded) {
-            this.setState({ expanded: nextProps.data.expanded });
-        }
-        //keep the core group defined in layoutspec always expanded.
-        //Commented as part of the task : https://jira.autodesk.com/browse/QNTM-2975
-        // if(nextProps.data.itemType == "coregroup") {
-        //     this.setState({expanded:true});
-        // }
-    }
 
     render() {
         if (!this.props.data.visible) {

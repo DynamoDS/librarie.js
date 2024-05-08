@@ -2,7 +2,7 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 
 import { LibraryContainer } from "./components/LibraryContainer";
-import { JsonDownloader } from "./LibraryUtilities";
+import { ItemData, JsonDownloader } from "./LibraryUtilities";
 import { Reactor } from "./EventHandler";
 import "core-js/actual/string/starts-with";
 import "core-js/actual/string/includes";
@@ -44,6 +44,7 @@ export class LibraryController {
     setLoadedTypesJsonHandler: SetLoadedTypesJsonFunc | null = null;
     setLayoutSpecsJsonHandler: SetLayoutSpecsJsonFunc | null = null;
     refreshLibraryViewHandler: RefreshLibraryViewFunc | null = null;
+    modifyItemHandler:((contextDataToMatch:any, dataToModify:ItemData)=> boolean) | null = null;
 
     // This is to make it possible to set an external search handler.
     // Given a search text, it will call the callback function with search result.
@@ -165,5 +166,12 @@ export class LibraryController {
         if (this.refreshLibraryViewHandler) {
             this.refreshLibraryViewHandler();
         }
+    }
+
+    modifyLibraryItemData(context:any ,data:ItemData):boolean{
+        if(this.modifyItemHandler){
+            return this.modifyItemHandler(context,data);
+        }
+       return false;
     }
 }
