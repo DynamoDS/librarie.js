@@ -91,6 +91,7 @@ export class ItemData {
     childItems: ItemData[] = [];
     pathToItem: ItemData[] = [];
     weight: number = 0;
+    fullyQualifiedName:string = ""
 
     constructor(public text: string) {
         this.keywords.push(text ? text.toLowerCase() : text);
@@ -118,6 +119,7 @@ export class ItemData {
             this.keywords.push(keyword.toLowerCase().replace(/ /g, ''));
         });
         this.keywords.push(typeListNode.fullyQualifiedName.toLowerCase().replace(/ /g, ''));
+        this.fullyQualifiedName = typeListNode.fullyQualifiedName;
     }
 
     appendChild(childItem: ItemData) {

@@ -219,17 +219,19 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
         }
         return false;
     }
-    searchForLeafLibItem(contextData:any,items:LibraryUtilities.ItemData[]) : LibraryUtilities.ItemData|null{
+    searchForLeafLibItem(fullyQualifiedNameToSearchFor:any,items:LibraryUtilities.ItemData[]) : LibraryUtilities.ItemData|null{
         for(let item of items){
-            if (item.contextData == contextData && item.childItems.length ==0){
+            
+            if (item?.fullyQualifiedName == fullyQualifiedNameToSearchFor && item.childItems.length ==0){
                 return item;
             }
             else{
                 if(item.childItems.length > 0){
-                var res = this.searchForLeafLibItem(contextData,item.childItems)
-                if(res){
-                return res
-                }
+                var res = this.searchForLeafLibItem(fullyQualifiedNameToSearchFor,item.childItems)
+                if(res)
+                    {
+                    return res
+                    }
                 }
             }
         }

@@ -61,6 +61,7 @@ export class LibraryController {
         this.setLoadedTypesJson = this.setLoadedTypesJson.bind(this);
         this.setLayoutSpecsJson = this.setLayoutSpecsJson.bind(this);
         this.refreshLibraryView = this.refreshLibraryView.bind(this);
+        this.modifyLibraryItemData = this.modifyLibraryItemData.bind(this);
 
         this.reactor = new Reactor();
     }

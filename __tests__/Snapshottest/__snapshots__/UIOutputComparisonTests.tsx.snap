@@ -12,6 +12,7 @@ exports[`LibraryContainer Test UI rendering of Library Item and child components
           "contextData": "",
           "description": "",
           "expanded": false,
+          "fullyQualifiedName": "",
           "iconUrl": "",
           "itemType": "category",
           "keywords": [
@@ -29,6 +30,7 @@ exports[`LibraryContainer Test UI rendering of Library Item and child components
           "contextData": "",
           "description": "",
           "expanded": false,
+          "fullyQualifiedName": "",
           "iconUrl": "",
           "itemType": "category",
           "keywords": [
@@ -45,6 +47,7 @@ exports[`LibraryContainer Test UI rendering of Library Item and child components
       "contextData": "",
       "description": "",
       "expanded": false,
+      "fullyQualifiedName": "",
       "iconUrl": "",
       "itemType": "none",
       "keywords": [
@@ -72,6 +75,8 @@ exports[`LibraryContainer Test UI rendering of Library Item and child components
       "SectionIconClickedEventName": "sectionIconClicked",
       "createLibraryByElementId": [Function],
       "createLibraryContainer": [Function],
+      "modifyItemHandler": null,
+      "modifyLibraryItemData": [Function],
       "on": [Function],
       "raiseEvent": [Function],
       "reactor": Reactor {
