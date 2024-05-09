@@ -23,7 +23,6 @@ import * as LibraryUtilities from "../LibraryUtilities";
 import { ArrowIcon } from "./icons";
 import { LibraryContainer } from "./LibraryContainer";
 import { HostingContextType } from "../sharedTypes";
-import { setItemStateRecursive } from "../LibraryUtilities";
 
 export interface LibraryItemProps {
     libraryContainer: LibraryContainer,
@@ -101,7 +100,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
     }
 
     render() {
-        if ((this.props.libraryContainer.state.hostingContext == "home" as HostingContextType)
+        if ((this.props.libraryContainer.state?.hostingContext == "home" as HostingContextType)
             && this.props.data.hiddenInWorkspaceContext){
               return null;  
         }
@@ -427,11 +426,9 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         event.stopPropagation(); // Prevent the onClick event of its parent item from being called.
     }
 
-    // Collapse all child items when one of the child items is expanded
     onSingleChildItemWillExpand() {
-        for (let item of this.props.data.childItems) {
-            item.expanded = false;
-        }
+        //"this" here refers to the parent library item, and will expand it and kick off a render cycle
+        //for all children below it.
         this.setState({ expanded: true }); // Make the current item (parent) expanded.
     }
     onLibraryItemMouseLeave() {

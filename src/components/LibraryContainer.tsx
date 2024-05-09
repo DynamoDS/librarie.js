@@ -75,13 +75,13 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
         this.handleKeyDown = this.handleKeyDown.bind(this);
         this.scrollToExpandedItem = this.scrollToExpandedItem.bind(this);
         this.setTooltipText = this.setTooltipText.bind(this);
-        this.setContext = this.setContext.bind(this);
+        this.setHostContext = this.setHostContext.bind(this);
 
         // Set handlers after methods are bound.
         this.props.libraryController.setLoadedTypesJsonHandler = this.setLoadedTypesJson;
         this.props.libraryController.setLayoutSpecsJsonHandler = this.setLayoutSpecsJson;
         this.props.libraryController.refreshLibraryViewHandler = this.refreshLibraryView;
-        this.props.libraryController.setContextHandler = this.setContext;
+        this.props.libraryController.setHostContextHandler = this.setHostContext;
 
         // Initialize the search utilities with empty data
         this.searcher = new Searcher();
@@ -208,7 +208,7 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
         this.updateSections(this.generatedSections);
     }
 
-    setContext(context:HostingContextType){
+    setHostContext(context:HostingContextType){
         this.setState({shouldOverideExpandedState:false, hostingContext:context})
     }
 

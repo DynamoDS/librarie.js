@@ -19,7 +19,8 @@ describe("LibraryContainer", function () {
   let data = createLibraryItem(ItemData);
 
   // Create "LibraryContainer" to pass as an argument for creation of "LibraryItem"
-  const libContainer = LibraryEntryPoint.CreateLibraryController();
+  let libcontroller = LibraryEntryPoint.CreateLibraryController()
+  let libContainer = mount(libcontroller.createLibraryContainer())
 
   // Creation of LibraryItem component 
   const libraryItemComponent = <LibraryItem libraryContainer={libContainer as any} data={data} showItemSummary={false} />;

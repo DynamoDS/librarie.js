@@ -13,6 +13,7 @@ exports[`LibraryContainer Test UI rendering of Library Item and child components
           "description": "",
           "expanded": false,
           "fullyQualifiedName": "",
+          "hiddenInWorkspaceContext": false,
           "iconUrl": "",
           "itemType": "category",
           "keywords": [
@@ -31,6 +32,7 @@ exports[`LibraryContainer Test UI rendering of Library Item and child components
           "description": "",
           "expanded": false,
           "fullyQualifiedName": "",
+          "hiddenInWorkspaceContext": false,
           "iconUrl": "",
           "itemType": "category",
           "keywords": [
@@ -48,6 +50,7 @@ exports[`LibraryContainer Test UI rendering of Library Item and child components
       "description": "",
       "expanded": false,
       "fullyQualifiedName": "",
+      "hiddenInWorkspaceContext": false,
       "iconUrl": "",
       "itemType": "none",
       "keywords": [
@@ -62,37 +65,49 @@ exports[`LibraryContainer Test UI rendering of Library Item and child components
     }
   }
   libraryContainer={
-    LibraryController {
-      "DefaultSectionName": "default",
-      "FilterCategoryEventName": "filterCategoryChange",
-      "ItemClickedEventName": "itemClicked",
-      "ItemMouseEnterEventName": "itemMouseEnter",
-      "ItemMouseLeaveEventName": "itemMouseLeave",
-      "ItemSummaryExpandedEventName": "itemSummaryExpanded",
-      "MiscSectionName": "Miscellaneous",
-      "RefreshLibraryViewRequestName": "refreshLibraryView",
-      "SearchTextUpdatedEventName": "searchTextUpdated",
-      "SectionIconClickedEventName": "sectionIconClicked",
-      "createLibraryByElementId": [Function],
-      "createLibraryContainer": [Function],
-      "modifyItemHandler": null,
-      "modifyLibraryItemData": [Function],
-      "on": [Function],
-      "raiseEvent": [Function],
-      "reactor": Reactor {
-        "events": [],
-      },
-      "refreshLibraryView": [Function],
-      "refreshLibraryViewHandler": null,
-      "registerRequestHandler": [Function],
-      "request": [Function],
-      "requestHandler": {},
-      "searchLibraryItemsHandler": null,
-      "setLayoutSpecsJson": [Function],
-      "setLayoutSpecsJsonHandler": null,
-      "setLoadedTypesJson": [Function],
-      "setLoadedTypesJsonHandler": null,
-    }
+    <LibraryContainer
+      defaultSectionString="default"
+      libraryController={
+        LibraryController {
+          "DefaultSectionName": "default",
+          "FilterCategoryEventName": "filterCategoryChange",
+          "ItemClickedEventName": "itemClicked",
+          "ItemMouseEnterEventName": "itemMouseEnter",
+          "ItemMouseLeaveEventName": "itemMouseLeave",
+          "ItemSummaryExpandedEventName": "itemSummaryExpanded",
+          "MiscSectionName": "Miscellaneous",
+          "RefreshLibraryViewRequestName": "refreshLibraryView",
+          "SearchTextUpdatedEventName": "searchTextUpdated",
+          "SectionIconClickedEventName": "sectionIconClicked",
+          "createLibraryByElementId": [Function],
+          "createLibraryContainer": [Function],
+          "modifyItemHandler": null,
+          "modifyLibraryItemData": [Function],
+          "on": [Function],
+          "raiseEvent": [Function],
+          "reactor": Reactor {
+            "events": [],
+          },
+          "refreshLibraryView": [Function],
+          "refreshLibraryViewHandler": [Function],
+          "registerRequestHandler": [Function],
+          "request": [Function],
+          "requestHandler": {},
+          "searchLibraryItemsHandler": null,
+          "setHostContext": [Function],
+          "setHostContextHandler": [Function],
+          "setLayoutSpecsJson": [Function],
+          "setLayoutSpecsJsonHandler": [Function],
+          "setLoadedTypesJson": [Function],
+          "setLoadedTypesJsonHandler": [Function],
+        }
+      }
+      miscSectionString="Miscellaneous"
+    >
+      <div>
+        This is LibraryContainer
+      </div>
+    </LibraryContainer>
   }
   showItemSummary={false}
 >
