@@ -43,6 +43,7 @@ export interface LibraryContainerStates {
         query: string;
     }
     hostingContext:HostingContextType
+    shouldOverideExpandedState:boolean
 }
 
 export class LibraryContainer extends React.Component<LibraryContainerProps, LibraryContainerStates> {
@@ -97,7 +98,8 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
                 action: ClusterTypeDescription.action, 
                 query: ClusterTypeDescription.query
             },
-            hostingContext: "none" as HostingContextType
+            hostingContext: "none" as HostingContextType,
+            shouldOverideExpandedState : true
         };
         window.setTooltipText = this.setTooltipText;
     }
@@ -207,8 +209,7 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
     }
 
     setContext(context:HostingContextType){
-        this.setState({hostingContext:context})
-        //this.forceUpdate();
+        this.setState({shouldOverideExpandedState:false, hostingContext:context})
     }
 
     updateSections(sections: any): void {
@@ -362,6 +363,12 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
         }
     }
 
+    setOverride(override:boolean){
+        if(this.state.shouldOverideExpandedState != override){
+        this.setState({shouldOverideExpandedState:override})
+        }
+    }
+
     setTooltipText(content: string){
         this.setState({tooltipContent: JSON.parse(content)});
     }
@@ -384,6 +391,7 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
                         data={data}
                         showItemSummary={this.state.showItemSummary}
                         tooltipContent={this.state.tooltipContent}
+                        setOverride={this.setOverride.bind(this)}
                     />
                 }
                 );

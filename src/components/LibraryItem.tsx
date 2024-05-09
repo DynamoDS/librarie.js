@@ -30,6 +30,7 @@ export interface LibraryItemProps {
     data: LibraryUtilities.ItemData,
     showItemSummary: boolean,
     onItemWillExpand?: Function,
+    setOverride?:Function,
     tooltipContent?: any
 }
 
@@ -86,8 +87,18 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         this.onLibraryItemMouseLeave = this.onLibraryItemMouseLeave.bind(this);
         this.onSectionIconClicked = this.onSectionIconClicked.bind(this);
         this.onSingleChildItemWillExpand = this.onSingleChildItemWillExpand.bind(this);
+
     }
 
+     // By default all items in search view will be expanded. In search view, 
+    // user is still able to expand/unexpand the item, which will toggle the 
+    // expansion state. This will make sure that the expansion state of an item
+    // in search view will not be affected by the previous user click.
+    UNSAFE_componentWillReceiveProps(nextProps: LibraryItemProps) {
+        if (nextProps.data.expanded !== this.state.expanded && this.props.libraryContainer.state.shouldOverideExpandedState) {
+            this.setState({ expanded: nextProps.data.expanded });
+        }
+    }
 
     render() {
         if ((this.props.libraryContainer.state.hostingContext == "home" as HostingContextType)
@@ -316,6 +327,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
                                 this.onSingleChildItemWillExpand();
                                 this.props.libraryContainer.scrollToExpandedItem(args)
                             }}
+                            setOverride={this.props.setOverride}
                             tooltipContent={this.props.tooltipContent}
                         />);
                     })
@@ -386,13 +398,10 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         if(this.props.data.text == "Add-ons") return;
         // Toggle expansion state.
         let currentlyExpanded = this.state.expanded;
-
         if (this.props.data.childItems.length > 0 && !currentlyExpanded && this.props.onItemWillExpand) {
             this.props.onItemWillExpand(ReactDOM.findDOMNode(this));
         }
-
         this.setState({ expanded: !currentlyExpanded });
-
         //auto expand the coregroup elements
         //commenting as part of the task : https://jira.autodesk.com/browse/QNTM-2975
         // if(this.props.data.itemType === "category" ) {
@@ -408,6 +417,8 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
             libraryContainer.raiseEvent(libraryContainer.props.libraryController.ItemClickedEventName,
                 this.props.data.contextData);
         }
+        // @ts-ignore 
+        this.props.libraryContainer.state.shouldOverideExpandedState = true
     }
 
     onSectionIconClicked(event: any) {
@@ -423,7 +434,6 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         }
         this.setState({ expanded: true }); // Make the current item (parent) expanded.
     }
-
     onLibraryItemMouseLeave() {
         let libraryContainer = this.props.libraryContainer;
         if (this.props.data.childItems.length == 0) {
