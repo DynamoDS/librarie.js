@@ -74,14 +74,12 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
         this.handleKeyDown = this.handleKeyDown.bind(this);
         this.scrollToExpandedItem = this.scrollToExpandedItem.bind(this);
         this.setTooltipText = this.setTooltipText.bind(this);
-        this.modifyLibraryItemData = this.modifyLibraryItemData.bind(this);
         this.setContext = this.setContext.bind(this);
 
         // Set handlers after methods are bound.
         this.props.libraryController.setLoadedTypesJsonHandler = this.setLoadedTypesJson;
         this.props.libraryController.setLayoutSpecsJsonHandler = this.setLayoutSpecsJson;
         this.props.libraryController.refreshLibraryViewHandler = this.refreshLibraryView;
-        this.props.libraryController.modifyItemHandler = this.modifyLibraryItemData;
         this.props.libraryController.setContextHandler = this.setContext;
 
         // Initialize the search utilities with empty data
@@ -210,41 +208,7 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
 
     setContext(context:HostingContextType){
         this.setState({hostingContext:context})
-        this.forceUpdate();
-    }
-
-    modifyLibraryItemData(contextDataToMatch:any, dataToModify:LibraryUtilities.ItemData) : boolean{
-        if(this.generatedSections){
-        let searchResult = this.searchForLeafLibItem(contextDataToMatch,this.generatedSections)
-
-        if(searchResult){
-            searchResult.visible = dataToModify.visible
-            // Just to force a refresh of UI.
-        this.forceUpdate()
-            return true
-        }
-
-        return false;
-        }
-        return false;
-    }
-    searchForLeafLibItem(fullyQualifiedNameToSearchFor:any,items:LibraryUtilities.ItemData[]) : LibraryUtilities.ItemData|null{
-        for(let item of items){
-            
-            if (item?.fullyQualifiedName == fullyQualifiedNameToSearchFor && item.childItems.length ==0){
-                return item;
-            }
-            else{
-                if(item.childItems.length > 0){
-                var res = this.searchForLeafLibItem(fullyQualifiedNameToSearchFor,item.childItems)
-                if(res)
-                    {
-                    return res
-                    }
-                }
-            }
-        }
-        return null;
+        //this.forceUpdate();
     }
 
     updateSections(sections: any): void {
