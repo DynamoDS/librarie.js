@@ -7,7 +7,7 @@ import { Reactor } from "./EventHandler";
 import "core-js/actual/string/starts-with";
 import "core-js/actual/string/includes";
 import "core-js/actual/array/";
-import { HostingContextType } from "./sharedTypes";
+import { HostingContextType } from "./SharedTypes";
 
 export function CreateJsonDownloader(jsonUrls: string[], callback: Function) {
     return new JsonDownloader(jsonUrls, callback);
@@ -45,7 +45,6 @@ export class LibraryController {
     setLoadedTypesJsonHandler: SetLoadedTypesJsonFunc | null = null;
     setLayoutSpecsJsonHandler: SetLayoutSpecsJsonFunc | null = null;
     refreshLibraryViewHandler: RefreshLibraryViewFunc | null = null;
-    modifyItemHandler:((contextDataToMatch:any, dataToModify:ItemData)=> boolean) | null = null;
     setHostContextHandler:((context:HostingContextType)=> void) | null = null;
 
     // This is to make it possible to set an external search handler.
@@ -63,7 +62,6 @@ export class LibraryController {
         this.setLoadedTypesJson = this.setLoadedTypesJson.bind(this);
         this.setLayoutSpecsJson = this.setLayoutSpecsJson.bind(this);
         this.refreshLibraryView = this.refreshLibraryView.bind(this);
-        this.modifyLibraryItemData = this.modifyLibraryItemData.bind(this);
         this.setHostContext = this.setHostContext.bind(this);
 
         this.reactor = new Reactor();
@@ -171,16 +169,13 @@ export class LibraryController {
             this.refreshLibraryViewHandler();
         }
     }
-
-    modifyLibraryItemData(context:any ,data:ItemData):boolean{
-        if(this.modifyItemHandler){
-            return this.modifyItemHandler(context,data);
-        }
-       return false;
-    }
-    //TODO summary
+    /**
+     * Set the host context that the library is being displayed in.
+     * Some loadedTypes will not be displayed in the home context.
+     * @param context current host context. 
+     * @returns void
+     */
     setHostContext(context:HostingContextType):void{
-        console.log("I AM HERE")
         if(this.setHostContextHandler){
             console.log("set context to",context)
             return this.setHostContextHandler(context);

@@ -22,14 +22,13 @@ import { ClusterView } from "./ClusterView";
 import * as LibraryUtilities from "../LibraryUtilities";
 import { ArrowIcon } from "./icons";
 import { LibraryContainer } from "./LibraryContainer";
-import { HostingContextType } from "../sharedTypes";
+import { HostingContextType } from "../SharedTypes";
 
 export interface LibraryItemProps {
     libraryContainer: LibraryContainer,
     data: LibraryUtilities.ItemData,
     showItemSummary: boolean,
     onItemWillExpand?: Function,
-    setOverride?:Function,
     tooltipContent?: any
 }
 
@@ -94,9 +93,11 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
     // expansion state. This will make sure that the expansion state of an item
     // in search view will not be affected by the previous user click.
     UNSAFE_componentWillReceiveProps(nextProps: LibraryItemProps) {
-        if (nextProps.data.expanded !== this.state.expanded && this.props.libraryContainer.state.shouldOverideExpandedState) {
+        if (nextProps.data.expanded !== this.state.expanded && 
+            this.props.libraryContainer.state.shouldOverrideExpandedState)
+            {
             this.setState({ expanded: nextProps.data.expanded });
-        }
+            }
     }
 
     render() {
@@ -326,7 +327,6 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
                                 this.onSingleChildItemWillExpand();
                                 this.props.libraryContainer.scrollToExpandedItem(args)
                             }}
-                            setOverride={this.props.setOverride}
                             tooltipContent={this.props.tooltipContent}
                         />);
                     })
@@ -416,8 +416,10 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
             libraryContainer.raiseEvent(libraryContainer.props.libraryController.ItemClickedEventName,
                 this.props.data.contextData);
         }
+        //not ideal, but we set the state without setState here to avoid triggering a render so
+        //that the item we just clicked will stay expanded.
         // @ts-ignore 
-        this.props.libraryContainer.state.shouldOverideExpandedState = true
+        this.props.libraryContainer.state.shouldOverrideExpandedState = true
     }
 
     onSectionIconClicked(event: any) {

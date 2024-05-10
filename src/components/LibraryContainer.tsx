@@ -10,7 +10,7 @@ import { Searcher } from "../Searcher";
 import { SearchBar, CategoryData } from "./SearchBar";
 import { SearchResultItem } from "./SearchResultItem";
 import * as ReactDOM from "react-dom";
-import { HostingContextType } from "../sharedTypes";
+import { HostingContextType } from "../SharedTypes";
 
 declare global {
     interface Window { setTooltipText: any; }
@@ -42,8 +42,16 @@ export interface LibraryContainerStates {
         action: string;
         query: string;
     }
+    /**
+     * context that the library is currently displayed in, currently used to hide
+     * some loadedtypes in certain contexts.
+     */
     hostingContext:HostingContextType
-    shouldOverideExpandedState:boolean
+    /**
+     * used to control legacy props overriding state behavior. (see UNSAFE_componentWillMount)
+     * TODO (get rid of this and the unsafe lifecycle hook while retaining behavior.)
+     */
+    shouldOverrideExpandedState:boolean
 }
 
 export class LibraryContainer extends React.Component<LibraryContainerProps, LibraryContainerStates> {
@@ -99,7 +107,7 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
                 query: ClusterTypeDescription.query
             },
             hostingContext: "none" as HostingContextType,
-            shouldOverideExpandedState : true
+            shouldOverrideExpandedState : true
         };
         window.setTooltipText = this.setTooltipText;
     }
@@ -209,7 +217,10 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
     }
 
     setHostContext(context:HostingContextType){
-        this.setState({shouldOverideExpandedState:false, hostingContext:context})
+        //besides setting the host context we also set the expanded state override mode to false
+        //so that the currently expanded library items retain their state and don't all close
+        //as a result of this top level state update.
+        this.setState({shouldOverrideExpandedState:false, hostingContext:context})
     }
 
     updateSections(sections: any): void {
@@ -294,8 +305,12 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
                     //Needs to be done inside the callback because the callback is executed in a async way otherwise we don't have control when this method will be executed
                     this.updateSearchViewDelayed(text);
                 }.bind(this));
+            //this else block is only hit in the libjs test app, not usually in Dynamo.
             } else {
                 LibraryUtilities.searchItemResursive(this.generatedSections, text);
+                if(text.length == 0){
+                    LibraryUtilities.setItemStateRecursive(this.generatedSections, true, false);
+                }
                 this.updateSearchViewDelayed(text);
             }
         }.bind(this), 300);
@@ -303,7 +318,6 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
 
     updateSearchViewDelayed(text: string) {
         if (text.length == 0) {
-            LibraryUtilities.setItemStateRecursive(this.generatedSections, true, false);
             this.onSearchModeChanged(false);
         } else if (!this.state.structured) {
             this.raiseEvent(this.props.libraryController.SearchTextUpdatedEventName, text);
@@ -363,12 +377,6 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
         }
     }
 
-    setOverride(override:boolean){
-        if(this.state.shouldOverideExpandedState != override){
-        this.setState({shouldOverideExpandedState:override})
-        }
-    }
-
     setTooltipText(content: string){
         this.setState({tooltipContent: JSON.parse(content)});
     }
@@ -391,7 +399,6 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
                         data={data}
                         showItemSummary={this.state.showItemSummary}
                         tooltipContent={this.state.tooltipContent}
-                        setOverride={this.setOverride.bind(this)}
                     />
                 }
                 );

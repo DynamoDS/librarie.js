@@ -4,7 +4,7 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { LibraryContainer } from "./LibraryContainer";
 import * as LibraryUtilities from "../LibraryUtilities";
-import { HostingContextType } from "../sharedTypes";
+import { HostingContextType } from "../SharedTypes";
 
 type ParentTextClickedFunc = (pathToItem: LibraryUtilities.ItemData[]) => void;
 
@@ -47,14 +47,18 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
         if (this.state.selected) {
             let container = ReactDOM.findDOMNode(this.props.libraryContainer);
             let currentItem = ReactDOM.findDOMNode(this);
-            let containerRect = container?.getBoundingClientRect();
-            let currentRect = currentItem?.getBoundingClientRect();
+            let containerRect = container.getBoundingClientRect();
+            let currentRect = currentItem.getBoundingClientRect();
+            //bail if rects are null.
+            if(containerRect == null || currentRect == null){
+                return
+            }
 
-            if (currentRect?.top < currentRect?.height) {
+            if (currentRect.top < currentRect.height) {
                 currentItem.scrollIntoView();
             }
 
-            if (currentRect?.bottom > containerRect?.bottom) {
+            if (currentRect.bottom > containerRect.bottom) {
                 currentItem.scrollIntoView(false);
             }
         }
