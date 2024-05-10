@@ -19,10 +19,11 @@ describe("LibraryContainer", function () {
   let data = createLibraryItem(ItemData);
 
   // Create "LibraryContainer" to pass as an argument for creation of "LibraryItem"
-  const libContainer = LibraryEntryPoint.CreateLibraryController();
+  let libcontroller = LibraryEntryPoint.CreateLibraryController()
+  let libContainer = mount(libcontroller.createLibraryContainer())
 
   // Creation of LibraryItem component 
-  const libraryItemComponent = <LibraryItem libraryContainer={libContainer} data={data} showItemSummary={false} />;
+  const libraryItemComponent = <LibraryItem libraryContainer={libContainer as any} data={data} showItemSummary={false} />;
 
   it("Test UI rendering of single component of Library Item", function () {
     // "LibraryItem" with Shallow rendering to testing component as a unit.

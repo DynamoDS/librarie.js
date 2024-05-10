@@ -18,7 +18,8 @@
       "itemType": "action",
       "keywords": "Dynamo.Nodes.Symbol, Input, variable, argument, parameter",
       "weight": 0,
-      "description": "A function parameter, use with custom nodes.\n\nYou can specify the type and default value for parameter. E.g.,\n\ninput : var[]..[]\nvalue : bool = false"
+      "description": "A function parameter, use with custom nodes.\n\nYou can specify the type and default value for parameter. E.g.,\n\ninput : var[]..[]\nvalue : bool = false",
+      "hiddenInWorkspaceContext":true
     },
     {
       "fullyQualifiedName": "Core.Input.Output",
@@ -28,7 +29,8 @@
       "itemType": "action",
       "keywords": "Dynamo.Nodes.Output, Output",
       "weight": 0,
-      "description": "A function output, use with custom nodes"
+      "description": "A function output, use with custom nodes",
+      "hiddenInWorkspaceContext":true
     },
     {
       "fullyQualifiedName": "Core.Units.Convert Between Units",

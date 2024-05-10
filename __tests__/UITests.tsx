@@ -106,6 +106,7 @@ describe("LibraryContainer UI", function () {
     };
 
     libController = LibraryEntryPoint.CreateLibraryController();
+    libContainer = mount(libController.createLibraryContainer())
   });
 
   it("should recognize mouse click event and change expand state", function () {
@@ -117,7 +118,7 @@ describe("LibraryContainer UI", function () {
     // If you are testing full React components, 
     // mount is used to do rendering  and test actions are simulated on mounted html
 
-    let libraryItem = mount(<LibraryItem libraryContainer={libController} data={data} showItemSummary={false} />);
+    let libraryItem = mount(<LibraryItem libraryContainer={libContainer as any} data={data} showItemSummary={false} />);
 
     expect(libraryItem).to.have.lengthOf(1);
     expect(libraryItem.props().data.childItems).to.have.lengthOf(2);
@@ -137,7 +138,7 @@ describe("LibraryContainer UI", function () {
     let data = createLibraryItem(ItemData);
     
     //pass a callback which if called will end the test
-    let libraryItem = mount(<LibraryItem libraryContainer={libController} data={data} showItemSummary={false} onItemWillExpand={() => { done() }} />);
+    let libraryItem = mount(<LibraryItem libraryContainer={libContainer} data={data} showItemSummary={false} onItemWillExpand={() => { done() }} />);
 
     let header = libraryItem.find(('div.LibraryItemHeader')).at(0);// the state of LibraryItem is changed when clicking on header
     expect(header).to.have.lengthOf(1); // verify that there is a header

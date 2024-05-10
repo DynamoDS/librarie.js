@@ -4,6 +4,7 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { LibraryContainer } from "./LibraryContainer";
 import * as LibraryUtilities from "../LibraryUtilities";
+import { HostingContextType } from "../SharedTypes";
 
 type ParentTextClickedFunc = (pathToItem: LibraryUtilities.ItemData[]) => void;
 
@@ -46,8 +47,12 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
         if (this.state.selected) {
             let container = ReactDOM.findDOMNode(this.props.libraryContainer);
             let currentItem = ReactDOM.findDOMNode(this);
-            let containerRect = container.getBoundingClientRect();
-            let currentRect = currentItem.getBoundingClientRect();
+            let containerRect = container?.getBoundingClientRect();
+            let currentRect = currentItem?.getBoundingClientRect();
+            //bail if rects are null.
+            if(containerRect == null || currentRect == null){
+                return
+            }
 
             if (currentRect.top < currentRect.height) {
                 currentItem.scrollIntoView();
@@ -71,6 +76,12 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
     }
 
     render() {
+
+        if ((this.props.libraryContainer.state.hostingContext == HostingContextType.home)
+            && this.props.data.hiddenInWorkspaceContext){
+              return null;  
+        }
+
         let ItemContainerStyle = this.state.selected ? "SearchResultItemContainerSelected" : "SearchResultItemContainer";
         let iconPath = this.props.data.iconUrl;
 

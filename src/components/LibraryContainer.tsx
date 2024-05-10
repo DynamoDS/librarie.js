@@ -10,6 +10,7 @@ import { Searcher } from "../Searcher";
 import { SearchBar, CategoryData } from "./SearchBar";
 import { SearchResultItem } from "./SearchResultItem";
 import * as ReactDOM from "react-dom";
+import { HostingContextType } from "../SharedTypes";
 
 declare global {
     interface Window { setTooltipText: any; }
@@ -41,6 +42,16 @@ export interface LibraryContainerStates {
         action: string;
         query: string;
     }
+    /**
+     * context that the library is currently displayed in, currently used to hide
+     * some loadedtypes in certain contexts.
+     */
+    hostingContext:HostingContextType
+    /**
+     * used to control legacy props overriding state behavior. (see UNSAFE_componentWillMount)
+     * TODO (get rid of this and the unsafe lifecycle hook while retaining behavior.)
+     */
+    shouldOverrideExpandedState:boolean
 }
 
 export class LibraryContainer extends React.Component<LibraryContainerProps, LibraryContainerStates> {
@@ -72,12 +83,13 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
         this.handleKeyDown = this.handleKeyDown.bind(this);
         this.scrollToExpandedItem = this.scrollToExpandedItem.bind(this);
         this.setTooltipText = this.setTooltipText.bind(this);
+        this.setHostContext = this.setHostContext.bind(this);
 
         // Set handlers after methods are bound.
         this.props.libraryController.setLoadedTypesJsonHandler = this.setLoadedTypesJson;
         this.props.libraryController.setLayoutSpecsJsonHandler = this.setLayoutSpecsJson;
         this.props.libraryController.refreshLibraryViewHandler = this.refreshLibraryView;
-
+        this.props.libraryController.setHostContextHandler = this.setHostContext;
 
         // Initialize the search utilities with empty data
         this.searcher = new Searcher();
@@ -93,7 +105,9 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
                 create: ClusterTypeDescription.create, 
                 action: ClusterTypeDescription.action, 
                 query: ClusterTypeDescription.query
-            }
+            },
+            hostingContext: "none" as HostingContextType,
+            shouldOverrideExpandedState : true
         };
         window.setTooltipText = this.setTooltipText;
     }
@@ -202,6 +216,13 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
         this.updateSections(this.generatedSections);
     }
 
+    setHostContext(context:HostingContextType){
+        //besides setting the host context we also set the expanded state override mode to false
+        //so that the currently expanded library items retain their state and don't all close
+        //as a result of this top level state update.
+        this.setState({shouldOverrideExpandedState:false, hostingContext:context})
+    }
+
     updateSections(sections: any): void {
         // Obtain the categories from each section to be added into the filtering options for search
         for (let section of sections) {
@@ -284,8 +305,12 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
                     //Needs to be done inside the callback because the callback is executed in a async way otherwise we don't have control when this method will be executed
                     this.updateSearchViewDelayed(text);
                 }.bind(this));
+            //this else block is only hit in the libjs test app, not usually in Dynamo.
             } else {
                 LibraryUtilities.searchItemResursive(this.generatedSections, text);
+                if(text.length == 0){
+                    LibraryUtilities.setItemStateRecursive(this.generatedSections, true, false);
+                }
                 this.updateSearchViewDelayed(text);
             }
         }.bind(this), 300);

@@ -2,11 +2,12 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 
 import { LibraryContainer } from "./components/LibraryContainer";
-import { JsonDownloader } from "./LibraryUtilities";
+import { ItemData, JsonDownloader } from "./LibraryUtilities";
 import { Reactor } from "./EventHandler";
 import "core-js/actual/string/starts-with";
 import "core-js/actual/string/includes";
 import "core-js/actual/array/";
+import { HostingContextType } from "./SharedTypes";
 
 export function CreateJsonDownloader(jsonUrls: string[], callback: Function) {
     return new JsonDownloader(jsonUrls, callback);
@@ -44,6 +45,7 @@ export class LibraryController {
     setLoadedTypesJsonHandler: SetLoadedTypesJsonFunc | null = null;
     setLayoutSpecsJsonHandler: SetLayoutSpecsJsonFunc | null = null;
     refreshLibraryViewHandler: RefreshLibraryViewFunc | null = null;
+    setHostContextHandler:((context:HostingContextType)=> void) | null = null;
 
     // This is to make it possible to set an external search handler.
     // Given a search text, it will call the callback function with search result.
@@ -60,6 +62,7 @@ export class LibraryController {
         this.setLoadedTypesJson = this.setLoadedTypesJson.bind(this);
         this.setLayoutSpecsJson = this.setLayoutSpecsJson.bind(this);
         this.refreshLibraryView = this.refreshLibraryView.bind(this);
+        this.setHostContext = this.setHostContext.bind(this);
 
         this.reactor = new Reactor();
     }
@@ -164,6 +167,18 @@ export class LibraryController {
     refreshLibraryView(): void {
         if (this.refreshLibraryViewHandler) {
             this.refreshLibraryViewHandler();
+        }
+    }
+    /**
+     * Set the host context that the library is being displayed in.
+     * Some loadedTypes will not be displayed in the home context.
+     * @param context current host context. 
+     * @returns void
+     */
+    setHostContext(context:HostingContextType):void{
+        if(this.setHostContextHandler){
+            console.log("set context to",context)
+            return this.setHostContextHandler(context);
         }
     }
 }
