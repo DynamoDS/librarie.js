@@ -81,8 +81,6 @@ exports[`LibraryContainer Test UI rendering of Library Item and child components
           "SectionIconClickedEventName": "sectionIconClicked",
           "createLibraryByElementId": [Function],
           "createLibraryContainer": [Function],
-          "modifyItemHandler": null,
-          "modifyLibraryItemData": [Function],
           "on": [Function],
           "raiseEvent": [Function],
           "reactor": Reactor {
