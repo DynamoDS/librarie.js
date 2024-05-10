@@ -47,8 +47,8 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
         if (this.state.selected) {
             let container = ReactDOM.findDOMNode(this.props.libraryContainer);
             let currentItem = ReactDOM.findDOMNode(this);
-            let containerRect = container.getBoundingClientRect();
-            let currentRect = currentItem.getBoundingClientRect();
+            let containerRect = container?.getBoundingClientRect();
+            let currentRect = currentItem?.getBoundingClientRect();
             //bail if rects are null.
             if(containerRect == null || currentRect == null){
                 return
@@ -77,10 +77,8 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
 
     render() {
 
-        if ((this.props.libraryContainer.state.hostingContext == "home" as HostingContextType)
+        if ((this.props.libraryContainer.state.hostingContext == HostingContextType.home)
             && this.props.data.hiddenInWorkspaceContext){
-                console.log("we should have hidden this lib item",this.props.data.contextData)
-
               return null;  
         }
 

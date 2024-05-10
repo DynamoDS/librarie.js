@@ -101,7 +101,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
     }
 
     render() {
-        if ((this.props.libraryContainer.state?.hostingContext == "home" as HostingContextType)
+        if ((this.props.libraryContainer.state?.hostingContext == HostingContextType.home)
             && this.props.data.hiddenInWorkspaceContext){
               return null;  
         }
