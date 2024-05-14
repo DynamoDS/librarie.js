@@ -1,0 +1,90 @@
+body {
+    padding: 0;
+    margin: 0;
+    background-color: #353535;
+    overflow-x: hidden;
+    -webkit-user-drag: none;
+    -khtml-user-drag: none;
+    -moz-user-drag: none;
+    -o-user-drag: none;
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Chrome/Safari/Opera */
+    -khtml-user-select: none; /* Konqueror */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet */
+    user-select: none;
+    scrollbar-base-color: #353535;
+    scrollbar-highlight-color: #202020;
+    scrollbar-track-color: #202020;
+    scrollbar-arrow-color: #353535;
+    scrollbar-shadow-color: #202020;
+    scrollbar-width: thin;
+}
+
+input::-ms-clear {
+    display: none;
+}
+
+#glow_active {
+    border: 3px;
+    background-color: transparent;
+    box-shadow: 0px 0px 20px 2px orange;
+    transition: box-shadow 2s ease-in-out;
+    border-style: solid;
+    border-color: rgba(239, 147, 98, 0.7);
+}
+
+#glow_inactive {
+    border: 3px;
+    background-color: transparent;
+    box-shadow: 0px 0px 2px 0px orange;
+    transition: box-shadow 2s ease-in-out;
+    border-style: solid;
+    border-color: rgba(239, 147, 98, 0.7);
+}
+
+.overlay {
+    background-color: black;
+    pointer-events: none;
+    opacity: 0.5;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    border: 2px;
+}
+
+.hole {
+    background-color: transparent;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+/* 
+    The below style aligns texts in IE
+    as it adds some offset to text when using Artifakt Element font
+*/
+.LibraryItemHeader .LibraryItemGroupText, 
+.LibrarySectionHeader .LibraryItemGroupText,
+.LibraryItemContainerCategory .LibraryItemText {
+    padding-top: 0.5rem;
+}
+
+.SearchFilterPanel label.Category > * {
+    margin-top: 0.15rem;
+    vertical-align: top !important;
+}
+
+#overlay {
+    position: fixed;
+    display: none;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 2;
+}
