@@ -117,7 +117,7 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
 					onMouseEnter={this.onLibraryItemMouseEnter.bind(this)}
                     onMouseLeave={this.onLibraryItemMouseLeave.bind(this)}
                 >
-					<img className={"ItemIcon"} src={iconPath} onError={this.onImageLoadFail.bind(this)} />
+					<img className={"ItemIcon"} src={"../"+iconPath} onError={this.onImageLoadFail.bind(this)} />
 					<div className={"ItemInfo"}>
 						<div className={"ItemTitle"}>{highLightedItemText}
 							<div className={"LibraryItemParameters"}>{parameters}</div>

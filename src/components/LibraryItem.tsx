@@ -167,7 +167,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
                 <div className="LibraryItemIconWrapper">
                     <img
                         className={"LibraryItemIcon"}
-                        src={this.props.data.iconUrl}
+                        src={require("../"+this.props.data.iconUrl)}
                         onError={this.onImageLoadFail}
                     />
                 </div>
@@ -180,7 +180,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
             this.props.data.iconUrl) {
             return <img
                 className={"LibraryAddOnSectionIcon"}
-                src={this.props.data.iconUrl}
+                src={require("../"+this.props.data.iconUrl)}
                 onError={this.onImageLoadFail}
                 onClick={this.onSectionIconClicked}
                 onKeyDown={this.onSectionIconClicked}
@@ -191,7 +191,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         if (this.props.data.itemType === "section" && this.props.data.iconUrl) {
             return <img
                 className={"LibraryItemIcon"}
-                src={this.props.data.iconUrl}
+                src={require("../"+this.props.data.iconUrl)}
                 onError={this.onImageLoadFail}
                 onClick={this.onSectionIconClicked}
                 onKeyDown={this.onSectionIconClicked}
