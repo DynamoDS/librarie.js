@@ -1,6 +1,7 @@
 "use strict";
 const webpack = require('webpack');
 const TerserPlugin = require("terser-webpack-plugin");
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
 const productionBuild = (process.env.NODE_ENV == "production");
 let plugins = [];
@@ -9,20 +10,23 @@ plugins.push(
     new webpack.DefinePlugin({
         'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
     }),
+    new HtmlWebpackPlugin({
+        template: "./index.html",
+        filename: "./index.html"
+     })
 );
 
 
 module.exports = {
-    entry: [
-        "./src/entry-point.tsx"
-    ],
+    entry: "./src/main.js",
     target: "web",
     output: {
         filename: productionBuild ? "librarie.min.js" : "librarie.js",
-        path: path.join(__dirname, '/dist/build'),
-        publicPath: "./dist/build/",
+        path: path.resolve(__dirname, './dist/build'),
+        publicPath: "./",
         libraryTarget: "umd",
         library: "LibraryEntryPoint",
+        clean: true
     },
     optimization:{
         minimize: !!productionBuild,
@@ -61,8 +65,10 @@ module.exports = {
             {
                 test: /\.(?:ttf|otf|eot|woff|svg|png)$/,
                 type: 'asset/resource',
-                generator:{
-                    filename:'resources/[name][ext][query]'
+                generator: {
+                    filename: content => {
+                        return content.filename.replace('src/', '')
+                    }
                 }
             }
         ]
