@@ -18,7 +18,7 @@ LibraryEntryPoint.CreateJsonDownloader(jsonUrls, function (jsonUrl, jsonObject) 
         "libraryContainerPlaceholder", layoutSpecsJson, loadedTypesJson);
 });
 
-var replaceImageDelayTime = 100;
+const replaceImageDelayTime = 100;
 let intervalId;
 
 // Disable the context menu
@@ -54,16 +54,16 @@ document.addEventListener("mousewheel",
 
 
     // //Create library view
-    var libContainer = libController.createLibraryByElementId("libraryContainerPlaceholder");
+    const libContainer = libController.createLibraryByElementId("libraryContainerPlaceholder");
     if (refreshLibraryView) {
         refreshLibraryView(libController);
     }
 
     async function replaceImages() {
-        var allimages = document.getElementsByTagName("img");
+        const allimages = document.getElementsByTagName("img");
         for (const element of allimages) {
             let currentImage = element;
-            var src = element.src
+            let src = element.src
             if (element.orgSrc != null) {
                 src = element.orgSrc;
             }
@@ -73,7 +73,7 @@ document.addEventListener("mousewheel",
             }
             
             //request the icon from the extension.
-            var base64String = await window.chrome.webview.hostObjects.bridgeTwoWay.GetBase64StringFromPath(src);
+            const base64String = await window.chrome.webview.hostObjects.bridgeTwoWay.GetBase64StringFromPath(src);
             if (currentImage != null) {
                 currentImage.src = base64String;
             }
@@ -86,7 +86,7 @@ document.addEventListener("mousewheel",
 
     //set a custom search handler
     libController.searchLibraryItemsHandler = function (text, callback) {
-        var encodedText = encodeURIComponent(text);
+        const encodedText = encodeURIComponent(text);
         //save the callback so we can access from our completion function
         searchCallback = callback;
         window.chrome.webview.postMessage(JSON.stringify({ "func": "performSearch", "data": encodedText }));
@@ -126,9 +126,9 @@ document.addEventListener("mousewheel",
     });
 
     libController.on(libController.FilterCategoryEventName, function (item) {
-        var categories = [];
+        let categories = [];
         item.forEach(function (elem) {
-            var catString = elem.name + ":" + (elem.checked ? "Selected" : "Unselected");
+            const catString = elem.name + ":" + (elem.checked ? "Selected" : "Unselected");
             categories.push(catString);
         });
         
@@ -143,7 +143,7 @@ document.addEventListener("mousewheel",
 
 
 function refreshLibViewFromData(loadedTypes, layoutSpec) {
-    var append = false; // Replace existing contents instead of appending.
+    const append = false; // Replace existing contents instead of appending.
     libController.setLoadedTypesJson(JSON.parse(loadedTypes), append);
     libController.setLayoutSpecsJson(JSON.parse(layoutSpec), append);
     libController?.refreshLibraryView(); // Refresh library view.
@@ -154,7 +154,7 @@ function refreshLibViewFromData(loadedTypes, layoutSpec) {
     }, replaceImageDelayTime);
 }
 
-var searchCallback = null;
+let searchCallback = null;
 function completeSearch(searchLoadedTypes) {
     searchCallback(JSON.parse(searchLoadedTypes));
 }
@@ -165,8 +165,8 @@ function setLibraryFontSize(fontSize) {
 
 //This will find a specific div in the html and then it will apply the glow animation on it
 function highlightLibraryItem(itemName, enableHighlight) {
-    var found_div = null;
-    var libraryItemsText = document.getElementsByClassName("LibraryItemText");
+    let found_div = null;
+    const libraryItemsText = document.getElementsByClassName("LibraryItemText");
     for (const libraryItem of libraryItemsText) {
         if (libraryItem.textContent == itemName) {
             found_div = libraryItem.parentNode;
@@ -176,7 +176,7 @@ function highlightLibraryItem(itemName, enableHighlight) {
     if (found_div != null) {
         if (enableHighlight) {
             //Validates that the div is not already highlighted
-            var currentAttibute = found_div.getAttribute("id");
+            const currentAttibute = found_div.getAttribute("id");
             if (currentAttibute == null || !currentAttibute.includes("glow_")) {
                 glowAnimation(found_div, true);
             }
@@ -211,7 +211,7 @@ function setIdAttribute(divElement) {
 
 //This will subscribe a handler to the div.click event, so when is clicked we will be moved to the next Step
 function subscribePackageClickedEvent(packageName, enable) {
-    var found_div = findPackageDiv(packageName, "LibraryItemText");
+    const found_div = findPackageDiv(packageName, "LibraryItemText");
     if (found_div == null) {
         return;
     }
@@ -225,8 +225,8 @@ function subscribePackageClickedEvent(packageName, enable) {
 
 //This will find the <div> that contains the package information
 function findPackageDiv(packageName, libraryClassName) {
-    var found_div = null;
-    var libraryItemsText = document.getElementsByClassName(libraryClassName);
+    let found_div = null;
+    const libraryItemsText = document.getElementsByClassName(libraryClassName);
     for (const libraryItem of libraryItemsText) {
         if (libraryItem.textContent.toLowerCase() == packageName.toLowerCase()) {
             found_div = libraryItem;
@@ -238,24 +238,24 @@ function findPackageDiv(packageName, libraryClassName) {
 
 //This will execute a click over a specific <div> that contains the package content
 function expandPackageDiv(packageName, libraryClassName) {
-    var found_div = findPackageDiv(packageName, libraryClassName);
+    const found_div = findPackageDiv(packageName, libraryClassName);
     if (found_div == null) {
         return;
     }
-    var containerCatDiv = found_div.parentNode.parentNode;
-    var itemBodyContainer = containerCatDiv.getElementsByClassName(libraryClassName)[0];
+    const containerCatDiv = found_div.parentNode.parentNode;
+    const itemBodyContainer = containerCatDiv.getElementsByClassName(libraryClassName)[0];
     if (!itemBodyContainer.parentElement.parentElement.className.includes('expanded')) {
         itemBodyContainer.click();
     }
 }
 
 function collapsePackageDiv(packageName, libraryClassName) {
-    var found_div = findPackageDiv(packageName, libraryClassName);
+    const found_div = findPackageDiv(packageName, libraryClassName);
     if (found_div == null) {
         return;
     }
-    var containerCatDiv = found_div.parentNode.parentNode;
-    var itemBodyContainer = containerCatDiv.getElementsByClassName(libraryClassName)[0];
+    const containerCatDiv = found_div.parentNode.parentNode;
+    const itemBodyContainer = containerCatDiv.getElementsByClassName(libraryClassName)[0];
     if (itemBodyContainer.parentElement.parentElement.className.includes('expanded')) {
         itemBodyContainer.click();
     }
@@ -265,17 +265,17 @@ function collapsePackageDiv(packageName, libraryClassName) {
 
 //Set the overlay and the hole
 function setOverlay(enable) {
-    var tools = document.getElementsByClassName("LibraryItemContainerSection")[0];
+    const tools = document.getElementsByClassName("LibraryItemContainerSection")[0];
     if (tools == null)
         return;
-    var addons = document.getElementsByClassName("LibraryItemContainerSection")[1];
+    const addons = document.getElementsByClassName("LibraryItemContainerSection")[1];
     if (addons == null)
         return;
-    var searchBar = document.getElementsByClassName("SearchBar")[0];
+    const searchBar = document.getElementsByClassName("SearchBar")[0];
     if (searchBar == null)
         return;
 
-    let children = addons.childNodes;
+    const children = addons.childNodes;
     if (children == null || children.lenght == 0)
         return;
 
@@ -296,20 +296,20 @@ function setOverlay(enable) {
 
 //get information about the current position of a specific div element, if the WebBrowser is resized the values will change
 function getDocumentClientRect(divElement) {
-    var targetDiv = findPackageDiv(divElement, "LibraryItemText");
+    const targetDiv = findPackageDiv(divElement, "LibraryItemText");
     if (targetDiv == null) return;
-    var rect = targetDiv.parentNode.getBoundingClientRect();
-    var clientRectDiv = {
+    const rect = targetDiv.parentNode.getBoundingClientRect();
+    const clientRectDiv = {
         "width": rect.width,
         "height": rect.height,
         "top": rect.top,
         "bottom": rect.bottom
     }
-    var documentSize = {
+    const documentSize = {
         "width": document.body.clientWidth,
         "height": document.body.clientHeight
     }
-    var locationInfo = {
+    const locationInfo = {
         "document": documentSize,
         "client": clientRectDiv
     }
