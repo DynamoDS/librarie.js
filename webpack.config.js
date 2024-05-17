@@ -19,10 +19,11 @@ module.exports = {
     target: "web",
     output: {
         filename: productionBuild ? "librarie.min.js" : "librarie.js",
-        path: path.join(__dirname, '/dist/build'),
+        path: path.join(__dirname, '/dist/build/'),
         publicPath: "./dist/build/",
         libraryTarget: "umd",
         library: "LibraryEntryPoint",
+        clean:  true
     },
     optimization:{
         minimize: !!productionBuild,
