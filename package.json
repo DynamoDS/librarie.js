@@ -10,7 +10,7 @@
     "build": "cross-env NODE_ENV=production --mode=development webpack",
     "bundle": "cross-env NODE_ENV=production --mode=production webpack",
     "copy": "cp package.json dist/ && cp README.md dist/ && cp -r license_output dist/",
-    "production": "npm run bundle && npm run copy && rm -r dist/resources",
+    "production": "npm run bundle && npm run copy && rm -r dist/build/resources",
     "serve": "npm run dev & node ./index.js",
     "lic_direct": "npx @adsk/adsk-npm-license-puller --path . --app-name 'librariejs' --verbose --about-box ./license_output/about-box_direct.html --about-box-type desktop --year 2022 --paos ./license_output/paos_direct.csv",
     "lic_transitive": "npx @adsk/adsk-npm-license-puller --path . --app-name 'librariejs' --verbose --about-box ./license_output/about-box_transitive.html --about-box-type desktop --transitive --year 2022 --paos ./license_output/paos_transitive.csv",
