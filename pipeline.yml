@@ -20,7 +20,7 @@ jenkins_creds:
 build:
   -
     customized_builder_image:
-      registry: https://artifactory.dev.adskengineer.net
+      registry: artifactory
       url: artifactory.dev.adskengineer.net/dynamo/dynamolibrariejs:dotnetcore3_node16_v2
     scripts:
       - "mv -f /home/ctr-user/.npmrc $WORKSPACE"
@@ -31,7 +31,7 @@ ci_test:
   tests:
     -
       customized_builder_image:
-        registry: https://artifactory.dev.adskengineer.net
+        registry: artifactory
         url: artifactory.dev.adskengineer.net/dynamo/dynamolibrariejs:dotnetcore3_node16_v2
       scripts:
         - "npm run test"
