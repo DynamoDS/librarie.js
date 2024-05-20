@@ -5,7 +5,6 @@ env:
   - MAIL_QUANTUM_BUILD_RECIPIENT : "dynamo.dev@autodesk.com"
   - ARTIFACTORY_BOBCAT_DOCKER_REGISTRY : "artifactory.dev.adskengineer.net"
   - NUGET_API_ID : "dynamovisualprogramming_nuget_api_key"
-  - ARTIFACTORY_DOCKER_CREDENTIALS_ID : "common_service_account"
   - HARMONY_REPO : "DynamoDS/librarie.js"
 
 check_changelog_updated_on_pr: false
