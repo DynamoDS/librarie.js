@@ -3,12 +3,11 @@ env:
   - SLACK_QUANTUM_BUILD_CHANNEL : "#dynamo-jenkinsbuild"
   - SLACK_QUANTUM_BUILD_CREDENTIAL_ID : "slack-notify-token"
   - MAIL_QUANTUM_BUILD_RECIPIENT : "dynamo.dev@autodesk.com"
-  - ARTIFACTORY_BOBCAT_DOCKER_REGISTRY : "artifactory.dev.adskengineer.net"
   - NUGET_API_ID : "dynamovisualprogramming_nuget_api_key"
   - HARMONY_REPO : "DynamoDS/librarie.js"
 
 check_changelog_updated_on_pr: false
-pipeline_os: "Linux"
+pipeline_os: "linux"
 force_slack_notification : true
 language: typescript
 
