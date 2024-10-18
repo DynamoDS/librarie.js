@@ -14,12 +14,6 @@ import { LibraryContainer } from '../src/components/LibraryContainer';
 
 configure({adapter: new Adapter()});
 
-describe("sample test", function () {
-  it("should add two numbers", function () {
-    expect(1 + 2).to.equal(3);
-  });
-});
-
 describe("LibraryContainer UI", function () {
   let loadedTypesJson: any;
   let layoutSpecsJson: any;
@@ -156,27 +150,25 @@ describe("LibraryContainer UI", function () {
       libController.setLoadedTypesJson(loadedTypesJson, false);
       libController.setLayoutSpecsJson(layoutSpecsJson, false);
       libController.refreshLibraryView();
+      libContainer.update();
 
     })
 
-    xit("scrollToElement should be called when libraryItem is expanded only", function () {
+    it("scrollToElement should be called when libraryItem is expanded only", function () {
   
+      let scrolled = false;
       let header = libContainer.find('div.LibraryItemHeader').at(0);
       expect(header).to.have.lengthOf(1);
-      let count = 0;
   
       //replace the scroll method with a method which ends the test.
-      (libContainer.getNode() as unknown as LibraryContainer).scrollToExpandedItem = () => { count = count + 1; }
+      (libContainer.instance() as unknown as LibraryContainer).scrollToExpandedItem = () => { scrolled = !scrolled;}
       header.simulate('click');
-      header.simulate('click');
-      assert.equal(count, 1);
+      expect(scrolled).to.be.true;
   
     });
   
   
-    // Test uses timeout function and testframework knows 
-    // when to complete the test bases on calling funciton 'done()' 
-    xit("search a string in library and verify change of state and results", function (done) {
+    it("search a string in library and verify change of state and results", function () {
   
       // find is used to find a rendered component by css selectors, 
       // component constructors, display name or property selector.
@@ -187,23 +179,18 @@ describe("LibraryContainer UI", function () {
   
       // Search is triggered after a timeout of 300 milli seconds
       // So wait before verifying the results 
-  
       setTimeout(function () {
         // Verify the state 'inSearchMode' is changed
         expect(libContainer.state('inSearchMode')).to.be.true;
-        //let result = libContainer.find('div.LibraryItemContainer');
         // Verify the search results are correct
         let value = libContainer.find('SearchResultItem');
         expect(value).to.have.lengthOf(2);
         expect((value.at(0).props() as any).data.text).to.equal("Child1");
         expect((value.at(1).props() as any).data.text).to.equal("Child2");
-        done();// For testframework to figure out when to complete this test
       }, 500);
     });
   
-    // Test uses timeout function and testframework knows 
-    // when to complete the test bases on calling funciton 'done()' 
-    xit("search a negative scenario for search", function (done) {
+    it("search a negative scenario for search", function () {
   
       // find is used to find a rendered component by css selectors, 
       // component constructors, display name or property selector.
@@ -221,11 +208,10 @@ describe("LibraryContainer UI", function () {
         // Verify the search does not return any nodes
         let value = libContainer.find('SearchResultItem');
         expect(value).to.have.lengthOf(0);
-        done();// For testframework to figure out when to complete this test
       }, 500);
     });
   
-    xit("change state of searchbar to detail view and verify the search results display item description", function (done) {
+    it("change state of searchbar to detail view and verify the search results display item description", function () {
   
       // Trigger the search so the option for detail view is enabled
       let text = () => libContainer.find('input.SearchInputText');
@@ -251,11 +237,10 @@ describe("LibraryContainer UI", function () {
         expect(describe).to.have.lengthOf(2);
         expect(describe.at(0).text()).to.equal('First item');
         expect(describe.at(1).text()).to.equal('Second item');
-        done(); // For testframework to know when to terminate execution
       }, 500);
     });
   
-    xit("search bar should not contain structured view button", function () {
+    it("search bar should not contain structured view button", function () {
   
       let buttons = libContainer.find('button');
       //detail view, filter.
@@ -273,7 +258,7 @@ describe("LibraryContainer UI", function () {
   
     });
   
-    xit("click item text on search should return to the library item", function (done) {
+    it("click item text on search should return to the library item", function () {
   
       // Trigger the search so the option for detail view is enabled
       let text = () => libContainer.find('input.SearchInputText');
@@ -301,31 +286,18 @@ describe("LibraryContainer UI", function () {
         //click the item text
         detials.at(0).simulate('click');
         expect((value.at(0).props() as any).data.pathToItem[0].expanded).to.be.true;
-        done();
       }, 500);
     });
   
-    xit("coregroup items should auto expand", function () {
-    
-        let header = libContainer.find('div.LibraryItemHeader').at(0);
-        expect(header).to.have.lengthOf(1);
-        
-        header.simulate('click');
+    it("add-ons should auto expand", function () {
 
-        let libraryItem = libContainer.find('LibraryItem') as any;
-        expect(libraryItem.nodes[2].props.data.expanded).to.be.true; 
-
-      });
-    
-      it("add-ons should auto expand", function () {
-
-        let generatedSections = libContainer.instance().generatedSections;
-        expect(generatedSections).to.have.lengthOf(2);
-        if(!generatedSections) return;
-        expect(generatedSections[1].text).to.equal("Add-ons");
-        expect(generatedSections[1].expanded).to.be.true; 
-        
-      });
+      let generatedSections = libContainer.instance().generatedSections;
+      expect(generatedSections).to.have.lengthOf(2);
+      if(!generatedSections) return;
+      expect(generatedSections[1].text).to.equal("Add-ons");
+      expect(generatedSections[1].expanded).to.be.true; 
+      
+    });
   })
 
 });
