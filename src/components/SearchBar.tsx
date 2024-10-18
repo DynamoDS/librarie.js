@@ -226,7 +226,7 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
 
     onDetailedModeChanged(event: any) {
         this.setState(prevState => ({detailed: !prevState.detailed}));
-        this.props.onDetailedModeChanged(this.state.detailed);
+        this.props.onDetailedModeChanged(!this.state.detailed);
     }
 
     getSelectedCategories(): string[]{
@@ -290,7 +290,6 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
     createFilterPanel(){
         let binIcon: string = require("../resources/ui/bin.svg");
 
-        console.log(this.state.selectedCategories)
         let checkboxes: React.ReactNode[] = ObjectExtensions.values(this.categoryData)
             .map(cat => cat.getCheckbox(this.state.selectedCategories.includes(cat.name)))
 
