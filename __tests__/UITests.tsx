@@ -9,7 +9,7 @@ import { LibraryItem } from '../src/components/LibraryItem';
 import { ItemData } from "../src/LibraryUtilities";
 import { createLibraryItem } from "../src/utils";
 import * as Adapter from 'enzyme-adapter-react-16';
-import { expect, assert } from 'chai';
+import { expect } from 'chai';
 import { LibraryContainer } from '../src/components/LibraryContainer';
 
 configure({adapter: new Adapter()});
