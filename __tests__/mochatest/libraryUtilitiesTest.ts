@@ -1441,7 +1441,7 @@ describe("findAndExpandItemByPath function", function () {
   //If the item is defined in RawDataType and not in layoutspec, it will be in miscallenous section.
   //Searching for 113 in this test should not show data in the searchview. So, expanding an item is not possible
   //in this case.
-  xit("should return false if an item is not found", function () {
+  it("should return false if an item is not found", function () {
     let itemData113 = new LibraryUtilities.ItemData("113");
     let pathToItem = [itemData1, itemData11, itemData113];
     expect(LibraryUtilities.findAndExpandItemByPath(pathToItem, allItems)).to.equal(false);
