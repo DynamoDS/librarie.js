@@ -28,7 +28,7 @@ export interface LibraryItemProps {
     libraryContainer: LibraryContainer,
     data: LibraryUtilities.ItemData,
     showItemSummary: boolean,
-    onItemWillExpand?: Function,
+    onItemWillExpand?: (args: any) => void,
     tooltipContent?: any
 }
 
@@ -110,12 +110,12 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
             let isThereChildItemsToExpand = this.props.data.childItems.filter((item: any) => {
                 return item.expanded == true;
             });
-            if (isThereChildItemsToExpand.length == 0) {
-                setTimeout(() => {
-                    let elem = ReactDOM.findDOMNode(this);
-                    elem.scrollIntoView(false);
-                }, 0);
-            }
+            // if (isThereChildItemsToExpand.length == 0) {
+            //     setTimeout(() => {
+            //         let elem = ReactDOM.findDOMNode(this);
+            //         elem.scrollIntoView(false);
+            //     }, 0);
+            // }
 
         }
     }
@@ -412,6 +412,7 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
     }
 
     onLibraryItemClicked() {
+        console.log("CLICKED !!");
         //https://jira.autodesk.com/browse/QNTM-2975
         //Add-ons section is always expanded.
         if(this.props.data.text == "Add-ons") return;

@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest --coverage",
-    "utiltest": "mocha -r ts-node/register __tests__/mochatest/libraryUtilitiesTest.ts --reporter mocha-junit-reporter --reporter-options mochaFile=./TestResults/MochaReport.xml",
+    "utiltest": "npx mocha",
     "dev": "cross-env NODE_ENV=development webpack",
     "build": "cross-env NODE_ENV=production --mode=development webpack",
     "bundle": "cross-env NODE_ENV=production --mode=production webpack",
@@ -23,6 +23,9 @@
   "author": "Dynamo Team",
   "license": "MIT",
   "dependencies": {
+    "@testing-library/jest-dom": "^6.6.2",
+    "@testing-library/react": "^11.2.7",
+    "@testing-library/user-event": "^12.8.3",
     "core-js": "^3.36.1",
     "express": "^4.19.2",
     "react": "^16.14.0",
@@ -66,42 +69,5 @@
   },
   "overrides": {
     "node-notifier": "^10.0.0"
-  },
-  "jest": {
-    "transform": {
-      ".(ts|tsx)": "ts-jest"
-    },
-    "testRegex": "(/__tests__/*/.*|\\.(test|spec))\\.(ts|tsx|js)$",
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "json"
-    ],
-    "moduleNameMapper": {
-      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/__mocks__/fileMock.ts",
-      "\\.(css|less)$": "<rootDir>/__mocks__/styleMock.ts"
-    },
-    "collectCoverageFrom": [
-      "src/**/*.{ts,tsx}"
-    ],
-    "testPathIgnorePatterns": [
-      "__tests__/data/"
-    ],
-    "snapshotSerializers": [
-      "<rootDir>/node_modules/enzyme-to-json/serializer"
-    ],
-    "reporters": [
-      "default",
-      [
-        "jest-junit",
-        {
-          "outputDirectory": "TestResults",
-          "outputName": "TestReport.xml",
-          "classNameTemplate": "{classname}",
-          "titleTemplate": "{title}"
-        }
-      ]
-    ]
   }
 }
