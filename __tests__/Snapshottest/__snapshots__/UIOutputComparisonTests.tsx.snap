@@ -1,206 +1,272 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`LibraryContainer Demonstrate testing UIitems loads correctly from static data 1`] = `null`;
+exports[`LibraryContainer Demonstrate testing UIitems loads correctly from static data 1`] = `
+"[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"LibraryContainer"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"SearchBar "[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"LibraryHeader"[39m
+        [36m>[39m
+          [0mLibrary[0m
+        [36m</div>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"SearchInput  "[39m
+        [36m>[39m
+          [36m<svg[39m
+            [33mheight[39m=[32m"1rem"[39m
+            [33mid[39m=[32m"Capa_1"[39m
+            [33mversion[39m=[32m"1.1"[39m
+            [33mviewBox[39m=[32m"0 0 16 16"[39m
+            [33mwidth[39m=[32m"1rem"[39m
+            [33mx[39m=[32m"0px"[39m
+            [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+            [33my[39m=[32m"0px"[39m
+          [36m>[39m
+            [36m<path[39m
+              [33mclass[39m=[32m"Right st0"[39m
+              [33md[39m=[32m"M12,6c0,3.3-2.7,6-6,6S0,9.3,0,6s2.7-6,6-6S12,2.7,12,6z M6,1.5c-2.5,0-4.5,2-4.5,4.5s2,4.5,4.5,4.5
+	s4.5-2,4.5-4.5S8.5,1.5,6,1.5z"[39m
+              [33mfill[39m=[32m"#999999"[39m
+            [36m/>[39m
+            [36m<rect[39m
+              [33mclass[39m=[32m"st0"[39m
+              [33mfill[39m=[32m"#999999"[39m
+              [33mheight[39m=[32m"2"[39m
+              [33mtransform[39m=[32m"matrix(0.7071 0.7071 -0.7071 0.7071 13.1716 -5.4558)"[39m
+              [33mwidth[39m=[32m"6"[39m
+              [33mx[39m=[32m"10.2"[39m
+              [33my[39m=[32m"12.2"[39m
+            [36m/>[39m
+          [36m</svg>[39m
+          [36m<input[39m
+            [33mclass[39m=[32m"SearchInputText"[39m
+            [33mplaceholder[39m=[32m"Search"[39m
+            [33mtype[39m=[32m"input"[39m
+          [36m/>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"SearchOptionContainer"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"SearchFilterContainer"[39m
+          [36m>[39m
+            [36m<button[39m
+              [33mclass[39m=[32m"SearchOptionsBtnDisabled"[39m
+              [33mdisabled[39m=[32m""[39m
+              [33mtitle[39m=[32m"Filter results"[39m
+            [36m>[39m
+              [36m<img[39m
+                [33mclass[39m=[32m"Icon SearchFilter"[39m
+                [33msrc[39m=[32m"test-file-stub"[39m
+              [36m/>[39m
+            [36m</button>[39m
+          [36m</div>[39m
+          [36m<button[39m
+            [33mclass[39m=[32m"SearchOptionsBtnDisabled"[39m
+            [33mdisabled[39m=[32m""[39m
+            [33mtitle[39m=[32m"Compact/Detailed View"[39m
+          [36m>[39m
+            [36m<img[39m
+              [33mclass[39m=[32m"Icon SearchDetailed"[39m
+              [33msrc[39m=[32m"test-file-stub"[39m
+            [36m/>[39m
+          [36m</button>[39m
+        [36m</div>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"LibraryItemContainer"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"SearchResultsWrapper"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"LibraryItemContainerSection expanded"[39m
+          [36m>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"LibraryItemBodyContainer"[39m
+            [36m>[39m
+              [36m<div[39m
+                [33mclass[39m=[32m"LibraryItemBodyElements "[39m
+              [36m>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"LibraryItemBody"[39m
+                [36m>[39m
+                  [36m<div[39m
+                    [33mclass[39m=[32m"LibraryItemContainerCategory"[39m
+                  [36m>[39m
+                    [36m<div[39m
+                      [33mclass[39m=[32m"LibraryItemHeader"[39m
+                    [36m>[39m
+                      [36m<svg[39m
+                        [33mclass[39m=[32m"ArrowIcon Right"[39m
+                        [33mfill[39m=[32m"none"[39m
+                        [33mheight[39m=[32m"7"[39m
+                        [33mviewBox[39m=[32m"0 0 4 8"[39m
+                        [33mwidth[39m=[32m"4"[39m
+                        [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+                      [36m>[39m
+                        [36m<g[39m
+                          [33mid[39m=[32m"icon-wrapper"[39m
+                        [36m>[39m
+                          [36m<path[39m
+                            [33mclip-rule[39m=[32m"evenodd"[39m
+                            [33md[39m=[32m"M4 4L0 7.5L0 0.5L4 4Z"[39m
+                            [33mfill[39m=[32m"#84D7CE"[39m
+                            [33mfill-rule[39m=[32m"evenodd"[39m
+                            [33mid[39m=[32m"ð  icon-color"[39m
+                          [36m/>[39m
+                        [36m</g>[39m
+                      [36m</svg>[39m
+                      [36m<div[39m
+                        [33mclass[39m=[32m"LibraryItemTextWrapper"[39m
+                      [36m>[39m
+                        [36m<div[39m
+                          [33mclass[39m=[32m"TextBox"[39m
+                        [36m>[39m
+                          [36m<span[39m
+                            [33mclass[39m=[32m"LibraryItemText"[39m
+                          [36m>[39m
+                            [0mDisplay[0m
+                          [36m</span>[39m
+                        [36m</div>[39m
+                      [36m</div>[39m
+                    [36m</div>[39m
+                    [36m<div[39m
+                      [33mclass[39m=[32m"LibraryItemBodyContainer"[39m
+                    [36m>[39m
+                      [36m<div[39m
+                        [33mclass[39m=[32m"LibraryItemBodyElements "[39m
+                      [36m/>[39m
+                    [36m</div>[39m
+                  [36m</div>[39m
+                  [36m<div[39m
+                    [33mclass[39m=[32m"LibraryItemContainerCategory"[39m
+                  [36m>[39m
+                    [36m<div[39m
+                      [33mclass[39m=[32m"LibraryItemHeader"[39m
+                    [36m>[39m
+                      [36m<svg[39m
+                        [33mclass[39m=[32m"ArrowIcon Right"[39m
+                        [33mfill[39m=[32m"none"[39m
+                        [33mheight[39m=[32m"7"[39m
+                        [33mviewBox[39m=[32m"0 0 4 8"[39m
+                        [33mwidth[39m=[32m"4"[39m
+                        [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+                      [36m>[39m
+                        [36m<g[39m
+                          [33mid[39m=[32m"icon-wrapper"[39m
+                        [36m>[39m
+                          [36m<path[39m
+                            [33mclip-rule..."
+`;
 
 exports[`LibraryContainer Test UI rendering of Library Item and child components 1`] = `
-<LibraryItem
-  data={
-    ItemData {
-      "childItems": [
-        ItemData {
-          "childItems": [],
-          "contextData": "",
-          "description": "",
-          "expanded": false,
-          "hiddenInWorkspaceContext": false,
-          "iconUrl": "",
-          "itemType": "category",
-          "keywords": [
-            "",
-          ],
-          "parameters": "",
-          "pathToItem": [],
-          "showHeader": true,
-          "text": "Child0",
-          "visible": true,
-          "weight": 0,
-        },
-        ItemData {
-          "childItems": [],
-          "contextData": "",
-          "description": "",
-          "expanded": false,
-          "hiddenInWorkspaceContext": false,
-          "iconUrl": "",
-          "itemType": "category",
-          "keywords": [
-            "",
-          ],
-          "parameters": "",
-          "pathToItem": [],
-          "showHeader": true,
-          "text": "Child1",
-          "visible": true,
-          "weight": 0,
-        },
-      ],
-      "contextData": "",
-      "description": "",
-      "expanded": false,
-      "hiddenInWorkspaceContext": false,
-      "iconUrl": "",
-      "itemType": "none",
-      "keywords": [
-        "",
-      ],
-      "parameters": "",
-      "pathToItem": [],
-      "showHeader": true,
-      "text": "TestItem",
-      "visible": true,
-      "weight": 0,
-    }
-  }
-  libraryContainer={
-    <LibraryContainer
-      defaultSectionString="default"
-      libraryController={
-        LibraryController {
-          "DefaultSectionName": "default",
-          "FilterCategoryEventName": "filterCategoryChange",
-          "ItemClickedEventName": "itemClicked",
-          "ItemMouseEnterEventName": "itemMouseEnter",
-          "ItemMouseLeaveEventName": "itemMouseLeave",
-          "ItemSummaryExpandedEventName": "itemSummaryExpanded",
-          "MiscSectionName": "Miscellaneous",
-          "RefreshLibraryViewRequestName": "refreshLibraryView",
-          "SearchTextUpdatedEventName": "searchTextUpdated",
-          "SectionIconClickedEventName": "sectionIconClicked",
-          "createLibraryByElementId": [Function],
-          "createLibraryContainer": [Function],
-          "on": [Function],
-          "raiseEvent": [Function],
-          "reactor": Reactor {
-            "events": [],
-          },
-          "refreshLibraryView": [Function],
-          "refreshLibraryViewHandler": [Function],
-          "registerRequestHandler": [Function],
-          "request": [Function],
-          "requestHandler": {},
-          "searchLibraryItemsHandler": null,
-          "setHostContext": [Function],
-          "setHostContextHandler": [Function],
-          "setLayoutSpecsJson": [Function],
-          "setLayoutSpecsJsonHandler": [Function],
-          "setLoadedTypesJson": [Function],
-          "setLoadedTypesJsonHandler": [Function],
-        }
-      }
-      miscSectionString="Miscellaneous"
-    >
-      <div>
-        This is LibraryContainer
-      </div>
-    </LibraryContainer>
-  }
-  showItemSummary={false}
->
-  <div
-    className="LibraryItemContainerNone"
-  >
-    <div
-      className="LibraryItemHeader"
-      onClick={[Function]}
-      onKeyDown={[Function]}
-      onMouseEnter={[Function]}
-      onMouseLeave={[Function]}
-    >
-      <ArrowIcon
-        color="#D8D8D8"
-        position="Right"
-      >
-        <svg
-          className="ArrowIcon Right"
-          fill="none"
-          height="7"
-          viewBox="0 0 4 8"
-          width="4"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <g
-            id="icon-wrapper"
-          >
-            <path
-              clipRule="evenodd"
-              d="M4 4L0 7.5L0 0.5L4 4Z"
-              fill="#D8D8D8"
-              fillRule="evenodd"
-              id="ð  icon-color"
-            />
-          </g>
-        </svg>
-      </ArrowIcon>
-      <div
-        className="LibraryItemTextWrapper"
-      >
-        <div
-          className="TextBox"
-        >
-          <span
-            className="LibraryItemText"
-          >
-            TestItem
-          </span>
-        </div>
-      </div>
-    </div>
-    <div
-      className="LibraryItemBodyContainer"
-    >
-      <div
-        className="LibraryItemBodyElements "
-      />
-    </div>
-  </div>
-</LibraryItem>
+"[36m<div>[39m
+  [36m<div[39m
+    [33mclass[39m=[32m"LibraryItemContainerNone"[39m
+  [36m>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"LibraryItemHeader"[39m
+    [36m>[39m
+      [36m<svg[39m
+        [33mclass[39m=[32m"ArrowIcon Right"[39m
+        [33mfill[39m=[32m"none"[39m
+        [33mheight[39m=[32m"7"[39m
+        [33mviewBox[39m=[32m"0 0 4 8"[39m
+        [33mwidth[39m=[32m"4"[39m
+        [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+      [36m>[39m
+        [36m<g[39m
+          [33mid[39m=[32m"icon-wrapper"[39m
+        [36m>[39m
+          [36m<path[39m
+            [33mclip-rule[39m=[32m"evenodd"[39m
+            [33md[39m=[32m"M4 4L0 7.5L0 0.5L4 4Z"[39m
+            [33mfill[39m=[32m"#D8D8D8"[39m
+            [33mfill-rule[39m=[32m"evenodd"[39m
+            [33mid[39m=[32m"ð  icon-color"[39m
+          [36m/>[39m
+        [36m</g>[39m
+      [36m</svg>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"LibraryItemTextWrapper"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"TextBox"[39m
+        [36m>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"LibraryItemText"[39m
+          [36m>[39m
+            [0mTestItem[0m
+          [36m</span>[39m
+        [36m</div>[39m
+      [36m</div>[39m
+    [36m</div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"LibraryItemBodyContainer"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"LibraryItemBodyElements "[39m
+      [36m/>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</div>[39m"
 `;
 
 exports[`LibraryContainer Test UI rendering of single component of Library Item 1`] = `
-<div
-  className="LibraryItemContainerNone"
->
-  <div
-    className="LibraryItemHeader"
-    onClick={[Function]}
-    onKeyDown={[Function]}
-    onMouseEnter={[Function]}
-    onMouseLeave={[Function]}
-  >
-    <ArrowIcon
-      color="#D8D8D8"
-      position="Right"
-    />
-    <div
-      className="LibraryItemTextWrapper"
-    >
-      <div
-        className="TextBox"
-      >
-        <span
-          className="LibraryItemText"
-        >
-          TestItem
-        </span>
-      </div>
-    </div>
-  </div>
-  <div
-    className="LibraryItemBodyContainer"
-  >
-    <div
-      className="LibraryItemBodyElements "
-    />
-  </div>
-</div>
+"[36m<div>[39m
+  [36m<div[39m
+    [33mclass[39m=[32m"LibraryItemContainerNone"[39m
+  [36m>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"LibraryItemHeader"[39m
+    [36m>[39m
+      [36m<svg[39m
+        [33mclass[39m=[32m"ArrowIcon Right"[39m
+        [33mfill[39m=[32m"none"[39m
+        [33mheight[39m=[32m"7"[39m
+        [33mviewBox[39m=[32m"0 0 4 8"[39m
+        [33mwidth[39m=[32m"4"[39m
+        [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+      [36m>[39m
+        [36m<g[39m
+          [33mid[39m=[32m"icon-wrapper"[39m
+        [36m>[39m
+          [36m<path[39m
+            [33mclip-rule[39m=[32m"evenodd"[39m
+            [33md[39m=[32m"M4 4L0 7.5L0 0.5L4 4Z"[39m
+            [33mfill[39m=[32m"#D8D8D8"[39m
+            [33mfill-rule[39m=[32m"evenodd"[39m
+            [33mid[39m=[32m"ð  icon-color"[39m
+          [36m/>[39m
+        [36m</g>[39m
+      [36m</svg>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"LibraryItemTextWrapper"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"TextBox"[39m
+        [36m>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"LibraryItemText"[39m
+          [36m>[39m
+            [0mTestItem[0m
+          [36m</span>[39m
+        [36m</div>[39m
+      [36m</div>[39m
+    [36m</div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"LibraryItemBodyContainer"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"LibraryItemBodyElements "[39m
+      [36m/>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</div>[39m"
 `;
