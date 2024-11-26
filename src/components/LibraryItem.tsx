@@ -417,7 +417,6 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
     }
 
     onLibraryItemClicked() {
-        console.log("CLICKED !!");
         //https://jira.autodesk.com/browse/QNTM-2975
         //Add-ons section is always expanded.
         if(this.props.data.text == "Add-ons") return;

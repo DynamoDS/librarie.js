@@ -4,7 +4,7 @@
 
 import * as React from 'react';
 import '@testing-library/jest-dom';
-import { prettyDOM, render } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import * as LibraryEntryPoint from '../../src/entry-point';
 import { LibraryItem } from '../../src/components/LibraryItem';
 import { ItemData } from "../../src/LibraryUtilities";
@@ -28,13 +28,13 @@ describe("LibraryContainer", function () {
 
     // When running for the first time creates a snapshot in __snapshots__ folder
     // To compare with the existing snapshot for subsequent running. 
-    expect(prettyDOM(container)).toMatchSnapshot();
+    expect(container).toMatchSnapshot();
   });
 
   it("Test UI rendering of Library Item and child components", function () {
     // Render with render() to test child components
     const { container } = render(libraryItemComponent);
-    expect(prettyDOM(container)).toMatchSnapshot(); 
+    expect(container).toMatchSnapshot(); 
   });
 
   it("Demonstrate testing UIitems loads correctly from static data", function () {
@@ -55,8 +55,9 @@ describe("LibraryContainer", function () {
     libController.refreshLibraryView();
     
     // Search for all LibraryItems      
-    let text = container.querySelectorAll('div.LibraryItemText')[0];
-    expect(prettyDOM(text)).toMatchSnapshot();
+    const text = container.querySelectorAll('.LibraryItemText');
+    const serializedNodes = Array.from(text).map((node)=> node.outerHTML).join("\n");
+    expect(serializedNodes).toMatchSnapshot();
   });
 });
 

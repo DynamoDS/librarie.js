@@ -23,9 +23,6 @@ const config: Config = {
     testPathIgnorePatterns: [
       "__tests__/data/"
     ],
-    snapshotSerializers: [
-      "<rootDir>/node_modules/enzyme-to-json/serializer"
-    ],
     reporters: [
       "default",
       [
