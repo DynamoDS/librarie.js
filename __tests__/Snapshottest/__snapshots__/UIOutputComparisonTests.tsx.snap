@@ -1,154 +1,54 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`LibraryContainer Demonstrate testing UIitems loads correctly from static data 1`] = `null`;
+exports[`LibraryContainer Demonstrate testing UIitems loads correctly from static data 1`] = `
+"<span class="LibraryItemText">Display</span>
+<span class="LibraryItemText">Geometry</span>
+<span class="LibraryItemText">ImportExport</span>
+<span class="LibraryItemText">Input</span>
+<span class="LibraryItemText">List</span>
+<span class="LibraryItemText">Math</span>
+<span class="LibraryItemText">Script</span>
+<span class="LibraryItemText">String</span>
+<span class="LibraryItemText">Clockwork</span>
+<span class="LibraryItemText">DynamoText</span>"
+`;
 
 exports[`LibraryContainer Test UI rendering of Library Item and child components 1`] = `
-<LibraryItem
-  data={
-    ItemData {
-      "childItems": [
-        ItemData {
-          "childItems": [],
-          "contextData": "",
-          "description": "",
-          "expanded": false,
-          "hiddenInWorkspaceContext": false,
-          "iconUrl": "",
-          "itemType": "category",
-          "keywords": [
-            "",
-          ],
-          "parameters": "",
-          "pathToItem": [],
-          "showHeader": true,
-          "text": "Child0",
-          "visible": true,
-          "weight": 0,
-        },
-        ItemData {
-          "childItems": [],
-          "contextData": "",
-          "description": "",
-          "expanded": false,
-          "hiddenInWorkspaceContext": false,
-          "iconUrl": "",
-          "itemType": "category",
-          "keywords": [
-            "",
-          ],
-          "parameters": "",
-          "pathToItem": [],
-          "showHeader": true,
-          "text": "Child1",
-          "visible": true,
-          "weight": 0,
-        },
-      ],
-      "contextData": "",
-      "description": "",
-      "expanded": false,
-      "hiddenInWorkspaceContext": false,
-      "iconUrl": "",
-      "itemType": "none",
-      "keywords": [
-        "",
-      ],
-      "parameters": "",
-      "pathToItem": [],
-      "showHeader": true,
-      "text": "TestItem",
-      "visible": true,
-      "weight": 0,
-    }
-  }
-  libraryContainer={
-    <LibraryContainer
-      defaultSectionString="default"
-      libraryController={
-        LibraryController {
-          "DefaultSectionName": "default",
-          "FilterCategoryEventName": "filterCategoryChange",
-          "ItemClickedEventName": "itemClicked",
-          "ItemMouseEnterEventName": "itemMouseEnter",
-          "ItemMouseLeaveEventName": "itemMouseLeave",
-          "ItemSummaryExpandedEventName": "itemSummaryExpanded",
-          "MiscSectionName": "Miscellaneous",
-          "RefreshLibraryViewRequestName": "refreshLibraryView",
-          "SearchTextUpdatedEventName": "searchTextUpdated",
-          "SectionIconClickedEventName": "sectionIconClicked",
-          "createLibraryByElementId": [Function],
-          "createLibraryContainer": [Function],
-          "on": [Function],
-          "raiseEvent": [Function],
-          "reactor": Reactor {
-            "events": [],
-          },
-          "refreshLibraryView": [Function],
-          "refreshLibraryViewHandler": [Function],
-          "registerRequestHandler": [Function],
-          "request": [Function],
-          "requestHandler": {},
-          "searchLibraryItemsHandler": null,
-          "setHostContext": [Function],
-          "setHostContextHandler": [Function],
-          "setLayoutSpecsJson": [Function],
-          "setLayoutSpecsJsonHandler": [Function],
-          "setLoadedTypesJson": [Function],
-          "setLoadedTypesJsonHandler": [Function],
-        }
-      }
-      miscSectionString="Miscellaneous"
-    >
-      <div>
-        This is LibraryContainer
-      </div>
-    </LibraryContainer>
-  }
-  showItemSummary={false}
->
+<div>
   <div
-    className="LibraryItemContainerNone"
+    class="LibraryItemContainerNone"
   >
     <div
-      className="LibraryItemHeader"
-      onClick={[Function]}
-      onKeyDown={[Function]}
-      onMouseEnter={[Function]}
-      onMouseLeave={[Function]}
+      class="LibraryItemHeader"
     >
-      <ArrowIcon
-        color="#D8D8D8"
-        position="Right"
+      <svg
+        class="ArrowIcon Right"
+        fill="none"
+        height="7"
+        viewBox="0 0 4 8"
+        width="4"
+        xmlns="http://www.w3.org/2000/svg"
       >
-        <svg
-          className="ArrowIcon Right"
-          fill="none"
-          height="7"
-          viewBox="0 0 4 8"
-          width="4"
-          xmlns="http://www.w3.org/2000/svg"
+        <g
+          id="icon-wrapper"
         >
-          <g
-            id="icon-wrapper"
-          >
-            <path
-              clipRule="evenodd"
-              d="M4 4L0 7.5L0 0.5L4 4Z"
-              fill="#D8D8D8"
-              fillRule="evenodd"
-              id="ð  icon-color"
-            />
-          </g>
-        </svg>
-      </ArrowIcon>
+          <path
+            clip-rule="evenodd"
+            d="M4 4L0 7.5L0 0.5L4 4Z"
+            fill="#D8D8D8"
+            fill-rule="evenodd"
+            id="ð  icon-color"
+          />
+        </g>
+      </svg>
       <div
-        className="LibraryItemTextWrapper"
+        class="LibraryItemTextWrapper"
       >
         <div
-          className="TextBox"
+          class="TextBox"
         >
           <span
-            className="LibraryItemText"
+            class="LibraryItemText"
           >
             TestItem
           </span>
@@ -156,51 +56,65 @@ exports[`LibraryContainer Test UI rendering of Library Item and child components
       </div>
     </div>
     <div
-      className="LibraryItemBodyContainer"
+      class="LibraryItemBodyContainer"
     >
       <div
-        className="LibraryItemBodyElements "
+        class="LibraryItemBodyElements "
       />
     </div>
   </div>
-</LibraryItem>
+</div>
 `;
 
 exports[`LibraryContainer Test UI rendering of single component of Library Item 1`] = `
-<div
-  className="LibraryItemContainerNone"
->
+<div>
   <div
-    className="LibraryItemHeader"
-    onClick={[Function]}
-    onKeyDown={[Function]}
-    onMouseEnter={[Function]}
-    onMouseLeave={[Function]}
+    class="LibraryItemContainerNone"
   >
-    <ArrowIcon
-      color="#D8D8D8"
-      position="Right"
-    />
     <div
-      className="LibraryItemTextWrapper"
+      class="LibraryItemHeader"
     >
-      <div
-        className="TextBox"
+      <svg
+        class="ArrowIcon Right"
+        fill="none"
+        height="7"
+        viewBox="0 0 4 8"
+        width="4"
+        xmlns="http://www.w3.org/2000/svg"
       >
-        <span
-          className="LibraryItemText"
+        <g
+          id="icon-wrapper"
         >
-          TestItem
-        </span>
+          <path
+            clip-rule="evenodd"
+            d="M4 4L0 7.5L0 0.5L4 4Z"
+            fill="#D8D8D8"
+            fill-rule="evenodd"
+            id="ð  icon-color"
+          />
+        </g>
+      </svg>
+      <div
+        class="LibraryItemTextWrapper"
+      >
+        <div
+          class="TextBox"
+        >
+          <span
+            class="LibraryItemText"
+          >
+            TestItem
+          </span>
+        </div>
       </div>
     </div>
-  </div>
-  <div
-    className="LibraryItemBodyContainer"
-  >
     <div
-      className="LibraryItemBodyElements "
-    />
+      class="LibraryItemBodyContainer"
+    >
+      <div
+        class="LibraryItemBodyElements "
+      />
+    </div>
   </div>
 </div>
 `;

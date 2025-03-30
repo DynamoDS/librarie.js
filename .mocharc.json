@@ -1,0 +1,12 @@
+{
+  "require": [
+    "ts-node/register"
+  ],
+  "spec": "__tests__/mochatest/**/*.{ts,tsx}",
+  "timeout": 5000,
+  "extensions": ["ts", "tsx"],
+  "reporter": "mocha-junit-reporter",
+  "reporter-option": [
+    "mochaFile=./TestResults/MochaReport.xml"
+  ]
+}
