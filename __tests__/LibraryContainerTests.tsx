@@ -1,13 +1,7 @@
-/**
- * @jest-environment jsdom
- */
-import { shallow, mount, configure, ReactWrapper } from 'enzyme';
-import { expect } from 'chai';
+import '@testing-library/jest-dom';
+import { fireEvent, render, screen } from '@testing-library/react';
+import { expect as expectChai} from 'chai';
 import * as LibraryEntryPoint from '../src/entry-point';
-import * as Adapter from 'enzyme-adapter-react-16';
-import { LibraryContainer } from '../src/components/LibraryContainer';
-import { ItemData } from '../src/LibraryUtilities';
-configure({adapter: new Adapter()});
 
 describe("LibraryContainer class", function () {
   let loadedTypesJson: any;
@@ -58,7 +52,15 @@ describe("LibraryContainer class", function () {
           "elementType": "section",
           "showHeader": true,
           "include": [],
-          "childElements": []
+          "childElements": [
+            {
+              "text": "Parent",
+              "iconUrl": "",
+              "elementType": "category",
+              "include": [{ "path": "Child1" }, { "path": "Child2" }],
+              "childElements": []
+            }
+          ]
         }
       ]
     };
@@ -67,79 +69,53 @@ describe("LibraryContainer class", function () {
   });
 
   it("should throw exception if set with an invalid loadedTypesJson", function () {
-    shallow(
+    render(
       libController.createLibraryContainer()
     );
 
     // loadedTypesJson is null
-    expect(function () {
+    expectChai(function () {
       libController.setLoadedTypesJson(null, false);
     }).to.throw("Parameter 'loadedTypesJson' must be supplied");
 
     // loadedTypesJson is invalid
-    expect(function () {
+    expectChai(function () {
       libController.setLoadedTypesJson({ "loadedTypes": "Hello!" }, false);
     }).to.throw("'loadedTypesJson.loadedTypes' must be a valid array");
   });
 
   it("should throw exception if set with an invalid layoutSpecsJson", function () {
-    shallow(
+    render(
       libController.createLibraryContainer()
     );
 
     // layoutSpecsJson is null
-    expect(function () {
+    expectChai(function () {
       libController.setLayoutSpecsJson(null, false);
     }).to.throw("Parameter 'layoutSpecsJson' must be supplied");
 
     // layoutSpecsJson is invalid
-    expect(function () {
+    expectChai(function () {
       libController.setLayoutSpecsJson({ "sections": "Hello!" }, false);
     }).to.throw("'layoutSpecsJson.sections' must be a valid array");
   });
 
   it("should set the loadedTypesJson correctly", function () {
-    let libContainer = mount(
+    render(
       libController.createLibraryContainer()
     );
-
-    expect(libContainer).to.not.be.undefined;
-    expect((libContainer.instance() as LibraryContainer).loadedTypesJson).to.be.null;
-
     libController.setLoadedTypesJson(loadedTypesJson, false);
-
-    expect((libContainer.instance() as LibraryContainer)).to.not.be.null;
-    expect((libContainer.instance() as LibraryContainer).loadedTypesJson.loadedTypes).to.not.be.null;
-    expect((libContainer.instance() as LibraryContainer).loadedTypesJson.loadedTypes).to.have.length.of("2");
-    expect((libContainer.instance() as LibraryContainer).loadedTypesJson.loadedTypes[1].fullyQualifiedName).to.equal("Child2");
-  });
-
-  it("should set the layoutSpecsJson correctly", function () {
-    let libContainer = mount(
-      libController.createLibraryContainer()
-    ) as unknown as ReactWrapper<{},{},LibraryContainer>;
-
-    expect(libContainer).to.not.be.undefined;
-    expect(libContainer.instance().layoutSpecsJson).to.be.null;
-
     libController.setLayoutSpecsJson(layoutSpecsJson, false);
-
-    expect(libContainer.instance().layoutSpecsJson).to.not.be.null;
-    expect(libContainer.instance().layoutSpecsJson.sections).to.not.be.null;
-    expect(libContainer.instance().layoutSpecsJson.sections).to.have.length.of("2");
-    expect(libContainer.instance().layoutSpecsJson.sections[1].text).to.equal("Miscellaneous");
+    libController.refreshLibraryView();
+    
+    const parentItem = screen.getByText('Parent');
+    fireEvent.click(parentItem);
+    expect(screen.queryByText('Child1')).toBeInTheDocument();
+    expect(screen.queryByText('Child2')).toBeInTheDocument();
   });
 
-  //TODO: it("should append the loadedTypesJson correctly");
-
-  //TODO: it("should append the layoutSpecsJson correctly");
-
-  it("should populate and render the LibraryItems correctly", function () {
-
-    // shallow rendering renders a component only one-level deep, 
-    // errors in children components wouldn't propagate to top level components,
-    // this is useful when testing one component as a unit.
-    let libContainer = shallow(
+  it("should set the layoutSpecsJson correctly", async function () {
+    render(
       libController.createLibraryContainer()
     );
 
@@ -147,18 +123,33 @@ describe("LibraryContainer class", function () {
     libController.setLayoutSpecsJson(layoutSpecsJson, false);
     libController.refreshLibraryView();
 
-    // find is used to find a rendered component by css selectors, 
-    // component constructors, display name or property selector.
-    expect(libContainer.find('SearchBar')).to.have.lengthOf(1);
+    expect(screen.getByText("Miscellaneous")).toBeInTheDocument();
+  });
 
-    let libraryItem = libContainer.find('LibraryItem');
-    expect(libraryItem).to.have.lengthOf(1);
-    expect((libraryItem.prop<ItemData>('data')).childItems).to.have.lengthOf(1);
-    expect((libraryItem.prop<ItemData>('data')).childItems[0].text).to.equal("Parent");
-    expect((libraryItem.prop<ItemData>('data')).childItems[0].itemType).to.equal("category");
-    expect((libraryItem.prop<ItemData>('data')).childItems[0].childItems).to.have.lengthOf(2);
-    expect((libraryItem.prop<ItemData>('data')).childItems[0].childItems[0].text).to.equal("Child1");
-    expect((libraryItem.prop<ItemData>('data')).childItems[0].childItems[1].text).to.equal("Child2");
+  //TODO: it("should append the loadedTypesJson correctly");
+
+  //TODO: it("should append the layoutSpecsJson correctly");
+
+  it("should populate and render the LibraryItems correctly", function () {
+    
+    render(
+      libController.createLibraryContainer()
+    );
+
+    libController.setLoadedTypesJson(loadedTypesJson, false);
+    libController.setLayoutSpecsJson(layoutSpecsJson, false);
+    libController.refreshLibraryView();
+
+    // Looks for the searchInput element
+    const input = screen.getByRole('textbox');
+    expect(input).toHaveClass('SearchInputText');
+
+    const libraryItem = screen.getByText("Parent");
+    // Check Parent to be rendered
+    expect(libraryItem).toBeInTheDocument();
+    // Confirm itemType it's equal to "category" based on LibraryItemContainerCategory class
+    expect(libraryItem.closest('.LibraryItemContainerCategory')).not.toBeNull();
+    
   });
 
 });
