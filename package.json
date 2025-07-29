@@ -25,7 +25,7 @@
   "dependencies": {
     "core-js": "^3.36.1",
     "express": "^4.19.2",
-    "react": "^16.14.0",
+    "react": "^19.1.1",
     "react-dom": "^16.14.0",
     "react-tooltip": "^5.26.3",
     "underscore": "^1.12.1"
@@ -36,7 +36,7 @@
     "@types/enzyme-adapter-react-16": "^1.0.6",
     "@types/jest": "^29.5.4",
     "@types/node": "^7.0.5",
-    "@types/react": "^17.0.0",
+    "@types/react": "^19.1.9",
     "@types/react-dom": "^0.14.20",
     "@types/react-test-renderer": "^15.5.0",
     "@types/underscore": "^1.11.0",
