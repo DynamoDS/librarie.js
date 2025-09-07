@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="Mocha Tests" time="0.0130" tests="56" failures="0">
+  <testsuite name="Root Suite" timestamp="2024-10-22T19:37:18" tests="0" time="0.0000" failures="0">
+  </testsuite>
+  <testsuite name="isValidIncludeInfo function" timestamp="2024-10-22T19:37:18" tests="5" file="C:\Users\batiste\Workspace\librarie.js\__tests__\mochatest\libraryUtilitiesTest.ts" time="0.0010" failures="0">
+    <testcase name="isValidIncludeInfo function should return true if includeItemPairs is empty" time="0.0010" classname="should return true if includeItemPairs is empty">
+    </testcase>
+    <testcase name="isValidIncludeInfo function should return true if includeItemPairs is valid" time="0.0000" classname="should return true if includeItemPairs is valid">
+    </testcase>
+    <testcase name="isValidIncludeInfo function should return false if includes are not unique" time="0.0000" classname="should return false if includes are not unique">
+    </testcase>
+    <testcase name="isValidIncludeInfo function should return false if one include is contained in another include" time="0.0000" classname="should return false if one include is contained in another include">
+    </testcase>
+    <testcase name="isValidIncludeInfo function should return false if one include with prefix is contained in another include" time="0.0000" classname="should return false if one include with prefix is contained in another include">
+    </testcase>
+  </testsuite>
+  <testsuite name="removeEmptyNodes function" timestamp="2024-10-22T19:37:18" tests="5" file="C:\Users\batiste\Workspace\librarie.js\__tests__\mochatest\libraryUtilitiesTest.ts" time="0.0000" failures="0">
+    <testcase name="removeEmptyNodes function should work for empty array" time="0.0000" classname="should work for empty array">
+    </testcase>
+    <testcase name="removeEmptyNodes function should remove all items for an array of sections(except Add-ons section) with no childItems" time="0.0000" classname="should remove all items for an array of sections(except Add-ons section) with no childItems">
+    </testcase>
+    <testcase name="removeEmptyNodes function should remove all items from an array of sections with childItems but no leaf items" time="0.0000" classname="should remove all items from an array of sections with childItems but no leaf items">
+    </testcase>
+    <testcase name="removeEmptyNodes function should remove items with no leaf items" time="0.0000" classname="should remove items with no leaf items">
+    </testcase>
+    <testcase name="removeEmptyNodes function should not remove items if all items have leaf items" time="0.0000" classname="should not remove items if all items have leaf items">
+    </testcase>
+  </testsuite>
+  <testsuite name="constructFromIncludeInfo function" timestamp="2024-10-22T19:37:18" tests="8" file="C:\Users\batiste\Workspace\librarie.js\__tests__\mochatest\libraryUtilitiesTest.ts" time="0.0100" failures="0">
+    <testcase name="constructFromIncludeInfo function should merge all typeListNodes if all of them are matched in include info" time="0.0080" classname="should merge all typeListNodes if all of them are matched in include info">
+    </testcase>
+    <testcase name="constructFromIncludeInfo function should skip nodes that are not matched or included" time="0.0000" classname="should skip nodes that are not matched or included">
+    </testcase>
+    <testcase name="constructFromIncludeInfo function should merge typeListNodes even if appear in different include info" time="0.0010" classname="should merge typeListNodes even if appear in different include info">
+    </testcase>
+    <testcase name="constructFromIncludeInfo function should merge typeListNodes if they are matched or included in include info" time="0.0000" classname="should merge typeListNodes if they are matched or included in include info">
+    </testcase>
+    <testcase name="constructFromIncludeInfo function should merge typeListNodes based on the attribute inclusive of include info" time="0.0010" classname="should merge typeListNodes based on the attribute inclusive of include info">
+    </testcase>
+    <testcase name="constructFromIncludeInfo function should merge typeListNodes based on include path with prefix" time="0.0000" classname="should merge typeListNodes based on include path with prefix">
+    </testcase>
+    <testcase name="constructFromIncludeInfo function should merge typeListNodes even if multiple include paths have the same prefix" time="0.0000" classname="should merge typeListNodes even if multiple include paths have the same prefix">
+    </testcase>
+    <testcase name="constructFromIncludeInfo function should merge typeListNodes and build node name from their fullyQualifiedNames after prefix" time="0.0000" classname="should merge typeListNodes and build node name from their fullyQualifiedNames after prefix">
+    </testcase>
+  </testsuite>
+  <testsuite name="updateSections function" timestamp="2024-10-22T19:37:18" tests="8" file="C:\Users\batiste\Workspace\librarie.js\__tests__\mochatest\libraryUtilitiesTest.ts" time="0.0010" failures="0">
+    <testcase name="updateSections function should throw exceptions 0" time="0.0000" classname="should throw exceptions 0">
+    </testcase>
+    <testcase name="updateSections function should throw exceptions 1" time="0.0000" classname="should throw exceptions 1">
+    </testcase>
+    <testcase name="updateSections function should throw exceptions 2" time="0.0000" classname="should throw exceptions 2">
+    </testcase>
+    <testcase name="updateSections function should throw exceptions 3" time="0.0000" classname="should throw exceptions 3">
+    </testcase>
+    <testcase name="updateSections function should throw exceptions 4" time="0.0000" classname="should throw exceptions 4">
+    </testcase>
+    <testcase name="updateSections function should insert a new element when there isn&apos;t an existing one" time="0.0010" classname="should insert a new element when there isn&apos;t an existing one">
+    </testcase>
+    <testcase name="updateSections function should update existing contents with new contents" time="0.0000" classname="should update existing contents with new contents">
+    </testcase>
+    <testcase name="updateSections function should update existing contents including child elements" time="0.0000" classname="should update existing contents including child elements">
+    </testcase>
+  </testsuite>
+  <testsuite name="listNode Class" timestamp="2024-10-22T19:37:18" tests="2" file="C:\Users\batiste\Workspace\librarie.js\__tests__\mochatest\libraryUtilitiesTest.ts" time="0.0000" failures="0">
+    <testcase name="listNode Class should create an empty TypeListNode" time="0.0000" classname="should create an empty TypeListNode">
+    </testcase>
+    <testcase name="listNode Class should create a TypeListNode with correct attributes" time="0.0000" classname="should create a TypeListNode with correct attributes">
+    </testcase>
+  </testsuite>
+  <testsuite name="LayoutElement class" timestamp="2024-10-22T19:37:18" tests="3" file="C:\Users\batiste\Workspace\librarie.js\__tests__\mochatest\libraryUtilitiesTest.ts" time="0.0000" failures="0">
+    <testcase name="LayoutElement class should create an empty LayoutElement" time="0.0000" classname="should create an empty LayoutElement">
+    </testcase>
+    <testcase name="LayoutElement class should be able to append a child" time="0.0000" classname="should be able to append a child">
+    </testcase>
+    <testcase name="LayoutElement class should create LayoutElement from data with child elements" time="0.0000" classname="should create LayoutElement from data with child elements">
+    </testcase>
+  </testsuite>
+  <testsuite name="ItemData class" timestamp="2024-10-22T19:37:18" tests="3" file="C:\Users\batiste\Workspace\librarie.js\__tests__\mochatest\libraryUtilitiesTest.ts" time="0.0000" failures="0">
+    <testcase name="ItemData class should create an LibraryItem from string" time="0.0000" classname="should create an LibraryItem from string">
+    </testcase>
+    <testcase name="ItemData class should create an LibraryItem from layoutElement" time="0.0000" classname="should create an LibraryItem from layoutElement">
+    </testcase>
+    <testcase name="ItemData class should append some children" time="0.0000" classname="should append some children">
+    </testcase>
+  </testsuite>
+  <testsuite name="buildLibraryItemsFromName function" timestamp="2024-10-22T19:37:18" tests="2" file="C:\Users\batiste\Workspace\librarie.js\__tests__\mochatest\libraryUtilitiesTest.ts" time="0.0000" failures="0">
+    <testcase name="buildLibraryItemsFromName function should construct a library item with fullyQualifiedName" time="0.0000" classname="should construct a library item with fullyQualifiedName">
+    </testcase>
+    <testcase name="buildLibraryItemsFromName function should construct correctly nested library items with fullyQualifiedName" time="0.0000" classname="should construct correctly nested library items with fullyQualifiedName">
+    </testcase>
+  </testsuite>
+  <testsuite name="setItemStateRecursive function" timestamp="2024-10-22T19:37:18" tests="3" file="C:\Users\batiste\Workspace\librarie.js\__tests__\mochatest\libraryUtilitiesTest.ts" time="0.0000" failures="0">
+    <testcase name="setItemStateRecursive function should work on empty array" time="0.0000" classname="should work on empty array">
+    </testcase>
+    <testcase name="setItemStateRecursive function should set the correct attributes" time="0.0000" classname="should set the correct attributes">
+    </testcase>
+    <testcase name="setItemStateRecursive function should set the correct attributes of child items" time="0.0000" classname="should set the correct attributes of child items">
+    </testcase>
+  </testsuite>
+  <testsuite name="Search function" timestamp="2024-10-22T19:37:18" tests="7" file="C:\Users\batiste\Workspace\librarie.js\__tests__\mochatest\libraryUtilitiesTest.ts" time="0.0000" failures="0">
+    <testcase name="Search function should return false when nothing is found" time="0.0000" classname="should return false when nothing is found">
+    </testcase>
+    <testcase name="Search function should return true when matched items are found" time="0.0000" classname="should return true when matched items are found">
+    </testcase>
+    <testcase name="Search function should show all child items when parent item matches" time="0.0000" classname="should show all child items when parent item matches">
+    </testcase>
+    <testcase name="Search function should show parent item when some of its child items are matched" time="0.0000" classname="should show parent item when some of its child items are matched">
+    </testcase>
+    <testcase name="Search function should ignore item of type group" time="0.0000" classname="should ignore item of type group">
+    </testcase>
+    <testcase name="Search function should return results for search text with regex meta characters" time="0.0000" classname="should return results for search text with regex meta characters">
+    </testcase>
+    <testcase name="Search function should highlight text with regex meta characters" time="0.0000" classname="should highlight text with regex meta characters">
+    </testcase>
+  </testsuite>
+  <testsuite name="findAndExpandItemByPath function" timestamp="2024-10-22T19:37:18" tests="2" file="C:\Users\batiste\Workspace\librarie.js\__tests__\mochatest\libraryUtilitiesTest.ts" time="0.0010" failures="0">
+    <testcase name="findAndExpandItemByPath function should return true if an item is found" time="0.0010" classname="should return true if an item is found">
+    </testcase>
+    <testcase name="findAndExpandItemByPath function should return false if an item is not found" time="0.0000" classname="should return false if an item is not found">
+    </testcase>
+  </testsuite>
+  <testsuite name="sortItemsByText function" timestamp="2024-10-22T19:37:18" tests="2" file="C:\Users\batiste\Workspace\librarie.js\__tests__\mochatest\libraryUtilitiesTest.ts" time="0.0000" failures="0">
+    <testcase name="sortItemsByText function should sort items in alphabetical order" time="0.0000" classname="should sort items in alphabetical order">
+    </testcase>
+    <testcase name="sortItemsByText function should sort items ignoring cases" time="0.0000" classname="should sort items ignoring cases">
+    </testcase>
+  </testsuite>
+  <testsuite name="splitToParts function" timestamp="2024-10-22T19:37:18" tests="6" file="C:\Users\batiste\Workspace\librarie.js\__tests__\mochatest\libraryUtilitiesTest.ts" time="0.0000" failures="0">
+    <testcase name="splitToParts function should return empty array if text is empty" time="0.0000" classname="should return empty array if text is empty">
+    </testcase>
+    <testcase name="splitToParts function should return correct parts if text doesn&apos;t have prefix or delimiter" time="0.0000" classname="should return correct parts if text doesn&apos;t have prefix or delimiter">
+    </testcase>
+    <testcase name="splitToParts function should return correct parts if text doesn&apos;t have prefix" time="0.0000" classname="should return correct parts if text doesn&apos;t have prefix">
+    </testcase>
+    <testcase name="splitToParts function should return correct parts if text has only prefix" time="0.0000" classname="should return correct parts if text has only prefix">
+    </testcase>
+    <testcase name="splitToParts function should return correct parts if text has prefix but no delimiter" time="0.0000" classname="should return correct parts if text has prefix but no delimiter">
+    </testcase>
+    <testcase name="splitToParts function should return correct parts if text has prefix and delimiter" time="0.0000" classname="should return correct parts if text has prefix and delimiter">
+    </testcase>
+  </testsuite>
+</testsuites>

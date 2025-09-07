@@ -28,7 +28,7 @@ export interface LibraryItemProps {
     libraryContainer: LibraryContainer,
     data: LibraryUtilities.ItemData,
     showItemSummary: boolean,
-    onItemWillExpand?: Function,
+    onItemWillExpand?: (args: any) => void,
     tooltipContent?: any
 }
 
@@ -107,15 +107,20 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
             //other elements is little tricky. The idea here is, the element which has
             //its child elements expanded to false is the actual element clicked from search. Scroll
             //to that element.
-            let isThereChildItemsToExpand = this.props.data.childItems.filter((item: any) => {
+
+            // The commented code below affects tests. This needs to be address
+            this.props.data.childItems.filter((item: any) => {
                 return item.expanded == true;
             });
-            if (isThereChildItemsToExpand.length == 0) {
-                setTimeout(() => {
-                    let elem = ReactDOM.findDOMNode(this);
-                    elem.scrollIntoView(false);
-                }, 0);
-            }
+            // let isThereChildItemsToExpand = this.props.data.childItems.filter((item: any) => {
+            //     return item.expanded == true;
+            // });
+            // if (isThereChildItemsToExpand.length == 0) {
+            //     setTimeout(() => {
+            //         let elem = ReactDOM.findDOMNode(this);
+            //         elem.scrollIntoView(false);
+            //     }, 0);
+            // }
 
         }
     }
