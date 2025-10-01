@@ -1,4 +1,7 @@
 # librarie.js
+![NPM Version](https://img.shields.io/npm/v/%40dynamods%2Flibrariejs)
+![NPM Last Update](https://img.shields.io/npm/last-update/%40dynamods%2Flibrariejs)
+
 Reusable lightweight library component based on React.js
 
 ## Set up
