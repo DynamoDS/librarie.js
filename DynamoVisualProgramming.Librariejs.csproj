@@ -8,7 +8,7 @@
     <RepositoryUrl>https://github.com/DynamoDS/librarie.js.git</RepositoryUrl>
     <PackageTags>Dynamo;librariejs</PackageTags>
     <NeutralLanguage>en-US</NeutralLanguage>
-    <versionprefix>1.0.0</versionprefix>
+    <versionprefix>1.0.1</versionprefix>
     <PackProjectInputFile>$(MSBuildProjectFullPath)</PackProjectInputFile>
     <NoBuild>true</NoBuild>
     <IncludeBuildOutput>false</IncludeBuildOutput>
