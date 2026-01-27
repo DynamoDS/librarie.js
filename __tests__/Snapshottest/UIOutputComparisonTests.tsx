@@ -9,7 +9,7 @@ import { ItemData } from "../../src/LibraryUtilities";
 import { createLibraryItem } from "../../src/utils";
 import { mount, shallow, configure } from 'enzyme';
 import toJson from 'enzyme-to-json';
-import * as Adapter from 'enzyme-adapter-react-16';
+import Adapter from '@cfaester/enzyme-adapter-react-18';
 
 configure({adapter: new Adapter()});
 

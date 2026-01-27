@@ -112,7 +112,7 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
         window.setTooltipText = this.setTooltipText;
     }
 
-    UNSAFE_componentWillMount() {
+    componentDidMount() {
         window.addEventListener("keydown", this.handleKeyDown);
     }
 
@@ -148,7 +148,8 @@ export class LibraryContainer extends React.Component<LibraryContainerProps, Lib
     scrollToExpandedItem(element: HTMLElement) {
         if (element) {
             
-            const currentElement = ReactDOM.findDOMNode(this).querySelector(".LibraryItemContainer");
+            const domNode = ReactDOM.findDOMNode(this);
+            const currentElement = domNode instanceof Element ? domNode.querySelector(".LibraryItemContainer") : null;
             //get the offset for the element we care about scrolling to.
             const offsetOldElement = this.offset(element);
             //now we wait until the expansion and re-render occurs,

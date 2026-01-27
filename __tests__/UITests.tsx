@@ -8,7 +8,7 @@ import * as LibraryEntryPoint from '../src/entry-point';
 import { LibraryItem } from '../src/components/LibraryItem';
 import { ItemData } from "../src/LibraryUtilities";
 import { createLibraryItem } from "../src/utils";
-import * as Adapter from 'enzyme-adapter-react-16';
+import Adapter from '@cfaester/enzyme-adapter-react-18';
 import { expect } from 'chai';
 import { LibraryContainer } from '../src/components/LibraryContainer';
 
