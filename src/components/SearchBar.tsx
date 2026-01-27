@@ -62,6 +62,8 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
     }
 
     componentDidUpdate(prevProps: SearchBarProps) {
+        // Note: This reference comparison works because categories array is replaced, not mutated
+        // If categories were mutated in place, we'd need deep comparison
         if (prevProps.categories !== this.props.categories) {
             let oldCategoryData = this.categoryData;
             this.categoryData = {};

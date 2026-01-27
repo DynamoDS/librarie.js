@@ -90,10 +90,9 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
 
     componentDidUpdate(prevProps: LibraryItemProps) {
         if (prevProps.data.expanded !== this.props.data.expanded && 
-            this.props.libraryContainer.state.shouldOverrideExpandedState)
-            {
+            this.props.libraryContainer.state.shouldOverrideExpandedState) {
             this.setState({ expanded: this.props.data.expanded });
-            }
+        }
     }
 
     //Afer rendering each Library item, scroll to the expanded item
