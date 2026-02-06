@@ -8,9 +8,10 @@ import * as LibraryEntryPoint from '../src/entry-point';
 import { LibraryItem } from '../src/components/LibraryItem';
 import { ItemData } from "../src/LibraryUtilities";
 import { createLibraryItem } from "../src/utils";
-import * as Adapter from 'enzyme-adapter-react-16';
+import Adapter from '@cfaester/enzyme-adapter-react-18';
 import { expect } from 'chai';
 import { LibraryContainer } from '../src/components/LibraryContainer';
+import { act } from 'react-dom/test-utils';
 
 configure({adapter: new Adapter()});
 
@@ -146,10 +147,12 @@ describe("LibraryContainer UI", function () {
         libController.createLibraryContainer()
       );
 
-      // Load the data to libController
-      libController.setLoadedTypesJson(loadedTypesJson, false);
-      libController.setLayoutSpecsJson(layoutSpecsJson, false);
-      libController.refreshLibraryView();
+      // Load the data to libController - wrap in act for React 18
+      act(() => {
+        libController.setLoadedTypesJson(loadedTypesJson, false);
+        libController.setLayoutSpecsJson(layoutSpecsJson, false);
+        libController.refreshLibraryView();
+      });
       libContainer.update();
 
     })

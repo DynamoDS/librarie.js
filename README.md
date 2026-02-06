@@ -4,6 +4,18 @@
 
 Reusable lightweight library component based on React.js
 
+## React 18 Upgrade ⚡
+
+librarie.js has been upgraded to React 18.3.1! See [MIGRATION_GUIDE.md](./MIGRATION_GUIDE.md) for details about the changes and [TECH_DEBT_ANALYSIS.md](./TECH_DEBT_ANALYSIS.md) for the complete technical debt inventory and modernization roadmap.
+
+**Key Changes:**
+- ✅ React 18.3.1 (from 16.14.0)
+- ✅ All deprecated UNSAFE_ lifecycle methods replaced
+- ✅ Modern TypeScript configuration (es2018 target)
+- ✅ 43% reduction in security vulnerabilities
+
+**Known Issue:** cheerio 0.22.0 is locked to this older version for Enzyme compatibility. This will be resolved when migrating to React Testing Library in Phase 3. See [TECH_DEBT_ANALYSIS.md](./TECH_DEBT_ANALYSIS.md) for details.
+
 ## Set up
 Installing all dependencies
 

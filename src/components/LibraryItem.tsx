@@ -88,16 +88,11 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
 
     }
 
-     // By default all items in search view will be expanded. In search view, 
-    // user is still able to expand/unexpand the item, which will toggle the 
-    // expansion state. This will make sure that the expansion state of an item
-    // in search view will not be affected by the previous user click.
-    UNSAFE_componentWillReceiveProps(nextProps: LibraryItemProps) {
-        if (nextProps.data.expanded !== this.state.expanded && 
-            this.props.libraryContainer.state.shouldOverrideExpandedState)
-            {
-            this.setState({ expanded: nextProps.data.expanded });
-            }
+    componentDidUpdate(prevProps: LibraryItemProps) {
+        if (prevProps.data.expanded !== this.props.data.expanded && 
+            this.props.libraryContainer.state.shouldOverrideExpandedState) {
+            this.setState({ expanded: this.props.data.expanded });
+        }
     }
 
     //Afer rendering each Library item, scroll to the expanded item
@@ -113,7 +108,9 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
             if (isThereChildItemsToExpand.length == 0) {
                 setTimeout(() => {
                     let elem = ReactDOM.findDOMNode(this);
-                    elem.scrollIntoView(false);
+                    if (elem instanceof Element) {
+                        elem.scrollIntoView(false);
+                    }
                 }, 0);
             }
 
@@ -464,9 +461,12 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
     onLibraryItemMouseEnter() {
         let libraryContainer = this.props.libraryContainer;
         if (this.props.data.childItems.length == 0) {
-            let rec = ReactDOM.findDOMNode(this).getBoundingClientRect();
-            let mouseEnterEvent = libraryContainer.props.libraryController.ItemMouseEnterEventName;
-            libraryContainer.raiseEvent(mouseEnterEvent, { data: this.props.data.contextData, rect: rec, element:  ReactDOM.findDOMNode(this) });
+            let domNode = ReactDOM.findDOMNode(this);
+            if (domNode instanceof Element) {
+                let rec = domNode.getBoundingClientRect();
+                let mouseEnterEvent = libraryContainer.props.libraryController.ItemMouseEnterEventName;
+                libraryContainer.raiseEvent(mouseEnterEvent, { data: this.props.data.contextData, rect: rec, element: domNode });
+            }
         }
     }
 }

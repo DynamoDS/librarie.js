@@ -34,7 +34,7 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
         this.setSelected = this.setSelected.bind(this);
     }
 
-    UNSAFE_componentWillMount() {
+    componentDidMount() {
         window.addEventListener("keydown", this.handleKeyDown);
     }
 
@@ -47,12 +47,14 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
         if (this.state.selected) {
             let container = ReactDOM.findDOMNode(this.props.libraryContainer);
             let currentItem = ReactDOM.findDOMNode(this);
-            let containerRect = container?.getBoundingClientRect();
-            let currentRect = currentItem?.getBoundingClientRect();
-            //bail if rects are null.
-            if(containerRect == null || currentRect == null){
-                return
+            
+            // Type guard to ensure we have Elements, not Text nodes
+            if (!(container instanceof Element) || !(currentItem instanceof Element)) {
+                return;
             }
+            
+            let containerRect = container.getBoundingClientRect();
+            let currentRect = currentItem.getBoundingClientRect();
 
             if (currentRect.top < currentRect.height) {
                 currentItem.scrollIntoView();
@@ -172,9 +174,12 @@ export class SearchResultItem extends React.Component<SearchResultItemProps, Sea
     onLibraryItemMouseEnter() {
         let libraryContainer = this.props.libraryContainer;
         if (this.props.data.childItems.length == 0) {
-            let rec = ReactDOM.findDOMNode(this).getBoundingClientRect();
-            let mouseEnterEvent = libraryContainer.props.libraryController.ItemMouseEnterEventName;
-            libraryContainer.raiseEvent(mouseEnterEvent, { data: this.props.data.contextData, rect: rec, element: ReactDOM.findDOMNode(this) });
+            let domNode = ReactDOM.findDOMNode(this);
+            if (domNode instanceof Element) {
+                let rec = domNode.getBoundingClientRect();
+                let mouseEnterEvent = libraryContainer.props.libraryController.ItemMouseEnterEventName;
+                libraryContainer.raiseEvent(mouseEnterEvent, { data: this.props.data.contextData, rect: rec, element: domNode });
+            }
         }
     }
 }

@@ -61,20 +61,23 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
         }.bind(this));
     }
 
-    UNSAFE_componentWillReceiveProps(newProps: SearchBarProps) {
-        let oldCategoryData = this.categoryData;
-        this.categoryData = {};
-        
-        _.each(newProps.categories, function (name: string) {
-            this.categoryData[name] = oldCategoryData[name]
-                ? oldCategoryData[name]
-                : new CategoryData(name, "CategoryCheckbox");
+    componentDidUpdate(prevProps: SearchBarProps) {
+        // Note: This reference comparison works because categories array is replaced, not mutated
+        // If categories were mutated in place, we'd need deep comparison
+        if (prevProps.categories !== this.props.categories) {
+            let oldCategoryData = this.categoryData;
+            this.categoryData = {};
+            
+            _.each(this.props.categories, function (name: string) {
+                this.categoryData[name] = oldCategoryData[name]
+                    ? oldCategoryData[name]
+                    : new CategoryData(name, "CategoryCheckbox");
 
-        }.bind(this));
-
+            }.bind(this));
+        }
     }
 
-    UNSAFE_componentWillMount() {
+    componentDidMount() {
         window.addEventListener("keydown", this.handleKeyDown.bind(this));
         window.addEventListener("click", this.handleGlobalClick.bind(this));
     }
