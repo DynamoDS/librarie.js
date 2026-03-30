@@ -4,7 +4,7 @@
 import { shallow, mount, configure, ReactWrapper } from 'enzyme';
 import { expect } from 'chai';
 import * as LibraryEntryPoint from '../src/entry-point';
-import * as Adapter from 'enzyme-adapter-react-16';
+import Adapter from '@cfaester/enzyme-adapter-react-18';
 import { LibraryContainer } from '../src/components/LibraryContainer';
 import { ItemData } from '../src/LibraryUtilities';
 configure({adapter: new Adapter()});
