@@ -1,0 +1,206 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`LibraryContainer Demonstrate testing UIitems loads correctly from static data 1`] = `null`;
+
+exports[`LibraryContainer Test UI rendering of Library Item and child components 1`] = `
+<LibraryItem
+  data={
+    ItemData {
+      "childItems": [
+        ItemData {
+          "childItems": [],
+          "contextData": "",
+          "description": "",
+          "expanded": false,
+          "hiddenInWorkspaceContext": false,
+          "iconUrl": "",
+          "itemType": "category",
+          "keywords": [
+            "",
+          ],
+          "parameters": "",
+          "pathToItem": [],
+          "showHeader": true,
+          "text": "Child0",
+          "visible": true,
+          "weight": 0,
+        },
+        ItemData {
+          "childItems": [],
+          "contextData": "",
+          "description": "",
+          "expanded": false,
+          "hiddenInWorkspaceContext": false,
+          "iconUrl": "",
+          "itemType": "category",
+          "keywords": [
+            "",
+          ],
+          "parameters": "",
+          "pathToItem": [],
+          "showHeader": true,
+          "text": "Child1",
+          "visible": true,
+          "weight": 0,
+        },
+      ],
+      "contextData": "",
+      "description": "",
+      "expanded": false,
+      "hiddenInWorkspaceContext": false,
+      "iconUrl": "",
+      "itemType": "none",
+      "keywords": [
+        "",
+      ],
+      "parameters": "",
+      "pathToItem": [],
+      "showHeader": true,
+      "text": "TestItem",
+      "visible": true,
+      "weight": 0,
+    }
+  }
+  libraryContainer={
+    <LibraryContainer
+      defaultSectionString="default"
+      libraryController={
+        LibraryController {
+          "DefaultSectionName": "default",
+          "FilterCategoryEventName": "filterCategoryChange",
+          "ItemClickedEventName": "itemClicked",
+          "ItemMouseEnterEventName": "itemMouseEnter",
+          "ItemMouseLeaveEventName": "itemMouseLeave",
+          "ItemSummaryExpandedEventName": "itemSummaryExpanded",
+          "MiscSectionName": "Miscellaneous",
+          "RefreshLibraryViewRequestName": "refreshLibraryView",
+          "SearchTextUpdatedEventName": "searchTextUpdated",
+          "SectionIconClickedEventName": "sectionIconClicked",
+          "createLibraryByElementId": [Function],
+          "createLibraryContainer": [Function],
+          "on": [Function],
+          "raiseEvent": [Function],
+          "reactor": Reactor {
+            "events": [],
+          },
+          "refreshLibraryView": [Function],
+          "refreshLibraryViewHandler": [Function],
+          "registerRequestHandler": [Function],
+          "request": [Function],
+          "requestHandler": {},
+          "searchLibraryItemsHandler": null,
+          "setHostContext": [Function],
+          "setHostContextHandler": [Function],
+          "setLayoutSpecsJson": [Function],
+          "setLayoutSpecsJsonHandler": [Function],
+          "setLoadedTypesJson": [Function],
+          "setLoadedTypesJsonHandler": [Function],
+        }
+      }
+      miscSectionString="Miscellaneous"
+    >
+      <div>
+        This is LibraryContainer
+      </div>
+    </LibraryContainer>
+  }
+  showItemSummary={false}
+>
+  <div
+    className="LibraryItemContainerNone"
+  >
+    <div
+      className="LibraryItemHeader"
+      onClick={[Function]}
+      onKeyDown={[Function]}
+      onMouseEnter={[Function]}
+      onMouseLeave={[Function]}
+    >
+      <ArrowIcon
+        color="#D8D8D8"
+        position="Right"
+      >
+        <svg
+          className="ArrowIcon Right"
+          fill="none"
+          height="7"
+          viewBox="0 0 4 8"
+          width="4"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <g
+            id="icon-wrapper"
+          >
+            <path
+              clipRule="evenodd"
+              d="M4 4L0 7.5L0 0.5L4 4Z"
+              fill="#D8D8D8"
+              fillRule="evenodd"
+              id="ð  icon-color"
+            />
+          </g>
+        </svg>
+      </ArrowIcon>
+      <div
+        className="LibraryItemTextWrapper"
+      >
+        <div
+          className="TextBox"
+        >
+          <span
+            className="LibraryItemText"
+          >
+            TestItem
+          </span>
+        </div>
+      </div>
+    </div>
+    <div
+      className="LibraryItemBodyContainer"
+    >
+      <div
+        className="LibraryItemBodyElements "
+      />
+    </div>
+  </div>
+</LibraryItem>
+`;
+
+exports[`LibraryContainer Test UI rendering of single component of Library Item 1`] = `
+<div
+  className="LibraryItemContainerNone"
+>
+  <div
+    className="LibraryItemHeader"
+    onClick={[Function]}
+    onKeyDown={[Function]}
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+  >
+    <ArrowIcon
+      color="#D8D8D8"
+      position="Right"
+    />
+    <div
+      className="LibraryItemTextWrapper"
+    >
+      <div
+        className="TextBox"
+      >
+        <span
+          className="LibraryItemText"
+        >
+          TestItem
+        </span>
+      </div>
+    </div>
+  </div>
+  <div
+    className="LibraryItemBodyContainer"
+  >
+    <div
+      className="LibraryItemBodyElements "
+    />
+  </div>
+</div>
+`;

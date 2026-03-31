@@ -71,7 +71,7 @@ export function LibraryContainer(props: LibraryContainerProps) {
         action: ClusterTypeDescription.action,
         query: ClusterTypeDescription.query
     });
-    const [hostingContext, setHostingContext] = useState<HostingContextType>("none");
+    const [hostingContext, setHostingContext] = useState<HostingContextType>(HostingContextType.none);
     const [generatedSections, setGeneratedSections] = useState<LibraryUtilities.ItemData[] | null>(null);
 
     // ── Instance-variable refs (no re-render on change) ──────────────────────

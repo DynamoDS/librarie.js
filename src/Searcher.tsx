@@ -1,9 +1,9 @@
 import * as _ from "underscore";
-import { LibraryContainer } from "./components/LibraryContainer";
+import { LibraryContainerHandle } from "./components/LibraryContainer";
 import * as LibraryUtilities from "./LibraryUtilities";
 
 export class Searcher {
-    libraryContainer: LibraryContainer | null = null;
+    libraryContainer: LibraryContainerHandle | null = null;
     sections: LibraryUtilities.ItemData[] = [];
     categories: string[] = [];
 
