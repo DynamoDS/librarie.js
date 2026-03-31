@@ -3,7 +3,7 @@
 require("../resources/LibraryStyles.css");
 
 import * as React from "react";
-import { useRef, useState, useCallback, useReducer } from "react";
+import { useRef, useState, useCallback } from "react";
 import * as LibraryUtilities from "../LibraryUtilities";
 import { LibraryController } from "../entry-point";
 import { LibraryItem } from "./LibraryItem";

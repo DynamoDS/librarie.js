@@ -39,20 +39,22 @@ export const SearchResultItem = forwardRef<SearchResultItemHandle, SearchResultI
             }
         }));
 
-        // Re-register handler on every render so it always reads latest `selected`.
-        // This replaces the componentDidMount/componentWillUnmount pattern while
-        // avoiding the stale-closure issue the class component had.
-        useEffect(() => {
-            function handleKeyDown(event: KeyboardEvent) {
-                if (event.key === "Enter" && selected) {
-                    handleItemClicked();
-                }
+        // Use a ref-based stable handler so the window listener is registered once
+        // but always reads the latest `selected` state (same pattern as SearchBar/LibraryContainer).
+        const handleKeyDownRef = useRef<(event: KeyboardEvent) => void>(() => {});
+        handleKeyDownRef.current = (event: KeyboardEvent) => {
+            if (event.key === "Enter" && selected) {
+                handleItemClicked();
             }
-            window.addEventListener("keydown", handleKeyDown);
-            return () => window.removeEventListener("keydown", handleKeyDown);
-        });
+        };
 
-        // Scroll selected item into view (replaces componentDidUpdate)
+        useEffect(() => {
+            const handler = (e: KeyboardEvent) => handleKeyDownRef.current(e);
+            window.addEventListener("keydown", handler);
+            return () => window.removeEventListener("keydown", handler);
+        }, []);
+
+        // Scroll selected item into view when selection state changes
         useEffect(() => {
             if (!selected) return;
             const container = libraryContainer.getContainerElement();
@@ -68,7 +70,7 @@ export const SearchResultItem = forwardRef<SearchResultItemHandle, SearchResultI
             if (currentRect.bottom > containerRect.bottom) {
                 currentItem.scrollIntoView(false);
             }
-        });
+        }, [selected, libraryContainer]);
 
         function handleImageLoadFail(event: any) {
             event.target.src = require("../resources/icons/default-icon.svg");

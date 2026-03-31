@@ -68,7 +68,7 @@ export function ItemSummary({ libraryContainer, data, showDescription }: ItemSum
                 let inputParameterName = inputParameter.name;
                 if (inputParameterName.length > 0) inputParameterName += ": ";
                 input.push(
-                    <div className={"IOParameter"}>
+                    <div key={inputParameterName} className={"IOParameter"}>
                         {inputParameterName}{inputParameter.type}
                     </div>
                 );
