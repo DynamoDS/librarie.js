@@ -17,15 +17,15 @@
 */
 
 import * as React from "react";
-import * as ReactDOM from "react-dom";
+import { useRef, useState, useEffect } from "react";
 import { ClusterView } from "./ClusterView";
 import * as LibraryUtilities from "../LibraryUtilities";
 import { ArrowIcon } from "./icons";
-import { LibraryContainer } from "./LibraryContainer";
+import type { LibraryContainerHandle } from "./LibraryContainer";
 import { HostingContextType } from "../SharedTypes";
 
 export interface LibraryItemProps {
-    libraryContainer: LibraryContainer,
+    libraryContainer: LibraryContainerHandle,
     data: LibraryUtilities.ItemData,
     showItemSummary: boolean,
     onItemWillExpand?: Function,
@@ -38,366 +38,319 @@ export interface LibraryItemState {
 }
 
 class GroupedItems {
-
     creates: LibraryUtilities.ItemData[] = [];
     actions: LibraryUtilities.ItemData[] = [];
     queries: LibraryUtilities.ItemData[] = [];
     others: LibraryUtilities.ItemData[] = [];
 
     constructor(items: LibraryUtilities.ItemData[]) {
-
         for (const element of items) {
-
             switch (element.itemType) {
                 case "create": this.creates.push(element); break;
                 case "action": this.actions.push(element); break;
-                case "query": this.queries.push(element); break;
-                default: this.others.push(element); break;
+                case "query":  this.queries.push(element); break;
+                default:       this.others.push(element);  break;
             }
-
         }
-
         this.creates = LibraryUtilities.sortItemsByText(this.creates);
         this.actions = LibraryUtilities.sortItemsByText(this.actions);
         this.queries = LibraryUtilities.sortItemsByText(this.queries);
-        this.others = LibraryUtilities.sortItemsByText(this.others);
+        this.others  = LibraryUtilities.sortItemsByText(this.others);
     }
 
     getCreateItems(): LibraryUtilities.ItemData[] { return this.creates; }
     getActionItems(): LibraryUtilities.ItemData[] { return this.actions; }
-    getQueryItems(): LibraryUtilities.ItemData[] { return this.queries; }
-    getOtherItems(): LibraryUtilities.ItemData[] { return this.others; }
+    getQueryItems():  LibraryUtilities.ItemData[] { return this.queries; }
+    getOtherItems():  LibraryUtilities.ItemData[] { return this.others;  }
 }
 
-export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemState> {
+export function LibraryItem(props: LibraryItemProps) {
+    const { libraryContainer, data, showItemSummary, onItemWillExpand, tooltipContent } = props;
 
-    constructor(props: LibraryItemProps) {
-        super(props);
+    const [expanded, setExpanded] = useState(data.expanded);
 
-        // All items are collapsed by default, except for section items
-        this.state = {
-            expanded: this.props.data.expanded,
-            itemSummaryExpanded: false
-        };
+    // DOM ref replaces findDOMNode(this)
+    const containerRef = useRef<HTMLDivElement>(null);
 
-        this.onLibraryItemClicked = this.onLibraryItemClicked.bind(this);
-        this.onLibraryItemMouseEnter = this.onLibraryItemMouseEnter.bind(this);
-        this.onLibraryItemMouseLeave = this.onLibraryItemMouseLeave.bind(this);
-        this.onSectionIconClicked = this.onSectionIconClicked.bind(this);
-        this.onSingleChildItemWillExpand = this.onSingleChildItemWillExpand.bind(this);
+    // Track previous data.expanded to detect prop-driven changes (componentDidUpdate)
+    const prevExpandedRef = useRef(data.expanded);
 
-    }
-
-    componentDidUpdate(prevProps: LibraryItemProps) {
-        if (prevProps.data.expanded !== this.props.data.expanded && 
-            this.props.libraryContainer.state.shouldOverrideExpandedState) {
-            this.setState({ expanded: this.props.data.expanded });
-        }
-    }
-
-    //Afer rendering each Library item, scroll to the expanded item
-    componentDidMount() {
-        if (this.props.data.expanded && this.props.data.itemType !== "coregroup") {
-            //scroll to only that element clicked from search. Determining that element from 
-            //other elements is little tricky. The idea here is, the element which has
-            //its child elements expanded to false is the actual element clicked from search. Scroll
-            //to that element.
-            let isThereChildItemsToExpand = this.props.data.childItems.filter((item: any) => {
-                return item.expanded == true;
-            });
-            if (isThereChildItemsToExpand.length == 0) {
+    // componentDidMount: scroll into view if initially expanded
+    useEffect(() => {
+        if (data.expanded && data.itemType !== "coregroup") {
+            const hasExpandedChildren = data.childItems.some((item: any) => item.expanded);
+            if (!hasExpandedChildren) {
                 setTimeout(() => {
-                    let elem = ReactDOM.findDOMNode(this);
-                    if (elem instanceof Element) {
-                        elem.scrollIntoView(false);
-                    }
+                    containerRef.current?.scrollIntoView(false);
                 }, 0);
             }
-
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    // componentDidUpdate: sync expanded state when data.expanded prop changes
+    useEffect(() => {
+        if (
+            prevExpandedRef.current !== data.expanded &&
+            libraryContainer.state?.shouldOverrideExpandedState
+        ) {
+            setExpanded(data.expanded);
+        }
+        prevExpandedRef.current = data.expanded;
+    }, [data.expanded, libraryContainer]);
+
+    // ── Visibility guard ─────────────────────────────────────────────────────
+
+    if (
+        libraryContainer.state?.hostingContext === HostingContextType.home &&
+        data.hiddenInWorkspaceContext
+    ) {
+        return null;
+    }
+    if (!data.visible) {
+        return null;
     }
 
-    render() {
-        if ((this.props.libraryContainer.state?.hostingContext == HostingContextType.home)
-            && this.props.data.hiddenInWorkspaceContext){
-              return null;  
-        }
-        if (!this.props.data.visible) {
-            return null;
-        }
+    // ── Event handlers ───────────────────────────────────────────────────────
 
-        let nestedElements: React.ReactNode = null;
-        let clusteredElements: React.ReactNode = null;
-        let bodyIndentation: string = "";
-        let header = this.getHeaderElement();
-
-        // visible only nested elements when expanded.
-        if (this.state.expanded && this.props.data.childItems.length > 0) {
-
-            // Break item list down into sub-lists based on the type of each item.
-            let groupedItems = new GroupedItems(LibraryUtilities.sortItemsByText(this.props.data.childItems));
-
-            // There are some leaf nodes (e.g. methods).
-            clusteredElements = this.getClusteredElements(groupedItems);
-
-            // There are intermediate child items.
-            nestedElements = this.getNestedElements(groupedItems);
-        }
-
-        // Indent one level for clustered and nested elements
-        if (nestedElements && ["group", "category"].includes(this.props.data.itemType)) {
-            bodyIndentation = `BodyIndentation`;
-        }
-
-        return (
-            <div className={this.getLibraryItemContainerStyle(this.state.expanded)}>
-                {header}
-                <div className={"LibraryItemBodyContainer"}>
-                    
-                    <div className={`LibraryItemBodyElements ${bodyIndentation}`} >
-                        {clusteredElements}
-                        {nestedElements}
-                    </div>
-                </div>
-            </div>
-        );
-    }
-
-    onImageLoadFail(event: any) {
+    function handleImageLoadFail(event: any) {
         event.target.orgSrc = event.target.src;
         event.target.src = require("../resources/icons/default-icon.svg");
     }
 
-    getIconElement(): React.ReactNode {
-        // Category type don't display any icon
-        if(this.props.data.itemType === "category"){
-            return null;
+    function handleItemClicked() {
+        if (data.text === "Add-ons") return;
+        const currentlyExpanded = expanded;
+        if (data.childItems.length > 0 && !currentlyExpanded && onItemWillExpand) {
+            onItemWillExpand(containerRef.current);
         }
+        setExpanded(!currentlyExpanded);
+        if (data.childItems.length === 0) {
+            libraryContainer.raiseEvent(
+                libraryContainer.props.libraryController.ItemClickedEventName,
+                data.contextData
+            );
+        }
+        libraryContainer.setShouldOverrideExpandedState?.(true);
+    }
 
-        // If the element type is a section, group, coregroup, class or none an icon shouldn't be displayed
-        if (this.props.data.itemType !== "group" && 
-        this.props.data.itemType !== "section" && 
-        this.props.data.itemType !== "coregroup" &&
-        this.props.data.itemType !== "classType" &&
-        this.props.data.itemType !== "none") {
+    function handleSectionIconClicked(event: any) {
+        libraryContainer.raiseEvent(
+            libraryContainer.props.libraryController.SectionIconClickedEventName,
+            data.text
+        );
+        event.stopPropagation();
+    }
+
+    function handleSingleChildItemWillExpand() {
+        setExpanded(true);
+    }
+
+    function handleMouseLeave() {
+        if (data.childItems.length === 0) {
+            libraryContainer.raiseEvent(
+                libraryContainer.props.libraryController.ItemMouseLeaveEventName,
+                { data: data.contextData }
+            );
+        }
+    }
+
+    function handleMouseEnter() {
+        if (data.childItems.length === 0 && containerRef.current) {
+            const rec = containerRef.current.getBoundingClientRect();
+            libraryContainer.raiseEvent(
+                libraryContainer.props.libraryController.ItemMouseEnterEventName,
+                { data: data.contextData, rect: rec, element: containerRef.current }
+            );
+        }
+    }
+
+    // ── Sub-element builders ─────────────────────────────────────────────────
+
+    function getIconElement(): React.ReactNode {
+        if (data.itemType === "category") return null;
+
+        if (
+            data.itemType !== "group" &&
+            data.itemType !== "section" &&
+            data.itemType !== "coregroup" &&
+            data.itemType !== "classType" &&
+            data.itemType !== "none"
+        ) {
             return (
                 <div className="LibraryItemIconWrapper">
                     <img
                         className={"LibraryItemIcon"}
-                        src={this.props.data.iconUrl}
-                        onError={this.onImageLoadFail}
+                        src={data.iconUrl}
+                        onError={handleImageLoadFail}
                     />
                 </div>
             );
         }
 
-         // If it is a section, display the icon (if given) and provide a click interaction.
-         //Add-ons have a different style. The icons opacity changes when hovering
-        if (this.props.data.itemType === "section" && this.props.data.text == "Add-ons" &&
-            this.props.data.iconUrl) {
-            return <img
-                className={"LibraryAddOnSectionIcon"}
-                src={this.props.data.iconUrl}
-                onError={this.onImageLoadFail}
-                onClick={this.onSectionIconClicked}
-                onKeyDown={this.onSectionIconClicked}
-            />;
-        }
-
-        // If it is a section, display the icon (if given) and provide a click interaction.
-        if (this.props.data.itemType === "section" && this.props.data.iconUrl) {
-            return <img
-                className={"LibraryItemIcon"}
-                src={this.props.data.iconUrl}
-                onError={this.onImageLoadFail}
-                onClick={this.onSectionIconClicked}
-                onKeyDown={this.onSectionIconClicked}
-            />;
-        }
-
-        return null;
-    }
-
-    // Show arrow for non-section, non-category and non-leaf items
-    getArrowElement(): React.ReactNode {
-        //no arrow for groups defined in layout spec
-        if (this.props.data.itemType === "section" || this.props.data.itemType === "coregroup" ) { 
-            return null;
-        }
-
-        if (this.props.data.childItems.length == 0) {
-            return null;
-        };
-
-        enum ArrowPositions {
-            "RIGTH" = "Right",
-            "DOWN" = "Down"
-        }
-
-        let arrowPosition = ArrowPositions.RIGTH;
-
-        if (this.state.expanded) {
-            arrowPosition = ArrowPositions.DOWN;
-        }
-        
-        if (this.props.data.itemType == "category") {
-            return <ArrowIcon position={arrowPosition} />;
-        }
-
-        return <ArrowIcon color="#D8D8D8" position={arrowPosition}/>;
-    }
-
-    getHeaderElement(): React.ReactNode {
-        let arrow = this.getArrowElement();
-        let iconElement = this.getIconElement();
-        let parameters: React.ReactNode = null;
-
-        if (this.props.data.parameters && this.props.data.parameters.length > 0 && this.props.data.childItems.length == 0) {
-            parameters = <span className="LibraryItemParameters">{this.props.data.parameters}</span>;
-        }
-
-        if (this.props.data.showHeader) {
+        if (data.itemType === "section" && data.text === "Add-ons" && data.iconUrl) {
             return (
-                <div className={this.getLibraryItemHeaderStyle()} 
-                    onClick={this.onLibraryItemClicked}
-                    onKeyDown={this.onLibraryItemClicked}
-                    onMouseEnter={this.onLibraryItemMouseEnter} onMouseLeave={this.onLibraryItemMouseLeave}>
-                    {arrow}
-                    {this.props.data.itemType === "section" ? null : iconElement}
-                    <div className="LibraryItemTextWrapper">
-                    <div className="TextBox">
-                        <span className={this.getLibraryItemTextStyle()}>{this.props.data.text}</span>
-                        {parameters}
-                    </div>
-                    </div>
-                    {this.props.data.itemType === "section" ? iconElement : null}
-                </div>
+                <img
+                    className={"LibraryAddOnSectionIcon"}
+                    src={data.iconUrl}
+                    onError={handleImageLoadFail}
+                    onClick={handleSectionIconClicked}
+                    onKeyDown={handleSectionIconClicked}
+                />
+            );
+        }
+
+        if (data.itemType === "section" && data.iconUrl) {
+            return (
+                <img
+                    className={"LibraryItemIcon"}
+                    src={data.iconUrl}
+                    onError={handleImageLoadFail}
+                    onClick={handleSectionIconClicked}
+                    onKeyDown={handleSectionIconClicked}
+                />
             );
         }
 
         return null;
     }
 
-    getLibraryItemContainerStyle(isExpanded : boolean): string {
-        let style : string = "";
-        switch (this.props.data.itemType) {
-            case "section":
-                style = "LibraryItemContainerSection";
-                break;
-            case "category":
-                style = "LibraryItemContainerCategory";
-                break;
-            case "group":
-            case "coregroup":
-                style = "LibraryItemContainerGroup";
-                break;
-            default:
-                style = "LibraryItemContainerNone";
-                break;
+    function getArrowElement(): React.ReactNode {
+        if (data.itemType === "section" || data.itemType === "coregroup") return null;
+        if (data.childItems.length === 0) return null;
+
+        enum ArrowPositions {
+            "RIGTH" = "Right",
+            "DOWN"  = "Down"
         }
 
-        if(isExpanded)
-            style += " expanded";
+        const arrowPosition = expanded ? ArrowPositions.DOWN : ArrowPositions.RIGTH;
 
+        if (data.itemType === "category") {
+            return <ArrowIcon position={arrowPosition} />;
+        }
+        return <ArrowIcon color="#D8D8D8" position={arrowPosition} />;
+    }
+
+    function getLibraryItemContainerStyle(isExpanded: boolean): string {
+        let style: string;
+        switch (data.itemType) {
+            case "section":  style = "LibraryItemContainerSection"; break;
+            case "category": style = "LibraryItemContainerCategory"; break;
+            case "group":
+            case "coregroup": style = "LibraryItemContainerGroup"; break;
+            default: style = "LibraryItemContainerNone"; break;
+        }
+        if (isExpanded) style += " expanded";
         return style;
     }
 
-    getLibraryItemHeaderStyle(): string {
-        if (this.props.data.itemType === "section") {
-            return "LibrarySectionHeader";
-        } else {
-            return "LibraryItemHeader";
-        }
+    function getLibraryItemHeaderStyle(): string {
+        return data.itemType === "section" ? "LibrarySectionHeader" : "LibraryItemHeader";
     }
 
-    getLibraryItemTextStyle(): string {
-        switch (this.props.data.itemType) {
+    function getLibraryItemTextStyle(): string {
+        switch (data.itemType) {
             case "group":
             case "coregroup":
-            case "section":
-                return "LibraryItemGroupText";
-            default:
-                return "LibraryItemText";
+            case "section": return "LibraryItemGroupText";
+            default:        return "LibraryItemText";
         }
     }
 
-    getNestedElements(groupedItems: GroupedItems): React.ReactNode {
+    function getHeaderElement(): React.ReactNode {
+        if (!data.showHeader) return null;
 
-        let regularItems = groupedItems.getOtherItems();
-        if (regularItems.length <= 0) {
-            return null; // No item to be generated.
+        const arrow = getArrowElement();
+        const iconElement = getIconElement();
+        let parameters: React.ReactNode = null;
+        if (data.parameters && data.parameters.length > 0 && data.childItems.length === 0) {
+            parameters = <span className="LibraryItemParameters">{data.parameters}</span>;
         }
 
-        let index = 0;
         return (
-            <div className={"LibraryItemBody"}>
-                {
-                    // 'getNestedElements' method is meant to render all other 
-                    // types of items except ones of type create/action/query.
-                    regularItems.map((item, i) => {
-                        return (<LibraryItem
-                            key={index++}
-                            libraryContainer={this.props.libraryContainer}
-                            data={item}
-                            showItemSummary={this.props.showItemSummary}
-                            onItemWillExpand={(args: any) => {
-                                this.onSingleChildItemWillExpand();
-                                this.props.libraryContainer.scrollToExpandedItem(args)
-                            }}
-                            tooltipContent={this.props.tooltipContent}
-                        />);
-                    })
-                }
+            <div
+                className={getLibraryItemHeaderStyle()}
+                onClick={handleItemClicked}
+                onKeyDown={handleItemClicked}
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+            >
+                {arrow}
+                {data.itemType === "section" ? null : iconElement}
+                <div className="LibraryItemTextWrapper">
+                    <div className="TextBox">
+                        <span className={getLibraryItemTextStyle()}>{data.text}</span>
+                        {parameters}
+                    </div>
+                </div>
+                {data.itemType === "section" ? iconElement : null}
             </div>
         );
     }
 
-    getClusteredElements(groupedItems: GroupedItems): React.ReactNode {
+    function getNestedElements(groupedItems: GroupedItems): React.ReactNode {
+        const regularItems = groupedItems.getOtherItems();
+        if (regularItems.length <= 0) return null;
+        let index = 0;
+        return (
+            <div className={"LibraryItemBody"}>
+                {regularItems.map((item) => (
+                    <LibraryItem
+                        key={index++}
+                        libraryContainer={libraryContainer}
+                        data={item}
+                        showItemSummary={showItemSummary}
+                        onItemWillExpand={(args: any) => {
+                            handleSingleChildItemWillExpand();
+                            libraryContainer.scrollToExpandedItem(args);
+                        }}
+                        tooltipContent={tooltipContent}
+                    />
+                ))}
+            </div>
+        );
+    }
 
+    function getClusteredElements(groupedItems: GroupedItems): React.ReactNode {
         const createMethods = groupedItems.getCreateItems();
         const actionMethods = groupedItems.getActionItems();
-        const queryMethods = groupedItems.getQueryItems();
+        const queryMethods  = groupedItems.getQueryItems();
 
-        let createCluster: React.ReactNode = null;
-
-        if (createMethods.length > 0 && createMethods.some(item => item.visible)) {
-            createCluster = (<ClusterView
-                libraryContainer={this.props.libraryContainer}
+        const createCluster = createMethods.length > 0 && createMethods.some(i => i.visible)
+            ? <ClusterView
+                libraryContainer={libraryContainer}
                 icon={require("../resources/icons/library-create.svg")}
                 clusterType="create"
-                showItemSummary={this.props.showItemSummary}
-                childItems={createMethods} 
-                tooltipContent={this.props?.tooltipContent["create"]}
-                />);
-        }
+                showItemSummary={showItemSummary}
+                childItems={createMethods}
+                tooltipContent={tooltipContent?.["create"]}
+            />
+            : null;
 
-        let actionCluster: React.ReactNode = null;
-        if (actionMethods.length > 0 && actionMethods.some(item => item.visible)) {
-            actionCluster = (<ClusterView
-                libraryContainer={this.props.libraryContainer}
+        const actionCluster = actionMethods.length > 0 && actionMethods.some(i => i.visible)
+            ? <ClusterView
+                libraryContainer={libraryContainer}
                 icon={require("../resources/icons/library-action.svg")}
                 clusterType="action"
-                showItemSummary={this.props.showItemSummary}
-                childItems={actionMethods} 
-                tooltipContent={this.props?.tooltipContent["action"]}
-                />);
-        }
+                showItemSummary={showItemSummary}
+                childItems={actionMethods}
+                tooltipContent={tooltipContent?.["action"]}
+            />
+            : null;
 
-        let queryCluster: React.ReactNode = null;
-        if (queryMethods.length > 0 && queryMethods.some(item => item.visible)) {
-            queryCluster = (<ClusterView
-                libraryContainer={this.props.libraryContainer}
+        const queryCluster = queryMethods.length > 0 && queryMethods.some(i => i.visible)
+            ? <ClusterView
+                libraryContainer={libraryContainer}
                 icon={require("../resources/icons/library-query.svg")}
                 clusterType="query"
-                showItemSummary={this.props.showItemSummary}
-                childItems={queryMethods} 
-                tooltipContent={this.props?.tooltipContent["query"]}
-                />);
-        }
+                showItemSummary={showItemSummary}
+                childItems={queryMethods}
+                tooltipContent={tooltipContent?.["query"]}
+            />
+            : null;
 
-        if ((!createCluster) && (!actionCluster) && (!queryCluster)) {
-            return null; // No cluster should be generated.
-        }
+        if (!createCluster && !actionCluster && !queryCluster) return null;
 
         return (
             <div className={"LibraryItemBody"}>
@@ -408,65 +361,31 @@ export class LibraryItem extends React.Component<LibraryItemProps, LibraryItemSt
         );
     }
 
-    onLibraryItemClicked() {
-        //https://jira.autodesk.com/browse/QNTM-2975
-        //Add-ons section is always expanded.
-        if(this.props.data.text == "Add-ons") return;
-        // Toggle expansion state.
-        let currentlyExpanded = this.state.expanded;
-        if (this.props.data.childItems.length > 0 && !currentlyExpanded && this.props.onItemWillExpand) {
-            this.props.onItemWillExpand(ReactDOM.findDOMNode(this));
-        }
-        this.setState({ expanded: !currentlyExpanded });
-        //auto expand the coregroup elements
-        //commenting as part of the task : https://jira.autodesk.com/browse/QNTM-2975
-        // if(this.props.data.itemType === "category" ) {
-        //     this.props.data.childItems.forEach((item: any) => {
-        //         if(item.itemType == "coregroup"){
-        //             item.expanded = true;
-        //         }
-        //     });
-        // }
+    // ── Render ───────────────────────────────────────────────────────────────
 
-        let libraryContainer = this.props.libraryContainer;
-        if (this.props.data.childItems.length == 0) {
-            libraryContainer.raiseEvent(libraryContainer.props.libraryController.ItemClickedEventName,
-                this.props.data.contextData);
-        }
-        //not ideal, but we set the state without setState here to avoid triggering a render so
-        //that the item we just clicked will stay expanded.
-        // @ts-ignore 
-        this.props.libraryContainer.state.shouldOverrideExpandedState = true
+    let nestedElements: React.ReactNode = null;
+    let clusteredElements: React.ReactNode = null;
+    let bodyIndentation = "";
+
+    if (expanded && data.childItems.length > 0) {
+        const groupedItems = new GroupedItems(LibraryUtilities.sortItemsByText(data.childItems));
+        clusteredElements = getClusteredElements(groupedItems);
+        nestedElements    = getNestedElements(groupedItems);
     }
 
-    onSectionIconClicked(event: any) {
-        let libraryContainer = this.props.libraryContainer;
-        libraryContainer.raiseEvent(libraryContainer.props.libraryController.SectionIconClickedEventName, this.props.data.text);
-        event.stopPropagation(); // Prevent the onClick event of its parent item from being called.
+    if (nestedElements && ["group", "category"].includes(data.itemType)) {
+        bodyIndentation = "BodyIndentation";
     }
 
-    onSingleChildItemWillExpand() {
-        //"this" here refers to the parent library item, and will expand it and kick off a render cycle
-        //for all children below it.
-        this.setState({ expanded: true }); // Make the current item (parent) expanded.
-    }
-    onLibraryItemMouseLeave() {
-        let libraryContainer = this.props.libraryContainer;
-        if (this.props.data.childItems.length == 0) {
-            let mouseLeaveEvent = libraryContainer.props.libraryController.ItemMouseLeaveEventName;
-            libraryContainer.raiseEvent(mouseLeaveEvent, { data: this.props.data.contextData });
-        }
-    }
-
-    onLibraryItemMouseEnter() {
-        let libraryContainer = this.props.libraryContainer;
-        if (this.props.data.childItems.length == 0) {
-            let domNode = ReactDOM.findDOMNode(this);
-            if (domNode instanceof Element) {
-                let rec = domNode.getBoundingClientRect();
-                let mouseEnterEvent = libraryContainer.props.libraryController.ItemMouseEnterEventName;
-                libraryContainer.raiseEvent(mouseEnterEvent, { data: this.props.data.contextData, rect: rec, element: domNode });
-            }
-        }
-    }
+    return (
+        <div ref={containerRef} className={getLibraryItemContainerStyle(expanded)}>
+            {getHeaderElement()}
+            <div className={"LibraryItemBodyContainer"}>
+                <div className={`LibraryItemBodyElements ${bodyIndentation}`}>
+                    {clusteredElements}
+                    {nestedElements}
+                </div>
+            </div>
+        </div>
+    );
 }

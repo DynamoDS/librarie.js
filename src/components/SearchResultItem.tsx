@@ -1,8 +1,8 @@
 /// <reference path="../../node_modules/@types/node/index.d.ts" />
 
 import * as React from "react";
-import * as ReactDOM from "react-dom";
-import { LibraryContainer } from "./LibraryContainer";
+import { useRef, useState, useEffect, forwardRef, useImperativeHandle } from "react";
+import type { LibraryContainerHandle } from "./LibraryContainer";
 import * as LibraryUtilities from "../LibraryUtilities";
 import { HostingContextType } from "../SharedTypes";
 
@@ -11,175 +11,176 @@ type ParentTextClickedFunc = (pathToItem: LibraryUtilities.ItemData[]) => void;
 interface SearchResultItemProps {
     index: number,
     data: LibraryUtilities.ItemData,
-    libraryContainer: LibraryContainer,
+    libraryContainer: LibraryContainerHandle,
     highlightedText: string;
     detailed: boolean;
     onParentTextClicked: ParentTextClickedFunc,
 }
 
-interface SearchResultItemStates {
-    selected: boolean,
-    itemSummaryExpanded: boolean
+export interface SearchResultItemHandle {
+    setSelected(selected: boolean): void;
 }
 
-export class SearchResultItem extends React.Component<SearchResultItemProps, SearchResultItemStates> {
+export const SearchResultItem = forwardRef<SearchResultItemHandle, SearchResultItemProps>(
+    function SearchResultItem(props, ref) {
+        const { index, data, libraryContainer, highlightedText, detailed } = props;
 
-    constructor(props: SearchResultItemProps) {
-        super(props);
-        this.state = {
-            selected: this.props.index == this.props.libraryContainer.selectionIndex,
-            itemSummaryExpanded: false
-        };
-        this.handleKeyDown = this.handleKeyDown.bind(this);
-        this.setSelected = this.setSelected.bind(this);
-    }
+        const [selected, setSelectedState] = useState(
+            () => index === (libraryContainer.selectionIndex ?? 0)
+        );
 
-    componentDidMount() {
-        window.addEventListener("keydown", this.handleKeyDown);
-    }
+        // DOM ref replacing findDOMNode(this)
+        const containerRef = useRef<HTMLDivElement>(null);
 
-    componentWillUnmount() {
-        window.removeEventListener("keydown", this.handleKeyDown);
-    }
-
-    // Update selection state and scroll current item into view if the selected item is not in view yet.
-    componentDidUpdate() {
-        if (this.state.selected) {
-            let container = ReactDOM.findDOMNode(this.props.libraryContainer);
-            let currentItem = ReactDOM.findDOMNode(this);
-            
-            // Type guard to ensure we have Elements, not Text nodes
-            if (!(container instanceof Element) || !(currentItem instanceof Element)) {
-                return;
+        // Expose setSelected for LibraryContainer keyboard navigation
+        useImperativeHandle(ref, () => ({
+            setSelected(value: boolean) {
+                setSelectedState(value);
             }
-            
-            let containerRect = container.getBoundingClientRect();
-            let currentRect = currentItem.getBoundingClientRect();
+        }));
+
+        // Re-register handler on every render so it always reads latest `selected`.
+        // This replaces the componentDidMount/componentWillUnmount pattern while
+        // avoiding the stale-closure issue the class component had.
+        useEffect(() => {
+            function handleKeyDown(event: KeyboardEvent) {
+                if (event.key === "Enter" && selected) {
+                    handleItemClicked();
+                }
+            }
+            window.addEventListener("keydown", handleKeyDown);
+            return () => window.removeEventListener("keydown", handleKeyDown);
+        });
+
+        // Scroll selected item into view (replaces componentDidUpdate)
+        useEffect(() => {
+            if (!selected) return;
+            const container = libraryContainer.getContainerElement();
+            const currentItem = containerRef.current;
+            if (!container || !currentItem) return;
+
+            const containerRect = container.getBoundingClientRect();
+            const currentRect = currentItem.getBoundingClientRect();
 
             if (currentRect.top < currentRect.height) {
                 currentItem.scrollIntoView();
             }
-
             if (currentRect.bottom > containerRect.bottom) {
                 currentItem.scrollIntoView(false);
             }
-        }
-    }
+        });
 
-    handleKeyDown(event: any) {
-        if(event.key !== "Enter") return;
-        // Allow node creation by pressing enter key
-        if (this.state.selected) {
-            this.onItemClicked();
-        }
-    }
-    setSelected(selected: boolean) {
-        this.setState({ selected: selected });
-    }
-
-    render() {
-
-        if ((this.props.libraryContainer.state.hostingContext == HostingContextType.home)
-            && this.props.data.hiddenInWorkspaceContext){
-              return null;  
+        function handleImageLoadFail(event: any) {
+            event.target.src = require("../resources/icons/default-icon.svg");
         }
 
-        let ItemContainerStyle = this.state.selected ? "SearchResultItemContainerSelected" : "SearchResultItemContainer";
-        let iconPath = this.props.data.iconUrl;
-
-		// Render the element only if the search element is a not a library section.
-		// In the case where the search element is a library section, the pathToItem list may not have any child elements and should not displayed in search results.
-        if(this.props.data.itemType !== "section" && this.props.data.pathToItem.length - 2 > 0)
-		{
-			// The parent of a search result item is the second last entry in 'pathToItem'
-			let parentText = this.props.data.pathToItem[this.props.data.pathToItem.length - 2].text;
-			
-			// Category of the item is the item with type category in the array pathToItem
-			let categoryText = this.props.data.pathToItem.find(item => item.itemType === "category")?.text ?? "";
-			let parameters = this.props.data.parameters;
-			let highLightedItemText = LibraryUtilities.getHighlightedText(this.props.data.text, this.props.highlightedText, true);
-			let highLightedParentText = LibraryUtilities.getHighlightedText(parentText, this.props.highlightedText, false);
-			let highLightedCategoryText = LibraryUtilities.getHighlightedText(categoryText, this.props.highlightedText, false);
-			let itemTypeIconPath = require(`../resources/icons/library-${this.props.data.itemType}.svg`)
-			let itemDescription: React.ReactNode = null;
-				
-			if (this.props.detailed) {
-					let description = "No description available";
-					if (this.props.data.description && this.props.data.description.length > 0) {
-						description = this.props.data.description;
-					}
-
-					itemDescription = <div className={"ItemDescription"}>{description}</div>;
-				}
-
-			return (
-				<div className={ItemContainerStyle} 
-                    onClick={this.onItemClicked.bind(this)}
-                    onKeyDown={this.onItemClicked.bind(this)}
-					onMouseEnter={this.onLibraryItemMouseEnter.bind(this)}
-                    onMouseLeave={this.onLibraryItemMouseLeave.bind(this)}
-                >
-					<img className={"ItemIcon"} src={iconPath} onError={this.onImageLoadFail.bind(this)} />
-					<div className={"ItemInfo"}>
-						<div className={"ItemTitle"}>{highLightedItemText}
-							<div className={"LibraryItemParameters"}>{parameters}</div>
-						</div>
-						{itemDescription}
-						<div className={"ItemDetails"}>
-							<div className={"ItemParent"} 
-                                onClick={this.onParentTextClicked.bind(this)}
-                                onKeyDown={this.onParentTextClicked.bind(this)}
-                            >
-								{highLightedParentText}
-							</div>
-							<img className={"ItemTypeIcon"} src={itemTypeIconPath} onError={this.onImageLoadFail.bind(this)} />
-							<div className={"ItemCategory"}>{highLightedCategoryText}</div>
-						</div>
-					</div>
-				</div>
-			);	
-		}
-		else
-		{
-			return (
-				<div></div>
-			);
-		}
-    }
-
-    onImageLoadFail(event: any) {
-        event.target.src = require("../resources/icons/default-icon.svg");
-    }
-
-    onParentTextClicked(event: any) {
-        event.stopPropagation();
-        this.onLibraryItemMouseLeave(); // Floating toolTip should be dismissed when clicking on parent text
-        this.props.onParentTextClicked(this.props.data.pathToItem);
-    }
-
-    onItemClicked() {
-        // Update selection index when an item is clicked
-        this.props.libraryContainer.setSelection(this.props.index);
-        this.props.libraryContainer.raiseEvent("itemClicked", this.props.data.contextData);
-    };
-
-    onLibraryItemMouseLeave() {
-        let libraryContainer = this.props.libraryContainer;
-        if (this.props.data.childItems.length == 0) {
-            let mouseLeaveEvent = libraryContainer.props.libraryController.ItemMouseLeaveEventName;
-            libraryContainer.raiseEvent(mouseLeaveEvent, { data: this.props.data.contextData });
+        function handleItemClicked() {
+            libraryContainer.setSelection(index);
+            libraryContainer.raiseEvent("itemClicked", data.contextData);
         }
-    }
 
-    onLibraryItemMouseEnter() {
-        let libraryContainer = this.props.libraryContainer;
-        if (this.props.data.childItems.length == 0) {
-            let domNode = ReactDOM.findDOMNode(this);
-            if (domNode instanceof Element) {
-                let rec = domNode.getBoundingClientRect();
-                let mouseEnterEvent = libraryContainer.props.libraryController.ItemMouseEnterEventName;
-                libraryContainer.raiseEvent(mouseEnterEvent, { data: this.props.data.contextData, rect: rec, element: domNode });
+        function handleMouseLeave() {
+            if (data.childItems.length === 0) {
+                libraryContainer.raiseEvent(
+                    libraryContainer.props.libraryController.ItemMouseLeaveEventName,
+                    { data: data.contextData }
+                );
             }
         }
+
+        function handleMouseEnter() {
+            if (data.childItems.length === 0 && containerRef.current) {
+                const rec = containerRef.current.getBoundingClientRect();
+                libraryContainer.raiseEvent(
+                    libraryContainer.props.libraryController.ItemMouseEnterEventName,
+                    { data: data.contextData, rect: rec, element: containerRef.current }
+                );
+            }
+        }
+
+        function handleParentTextClicked(event: React.MouseEvent | React.KeyboardEvent) {
+            event.stopPropagation();
+            handleMouseLeave(); // dismiss tooltip
+            props.onParentTextClicked(data.pathToItem);
+        }
+
+        if (
+            libraryContainer.state?.hostingContext === HostingContextType.home &&
+            data.hiddenInWorkspaceContext
+        ) {
+            return null;
+        }
+
+        const itemContainerStyle = selected
+            ? "SearchResultItemContainerSelected"
+            : "SearchResultItemContainer";
+
+        if (data.itemType !== "section" && data.pathToItem.length - 2 > 0) {
+            const parentText = data.pathToItem[data.pathToItem.length - 2].text;
+            const categoryText =
+                data.pathToItem.find(item => item.itemType === "category")?.text ?? "";
+            const highLightedItemText = LibraryUtilities.getHighlightedText(
+                data.text, highlightedText, true
+            );
+            const highLightedParentText = LibraryUtilities.getHighlightedText(
+                parentText, highlightedText, false
+            );
+            const highLightedCategoryText = LibraryUtilities.getHighlightedText(
+                categoryText, highlightedText, false
+            );
+            const itemTypeIconPath = require(`../resources/icons/library-${data.itemType}.svg`);
+
+            let itemDescription: React.ReactNode = null;
+            if (detailed) {
+                const description =
+                    data.description && data.description.length > 0
+                        ? data.description
+                        : "No description available";
+                itemDescription = <div className={"ItemDescription"}>{description}</div>;
+            }
+
+            return (
+                <div
+                    ref={containerRef}
+                    className={itemContainerStyle}
+                    onClick={handleItemClicked}
+                    onKeyDown={handleItemClicked}
+                    onMouseEnter={handleMouseEnter}
+                    onMouseLeave={handleMouseLeave}
+                >
+                    <img
+                        className={"ItemIcon"}
+                        src={data.iconUrl}
+                        onError={handleImageLoadFail}
+                    />
+                    <div className={"ItemInfo"}>
+                        <div className={"ItemTitle"}>
+                            {highLightedItemText}
+                            <div className={"LibraryItemParameters"}>{data.parameters}</div>
+                        </div>
+                        {itemDescription}
+                        <div className={"ItemDetails"}>
+                            <div
+                                className={"ItemParent"}
+                                onClick={handleParentTextClicked}
+                                onKeyDown={handleParentTextClicked}
+                            >
+                                {highLightedParentText}
+                            </div>
+                            <img
+                                className={"ItemTypeIcon"}
+                                src={itemTypeIconPath}
+                                onError={handleImageLoadFail}
+                            />
+                            <div className={"ItemCategory"}>{highLightedCategoryText}</div>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        return <div ref={containerRef} />;
     }
-}
+);
+
+SearchResultItem.displayName = "SearchResultItem";

@@ -1,131 +1,105 @@
 import * as React from 'react';
+import { useRef, useState, useEffect, useCallback } from 'react';
 import { ItemData } from "../LibraryUtilities";
-import { LibraryContainer } from "./LibraryContainer";
+import type { LibraryContainerHandle } from "./LibraryContainer";
 
 /**
- * 'ItemSummary' can optionally display the description text. In regular library 
- * view the description text is always shown as part of 'ItemSummary' when it is 
- * expanded. In search result view however, 'ItemSummary' does not display its 
+ * 'ItemSummary' can optionally display the description text. In regular library
+ * view the description text is always shown as part of 'ItemSummary' when it is
+ * expanded. In search result view however, 'ItemSummary' does not display its
  * description text as each search result item already displays the same description
- * text (in detailed view), in which case 'showDescription' property is set to false. 
+ * text (in detailed view), in which case 'showDescription' property is set to false.
  */
 interface ItemSummaryProps {
-    libraryContainer: LibraryContainer,
+    libraryContainer: LibraryContainerHandle,
     data: ItemData;
     showDescription: boolean;
 }
 
-interface ItemSummaryStates {
-    hasSummaryData: boolean;
-}
+export function ItemSummary({ libraryContainer, data, showDescription }: ItemSummaryProps) {
+    const [hasSummaryData, setHasSummaryData] = useState(false);
+    const summaryData = useRef<any>(null);
 
-export class ItemSummary extends React.Component<ItemSummaryProps, ItemSummaryStates> {
-    summaryData: any;
-
-    constructor(props: ItemSummaryProps) {
-        super(props);
-        this.state = ({ hasSummaryData: false });
-        this.summaryData = null;
-        this.setItemSummary = this.setItemSummary.bind(this);
-    }
-
-    render() {
-        this.fetchMissingItemSummary();
-
-        let descriptionText = this.props.data.description;
-        let input: React.ReactNode[] = [];
-        let output: React.ReactNode = null;
-        let description: React.ReactNode = null;
-        let icon: React.ReactNode = null;
-
-        if (this.state.hasSummaryData) {
-            let inputParameters = this.summaryData.InputParameters;
-            let outputParameters = this.summaryData.OutputParameters;
-            let descriptionTextReceived = this.summaryData.Description;
-
-            for (let inputParameter of inputParameters) {
-                let inputParameterName = inputParameter.name
-                if (inputParameterName.length > 0) {
-                    inputParameterName += ": ";
-                }
-
-                input.push(<div className={"IOParameter"}>{inputParameterName}{inputParameter.type}</div>);
-            }
-
-            output = <div className={"IOParameter"}>{outputParameters}</div>;
-
-            if (descriptionTextReceived.length > 0) {
-                descriptionText = descriptionTextReceived;
-            } else {
-                descriptionText = this.props.data.description;
-            }
+    /**
+     * Set data for displaying ItemSummary.
+     * Expected JSON format:
+     * {
+     *   "inputParameters": [{ "name": "c1", "type": "Color" }, ...],
+     *   "outputParameters": ["Color"],
+     *   "description": "..."
+     * }
+     */
+    const setItemSummary = useCallback((rawData: any) => {
+        const parsed = JSON.parse(rawData);
+        if (parsed.inputParameters && parsed.outputParameters && parsed.description) {
+            summaryData.current = parsed;
+            setHasSummaryData(true);
         }
+    }, []);
 
-        if (!descriptionText) {
-            descriptionText = this.state.hasSummaryData ? "No description available" : "Fetching summary...";
+    // Raise event to fetch summary data (replaces fetchMissingItemSummary in render)
+    useEffect(() => {
+        if (!hasSummaryData) {
+            const eventName =
+                libraryContainer.props.libraryController.ItemSummaryExpandedEventName;
+            libraryContainer.raiseEvent(eventName, {
+                setDataCallback: setItemSummary,
+                contextData: data.contextData
+            });
         }
+    }, [hasSummaryData, libraryContainer, data.contextData, setItemSummary]);
 
-        if (this.props.showDescription) {
-            description = <div className={"Description"}>{descriptionText}</div>;
-        }
-
-        return (
-            <div className={"LibraryItemSummary"}>
-                <div className={"LeftPane"}>
-                    {description}
-                    <div className={"Input"}>INPUT</div>
-                    {input}
-                    <div className={"Output"}>OUTPUT</div>
-                    {output}
-                </div>
-                <img className={"Icon"} src={this.props.data.iconUrl} onError={this.onImageLoadFail} />;
-            </div>
-        );
-    }
-
-    onImageLoadFail(event: any) {
+    function onImageLoadFail(event: any) {
         event.target.src = require("../resources/icons/default-icon.svg");
     }
 
-    // Raise event to get data if there is no data yet.
-    fetchMissingItemSummary() {
-        if (!this.state.hasSummaryData) {
-            let libraryContainer = this.props.libraryContainer;
-            let itemSummaryExpandedEvent = libraryContainer.props.libraryController.ItemSummaryExpandedEventName;
-            libraryContainer.raiseEvent(
-                itemSummaryExpandedEvent,
-                { setDataCallback: this.setItemSummary, contextData: this.props.data.contextData }
-            );
+    let descriptionText = data.description;
+    const input: React.ReactNode[] = [];
+    let output: React.ReactNode = null;
+    let description: React.ReactNode = null;
+
+    if (hasSummaryData && summaryData.current) {
+        const inputParameters  = summaryData.current.InputParameters;
+        const outputParameters = summaryData.current.OutputParameters;
+        const descriptionReceived = summaryData.current.Description;
+
+        if (inputParameters) {
+            for (const inputParameter of inputParameters) {
+                let inputParameterName = inputParameter.name;
+                if (inputParameterName.length > 0) inputParameterName += ": ";
+                input.push(
+                    <div className={"IOParameter"}>
+                        {inputParameterName}{inputParameter.type}
+                    </div>
+                );
+            }
+        }
+
+        output = <div className={"IOParameter"}>{outputParameters}</div>;
+
+        if (descriptionReceived && descriptionReceived.length > 0) {
+            descriptionText = descriptionReceived;
         }
     }
 
-    /**
-     * Set data for displaying ItemSummary
-     * @param data The data received should in the following format: 
-     * 
-     * {
-     *   "inputParameters":[
-     *      {
-     *          "name":"c1",
-     *          "type":"Color"
-     *      },
-     *      {
-     *          "name":"c2",
-     *          "type":"Color"
-     *      }
-     *   ],
-     *   "outputParameters":[
-     *      "Color"
-     *   ],
-     *   "description": "Construct a Color by combining two input Colors."
-     * }
-     * 
-     */
-    setItemSummary(data: any) {
-        let summaryData = JSON.parse(data);
-        if (summaryData.inputParameters && summaryData.outputParameters && summaryData.description) {
-            this.summaryData = summaryData;
-            this.setState({ hasSummaryData: true });
-        }
+    if (!descriptionText) {
+        descriptionText = hasSummaryData ? "No description available" : "Fetching summary...";
     }
+
+    if (showDescription) {
+        description = <div className={"Description"}>{descriptionText}</div>;
+    }
+
+    return (
+        <div className={"LibraryItemSummary"}>
+            <div className={"LeftPane"}>
+                {description}
+                <div className={"Input"}>INPUT</div>
+                {input}
+                <div className={"Output"}>OUTPUT</div>
+                {output}
+            </div>
+            <img className={"Icon"} src={data.iconUrl} onError={onImageLoadFail} />;
+        </div>
+    );
 }

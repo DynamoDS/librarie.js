@@ -3,13 +3,14 @@
 require("../resources/LibraryStyles.css");
 
 import * as React from "react";
+import { useRef, useState, useCallback, useReducer } from "react";
 import * as LibraryUtilities from "../LibraryUtilities";
 import { LibraryController } from "../entry-point";
 import { LibraryItem } from "./LibraryItem";
 import { Searcher } from "../Searcher";
 import { SearchBar, CategoryData } from "./SearchBar";
 import { SearchResultItem } from "./SearchResultItem";
-import * as ReactDOM from "react-dom";
+import type { SearchResultItemHandle } from "./SearchResultItem";
 import { HostingContextType } from "../SharedTypes";
 
 declare global {
@@ -19,8 +20,8 @@ declare global {
 declare let boundContainer: any; // Object set from C# side.
 
 enum ClusterTypeDescription {
-    create = "Nodes that create data", 
-    action = "Nodes that execute an action", 
+    create = "Nodes that create data",
+    action = "Nodes that execute an action",
     query = "Nodes that query data"
 }
 
@@ -42,405 +43,376 @@ export interface LibraryContainerStates {
         action: string;
         query: string;
     }
-    /**
-     * context that the library is currently displayed in, currently used to hide
-     * some loadedtypes in certain contexts.
-     */
-    hostingContext:HostingContextType
-    /**
-     * used to control legacy props overriding state behavior. (see UNSAFE_componentWillMount)
-     * TODO (get rid of this and the unsafe lifecycle hook while retaining behavior.)
-     */
-    shouldOverrideExpandedState:boolean
+    hostingContext: HostingContextType
+    shouldOverrideExpandedState: boolean
 }
 
-export class LibraryContainer extends React.Component<LibraryContainerProps, LibraryContainerStates> {
+export interface LibraryContainerHandle {
+    readonly state: LibraryContainerStates;
+    readonly selectionIndex: number;
+    readonly props: LibraryContainerProps;
+    setSelection(index: number): void;
+    raiseEvent(name: string, params?: any): void;
+    scrollToExpandedItem(element: HTMLElement | null): void;
+    getContainerElement(): Element | null;
+    setShouldOverrideExpandedState(value: boolean): void;
+}
 
-    loadedTypesJson: any = null;
-    layoutSpecsJson: any = null;
+export function LibraryContainer(props: LibraryContainerProps) {
+    // ── React state (triggers re-renders) ────────────────────────────────────
+    const [inSearchMode, setInSearchMode] = useState(false);
+    const [searchText, setSearchText] = useState('');
+    const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+    const [structured] = useState(false); // feature exists but is never toggled
+    const [detailed, setDetailed] = useState(false);
+    const [showItemSummary] = useState(false);
+    const [tooltipContent, setTooltipContent] = useState({
+        create: ClusterTypeDescription.create,
+        action: ClusterTypeDescription.action,
+        query: ClusterTypeDescription.query
+    });
+    const [hostingContext, setHostingContext] = useState<HostingContextType>("none");
+    const [generatedSections, setGeneratedSections] = useState<LibraryUtilities.ItemData[] | null>(null);
 
-    generatedSections: LibraryUtilities.ItemData[] | null = null;
-    generatedSectionsOnSearch: LibraryUtilities.ItemData[] | null = null;
-    searchResultItemRefs: SearchResultItem[] = [];
-    searchResultItems: LibraryUtilities.ItemData[] = [];
+    // ── Instance-variable refs (no re-render on change) ──────────────────────
+    const loadedTypesJsonRef = useRef<any>(null);
+    const layoutSpecsJsonRef = useRef<any>(null);
+    const generatedSectionsRef = useRef<LibraryUtilities.ItemData[] | null>(null);
+    const generatedSectionsOnSearchRef = useRef<LibraryUtilities.ItemData[] | null>(null);
+    const searchResultItemRefsRef = useRef<SearchResultItemHandle[]>([]);
+    const searchResultItemsRef = useRef<LibraryUtilities.ItemData[]>([]);
+    const searcherRef = useRef<Searcher | null>(new Searcher());
+    const searchCategoriesRef = useRef<string[]>([]);
+    const timeoutRef = useRef<number>(0);
+    const selectionIndexRef = useRef<number>(0);
+    const shouldOverrideRef = useRef<boolean>(true);
+    const containerDivRef = useRef<HTMLDivElement>(null);
 
-    searcher: Searcher | null = null;
-    searchCategories: string[] = [];
-    timeout: number;
-    selectionIndex: number = 0;
+    // Keep props/state accessible to the stable handle without re-creating it
+    const propsRef = useRef(props);
+    propsRef.current = props;
 
-    constructor(props: LibraryContainerProps) {
-        super(props);
+    const stateRef = useRef<LibraryContainerStates>({} as LibraryContainerStates);
+    stateRef.current = {
+        inSearchMode, searchText, selectedCategories, structured, detailed,
+        showItemSummary, tooltipContent, hostingContext,
+        shouldOverrideExpandedState: shouldOverrideRef.current
+    };
 
-        // Bind function prototypes to the object instance.
-        this.setLoadedTypesJson = this.setLoadedTypesJson.bind(this);
-        this.setLayoutSpecsJson = this.setLayoutSpecsJson.bind(this);
-        this.refreshLibraryView = this.refreshLibraryView.bind(this);
-        this.onSearchModeChanged = this.onSearchModeChanged.bind(this);
-        this.onDetailedModeChanged = this.onDetailedModeChanged.bind(this);
-        this.onCategoriesChanged = this.onCategoriesChanged.bind(this);
-        this.onTextChanged = this.onTextChanged.bind(this);
-        this.handleKeyDown = this.handleKeyDown.bind(this);
-        this.scrollToExpandedItem = this.scrollToExpandedItem.bind(this);
-        this.setTooltipText = this.setTooltipText.bind(this);
-        this.setHostContext = this.setHostContext.bind(this);
-
-        // Set handlers after methods are bound.
-        this.props.libraryController.setLoadedTypesJsonHandler = this.setLoadedTypesJson;
-        this.props.libraryController.setLayoutSpecsJsonHandler = this.setLayoutSpecsJson;
-        this.props.libraryController.refreshLibraryViewHandler = this.refreshLibraryView;
-        this.props.libraryController.setHostContextHandler = this.setHostContext;
-
-        // Initialize the search utilities with empty data
-        this.searcher = new Searcher();
-
-        this.state = {
-            inSearchMode: false,
-            searchText: '',
-            selectedCategories: [],
-            structured: false,
-            detailed: false,
-            showItemSummary: false, // disable expandable tool tip by default
-            tooltipContent: {
-                create: ClusterTypeDescription.create, 
-                action: ClusterTypeDescription.action, 
-                query: ClusterTypeDescription.query
-            },
-            hostingContext: "none" as HostingContextType,
-            shouldOverrideExpandedState : true
-        };
-        window.setTooltipText = this.setTooltipText;
-    }
-
-    componentDidMount() {
-        window.addEventListener("keydown", this.handleKeyDown);
-    }
-
-    componentWillUnmount() {
-        window.removeEventListener("keydown", this.handleKeyDown);
-    }
-
-    handleKeyDown(event: any) {
-        switch (event.key) {
-            case "ArrowUp":
-                this.updateSelectionIndex(false);
-                break;
-            case "ArrowDown":
-                this.updateSelectionIndex(true);
-                break;
-            default:
-                break;
-        }
-    }
-
-    private offset(el: any) {
-        const rect = el.getBoundingClientRect(),
-            scrollLeft = window.pageXOffset || document.documentElement.scrollLeft,
-            scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-        return { top: rect.top + scrollTop, left: rect.left + scrollLeft }
-    }
-
-    /**
-     * This method attempts to scroll the outer libraryItemContainer so that the position
-     * on screen of the passed element does not change, even though the scroll position does.
-     * @param element 
-     */
-    scrollToExpandedItem(element: HTMLElement) {
-        if (element) {
-            
-            const domNode = ReactDOM.findDOMNode(this);
-            const currentElement = domNode instanceof Element ? domNode.querySelector(".LibraryItemContainer") : null;
-            //get the offset for the element we care about scrolling to.
-            const offsetOldElement = this.offset(element);
-            //now we wait until the expansion and re-render occurs,
+    // ── Stable handle object (created once, reads latest values via refs) ────
+    const handleRef = useRef<LibraryContainerHandle>({
+        get state() { return stateRef.current; },
+        get selectionIndex() { return selectionIndexRef.current; },
+        get props() { return propsRef.current; },
+        setSelection(index: number) {
+            const refs = searchResultItemRefsRef.current;
+            if (refs[selectionIndexRef.current]) refs[selectionIndexRef.current].setSelected(false);
+            if (refs[index]) refs[index].setSelected(true);
+            selectionIndexRef.current = index;
+        },
+        raiseEvent(name: string, params?: any) {
+            propsRef.current.libraryController.raiseEvent(name, params);
+        },
+        scrollToExpandedItem(element: HTMLElement | null) {
+            if (!element || !containerDivRef.current) return;
+            const currentElement = containerDivRef.current.querySelector(".LibraryItemContainer");
+            const offsetOf = (el: any) => {
+                const rect = el.getBoundingClientRect();
+                return {
+                    top: rect.top + (window.pageYOffset || document.documentElement.scrollTop),
+                    left: rect.left + (window.pageXOffset || document.documentElement.scrollLeft)
+                };
+            };
+            const offsetOldElement = offsetOf(element);
             setTimeout(() => {
-                //measure the distance between the old element and the new position post expansion
-                const distance = offsetOldElement.top - this.offset(element).top;
-                //scroll back up by that distance.
-                if(!currentElement) return;
-                currentElement.scrollTop = currentElement.scrollTop - distance;
-
+                const distance = offsetOldElement.top - offsetOf(element).top;
+                if (currentElement) {
+                    (currentElement as Element).scrollTop -= distance;
+                }
             }, 0);
+        },
+        getContainerElement() {
+            return containerDivRef.current;
+        },
+        setShouldOverrideExpandedState(value: boolean) {
+            shouldOverrideRef.current = value;
         }
-    }
+    });
 
+    // ── Core handlers (stable via useCallback with empty deps, use refs) ─────
 
-
-    setLoadedTypesJson(loadedTypesJson: any, append: boolean = true): void {
-
+    const setLoadedTypesJson = useCallback((loadedTypesJson: any, append: boolean = true): void => {
         if (!loadedTypesJson) {
             throw new Error("Parameter 'loadedTypesJson' must be supplied");
         }
-
-        if (!loadedTypesJson.loadedTypes || (!Array.isArray(loadedTypesJson.loadedTypes))) {
+        if (!loadedTypesJson.loadedTypes || !Array.isArray(loadedTypesJson.loadedTypes)) {
             throw new Error("'loadedTypesJson.loadedTypes' must be a valid array");
         }
-
-        // If there is no existing loadedTypesJson object, or the call
-        // is meant to replace the existing one, then assign it and bail.
-        if (!this.loadedTypesJson || (!append)) {
-            this.loadedTypesJson = loadedTypesJson;
+        if (!loadedTypesJsonRef.current || !append) {
+            loadedTypesJsonRef.current = loadedTypesJson;
             return;
         }
+        Array.prototype.push.apply(loadedTypesJsonRef.current.loadedTypes, loadedTypesJson.loadedTypes);
+    }, []);
 
-        // To append to the existing 'loadedTypesJson.loadedTypes object' (merge both arrays).
-        Array.prototype.push.apply(this.loadedTypesJson.loadedTypes, loadedTypesJson.loadedTypes);
-    }
-
-    setLayoutSpecsJson(layoutSpecsJson: any, append: boolean = true): void {
-
+    const setLayoutSpecsJson = useCallback((layoutSpecsJson: any, append: boolean = true): void => {
         if (!layoutSpecsJson) {
             throw new Error("Parameter 'layoutSpecsJson' must be supplied");
         }
-
-        if (!layoutSpecsJson.sections || (!Array.isArray(layoutSpecsJson.sections))) {
+        if (!layoutSpecsJson.sections || !Array.isArray(layoutSpecsJson.sections)) {
             throw new Error("'layoutSpecsJson.sections' must be a valid array");
         }
-
-        // If there is no existing layoutSpecsJson object, or the call
-        // is meant to replace the existing one, then assign it and bail.
-        if (!this.layoutSpecsJson || (!append)) {
-            this.layoutSpecsJson = layoutSpecsJson;
+        if (!layoutSpecsJsonRef.current || !append) {
+            layoutSpecsJsonRef.current = layoutSpecsJson;
             return;
         }
+        LibraryUtilities.updateSections(layoutSpecsJsonRef.current, layoutSpecsJson);
+    }, []);
 
-        // Otherwise, recursively replace/append each section.
-        LibraryUtilities.updateSections(this.layoutSpecsJson, layoutSpecsJson);
-    }
-
-    refreshLibraryView(): void {
-
-        this.generatedSections = LibraryUtilities.buildLibrarySectionsFromLayoutSpecs(
-            this.loadedTypesJson, this.layoutSpecsJson,
-            this.props.defaultSectionString, this.props.miscSectionString);
-
-        this.updateSections(this.generatedSections);
-    }
-
-    setHostContext(context:HostingContextType){
-        //besides setting the host context we also set the expanded state override mode to false
-        //so that the currently expanded library items retain their state and don't all close
-        //as a result of this top level state update.
-        this.setState({shouldOverrideExpandedState:false, hostingContext:context})
-    }
-
-    updateSections(sections: any): void {
-        // Obtain the categories from each section to be added into the filtering options for search
-        for (let section of sections) {
-            for (let childItem of section.childItems)
-                this.searchCategories.push(childItem.text);
-        }
-
-        // Update the properties in searcher
-        if(this.searcher) {
-            this.searcher.sections = sections;
-            this.searcher.initializeCategories(this.searchCategories);
-        }
-
-        // Just to force a refresh of UI.
-        this.setState(prevState => ({inSearchMode: prevState.inSearchMode}));
-    }
-
-    raiseEvent(name: string, params?: any | any[]) {
-        this.props.libraryController.raiseEvent(name, params);
-    }
-
-    onSearchModeChanged(inSearchMode: boolean, searchText?: string) {
-                // Reset selectionIndex when serach mode changed
-        this.selectionIndex = 0;
-        this.updateSearchResultItems(inSearchMode, this.state.structured);
-        if (searchText) {
-                        this.setState({
-                inSearchMode: inSearchMode,
-                searchText: searchText
-            });
-        } else {
-            this.setState({ inSearchMode: inSearchMode });
-        }
-    }
-
-    onDetailedModeChanged(value: boolean) {
-        this.setState({ detailed: value });
-    }
-
-    onCategoriesChanged(categories: string[], categoryData:CategoryData[]) {
-        if(this.searcher) {
-            this.searcher.categories = categories;
-        }
-        this.updateSearchResultItems(true, this.state.structured);
-        this.setState({ selectedCategories: categories });
-        //This is used in Dynamo instrumenation. categoryData contains the list of all 
-        //categories in the filter with their state {checked or unchecked}
-        this.raiseEvent(this.props.libraryController.FilterCategoryEventName, categoryData);
-    }
-
-    onTextChanged(text: string) {
-        if (!this.generatedSections) return;
-
-        clearTimeout(this.timeout);
-        
-        // Starting searching immediately after user input, 
-        // but only show change on ui after 300ms
-        setTimeout( function () {
-            let hasText = text.length > 0;
-            if (this.props.libraryController.searchLibraryItemsHandler) {
-                //searchLibraryItemsHandler is the callback that needs to be set when creating the library
-                this.props.libraryController.searchLibraryItemsHandler(text.length === 0? "r":text, function (loadedTypesJsonOnSearch: any) {
-                    if (hasText) {
-                        // Generate sections based on layout specification and loaded types filtered by search string
-                        this.generatedSectionsOnSearch = LibraryUtilities.buildLibrarySectionsFromLayoutSpecs(
-                            loadedTypesJsonOnSearch, this.layoutSpecsJson,
-                            this.props.defaultSectionString, this.props.miscSectionString);
-
-                        this.updateSections(this.generatedSectionsOnSearch);
-
-                        // Set all categories and groups to be expanded
-                        //this.generatedSectionsOnSearch will contain all the search result nodes in a tree structure
-                        LibraryUtilities.setItemStateRecursive(this.generatedSectionsOnSearch, true, true);
-                    }
-                    else {
-                        // Show change on ui immediately if search text is cleared (shows Library with the default UI)
-                        LibraryUtilities.setItemStateRecursive(this.generatedSections, true, false);
-                    }   
-                    //The updateSearchViewDelayed() method updates the Library with the search results
-                    //Needs to be done inside the callback because the callback is executed in a async way otherwise we don't have control when this method will be executed
-                    this.updateSearchViewDelayed(text);
-                }.bind(this));
-            //this else block is only hit in the libjs test app, not usually in Dynamo.
-            } else {
-                LibraryUtilities.searchItemResursive(this.generatedSections, text);
-                if(text.length == 0){
-                    LibraryUtilities.setItemStateRecursive(this.generatedSections, true, false);
-                }
-                this.updateSearchViewDelayed(text);
+    const updateSections = useCallback((sections: any): void => {
+        for (const section of sections) {
+            for (const childItem of section.childItems) {
+                searchCategoriesRef.current.push(childItem.text);
             }
-        }.bind(this), 300);
-    }
-
-    updateSearchViewDelayed(text: string) {
-        if (text.length == 0) {
-            this.onSearchModeChanged(false);
-        } else if (!this.state.structured) {
-            this.raiseEvent(this.props.libraryController.SearchTextUpdatedEventName, text);
-            this.onSearchModeChanged(true, text);
         }
-    }
+        if (searcherRef.current) {
+            searcherRef.current.sections = sections;
+            searcherRef.current.initializeCategories(searchCategoriesRef.current);
+        }
+        // Callers always follow up with a state update that triggers re-render;
+        // no explicit force-update needed here.
+    }, []);
 
-    updateSearchResultItems(inSearchMode: boolean, structured: boolean) {
-        if (!inSearchMode) {
-            this.searchResultItemRefs = [];
+    const refreshLibraryView = useCallback((): void => {
+        const p = propsRef.current;
+        const sections = LibraryUtilities.buildLibrarySectionsFromLayoutSpecs(
+            loadedTypesJsonRef.current, layoutSpecsJsonRef.current,
+            p.defaultSectionString, p.miscSectionString
+        );
+        generatedSectionsRef.current = sections;
+        setGeneratedSections(sections);
+        updateSections(sections);
+    }, [updateSections]);
+
+    const setHostContext = useCallback((context: HostingContextType): void => {
+        shouldOverrideRef.current = false;
+        setHostingContext(context);
+    }, []);
+
+    const setTooltipTextHandler = useCallback((content: string): void => {
+        setTooltipContent(JSON.parse(content));
+    }, []);
+
+    // Set handlers synchronously so they're available even with shallow rendering
+    props.libraryController.setLoadedTypesJsonHandler = setLoadedTypesJson;
+    props.libraryController.setLayoutSpecsJsonHandler = setLayoutSpecsJson;
+    props.libraryController.refreshLibraryViewHandler = refreshLibraryView;
+    props.libraryController.setHostContextHandler = setHostContext;
+    window.setTooltipText = setTooltipTextHandler;
+
+    // ── Search helpers ───────────────────────────────────────────────────────
+
+    const updateSearchResultItems = useCallback((mode: boolean, isStructured: boolean): void => {
+        if (!mode) {
+            searchResultItemRefsRef.current = [];
+            searchResultItemsRef.current = [];
             return;
         }
-
-        if (structured) {
-            this.searchResultItems = this.searcher?.generateStructuredItems() ?? [];
+        if (isStructured) {
+            searchResultItemsRef.current = searcherRef.current?.generateStructuredItems() ?? [];
         } else {
-            this.searchResultItems = this.searcher?.generateListItems(
-                this.props.libraryController.searchLibraryItemsHandler ? (this.generatedSectionsOnSearch ?? []) : (this.generatedSections ?? [])
+            const searcher = searcherRef.current;
+            const p = propsRef.current;
+            searchResultItemsRef.current = searcher?.generateListItems(
+                p.libraryController.searchLibraryItemsHandler
+                    ? (generatedSectionsOnSearchRef.current ?? [])
+                    : (generatedSectionsRef.current ?? [])
             ) ?? [];
         }
-    }
+    }, []);
 
-    // Update the selectionIndex. Current index will add by 1 if selectNextItem is true,
-    // minus by 1 otherwise, but it should always be between 0 and maxSelectionIndex.
-    updateSelectionIndex(selectNextItem: boolean) {
-        if (!this.state.inSearchMode || this.state.structured) {
-            return;
+    const onSearchModeChanged = useCallback((mode: boolean, text?: string): void => {
+        selectionIndexRef.current = 0;
+        updateSearchResultItems(mode, structured);
+        if (text) {
+            setInSearchMode(mode);
+            setSearchText(text);
+        } else {
+            setInSearchMode(mode);
         }
+    }, [structured, updateSearchResultItems]);
 
-        let nextIndex = selectNextItem ? this.selectionIndex + 1 : this.selectionIndex - 1;
-        let maxSelectionIndex = this.searchResultItems.length - 1;
-
-        if (nextIndex < 0 && maxSelectionIndex >= 0) {
-            nextIndex = 0;
+    const updateSearchViewDelayed = useCallback((text: string): void => {
+        if (text.length === 0) {
+            onSearchModeChanged(false);
+        } else if (!structured) {
+            propsRef.current.libraryController.raiseEvent(
+                propsRef.current.libraryController.SearchTextUpdatedEventName, text
+            );
+            onSearchModeChanged(true, text);
         }
+    }, [structured, onSearchModeChanged]);
 
-        if (nextIndex >= maxSelectionIndex) {
-            nextIndex = maxSelectionIndex;
-        }
-
-        this.setSelection(nextIndex);
-    }
-
-    // Set item at index to be selected, and the previous selected item will be unselected.
-    setSelection(index: number) {
-        this.searchResultItemRefs[this.selectionIndex].setSelected(false);
-        this.searchResultItemRefs[index].setSelected(true);
-        this.selectionIndex = index;
-    }
-
-    // Direct back to library and expand items based on pathToItem. 
-    directToLibrary(pathToItem: LibraryUtilities.ItemData[]) {
-        if(!this.generatedSections) return;
-        LibraryUtilities.setItemStateRecursive(this.generatedSections, true, false);
-        if (LibraryUtilities.findAndExpandItemByPath(pathToItem.slice(0), this.generatedSections)) {
-            this.onSearchModeChanged(false);
-        }
-    }
-
-    setTooltipText(content: string){
-        this.setState({tooltipContent: JSON.parse(content)});
-    }
-
-    render() {
-        if (!this.generatedSections) {
-            let eventName = this.props.libraryController.RefreshLibraryViewRequestName;
-            this.props.libraryController.request(eventName);
-            return (<div>This is LibraryContainer</div>);
-        }
-
-        try {
-            let sections: React.ReactNode = null;
-            let index = 0;
-            if (!this.state.inSearchMode) {
-                sections = this.generatedSections.map(data => {
-                    return <LibraryItem
-                        key={index++}
-                        libraryContainer={this}
-                        data={data}
-                        showItemSummary={this.state.showItemSummary}
-                        tooltipContent={this.state.tooltipContent}
-                    />
-                }
-                );
-            } else if (this.state.structured) {
-                sections = this.searchResultItems.map(item =>
-                    <LibraryItem key={index++} data={item} libraryContainer={this} showItemSummary={this.state.showItemSummary} tooltipContent={this.state.tooltipContent} />
+    const onTextChanged = useCallback((text: string): void => {
+        if (!generatedSectionsRef.current) return;
+        clearTimeout(timeoutRef.current);
+        timeoutRef.current = window.setTimeout(() => {
+            const hasText = text.length > 0;
+            const p = propsRef.current;
+            if (p.libraryController.searchLibraryItemsHandler) {
+                p.libraryController.searchLibraryItemsHandler(
+                    text.length === 0 ? "r" : text,
+                    (loadedTypesJsonOnSearch: any) => {
+                        if (hasText) {
+                            generatedSectionsOnSearchRef.current =
+                                LibraryUtilities.buildLibrarySectionsFromLayoutSpecs(
+                                    loadedTypesJsonOnSearch, layoutSpecsJsonRef.current,
+                                    p.defaultSectionString, p.miscSectionString
+                                );
+                            updateSections(generatedSectionsOnSearchRef.current);
+                            LibraryUtilities.setItemStateRecursive(
+                                generatedSectionsOnSearchRef.current, true, true
+                            );
+                        } else {
+                            LibraryUtilities.setItemStateRecursive(
+                                generatedSectionsRef.current, true, false
+                            );
+                        }
+                        updateSearchViewDelayed(text);
+                    }
                 );
             } else {
-                sections = this.searchResultItems.map(item =>
-                    <SearchResultItem
-                        ref={item => { if (item) this.searchResultItemRefs.push(item); }}
-                        index={index}
-                        key={index++}
-                        data={item}
-                        libraryContainer={this}
-                        highlightedText={this.state.searchText}
-                        detailed={this.state.detailed}
-                        onParentTextClicked={this.directToLibrary.bind(this)}
-                    />
-                );
+                LibraryUtilities.searchItemResursive(generatedSectionsRef.current, text);
+                if (text.length === 0) {
+                    LibraryUtilities.setItemStateRecursive(generatedSectionsRef.current, true, false);
+                }
+                updateSearchViewDelayed(text);
             }
+        }, 300) as unknown as number;
+    }, [updateSections, updateSearchViewDelayed]);
 
-            const searchBar = <SearchBar
-                onCategoriesChanged={this.onCategoriesChanged}
-                onDetailedModeChanged={this.onDetailedModeChanged}
-                onTextChanged={this.onTextChanged}
-                categories={this.searcher?.getDisplayedCategories() ?? []}
-            />;
+    const onDetailedModeChanged = useCallback((value: boolean): void => {
+        setDetailed(value);
+    }, []);
 
-            return (
-                <div className="LibraryContainer">
-                    {searchBar}
-                    <div className="LibraryItemContainer">
-                        <div className="SearchResultsWrapper">
-                            {sections}
-                        </div>
+    const onCategoriesChanged = useCallback((categories: string[], categoryData: CategoryData[]): void => {
+        if (searcherRef.current) {
+            searcherRef.current.categories = categories;
+        }
+        updateSearchResultItems(true, structured);
+        setSelectedCategories(categories);
+        propsRef.current.libraryController.raiseEvent(
+            propsRef.current.libraryController.FilterCategoryEventName, categoryData
+        );
+    }, [structured, updateSearchResultItems]);
+
+    // ── Keyboard navigation ──────────────────────────────────────────────────
+
+    // Use a ref-based handler pattern so the stable listener always sees latest state
+    const handleKeyDownRef = useRef<(event: KeyboardEvent) => void>(() => {});
+    handleKeyDownRef.current = (event: KeyboardEvent) => {
+        if (!inSearchMode || structured) return;
+        const key = (event as any).key;
+        if (key !== "ArrowUp" && key !== "ArrowDown") return;
+
+        const selectNext = key === "ArrowDown";
+        const items = searchResultItemsRef.current;
+        let nextIndex = selectNext
+            ? selectionIndexRef.current + 1
+            : selectionIndexRef.current - 1;
+        const maxIndex = items.length - 1;
+        if (nextIndex < 0 && maxIndex >= 0) nextIndex = 0;
+        if (nextIndex >= maxIndex) nextIndex = maxIndex;
+        handleRef.current.setSelection(nextIndex);
+    };
+
+    React.useEffect(() => {
+        const handler = (e: KeyboardEvent) => handleKeyDownRef.current(e);
+        window.addEventListener("keydown", handler);
+        return () => window.removeEventListener("keydown", handler);
+    }, []);
+
+    // ── directToLibrary ──────────────────────────────────────────────────────
+
+    const directToLibrary = useCallback((pathToItem: LibraryUtilities.ItemData[]): void => {
+        if (!generatedSectionsRef.current) return;
+        LibraryUtilities.setItemStateRecursive(generatedSectionsRef.current, true, false);
+        if (LibraryUtilities.findAndExpandItemByPath(pathToItem.slice(0), generatedSectionsRef.current)) {
+            onSearchModeChanged(false);
+        }
+    }, [onSearchModeChanged]);
+
+    // ── Render ───────────────────────────────────────────────────────────────
+
+    if (!generatedSections) {
+        const eventName = props.libraryController.RefreshLibraryViewRequestName;
+        props.libraryController.request(eventName);
+        return <div>This is LibraryContainer</div>;
+    }
+
+    try {
+        let sections: React.ReactNode = null;
+        let index = 0;
+
+        if (!inSearchMode) {
+            sections = generatedSections.map(data =>
+                <LibraryItem
+                    key={index++}
+                    libraryContainer={handleRef.current}
+                    data={data}
+                    showItemSummary={showItemSummary}
+                    tooltipContent={tooltipContent}
+                />
+            );
+        } else if (structured) {
+            sections = searchResultItemsRef.current.map(item =>
+                <LibraryItem
+                    key={index++}
+                    data={item}
+                    libraryContainer={handleRef.current}
+                    showItemSummary={showItemSummary}
+                    tooltipContent={tooltipContent}
+                />
+            );
+        } else {
+            // Clear refs before rebuilding to avoid stale entries
+            searchResultItemRefsRef.current = [];
+            sections = searchResultItemsRef.current.map(item =>
+                <SearchResultItem
+                    ref={(handle: SearchResultItemHandle | null) => {
+                        if (handle) searchResultItemRefsRef.current.push(handle);
+                    }}
+                    index={index}
+                    key={index++}
+                    data={item}
+                    libraryContainer={handleRef.current}
+                    highlightedText={searchText}
+                    detailed={detailed}
+                    onParentTextClicked={directToLibrary}
+                />
+            );
+        }
+
+        const searchBar = (
+            <SearchBar
+                onCategoriesChanged={onCategoriesChanged}
+                onDetailedModeChanged={onDetailedModeChanged}
+                onTextChanged={onTextChanged}
+                categories={searcherRef.current?.getDisplayedCategories() ?? []}
+            />
+        );
+
+        return (
+            <div className="LibraryContainer" ref={containerDivRef}>
+                {searchBar}
+                <div className="LibraryItemContainer">
+                    <div className="SearchResultsWrapper">
+                        {sections}
                     </div>
                 </div>
-            );
-        } catch (exception) {
-            return (<div>Exception thrown: {exception.message}</div>);
-        }
+            </div>
+        );
+    } catch (exception: any) {
+        return <div>Exception thrown: {exception.message}</div>;
     }
 }
