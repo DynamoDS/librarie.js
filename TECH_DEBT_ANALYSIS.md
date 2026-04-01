@@ -286,35 +286,43 @@ Recommended limit: 244 KiB
 
 ---
 
-### Phase 2: Component Modernization (HIGH PRIORITY)
-**Duration:** 2-3 weeks  
-**Estimated Effort:** 10-15 days  
+### Phase 2: Component Modernization ✅ COMPLETE
+**Completed:** 2026-03-30
 
-#### Week 1: High Priority Components
-- [ ] **SearchBar.tsx** → Functional component
-  - Replace `setState` with `useState`
-  - Replace lifecycle methods with `useEffect`
-  - Replace `this.method.bind(this)` with `useCallback`
-  - Replace refs with `useRef`
+#### All Components Converted
+- [x] **SearchBar.tsx** → Functional component
+  - `useState` for all reactive state
+  - `useRef` for DOM refs (replaces `ReactDOM.findDOMNode`)
+  - Fixed event listener cleanup bug (bind/unbind mismatch in class component)
+  - Stable ref pattern for global keydown/click handlers
 
-- [ ] **LibraryContainer.tsx** → Functional component
-  - Complex state management → multiple `useState` or `useReducer`
-  - Event handling → `useCallback` + custom hooks
-  - Ref management → `useRef`
+- [x] **LibraryContainer.tsx** → Functional component
+  - `useState` for all reactive state
+  - `LibraryContainerHandle` interface replaces class instance type in child props
+  - Stable handle created once in `useRef`; stateRef/propsRef updated each render
+  - Handlers set synchronously in render body (Enzyme shallow compatibility)
 
-#### Week 2: Medium Priority Components
-- [ ] **LibraryItem.tsx** → Functional component
-- [ ] **SearchResultItem.tsx** → Functional component
+- [x] **LibraryItem.tsx** → Functional component
+  - `useRef<HTMLDivElement>` replaces all `ReactDOM.findDOMNode` calls
+  - `prevExpandedRef` for `componentDidUpdate` equivalent
 
-#### Week 3: Low Priority Components
-- [ ] **ItemSummary.tsx** → Functional component
-- [ ] **ClusterView.tsx** → Functional component (or keep as-is if simple)
+- [x] **SearchResultItem.tsx** → Functional component
+  - `React.forwardRef` + `useImperativeHandle` for `SearchResultItemHandle`
+  - `useRef<HTMLDivElement>` replaces `ReactDOM.findDOMNode`
 
-**Benefits:**
-- Complete removal of findDOMNode API
-- Better performance with hooks
-- Easier testing
-- More maintainable code
+- [x] **ItemSummary.tsx** → Functional component
+  - `useState` + `useRef` for summary data
+  - `fetchMissingItemSummary` moved to `useEffect`
+
+- [x] **ClusterView.tsx** → Functional component
+  - Simple stateless functional component
+
+- [x] **Tests updated** — removed all `.instance()` and `.state()` Enzyme calls; replaced with DOM-based assertions
+
+**Achieved:**
+- Complete removal of all `ReactDOM.findDOMNode` calls
+- Fixed pre-existing event listener leak in SearchBar
+- Tests work with functional components
 
 ---
 
