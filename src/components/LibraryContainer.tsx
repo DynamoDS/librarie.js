@@ -4,6 +4,7 @@ require("../resources/LibraryStyles.css");
 
 import * as React from "react";
 import { useRef, useState, useCallback } from "react";
+import { useStableWindowListener } from "./componentHelpers";
 import * as LibraryUtilities from "../LibraryUtilities";
 import { LibraryController } from "../entry-point";
 import { LibraryItem } from "./LibraryItem";
@@ -308,9 +309,7 @@ export function LibraryContainer(props: LibraryContainerProps) {
 
     // ── Keyboard navigation ──────────────────────────────────────────────────
 
-    // Use a ref-based handler pattern so the stable listener always sees latest state
-    const handleKeyDownRef = useRef<(event: KeyboardEvent) => void>(() => {});
-    handleKeyDownRef.current = (event: KeyboardEvent) => {
+    useStableWindowListener("keydown", (event: KeyboardEvent) => {
         if (!inSearchMode || structured) return;
         const key = (event as any).key;
         if (key !== "ArrowUp" && key !== "ArrowDown") return;
@@ -324,13 +323,7 @@ export function LibraryContainer(props: LibraryContainerProps) {
         if (nextIndex < 0 && maxIndex >= 0) nextIndex = 0;
         if (nextIndex >= maxIndex) nextIndex = maxIndex;
         handleRef.current.setSelection(nextIndex);
-    };
-
-    React.useEffect(() => {
-        const handler = (e: KeyboardEvent) => handleKeyDownRef.current(e);
-        window.addEventListener("keydown", handler);
-        return () => window.removeEventListener("keydown", handler);
-    }, []);
+    });
 
     // ── directToLibrary ──────────────────────────────────────────────────────
 

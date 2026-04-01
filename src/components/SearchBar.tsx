@@ -3,6 +3,7 @@ import { useRef, useState, useEffect } from 'react';
 import * as _ from 'underscore';
 import { ObjectExtensions } from '../LibraryUtilities';
 import { SearchIcon, ClearIcon } from './icons';
+import { useStableWindowListener } from './componentHelpers';
 
 type StructuredModeChangedFunc = (structured: boolean) => void;
 type DetailedModeChangedFunc   = (detailed: boolean) => void;
@@ -143,13 +144,9 @@ export function SearchBar(props: SearchBarProps) {
         }
     }
 
-    // ── Global event handlers – stored in refs so the stable window listeners
-    //    always call the latest version (avoids stale-closure bugs and the
-    //    bind/unbind mismatch that existed in the class component).
-    // ─────────────────────────────────────────────────────────────────────────
+    // ── Global event handlers ────────────────────────────────────────────────
 
-    const handleKeyDownRef = useRef<(event: any) => void>(() => {});
-    handleKeyDownRef.current = (event: any) => {
+    useStableWindowListener("keydown", (event: any) => {
         if (event.ctrlKey) {
             switch (event.key) {
                 case EventKey.KEYA: fullTextSelection();  return;
@@ -173,10 +170,9 @@ export function SearchBar(props: SearchBarProps) {
                 }
                 break;
         }
-    };
+    });
 
-    const handleGlobalClickRef = useRef<(event: any) => void>(() => {});
-    handleGlobalClickRef.current = (event: any) => {
+    useStableWindowListener("click", (event: any) => {
         const optionsEl = searchOptionsContainerRef.current;
         const filterEl  = filterBtnRef.current;
         if (optionsEl && filterEl) {
@@ -184,19 +180,7 @@ export function SearchBar(props: SearchBarProps) {
                 setExpanded(false);
             }
         }
-    };
-
-    // Register stable wrapper functions once (fixes the bind/unbind mismatch bug)
-    useEffect(() => {
-        const keyDown = (e: any) => handleKeyDownRef.current(e);
-        const click   = (e: any) => handleGlobalClickRef.current(e);
-        window.addEventListener("keydown", keyDown);
-        window.addEventListener("click",   click);
-        return () => {
-            window.removeEventListener("keydown", keyDown);
-            window.removeEventListener("click",   click);
-        };
-    }, []);
+    });
 
     // ── Internal helpers ─────────────────────────────────────────────────────
 

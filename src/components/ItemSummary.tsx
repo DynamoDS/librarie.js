@@ -2,6 +2,7 @@ import * as React from 'react';
 import { useRef, useState, useEffect, useCallback } from 'react';
 import { ItemData } from "../LibraryUtilities";
 import type { LibraryContainerHandle } from "./LibraryContainer";
+import { handleImageLoadFail } from "./componentHelpers";
 
 /**
  * 'ItemSummary' can optionally display the description text. In regular library
@@ -49,10 +50,6 @@ export function ItemSummary({ libraryContainer, data, showDescription }: ItemSum
         }
     }, [hasSummaryData, libraryContainer, data.contextData, setItemSummary]);
 
-    function onImageLoadFail(event: any) {
-        event.target.src = require("../resources/icons/default-icon.svg");
-    }
-
     let descriptionText = data.description;
     const input: React.ReactNode[] = [];
     let output: React.ReactNode = null;
@@ -99,7 +96,7 @@ export function ItemSummary({ libraryContainer, data, showDescription }: ItemSum
                 <div className={"Output"}>OUTPUT</div>
                 {output}
             </div>
-            <img className={"Icon"} src={data.iconUrl} onError={onImageLoadFail} />;
+            <img className={"Icon"} src={data.iconUrl} onError={handleImageLoadFail} />;
         </div>
     );
 }

@@ -23,6 +23,7 @@ import * as LibraryUtilities from "../LibraryUtilities";
 import { ArrowIcon } from "./icons";
 import type { LibraryContainerHandle } from "./LibraryContainer";
 import { HostingContextType } from "../SharedTypes";
+import { raiseItemMouseLeave, raiseItemMouseEnter, handleImageLoadFail } from "./componentHelpers";
 
 export interface LibraryItemProps {
     libraryContainer: LibraryContainerHandle,
@@ -113,10 +114,6 @@ export function LibraryItem(props: LibraryItemProps) {
 
     // ── Event handlers ───────────────────────────────────────────────────────
 
-    function handleImageLoadFail(event: any) {
-        event.target.orgSrc = event.target.src;
-        event.target.src = require("../resources/icons/default-icon.svg");
-    }
 
     function handleItemClicked() {
         if (data.text === "Add-ons") return;
@@ -147,22 +144,11 @@ export function LibraryItem(props: LibraryItemProps) {
     }
 
     function handleMouseLeave() {
-        if (data.childItems.length === 0) {
-            libraryContainer.raiseEvent(
-                libraryContainer.props.libraryController.ItemMouseLeaveEventName,
-                { data: data.contextData }
-            );
-        }
+        raiseItemMouseLeave(data, libraryContainer);
     }
 
     function handleMouseEnter() {
-        if (data.childItems.length === 0 && containerRef.current) {
-            const rec = containerRef.current.getBoundingClientRect();
-            libraryContainer.raiseEvent(
-                libraryContainer.props.libraryController.ItemMouseEnterEventName,
-                { data: data.contextData, rect: rec, element: containerRef.current }
-            );
-        }
+        raiseItemMouseEnter(data, libraryContainer, containerRef.current);
     }
 
     // ── Sub-element builders ─────────────────────────────────────────────────

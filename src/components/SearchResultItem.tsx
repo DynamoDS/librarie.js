@@ -5,6 +5,7 @@ import { useRef, useState, useEffect, forwardRef, useImperativeHandle } from "re
 import type { LibraryContainerHandle } from "./LibraryContainer";
 import * as LibraryUtilities from "../LibraryUtilities";
 import { HostingContextType } from "../SharedTypes";
+import { useStableWindowListener, raiseItemMouseLeave, raiseItemMouseEnter, handleImageLoadFail } from "./componentHelpers";
 
 type ParentTextClickedFunc = (pathToItem: LibraryUtilities.ItemData[]) => void;
 
@@ -41,18 +42,11 @@ export const SearchResultItem = forwardRef<SearchResultItemHandle, SearchResultI
 
         // Use a ref-based stable handler so the window listener is registered once
         // but always reads the latest `selected` state (same pattern as SearchBar/LibraryContainer).
-        const handleKeyDownRef = useRef<(event: KeyboardEvent) => void>(() => {});
-        handleKeyDownRef.current = (event: KeyboardEvent) => {
+        useStableWindowListener("keydown", (event: KeyboardEvent) => {
             if (event.key === "Enter" && selected) {
                 handleItemClicked();
             }
-        };
-
-        useEffect(() => {
-            const handler = (e: KeyboardEvent) => handleKeyDownRef.current(e);
-            window.addEventListener("keydown", handler);
-            return () => window.removeEventListener("keydown", handler);
-        }, []);
+        });
 
         // Scroll selected item into view when selection state changes
         useEffect(() => {
@@ -72,9 +66,6 @@ export const SearchResultItem = forwardRef<SearchResultItemHandle, SearchResultI
             }
         }, [selected, libraryContainer]);
 
-        function handleImageLoadFail(event: any) {
-            event.target.src = require("../resources/icons/default-icon.svg");
-        }
 
         function handleItemClicked() {
             libraryContainer.setSelection(index);
@@ -82,22 +73,11 @@ export const SearchResultItem = forwardRef<SearchResultItemHandle, SearchResultI
         }
 
         function handleMouseLeave() {
-            if (data.childItems.length === 0) {
-                libraryContainer.raiseEvent(
-                    libraryContainer.props.libraryController.ItemMouseLeaveEventName,
-                    { data: data.contextData }
-                );
-            }
+            raiseItemMouseLeave(data, libraryContainer);
         }
 
         function handleMouseEnter() {
-            if (data.childItems.length === 0 && containerRef.current) {
-                const rec = containerRef.current.getBoundingClientRect();
-                libraryContainer.raiseEvent(
-                    libraryContainer.props.libraryController.ItemMouseEnterEventName,
-                    { data: data.contextData, rect: rec, element: containerRef.current }
-                );
-            }
+            raiseItemMouseEnter(data, libraryContainer, containerRef.current);
         }
 
         function handleParentTextClicked(event: React.MouseEvent | React.KeyboardEvent) {
