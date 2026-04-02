@@ -10,40 +10,7 @@ import { LibraryItem } from '../src/components/LibraryItem';
 import { ItemData } from "../src/LibraryUtilities";
 import { createLibraryItem } from "../src/utils";
 import { expect as expectChai } from 'chai';
-import type { LibraryContainerHandle } from '../src/components/LibraryContainer';
-import * as mockData from './data/mock-data';
-import { HostingContextType } from '../src/SharedTypes';
-
-function createMockHandle(): LibraryContainerHandle {
-  return {
-    get state() {
-      return {
-        inSearchMode: false,
-        searchText: '',
-        selectedCategories: [] as string[],
-        structured: false,
-        detailed: false,
-        showItemSummary: false,
-        tooltipContent: { create: '', action: '', query: '' },
-        hostingContext: HostingContextType.none,
-        shouldOverrideExpandedState: true,
-      };
-    },
-    get selectionIndex() { return 0; },
-    get props() {
-      return {
-        libraryController: LibraryEntryPoint.CreateLibraryController(),
-        defaultSectionString: 'default',
-        miscSectionString: 'Miscellaneous',
-      };
-    },
-    setSelection(_index: number) {},
-    raiseEvent(_name: string, _params?: any) {},
-    scrollToExpandedItem(_element: HTMLElement | null) {},
-    getContainerElement() { return null; },
-    setShouldOverrideExpandedState(_value: boolean) {},
-  };
-}
+import { createMockHandle, loadedTypesJson, layoutSpecsJson } from './data/mock-data';
 
 describe("LibraryContainer UI", function () {
   let libController: LibraryEntryPoint.LibraryController;
@@ -102,8 +69,8 @@ describe("LibraryContainer UI", function () {
       // Render first so handlers are registered, then load data
       render(libController.createLibraryContainer());
       act(() => {
-        libController.setLoadedTypesJson(mockData.loadedTypesJson, false);
-        libController.setLayoutSpecsJson(mockData.layoutSpecsJson, false);
+        libController.setLoadedTypesJson(loadedTypesJson, false);
+        libController.setLayoutSpecsJson(layoutSpecsJson, false);
         libController.refreshLibraryView();
       });
     });

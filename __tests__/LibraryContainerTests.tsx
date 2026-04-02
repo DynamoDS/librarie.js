@@ -103,51 +103,38 @@ describe("LibraryContainer class", function () {
     }).to.not.throw();
   });
 
-  it("should set the loadedTypesJson correctly", function () {
-    render(libController.createLibraryContainer());
-
-    act(() => {
-      libController.setLoadedTypesJson(loadedTypesJson, false);
-      libController.setLayoutSpecsJson(layoutSpecsJson, false);
-      libController.refreshLibraryView();
+  describe("with library data loaded", function () {
+    beforeEach(function () {
+      render(libController.createLibraryContainer());
+      act(() => {
+        libController.setLoadedTypesJson(loadedTypesJson, false);
+        libController.setLayoutSpecsJson(layoutSpecsJson, false);
+        libController.refreshLibraryView();
+      });
     });
 
-    const parentItem = screen.getByText('Parent');
-    fireEvent.click(parentItem);
-    expect(screen.queryByText('Child1')).toBeInTheDocument();
-    expect(screen.queryByText('Child2')).toBeInTheDocument();
-  });
-
-  it("should set the layoutSpecsJson correctly", function () {
-    render(libController.createLibraryContainer());
-
-    act(() => {
-      libController.setLoadedTypesJson(loadedTypesJson, false);
-      libController.setLayoutSpecsJson(layoutSpecsJson, false);
-      libController.refreshLibraryView();
+    it("should set the loadedTypesJson correctly", function () {
+      const parentItem = screen.getByText('Parent');
+      fireEvent.click(parentItem);
+      expect(screen.queryByText('Child1')).toBeInTheDocument();
+      expect(screen.queryByText('Child2')).toBeInTheDocument();
     });
 
-    // "Add-ons" section is always preserved even when empty (special case in removeEmptyNodes)
-    expect(screen.getByText("Add-ons")).toBeInTheDocument();
-    // "Parent" category is rendered from the layout spec
-    expect(screen.getByText("Parent")).toBeInTheDocument();
-  });
-
-  it("should populate and render the LibraryItems correctly", function () {
-    render(libController.createLibraryContainer());
-
-    act(() => {
-      libController.setLoadedTypesJson(loadedTypesJson, false);
-      libController.setLayoutSpecsJson(layoutSpecsJson, false);
-      libController.refreshLibraryView();
+    it("should set the layoutSpecsJson correctly", function () {
+      // "Add-ons" section is always preserved even when empty (special case in removeEmptyNodes)
+      expect(screen.getByText("Add-ons")).toBeInTheDocument();
+      // "Parent" category is rendered from the layout spec
+      expect(screen.getByText("Parent")).toBeInTheDocument();
     });
 
-    const input = screen.getByRole('textbox');
-    expect(input).toHaveClass('SearchInputText');
+    it("should populate and render the LibraryItems correctly", function () {
+      const input = screen.getByRole('textbox');
+      expect(input).toHaveClass('SearchInputText');
 
-    const libraryItem = screen.getByText("Parent");
-    expect(libraryItem).toBeInTheDocument();
-    expect(libraryItem.closest('.LibraryItemContainerCategory')).not.toBeNull();
+      const libraryItem = screen.getByText("Parent");
+      expect(libraryItem).toBeInTheDocument();
+      expect(libraryItem.closest('.LibraryItemContainerCategory')).not.toBeNull();
+    });
   });
 
 });

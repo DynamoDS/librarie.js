@@ -1,3 +1,45 @@
+import type { LibraryContainerHandle } from '../../src/components/LibraryContainer';
+import { HostingContextType } from '../../src/SharedTypes';
+import * as LibraryEntryPoint from '../../src/entry-point';
+
+/**
+ * Creates a minimal LibraryContainerHandle mock for isolated component tests.
+ * Accepts an optional libController so callers can inject the same controller
+ * they are testing; falls back to a fresh one when not needed.
+ */
+export function createMockHandle(
+  libController: LibraryEntryPoint.LibraryController = LibraryEntryPoint.CreateLibraryController()
+): LibraryContainerHandle {
+  return {
+    get state() {
+      return {
+        inSearchMode: false,
+        searchText: '',
+        selectedCategories: [] as string[],
+        structured: false,
+        detailed: false,
+        showItemSummary: false,
+        tooltipContent: { create: '', action: '', query: '' },
+        hostingContext: HostingContextType.none,
+        shouldOverrideExpandedState: true,
+      };
+    },
+    get selectionIndex() { return 0; },
+    get props() {
+      return {
+        libraryController: libController,
+        defaultSectionString: 'default',
+        miscSectionString: 'Miscellaneous',
+      };
+    },
+    setSelection(_index: number) {},
+    raiseEvent(_name: string, _params?: any) {},
+    scrollToExpandedItem(_element: HTMLElement | null) {},
+    getContainerElement() { return null; },
+    setShouldOverrideExpandedState(_value: boolean) {},
+  };
+}
+
 export const loadedTypesJson: any = {
   "loadedTypes": [
     {

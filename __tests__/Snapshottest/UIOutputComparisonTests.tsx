@@ -9,39 +9,7 @@ import * as LibraryEntryPoint from '../../src/entry-point';
 import { LibraryItem } from '../../src/components/LibraryItem';
 import { ItemData } from "../../src/LibraryUtilities";
 import { createLibraryItem } from "../../src/utils";
-import type { LibraryContainerHandle } from '../../src/components/LibraryContainer';
-import { HostingContextType } from '../../src/SharedTypes';
-
-function createMockHandle(): LibraryContainerHandle {
-  return {
-    get state() {
-      return {
-        inSearchMode: false,
-        searchText: '',
-        selectedCategories: [] as string[],
-        structured: false,
-        detailed: false,
-        showItemSummary: false,
-        tooltipContent: { create: '', action: '', query: '' },
-        hostingContext: HostingContextType.none,
-        shouldOverrideExpandedState: true,
-      };
-    },
-    get selectionIndex() { return 0; },
-    get props() {
-      return {
-        libraryController: LibraryEntryPoint.CreateLibraryController(),
-        defaultSectionString: 'default',
-        miscSectionString: 'Miscellaneous',
-      };
-    },
-    setSelection(_index: number) {},
-    raiseEvent(_name: string, _params?: any) {},
-    scrollToExpandedItem(_element: HTMLElement | null) {},
-    getContainerElement() { return null; },
-    setShouldOverrideExpandedState(_value: boolean) {},
-  };
-}
+import { createMockHandle } from '../data/mock-data';
 
 describe("LibraryContainer", function () {
   const data = createLibraryItem(ItemData);
