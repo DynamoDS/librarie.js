@@ -1,9 +1,5 @@
-/**
- * @jest-environment jsdom
- */
 import '@testing-library/jest-dom';
 import { render, screen, fireEvent, act } from '@testing-library/react';
-import { expect as expectChai } from 'chai';
 import * as LibraryEntryPoint from '../src/entry-point';
 
 describe("LibraryContainer class", function () {
@@ -66,41 +62,41 @@ describe("LibraryContainer class", function () {
   it("should throw exception if set with an invalid loadedTypesJson", function () {
     render(libController.createLibraryContainer());
 
-    expectChai(function () {
+    expect(() => {
       libController.setLoadedTypesJson(null, false);
-    }).to.throw("Parameter 'loadedTypesJson' must be supplied");
+    }).toThrow("Parameter 'loadedTypesJson' must be supplied");
 
-    expectChai(function () {
+    expect(() => {
       libController.setLoadedTypesJson({ "loadedTypes": "Hello!" }, false);
-    }).to.throw("'loadedTypesJson.loadedTypes' must be a valid array");
+    }).toThrow("'loadedTypesJson.loadedTypes' must be a valid array");
   });
 
   it("should throw exception if set with an invalid layoutSpecsJson", function () {
     render(libController.createLibraryContainer());
 
-    expectChai(function () {
+    expect(() => {
       libController.setLayoutSpecsJson(null, false);
-    }).to.throw("Parameter 'layoutSpecsJson' must be supplied");
+    }).toThrow("Parameter 'layoutSpecsJson' must be supplied");
 
-    expectChai(function () {
+    expect(() => {
       libController.setLayoutSpecsJson({ "sections": "Hello!" }, false);
-    }).to.throw("'layoutSpecsJson.sections' must be a valid array");
+    }).toThrow("'layoutSpecsJson.sections' must be a valid array");
   });
 
   it("should accept valid loadedTypesJson without throwing", function () {
     render(libController.createLibraryContainer());
 
-    expectChai(function () {
+    expect(() => {
       libController.setLoadedTypesJson(loadedTypesJson, false);
-    }).to.not.throw();
+    }).not.toThrow();
   });
 
   it("should accept valid layoutSpecsJson without throwing", function () {
     render(libController.createLibraryContainer());
 
-    expectChai(function () {
+    expect(() => {
       libController.setLayoutSpecsJson(layoutSpecsJson, false);
-    }).to.not.throw();
+    }).not.toThrow();
   });
 
   describe("with library data loaded", function () {
