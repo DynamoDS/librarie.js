@@ -402,6 +402,8 @@ export class CategoryData {
     }
 
     onCheckboxChanged(event: any): void {
-        this.checkboxReference.checked = event.target.checked;
+        if (this.checkboxReference) {
+            this.checkboxReference.checked = event.target.checked;
+        }
     }
 }
