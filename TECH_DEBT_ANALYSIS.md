@@ -96,29 +96,28 @@ All 6 major components are class-based and candidates for hooks migration:
 
 ---
 
-### 4. TESTING FRAMEWORK (Current Status)
+### 4. TESTING FRAMEWORK (MIGRATED ✅)
 
-#### Current Setup:
-- ✅ **Enzyme** 3.11.0 with React 18 adapter (`@cfaester/enzyme-adapter-react-18`)
+#### Current Setup (Phase 3 Complete):
+- ✅ **React Testing Library** `@testing-library/react@^16` (replaces Enzyme)
+- ✅ **@testing-library/jest-dom@^6** — custom matchers (`toBeInTheDocument`, `toHaveClass`, etc.)
+- ✅ **@testing-library/user-event@^14** — realistic user interactions
 - ✅ **Jest** 29.6.4
 - ✅ **Mocha** 11.7.2 (for utility tests)
-- ✅ Coverage: 66% overall, 80% for utilities
+- ✅ Coverage: ~72% overall (improved from 63.5%)
 
-#### Modernization Opportunity:
+#### Migration Completed:
 ```
-Current:  Enzyme (deprecated, limited React 18 support)
-          ↓
-Target:   React Testing Library (recommended by React team)
+Before (Phase 1/2):  Enzyme (deprecated, limited React 18 support)
+                     ↓
+After (Phase 3):     React Testing Library (recommended by React team)
 ```
 
-**Benefits of React Testing Library:**
-- Better testing practices (user-centric)
-- Official React team recommendation
-- Better React 18 support
-- Simpler API
-- Focus on behavior over implementation
-
-**Estimated Migration Effort:** 5-7 days
+**Achieved Benefits:**
+- DOM/behavior-based tests instead of implementation-detail tests
+- Removed Enzyme's cheerio dependency (fewer vulnerabilities)
+- Full React 18 concurrent mode support
+- Tests are more resilient to refactoring
 
 ---
 
@@ -326,23 +325,36 @@ Recommended limit: 244 KiB
 
 ---
 
-### Phase 3: Testing Infrastructure Upgrade (MEDIUM PRIORITY)
-**Duration:** 1-2 weeks  
-**Estimated Effort:** 5-7 days
+### Phase 3: Testing Infrastructure Upgrade ✅ COMPLETE
+**Completed:** 2026-04-01
 
-#### Steps:
-1. Install React Testing Library
-2. Create migration guide/examples
-3. Migrate one test file as template
-4. Migrate remaining tests incrementally
-5. Remove Enzyme dependency
-6. Update CI/CD pipelines
+#### All Test Files Migrated
+- [x] **`__tests__/LibraryContainerTests.tsx`** → React Testing Library
+  - `render()` replaces `shallow()`/`mount()`
+  - `screen.getByText`, `screen.getByRole`, `fireEvent`, `act` replace Enzyme queries
+  - Chai's `expectChai` retained alongside Jest `expect` for exception-throwing assertions
 
-#### Benefits:
-- Remove cheerio vulnerabilities
-- Better React 18 support
-- User-centric testing approach
-- Reduced flakiness
+- [x] **`__tests__/UITests.tsx`** → React Testing Library
+  - `fireEvent.click` replaces `.simulate('click')`
+  - `waitFor` handles async search (300 ms debounce)
+  - `LibraryContainerHandle` mock object replaces Enzyme wrapper passed as `any`
+  - Behavioral DOM assertions replace `.state()` / `.instance()` calls
+
+- [x] **`__tests__/Snapshottest/UIOutputComparisonTests.tsx`** → React Testing Library
+  - `container.toMatchSnapshot()` replaces `toJson(enzyme-wrapper).toMatchSnapshot()`
+  - Snapshots regenerated as HTML strings (more readable and stable)
+
+- [x] **`__tests__/data/mock-data.ts`** created — shared test fixtures (eliminates duplication across test files)
+- [x] **`setupTests.ts`** created — global `@testing-library/jest-dom` + `scrollIntoView` mock
+- [x] **Enzyme removed** — `enzyme`, `enzyme-to-json`, `@cfaester/enzyme-adapter-react-18`, `@types/enzyme` removed from `package.json`
+- [x] **RTL installed** — `@testing-library/react@^16`, `@testing-library/jest-dom@^6`, `@testing-library/user-event@^14`
+- [x] **Jest config updated** — `setupFilesAfterEnv`, `testEnvironment: jsdom`, removed `snapshotSerializers` for enzyme-to-json
+
+**Achieved:**
+- Removed Enzyme (and its cheerio/cascade of vulnerable transitive deps)
+- Tests now follow React Testing Library's user-centric, DOM-based philosophy
+- All 73 tests pass (4 suites, 3 snapshots updated)
+- Test coverage improved: overall 71.9% → up from 63.5% pre-Phase-3
 
 ---
 
@@ -416,7 +428,7 @@ Recommended limit: 244 KiB
 ### High Risk Items (Address First)
 - ✅ **React 18 Compatibility** - RESOLVED
 - ✅ **UNSAFE_ Lifecycle Methods** - RESOLVED
-- ⚠️ **cheerio Vulnerabilities** - Acceptable (dev only)
+- ✅ **cheerio Vulnerabilities** - RESOLVED (Enzyme removed in Phase 3)
 
 ### Medium Risk Items (Monitor)
 - ⚠️ **express v5 RC** - Consider downgrading to v4 LTS
@@ -471,6 +483,19 @@ Each phase should be independently deployable with rollback capability:
 - [x] React 18 features available
 - [x] Reduced vulnerabilities
 
+### Phase 2 Success Criteria (✅ ACHIEVED):
+- [x] All class components converted to functional components with hooks
+- [x] All `ReactDOM.findDOMNode` calls removed
+- [x] All tests pass (73/73)
+- [x] No regressions
+
+### Phase 3 Success Criteria (✅ ACHIEVED):
+- [x] All test files migrated from Enzyme to React Testing Library
+- [x] Enzyme dependency completely removed
+- [x] All 73 tests pass
+- [x] Snapshots regenerated in HTML format
+- [x] Test coverage improved (63.5% → 71.9%)
+
 ### Future Phase Success Criteria:
 - No regression in functionality
 - Improved bundle size (<250 KiB)
@@ -482,17 +507,20 @@ Each phase should be independently deployable with rollback capability:
 
 ## Conclusion
 
-The librarie.js codebase has successfully completed Phase 1 of modernization, addressing critical compatibility and security issues. The remaining phases provide a clear roadmap for continued improvement, with estimated efforts and priorities clearly defined.
+The librarie.js codebase has successfully completed Phases 1, 2, and 3 of modernization, addressing critical compatibility, security, and testing infrastructure issues.
 
 **Recommended Next Steps:**
 1. ✅ **Phase 1 Complete** - React 18 upgrade successful
-2. 🎯 **Start Phase 2** - Begin component modernization with SearchBar
-3. 📊 **Monitor** - Track bundle size and performance
-4. 🔄 **Iterate** - Gradual, safe improvements
+2. ✅ **Phase 2 Complete** - All components migrated to functional components
+3. ✅ **Phase 3 Complete** - Testing migrated from Enzyme to React Testing Library
+4. 🎯 **Start Phase 4** - TypeScript strict mode
+5. 📊 **Monitor** - Track bundle size and performance
 
 **Total Estimated Effort for Complete Modernization:**
 - Phase 1: ✅ 2 days (Complete)
-- Phases 2-4: ~4-6 weeks
+- Phase 2: ✅ Complete
+- Phase 3: ✅ Complete
+- Phase 4: ~3-5 days
 - Phase 5-6: ~2-3 weeks (optional)
 - **Total: 6-9 weeks for comprehensive modernization**
 
@@ -503,6 +531,8 @@ The librarie.js codebase has successfully completed Phase 1 of modernization, ad
 | Date | Version | Author | Changes |
 |------|---------|--------|---------|
 | 2026-01-27 | 1.0 | Copilot Agent | Initial analysis and Phase 1 completion |
+| 2026-03-30 | 1.1 | Copilot Agent | Phase 2 completion — all components converted to functional |
+| 2026-04-01 | 1.2 | Copilot Agent | Phase 3 completion — Enzyme replaced with React Testing Library |
 
 ---
 

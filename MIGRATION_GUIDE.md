@@ -324,18 +324,22 @@ npm test          # Run all tests
 npm run utiltest  # Run utility tests
 ```
 
-### Writing New Tests
+### Writing New Tests (Phase 3 — React Testing Library)
 
-Use the updated Enzyme adapter:
+Use React Testing Library (RTL) for all new component tests:
 ```typescript
-import { mount, shallow, configure } from 'enzyme';
-import Adapter from '@cfaester/enzyme-adapter-react-18';
-
-configure({ adapter: new Adapter() });
+import '@testing-library/jest-dom';
+import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
 
 it('should render correctly', () => {
-    const wrapper = mount(<MyComponent />);
-    expect(wrapper.find('.my-class')).toHaveLength(1);
+    render(<MyComponent />);
+    expect(screen.getByText('my text')).toBeInTheDocument();
+});
+
+it('should respond to click', () => {
+    render(<MyComponent />);
+    fireEvent.click(screen.getByRole('button'));
+    expect(screen.getByText('clicked!')).toBeInTheDocument();
 });
 ```
 
@@ -345,13 +349,11 @@ it('should render correctly', () => {
 
 When adding new components or modifying existing ones:
 
-- [ ] Use `componentDidMount` instead of `UNSAFE_componentWillMount`
-- [ ] Use `componentDidUpdate(prevProps)` instead of `UNSAFE_componentWillReceiveProps(newProps)`
-- [ ] Add type guards when using `findDOMNode`
-- [ ] Ensure `componentDidUpdate` checks prevent infinite loops
-- [ ] Clean up event listeners in `componentWillUnmount`
+- [ ] Use functional components with hooks (`useState`, `useEffect`, `useRef`, `useCallback`)
+- [ ] Use `useRef<HTMLDivElement>(null)` instead of `ReactDOM.findDOMNode`
+- [ ] Clean up event listeners in `useEffect` return function
 - [ ] Use proper TypeScript types (avoid `any`)
-- [ ] Consider using refs instead of `findDOMNode` for new code
+- [ ] Write tests with React Testing Library (not Enzyme)
 
 ---
 
@@ -426,14 +428,12 @@ React 18's concurrent rendering and automatic batching mean better performance o
 
 ---
 
-## Future Improvements
+## Phase 2 Changes: Hooks Migration (COMPLETE ✅)
 
-### Phase 2: Hooks Migration
-
-The next phase will convert class components to functional components:
+All class components have been converted to functional components. For reference, this is what happened:
 
 ```typescript
-// Current (Class)
+// Before (Class — Phase 1)
 class SearchBar extends React.Component {
     state = { query: '' };
     
@@ -444,7 +444,7 @@ class SearchBar extends React.Component {
     render() { ... }
 }
 
-// Future (Hooks)
+// After (Hooks — Phase 2)
 function SearchBar() {
     const [query, setQuery] = useState('');
     
@@ -456,18 +456,154 @@ function SearchBar() {
 }
 ```
 
-**Benefits:**
-- Simpler code
-- Better performance
-- Easier testing
-- No more `this` confusion
-- Can remove `findDOMNode` completely
+---
+
+## Phase 3 Changes: React Testing Library Migration (COMPLETE ✅)
+
+### Overview
+
+All tests have been migrated from Enzyme to React Testing Library (RTL).
+
+### Key Differences
+
+#### Rendering
+```typescript
+// Before (Enzyme)
+import { mount, shallow, configure } from 'enzyme';
+import Adapter from '@cfaester/enzyme-adapter-react-18';
+configure({ adapter: new Adapter() });
+
+const wrapper = mount(<MyComponent />);
+const shallowWrapper = shallow(<MyComponent />);
+
+// After (RTL)
+import { render } from '@testing-library/react';
+
+const { container } = render(<MyComponent />);
+```
+
+#### Querying Elements
+```typescript
+// Before (Enzyme)
+const header = wrapper.find('div.LibraryItemHeader').at(0);
+const searchBar = wrapper.find('SearchBar');
+const input = wrapper.find('input.SearchInputText');
+
+// After (RTL)
+const header = container.querySelector('.LibraryItemHeader');
+const input = screen.getByRole('textbox');
+const text = screen.getByText('Parent');
+```
+
+#### Firing Events
+```typescript
+// Before (Enzyme)
+header.simulate('click');
+input.simulate('change', { target: { value: 'query' } });
+
+// After (RTL)
+fireEvent.click(header);
+fireEvent.change(input, { target: { value: 'query' } });
+```
+
+#### State / Component Instance Assertions
+```typescript
+// Before (Enzyme) — NOT POSSIBLE WITH FUNCTIONAL COMPONENTS
+expect(wrapper.state('expanded')).to.be.true;
+expect(wrapper.instance().someMethod).toBeCalled();
+
+// After (RTL) — test DOM behavior instead
+expect(container.querySelector('.LibraryItemContainerNone')).toHaveClass('expanded');
+```
+
+#### Async Assertions
+```typescript
+// Before (Enzyme) — unreliable setTimeout approach
+setTimeout(() => {
+    expect(wrapper.find('SearchResultItem')).to.have.lengthOf(2);
+}, 500);
+
+// After (RTL) — reliable waitFor
+await waitFor(() => {
+    expect(screen.queryByText('Child1')).toBeInTheDocument();
+}, { timeout: 1000 });
+```
+
+#### Snapshots
+```typescript
+// Before (Enzyme + enzyme-to-json)
+import toJson from 'enzyme-to-json';
+const wrapper = mount(<MyComponent />);
+expect(toJson(wrapper)).toMatchSnapshot();
+
+// After (RTL)
+const { container } = render(<MyComponent />);
+expect(container).toMatchSnapshot();
+```
+
+### New Testing Patterns
+
+#### Testing with LibraryContainerHandle Mock
+When testing `LibraryItem` in isolation (without a full library container):
+```typescript
+import type { LibraryContainerHandle } from '../src/components/LibraryContainer';
+import { HostingContextType } from '../src/SharedTypes';
+
+const mockHandle: LibraryContainerHandle = {
+    get state() {
+        return {
+            inSearchMode: false,
+            searchText: '',
+            selectedCategories: [],
+            structured: false,
+            detailed: false,
+            showItemSummary: false,
+            tooltipContent: { create: '', action: '', query: '' },
+            hostingContext: HostingContextType.none,
+            shouldOverrideExpandedState: true,
+        };
+    },
+    selectionIndex: 0,
+    props: { libraryController: libController },
+    setSelection: jest.fn(),
+    raiseEvent: jest.fn(),
+    scrollToExpandedItem: jest.fn(),
+    getContainerElement: jest.fn().mockReturnValue(null),
+    setShouldOverrideExpandedState: jest.fn(),
+};
+
+render(<LibraryItem libraryContainer={mockHandle} data={data} showItemSummary={false} />);
+```
+
+#### Triggering Library Updates (act)
+When the library controller triggers state updates:
+```typescript
+act(() => {
+    libController.setLoadedTypesJson(loadedTypesJson, false);
+    libController.setLayoutSpecsJson(layoutSpecsJson, false);
+    libController.refreshLibraryView();
+});
+```
+
+### Troubleshooting RTL Tests
+
+**Issue:** `screen.getByText` throws "Unable to find an element"
+**Solution:** Check the exact text content. Use `screen.debug()` to print the DOM.
+
+**Issue:** `waitFor` times out on search tests
+**Solution:** The search has a 300 ms debounce. Use `timeout: 1000` in `waitFor`.
+
+**Issue:** Snapshot tests fail after changes
+**Solution:** Run `npm test -- --updateSnapshot` to regenerate.
 
 ---
 
 ## Resources
 
 - [React 18 Upgrade Guide](https://react.dev/blog/2022/03/08/react-18-upgrade-guide)
+- [React Testing Library Docs](https://testing-library.com/docs/react-testing-library/intro/)
+- [React Testing Library Cheatsheet](https://testing-library.com/docs/react-testing-library/cheatsheet)
+- [React Hooks Documentation](https://react.dev/reference/react)
 - [React Lifecycle Methods Diagram](https://projects.wojtekmaj.pl/react-lifecycle-methods-diagram/)
 - [React 18 Working Group Discussions](https://github.com/reactwg/react-18/discussions)
 
@@ -478,11 +614,11 @@ function SearchBar() {
 If you encounter issues not covered in this guide:
 
 1. Check the [TECH_DEBT_ANALYSIS.md](./TECH_DEBT_ANALYSIS.md) for detailed technical debt inventory
-2. Review the PR that introduced React 18
+2. Review the PR descriptions for implementation details (Phases 1, 2, 3)
 3. Consult the React 18 official documentation
 
 ---
 
-**Document Version:** 1.0  
-**Last Updated:** 2026-01-27  
-**Applies To:** librarie.js v1.0.7+
+**Document Version:** 1.2  
+**Last Updated:** 2026-04-01  
+**Applies To:** librarie.js v1.0.8+
