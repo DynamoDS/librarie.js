@@ -1,6 +1,6 @@
 import * as React from 'react';
 import '@testing-library/jest-dom';
-import { render, act } from '@testing-library/react';
+import { render, act, fireEvent } from '@testing-library/react';
 import * as LibraryEntryPoint from '../../src/entry-point';
 import { LibraryItem } from '../../src/components/LibraryItem';
 import { ItemData } from "../../src/LibraryUtilities";
@@ -19,9 +19,11 @@ describe("LibraryContainer", function () {
   });
 
   it("Test UI rendering of Library Item and child components", function () {
-    const { asFragment } = render(
+    const { asFragment, container } = render(
       <LibraryItem libraryContainer={mockHandle} data={data} showItemSummary={false} />
     );
+    const header = container.querySelector('.LibraryItemHeader');
+    if (header) fireEvent.click(header);
     expect(asFragment()).toMatchSnapshot();
   });
 

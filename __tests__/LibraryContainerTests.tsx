@@ -1,61 +1,12 @@
 import '@testing-library/jest-dom';
 import { render, screen, fireEvent, act } from '@testing-library/react';
 import * as LibraryEntryPoint from '../src/entry-point';
+import { loadedTypesJson, layoutSpecsJson } from './data/mock-data';
 
 describe("LibraryContainer class", function () {
-  let loadedTypesJson: any;
-  let layoutSpecsJson: any;
   let libController: LibraryEntryPoint.LibraryController;
 
   beforeEach(function () {
-    loadedTypesJson = {
-      "loadedTypes": [
-        {
-          "fullyQualifiedName": "Child1",
-          "iconUrl": "",
-          "contextData": "Input",
-          "itemType": "action",
-          "keywords": ""
-        },
-        {
-          "fullyQualifiedName": "Child2",
-          "iconUrl": "",
-          "contextData": "",
-          "itemType": "action",
-          "keywords": ""
-        }
-      ]
-    };
-
-    layoutSpecsJson = {
-      "sections": [
-        {
-          "text": "default",
-          "iconUrl": "",
-          "elementType": "section",
-          "showHeader": false,
-          "include": [],
-          "childElements": [
-            {
-              "text": "Parent",
-              "iconUrl": "",
-              "elementType": "category",
-              "include": [{ "path": "Child1" }, { "path": "Child2" }],
-              "childElements": []
-            }
-          ]
-        },
-        {
-          "text": "Add-ons",
-          "iconUrl": "",
-          "elementType": "section",
-          "showHeader": true,
-          "include": [],
-          "childElements": []
-        }
-      ]
-    };
-
     libController = LibraryEntryPoint.CreateLibraryController();
   });
 

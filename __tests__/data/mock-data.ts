@@ -84,35 +84,17 @@ export const layoutSpecsJson: any = {
           "text": "Parent",
           "iconUrl": "",
           "elementType": "category",
-          "include": [],
-          "childElements": [{
-            "text": "Core",
-            "iconUrl": "",
-            "elementType": "group",
-            "include": [{"path": "Child1" }, { "path": "Child2" }],
-            "childElements":[]
-          }]
+          "include": [{ "path": "Child1" }, { "path": "Child2" }],
+          "childElements": []
         }
       ]
-    },
-    {
-      "text": "Miscellaneous",
-      "iconUrl": "",
-      "elementType": "section",
-      "showHeader": true,
-      "include": [],
-      "childElements": []
     },
     {
       "text": "Add-ons",
       "iconUrl": "",
       "elementType": "section",
       "showHeader": true,
-      "include": [
-        {
-          "path": "pkg://"
-        }
-      ],
+      "include": [],
       "childElements": []
     }
   ]

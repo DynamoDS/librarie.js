@@ -5,13 +5,13 @@ exports[`LibraryContainer Demonstrate testing UIitems loads correctly from stati
 exports[`LibraryContainer Test UI rendering of Library Item and child components 1`] = `
 <DocumentFragment>
   <div
-    class="LibraryItemContainerNone"
+    class="LibraryItemContainerNone expanded"
   >
     <div
       class="LibraryItemHeader"
     >
       <svg
-        class="ArrowIcon Right"
+        class="ArrowIcon Down"
         fill="none"
         height="7"
         viewBox="0 0 4 8"
@@ -49,7 +49,68 @@ exports[`LibraryContainer Test UI rendering of Library Item and child components
     >
       <div
         class="LibraryItemBodyElements "
-      />
+      >
+        <div
+          class="LibraryItemBody"
+        >
+          <div
+            class="LibraryItemContainerCategory"
+          >
+            <div
+              class="LibraryItemHeader"
+            >
+              <div
+                class="LibraryItemTextWrapper"
+              >
+                <div
+                  class="TextBox"
+                >
+                  <span
+                    class="LibraryItemText"
+                  >
+                    Child0
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div
+              class="LibraryItemBodyContainer"
+            >
+              <div
+                class="LibraryItemBodyElements "
+              />
+            </div>
+          </div>
+          <div
+            class="LibraryItemContainerCategory"
+          >
+            <div
+              class="LibraryItemHeader"
+            >
+              <div
+                class="LibraryItemTextWrapper"
+              >
+                <div
+                  class="TextBox"
+                >
+                  <span
+                    class="LibraryItemText"
+                  >
+                    Child1
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div
+              class="LibraryItemBodyContainer"
+            >
+              <div
+                class="LibraryItemBodyElements "
+              />
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </DocumentFragment>
