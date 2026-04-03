@@ -32,6 +32,7 @@
     "underscore": "^1.12.1"
   },
   "devDependencies": {
+    "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.0.0",
     "@testing-library/user-event": "^14.5.2",
@@ -92,7 +93,9 @@
       "__tests__/data/"
     ],
     "testEnvironment": "jsdom",
-    "setupFilesAfterEnv": ["<rootDir>/setupTests.ts"],
+    "setupFilesAfterEnv": [
+      "<rootDir>/setupTests.ts"
+    ],
     "reporters": [
       "default",
       [
