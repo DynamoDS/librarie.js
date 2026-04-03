@@ -132,7 +132,7 @@ export class ItemData {
 
 export class JsonDownloader {
 
-    callback: Function = null;
+    callback: Function | null = null;
     downloadedJson: any = {};
 
     constructor(jsonUrls: string[], callback: Function) {
@@ -149,7 +149,9 @@ export class JsonDownloader {
     }
 
     notifyOwner(jsonUrl: string, jsonObject: any) {
-        this.callback(jsonUrl, jsonObject);
+        if (this.callback) {
+            this.callback(jsonUrl, jsonObject);
+        }
     }
 
     fetchJsonContent(jsonUrl: string) {
@@ -732,7 +734,7 @@ export function getHighlightedText(text: string, highlightedText: string, matchD
         let delimiter = ".";
         if (highlightedText.includes(delimiter)) {
             let leafText = highlightedText.split(delimiter).pop();
-            if (text.toLowerCase().includes(leafText)) {
+            if (leafText && text.toLowerCase().includes(leafText)) {
                 highlightedText = leafText;
             }
         }
@@ -749,7 +751,7 @@ export function getHighlightedText(text: string, highlightedText: string, matchD
 
         for (let i = 0; i < segments.length; i++) {
             spans.push(React.createElement('span',{ key: spans.length }, segments[i]));
-            if (i != segments.length - 1) {
+            if (i != segments.length - 1 && replacements) {
                 spans.push(React.createElement('span',{ className: "HighlightedText", key: spans.length }, replacements[i]));
             }
         }
@@ -782,7 +784,7 @@ export function getHighlightedText(text: string, highlightedText: string, matchD
  */
 export function findAndExpandItemByPath(pathToItem: ItemData[], allItems: ItemData[]): boolean {
 
-    let item: ItemData;
+    let item: ItemData | undefined;
     //commented the check for iconUrl. This is false only for static RawDataType files.
     item = allItems.find(item =>
         item.text == pathToItem[0].text //&& item.iconUrl == pathToItem[0].iconUrl
@@ -791,6 +793,7 @@ export function findAndExpandItemByPath(pathToItem: ItemData[], allItems: ItemDa
     if (pathToItem.length == 1) {
         return !!item;
     } else {
+        if (!item) return false;
         pathToItem.shift();
         let result = findAndExpandItemByPath(pathToItem, item.childItems);
         item.expanded = result; // Expand only if item is found.

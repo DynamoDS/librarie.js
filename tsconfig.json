@@ -2,8 +2,7 @@
     "compilerOptions": {
         "outDir": "./dist/",
         "sourceMap": true,
-        "noImplicitAny": true,
-        "strict": false,
+        "strict": true,
         "module": "commonjs",
         "target": "es2018",
         "jsx": "react",
@@ -15,9 +14,10 @@
         "moduleResolution": "node"
     },
     "exclude": [
-        "node_modules"
+        "node_modules",
+        "__tests__"
     ],
-    "files": [
-        "./src/LibraryUtilities.ts"
+    "include": [
+        "src/**/*"
     ]
 }

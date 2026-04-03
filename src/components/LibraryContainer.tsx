@@ -256,6 +256,7 @@ export function LibraryContainer(props: LibraryContainerProps) {
 
     const onTextChanged = useCallback((text: string): void => {
         if (!generatedSectionsRef.current) return;
+        const currentSections = generatedSectionsRef.current;
         clearTimeout(timeoutRef.current);
         timeoutRef.current = window.setTimeout(() => {
             const hasText = text.length > 0;
@@ -276,16 +277,16 @@ export function LibraryContainer(props: LibraryContainerProps) {
                             );
                         } else {
                             LibraryUtilities.setItemStateRecursive(
-                                generatedSectionsRef.current, true, false
+                                currentSections, true, false
                             );
                         }
                         updateSearchViewDelayed(text);
                     }
                 );
             } else {
-                LibraryUtilities.searchItemResursive(generatedSectionsRef.current, text);
+                LibraryUtilities.searchItemResursive(currentSections, text);
                 if (text.length === 0) {
-                    LibraryUtilities.setItemStateRecursive(generatedSectionsRef.current, true, false);
+                    LibraryUtilities.setItemStateRecursive(currentSections, true, false);
                 }
                 updateSearchViewDelayed(text);
             }
