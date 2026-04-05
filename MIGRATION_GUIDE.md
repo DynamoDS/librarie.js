@@ -596,9 +596,193 @@ act(() => {
 **Issue:** Snapshot tests fail after changes
 **Solution:** Run `npm test -- --updateSnapshot` to regenerate.
 
----
+## Phase 4 Changes: TypeScript Strict Mode (COMPLETE ✅)
 
-## Resources
+### Overview
+
+TypeScript strict mode (`"strict": true`) has been enabled across all source files in `src/**/*`. This catches a class of bugs at compile time that were previously hidden: unchecked nulls, implicit `any`, uninitialized class properties, and incorrect function signatures.
+
+### What Changed in `tsconfig.json`
+
+```json
+// Before (Phase 3 and earlier)
+{
+  "noImplicitAny": true,
+  "strict": false,
+  "files": ["./src/LibraryUtilities.ts"]
+}
+
+// After (Phase 4)
+{
+  "strict": true,
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "__tests__"]
+}
+```
+
+Key differences:
+- `"strict": true` enables `strictNullChecks`, `strictFunctionTypes`, `strictPropertyInitialization`, `noImplicitAny`, and more
+- `"files"` replaced with `"include": ["src/**/*"]` — all source files are now type-checked by `tsc`
+- `"__tests__"` excluded from strict checking (test files use ts-jest's own config)
+
+### Code Fixes Applied
+
+#### Nullable `Function` field (`LibraryUtilities.ts`)
+```typescript
+// Before
+callback: Function = null;
+
+// After
+callback: Function | null = null;
+
+// Also: guard the call site
+notifyOwner(jsonUrl: string, jsonObject: any) {
+    if (this.callback) {
+        this.callback(jsonUrl, jsonObject);
+    }
+}
+```
+
+#### `Array.pop()` returning `string | undefined` (`LibraryUtilities.ts`)
+```typescript
+// Before — leafText may be undefined
+let leafText = highlightedText.split(delimiter).pop();
+if (text.toLowerCase().includes(leafText)) {
+    highlightedText = leafText;
+}
+
+// After — guard before use
+let leafText = highlightedText.split(delimiter).pop();
+if (leafText && text.toLowerCase().includes(leafText)) {
+    highlightedText = leafText;
+}
+```
+
+#### `RegExp.exec()` returning `RegExpExecArray | null` (`LibraryUtilities.ts`)
+```typescript
+// Before
+spans.push(React.createElement('span', {...}, replacements[i]));
+
+// After — guard the null case
+if (i != segments.length - 1 && replacements) {
+    spans.push(React.createElement('span', {...}, replacements[i]));
+}
+```
+
+#### `Array.find()` returning `T | undefined` (`LibraryUtilities.ts`)
+```typescript
+// Before
+let item: ItemData;
+item = allItems.find(...);
+// ... item.childItems used without check
+
+// After
+let item: ItemData | undefined;
+item = allItems.find(...);
+if (pathToItem.length == 1) {
+    return !!item;
+} else {
+    if (!item) return false;  // guard added
+    // safe to access item.childItems
+}
+```
+
+#### Uninitialized class property (`Searcher.tsx`)
+```typescript
+// Before — not definitely assigned in constructor
+displayedCategories: string[];
+
+// After — initialized to empty array
+displayedCategories: string[] = [];
+```
+
+#### Definite-assignment assertion for ref-assigned field (`SearchBar.tsx`)
+```typescript
+// Before
+checkboxReference: HTMLInputElement;
+
+// After — assigned via React ref callback before use
+checkboxReference!: HTMLInputElement;
+```
+
+#### Ref closure in `setTimeout` callback (`LibraryContainer.tsx`)
+```typescript
+// Before — TypeScript sees generatedSectionsRef.current as ItemData[] | null
+//           inside the async callback, even after an earlier null guard
+const onTextChanged = useCallback((text: string): void => {
+    if (!generatedSectionsRef.current) return;
+    window.setTimeout(() => {
+        // TypeScript can't narrow .current here — it may have changed
+        LibraryUtilities.searchItemResursive(generatedSectionsRef.current, text);
+    }, 300);
+}, [...]);
+
+// After — capture into a local const so the type is narrowed once
+const onTextChanged = useCallback((text: string): void => {
+    if (!generatedSectionsRef.current) return;
+    const currentSections = generatedSectionsRef.current;  // narrowed: ItemData[]
+    window.setTimeout(() => {
+        LibraryUtilities.searchItemResursive(currentSections, text);
+    }, 300);
+}, [...]);
+```
+
+### Archived Documents
+
+The following documents were moved to `docs/archive/` as they describe historical phases that are no longer actively referenced:
+
+- `docs/archive/PHASE1_COMPLETION.md` — detailed Phase 1 completion summary
+- `docs/archive/PR_UPDATE_SUMMARY.md` — PR description update notes
+
+These files are retained for historical reference but are no longer in the repository root.
+
+### Development Guidelines for Strict Mode
+
+When adding new code, keep these patterns in mind:
+
+#### Nullable values
+```typescript
+// ❌ Will fail strict compilation
+let x: string = maybeNull();  // string | null not assignable to string
+
+// ✅ Correct
+let x: string | null = maybeNull();
+if (x !== null) { use(x); }
+
+// ✅ Also correct (non-null assertion when you're certain)
+let x = maybeNull()!;
+```
+
+#### Uninitialized class properties
+```typescript
+// ❌ Will fail strict compilation
+class Foo {
+    bar: string;  // error: not definitely assigned
+}
+
+// ✅ Initialize in declaration
+class Foo {
+    bar: string = '';
+}
+
+// ✅ Or use definite-assignment assertion (only when assigned before first use)
+class Foo {
+    bar!: string;
+}
+```
+
+#### `Array.find()` / `Array.pop()`
+```typescript
+// ❌ find() returns T | undefined
+const item = items.find(x => x.id === id);
+item.name;  // error: item is possibly undefined
+
+// ✅ Guard first
+const item = items.find(x => x.id === id);
+if (item) { item.name; }
+```
+
+---
 
 - [React 18 Upgrade Guide](https://react.dev/blog/2022/03/08/react-18-upgrade-guide)
 - [React Testing Library Docs](https://testing-library.com/docs/react-testing-library/intro/)
@@ -619,6 +803,10 @@ If you encounter issues not covered in this guide:
 
 ---
 
-**Document Version:** 1.2  
-**Last Updated:** 2026-04-01  
+**Document Version:** 1.3  
+**Last Updated:** 2026-04-03  
 **Applies To:** librarie.js v1.0.8+
+
+---
+
+## Resources

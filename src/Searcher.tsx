@@ -10,7 +10,7 @@ export class Searcher {
     // This list represents the actual categories beind displayed on the search bar 
     // at the time search is performed. It will be a subset of 'props.categories', 
     // that are most relevant to the current search results.
-    displayedCategories: string[];
+    displayedCategories: string[] = [];
 
     // To set the categories and displayedCategories
     initializeCategories(categories: string[]) {

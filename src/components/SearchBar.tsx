@@ -362,7 +362,7 @@ export function SearchBar(props: SearchBarProps) {
 export class CategoryData {
     name: string;
     className: string;
-    checkboxReference: HTMLInputElement;
+    checkboxReference!: HTMLInputElement;
     setInputRef: (element: HTMLInputElement) => void;
     displayText: string | null = null;
 
@@ -402,6 +402,8 @@ export class CategoryData {
     }
 
     onCheckboxChanged(event: any): void {
-        this.checkboxReference.checked = event.target.checked;
+        if (this.checkboxReference) {
+            this.checkboxReference.checked = event.target.checked;
+        }
     }
 }
