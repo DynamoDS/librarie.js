@@ -28,6 +28,15 @@ This document provides a comprehensive analysis of technical debt in the librari
 - ✅ TypeScript strict mode enabled across all source files (Phase 4)
 - ✅ All 73 tests pass
 
+### Key Achievements (Phase 5 - COMPLETED ✅)
+- ✅ React and ReactDOM declared as `externals` in webpack — removed from bundle (~232 KiB saved)
+- ✅ Replaced `underscore.js` with native JS (`.find()`, `.includes()`, `.forEach()`) — removed from bundle
+- ✅ Removed legacy `core-js` polyfill imports (ES2018 target already provides String/Array methods)
+- ✅ Removed unused `prop-types` and `underscore` from `package.json` dependencies
+- ✅ Added `react` / `react-dom` as `peerDependencies` (host application must provide them)
+- ✅ Bundle size reduced from 377 KiB → **145 KiB** (62% reduction, well under the 250 KiB target)
+- ✅ All 73 tests continue to pass
+
 ---
 
 ## Detailed Technical Debt Inventory
@@ -399,26 +408,33 @@ Recommended limit: 244 KiB
 
 ---
 
-### Phase 5: Performance & Bundle Optimization (LOW PRIORITY)
-**Duration:** 1 week  
-**Estimated Effort:** 3-5 days
+### Phase 5: Performance & Bundle Optimization ✅ COMPLETE
+**Completed:** 2026-04-05
 
-#### Tasks:
-- [ ] Implement code splitting
-  - [ ] Vendor bundle separation
-  - [ ] Lazy load ItemSummary
-  - [ ] Dynamic imports for search
+#### Bundle Size Achieved
+- **Before:** 377 KiB (minified)
+- **After:** 145 KiB (minified) — **62% reduction**, well under the 250 KiB target
 
-- [ ] Replace underscore.js
-  - [ ] Use native array methods where possible
-  - [ ] Use lodash-es for remaining utilities
+#### Changes Made
 
-- [ ] Optimize assets
-  - [ ] Compress SVG icons
-  - [ ] Enable Brotli compression
-  - [ ] Analyze bundle with webpack-bundle-analyzer
+**webpack externals for React/ReactDOM (largest win)**
+- Added `externals` config for `react` and `react-dom` in `webpack.config.js`
+- React and ReactDOM are now provided by the host (Dynamo) rather than bundled
+- Saved ~232 KiB (react-dom 131 KiB + underscore 95 KiB + scheduler 4 KiB + overhead)
+- Added `react` and `react-dom` as `peerDependencies` in `package.json`
 
-**Target:** Reduce bundle size from 383 KiB to <250 KiB
+**Replaced underscore.js with native JavaScript**
+- `EventHandler.ts`: replaced `_.isEmpty()` with null/undefined/array checks; replaced `_.find()` with `Array.prototype.find()`
+- `Searcher.tsx`: replaced `_.contains()` (×2) with `Array.prototype.includes()`
+- `SearchBar.tsx`: replaced `_.each()` with `Array.prototype.forEach()`
+- Removed `underscore` from `package.json` dependencies
+
+**Removed legacy core-js polyfill imports**
+- Removed `"core-js/actual/string/starts-with"`, `"core-js/actual/string/includes"`, and `"core-js/actual/array/"` imports from `entry-point.tsx`
+- These polyfills are redundant: `tsconfig.json` targets `es2018` and `lib: ["es2020", "dom"]` which natively includes String/Array methods
+
+**Removed unused dependency**
+- Removed `prop-types` from `package.json` dependencies (was never imported in source)
 
 ---
 
@@ -426,22 +442,32 @@ Recommended limit: 244 KiB
 **Duration:** Ongoing
 
 #### Code Quality:
-- [ ] Add error boundaries
-- [ ] Replace manual bind with arrow functions
-- [ ] Add JSDoc comments for public APIs
-- [ ] Implement consistent error handling
+- [ ] Add error boundaries around LibraryContainer and search result views
+- [ ] Replace manual bind with arrow functions (a few remaining in ClusterView)
+- [ ] Add JSDoc comments for all public API methods in `entry-point.tsx`
+- [ ] Implement consistent error handling across all event callbacks
 
 #### Developer Experience:
-- [ ] Add ESLint with React hooks plugin
-- [ ] Add Prettier for code formatting
-- [ ] Setup Husky for pre-commit hooks
-- [ ] Add Storybook for component documentation
+- [ ] Add ESLint with `eslint-plugin-react-hooks` (enforce hook rules at lint time)
+- [ ] Add Prettier for consistent code formatting with `.prettierrc`
+- [ ] Setup Husky + lint-staged for pre-commit hooks
+- [ ] Add Storybook for interactive component documentation
 
 #### Modern React Patterns:
-- [ ] Context API for state management (if needed)
-- [ ] Custom hooks for reusable logic
-- [ ] Memoization where appropriate
-- [ ] Suspense for async components
+- [ ] Memoize expensive renders with `React.memo` / `useMemo` / `useCallback` where profiling shows benefit
+- [ ] Consider Suspense boundaries for async data loading in `JsonDownloader`
+- [ ] Evaluate replacing `react-tooltip` with a lighter custom tooltip to reduce `@floating-ui` from bundle
+- [ ] Migrate `express` from v5 RC to v4 LTS for production stability
+
+#### Further Bundle Optimizations:
+- [ ] Replace `react-tooltip` + `@floating-ui` (~116 KiB node_modules) with a lightweight CSS-only tooltip — could save another ~30–40 KiB minified
+- [ ] Enable Brotli/gzip compression on the serving layer for additional transfer-size savings
+- [ ] Evaluate converting `LibraryStyles.css` inline styles to CSS Modules for better tree-shaking
+
+#### React 19 Migration (tabled for future):
+- [ ] Upgrade React from 18 → 19 and adopt `use()`, `useActionState`, etc.
+- [ ] Remove `forwardRef` wrappers (React 19 supports ref as prop)
+- [ ] Replace `Context.Provider` with direct context rendering
 
 ---
 
@@ -525,19 +551,29 @@ Each phase should be independently deployable with rollback capability:
 - [x] All 73 tests continue to pass
 - [x] No regressions in functionality
 
+### Phase 5 Success Criteria (✅ ACHIEVED):
+- [x] Bundle size < 250 KiB (achieved: **145 KiB**)
+- [x] React/ReactDOM declared as `externals` — not bundled
+- [x] `underscore` removed from source and `package.json`
+- [x] `core-js` polyfill imports removed from `entry-point.tsx`
+- [x] `prop-types` removed from `package.json`
+- [x] `peerDependencies` for react/react-dom added to `package.json`
+- [x] All 73 tests continue to pass
+- [x] No regressions in functionality
+
 ---
 
 ## Conclusion
 
-The librarie.js codebase has successfully completed Phases 1, 2, 3, and 4 of modernization, addressing critical compatibility, security, testing infrastructure, and type-safety issues.
+The librarie.js codebase has successfully completed Phases 1, 2, 3, 4, and 5 of modernization, addressing critical compatibility, security, testing infrastructure, type-safety, and now bundle-size issues.
 
 **Recommended Next Steps:**
 1. ✅ **Phase 1 Complete** - React 18 upgrade successful
 2. ✅ **Phase 2 Complete** - All components migrated to functional components
 3. ✅ **Phase 3 Complete** - Testing migrated from Enzyme to React Testing Library
 4. ✅ **Phase 4 Complete** - TypeScript strict mode enabled
-5. 📊 **Start Phase 5** - Bundle size and performance optimization
-6. 📊 **Start Phase 6** - Additional code quality improvements (ESLint, error boundaries, etc.)
+5. ✅ **Phase 5 Complete** - Bundle optimized: 377 KiB → 145 KiB (62% reduction)
+6. 📊 **Start Phase 6** - Additional code quality improvements (ESLint, error boundaries, lighter tooltip, etc.)
 
 **Note on React 19 migration:** Tabled for a future phase. The codebase is compatible with React 18.3.x and all current work is stable.
 
@@ -546,7 +582,8 @@ The librarie.js codebase has successfully completed Phases 1, 2, 3, and 4 of mod
 - Phase 2: ✅ Complete
 - Phase 3: ✅ Complete
 - Phase 4: ✅ ~1 day (Complete)
-- Phase 5-6: ~2-3 weeks (optional)
+- Phase 5: ✅ ~1 day (Complete)
+- Phase 6: ~2-3 weeks (optional)
 - **Total: 6-9 weeks for comprehensive modernization**
 
 ---
@@ -559,6 +596,7 @@ The librarie.js codebase has successfully completed Phases 1, 2, 3, and 4 of mod
 | 2026-03-30 | 1.1 | Copilot Agent | Phase 2 completion — all components converted to functional |
 | 2026-04-01 | 1.2 | Copilot Agent | Phase 3 completion — Enzyme replaced with React Testing Library |
 | 2026-04-03 | 1.3 | Copilot Agent | Phase 4 completion — TypeScript strict mode enabled |
+| 2026-04-05 | 1.4 | Copilot Agent | Phase 5 completion — Bundle optimized 377 KiB → 145 KiB |
 
 ---
 

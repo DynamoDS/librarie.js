@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { useRef, useState, useEffect } from 'react';
-import * as _ from 'underscore';
 import { ObjectExtensions } from '../LibraryUtilities';
 import { SearchIcon, ClearIcon } from './icons';
 import { useStableWindowListener } from './componentHelpers';
@@ -199,7 +198,7 @@ export function SearchBar(props: SearchBarProps) {
     }
 
     function clearSelectedCategories() {
-        _.each(ObjectExtensions.values(categoryDataRef.current ?? {}), cat => {
+        ObjectExtensions.values(categoryDataRef.current ?? {}).forEach(cat => {
             cat.setChecked(false);
         });
     }
