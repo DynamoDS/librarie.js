@@ -25,7 +25,6 @@ export class Searcher {
             categoryItems = categoryItems.concat(section.childItems)
         );
 
-        let index = 0;
         this.displayedCategories = [];
         for (let item of categoryItems) {
             if (!item.visible) {

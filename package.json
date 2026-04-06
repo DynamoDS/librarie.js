@@ -24,8 +24,6 @@
   "license": "MIT",
   "dependencies": {
     "express": "^5.1.0",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
     "react-tooltip": "^5.26.3"
   },
   "peerDependencies": {
@@ -43,7 +41,6 @@
     "@types/react": "^18.3.1",
     "@types/react-dom": "^18.3.0",
     "@types/react-test-renderer": "^18.3.0",
-    "@types/underscore": "^1.11.0",
     "babel-jest": "^29.6.4",
     "chai": "^3.5.0",
     "cross-env": "^10.1.0",

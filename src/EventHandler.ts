@@ -1,6 +1,4 @@
 
-import * as React from "react";
-
 /**
  * The Event class stores the callback function together with a name
  * that identifies it.
