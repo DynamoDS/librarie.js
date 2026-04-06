@@ -1,4 +1,3 @@
-import * as _ from "underscore";
 import { LibraryContainerHandle } from "./components/LibraryContainer";
 import * as LibraryUtilities from "./LibraryUtilities";
 
@@ -26,7 +25,6 @@ export class Searcher {
             categoryItems = categoryItems.concat(section.childItems)
         );
 
-        let index = 0;
         this.displayedCategories = [];
         for (let item of categoryItems) {
             if (!item.visible) {
@@ -35,7 +33,7 @@ export class Searcher {
 
             this.displayedCategories.push(item.text);
 
-            if (!_.contains(this.categories, item.text)) {
+            if (!this.categories.includes(item.text)) {
                 continue;
             }
 
@@ -62,7 +60,7 @@ export class Searcher {
 
                 this.displayedCategories.push(item.text);
 
-                if (!_.contains(this.categories, item.text)) {
+                if (!this.categories.includes(item.text)) {
                     continue;
                 }
             }

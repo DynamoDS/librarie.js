@@ -1,7 +1,4 @@
 
-import * as React from "react";
-import * as _ from "underscore";
-
 /**
  * The Event class stores the callback function together with a name
  * that identifies it.
@@ -22,8 +19,14 @@ export class Event {
     executeCallback(params?: any | any[]) {
         this.callbacks.forEach(callback => {
             try {
-                if(!_.isEmpty(params)) callback(params);
-                else if (params.length == 0) callback();
+                if (params !== undefined && params !== null &&
+                    !(Array.isArray(params) && params.length === 0) &&
+                    !(typeof params === "object" && !Array.isArray(params) && Object.keys(params).length === 0) &&
+                    params !== "") {
+                    callback(params);
+                } else if (Array.isArray(params) && params.length === 0) {
+                    callback();
+                }
             }
             catch (e) {
                 console.log(e);
@@ -43,7 +46,7 @@ export class Reactor {
     }
 
     getEvent(eventName: string): Event | undefined {
-        return _.find(this.events, function (event) { return event.name == eventName });
+        return this.events.find(function (event) { return event.name == eventName });
     }
 
     registerEvent(eventName: string, callback: Function) {

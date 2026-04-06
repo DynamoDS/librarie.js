@@ -803,9 +803,101 @@ If you encounter issues not covered in this guide:
 
 ---
 
-**Document Version:** 1.3  
-**Last Updated:** 2026-04-03  
+**Document Version:** 1.4  
+**Last Updated:** 2026-04-05  
 **Applies To:** librarie.js v1.0.8+
+
+---
+
+## Phase 5: Bundle Optimization (Completed 2026-04-05)
+
+### Goal
+Reduce the production bundle from 377 KiB to < 250 KiB.
+
+### Result
+**145 KiB** — a 62% reduction, well under the 250 KiB target.
+
+---
+
+### Change 1: React and ReactDOM as Externals
+
+The single biggest lever: declaring `react` and `react-dom` as webpack `externals` so they are no longer bundled.
+
+**webpack.config.js — before:**
+```js
+module.exports = {
+    // ... no externals
+};
+```
+
+**webpack.config.js — after:**
+```js
+module.exports = {
+    externals: {
+        "react":     { commonjs: "react",     commonjs2: "react",     amd: "React",    root: "React"    },
+        "react-dom": { commonjs: "react-dom", commonjs2: "react-dom", amd: "ReactDOM", root: "ReactDOM" }
+    },
+    // ...
+};
+```
+
+**package.json — added peerDependencies:**
+```json
+"peerDependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+}
+```
+
+**Why?** Dynamo (the host application) already loads React. Bundling it again duplicates ~138 KiB in every release.  
+**Impact:** Host must provide `react` and `react-dom` via UMD globals or module system. This is standard practice for all React component libraries.
+
+---
+
+### Change 2: Replaced underscore.js with Native JavaScript
+
+`underscore` was used in three files for three simple operations. All replaced with built-in Array methods.
+
+| File | underscore call | Replacement |
+|------|----------------|-------------|
+| `EventHandler.ts` | `_.isEmpty(params)` | Explicit `null`/`undefined`/empty-array check |
+| `EventHandler.ts` | `_.find(arr, fn)` | `arr.find(fn)` |
+| `Searcher.tsx` | `_.contains(arr, val)` | `arr.includes(val)` |
+| `SearchBar.tsx` | `_.each(arr, fn)` | `arr.forEach(fn)` |
+
+Removed `underscore` from `dependencies` in `package.json`.
+
+---
+
+### Change 3: Removed Legacy core-js Polyfill Imports
+
+**entry-point.tsx — before:**
+```typescript
+import "core-js/actual/string/starts-with";
+import "core-js/actual/string/includes";
+import "core-js/actual/array/";
+```
+
+**entry-point.tsx — after:** *(lines removed)*
+
+**Why?** `tsconfig.json` already sets `"target": "es2018"` and `"lib": ["es2020", "dom"]`, which natively includes `String.prototype.startsWith`, `String.prototype.includes`, and all modern `Array` methods. Polyfilling them adds dead code.
+
+---
+
+### Change 4: Removed Unused Dependencies
+
+Removed from `dependencies` in `package.json`:
+- `prop-types` — was never imported in any source file
+- `underscore` — replaced by native JS (see Change 2)
+- `core-js` — polyfills no longer imported (see Change 3)
+
+---
+
+### Guidance for Future Development
+
+- **Externals are required at runtime.** Any environment loading `librarie.js` must provide `react` and `react-dom` — either as UMD globals (`window.React`, `window.ReactDOM`) or as CommonJS/AMD modules.
+- **Do not re-add underscore** — native `Array.prototype.find/includes/forEach` cover all the cases previously handled by underscore.
+- **Do not add new core-js imports** — the TypeScript/webpack toolchain already polyfills what is needed via the `target: "es2018"` setting.
 
 ---
 

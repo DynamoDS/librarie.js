@@ -14,7 +14,12 @@ librarie.js has been upgraded to React 18.3.1! See [MIGRATION_GUIDE.md](./MIGRAT
 - ✅ Modern TypeScript configuration (es2018 target)
 - ✅ 43% reduction in security vulnerabilities
 
-**Known Issue:** cheerio 0.22.0 is locked to this older version for Enzyme compatibility. This will be resolved when migrating to React Testing Library in Phase 3. See [TECH_DEBT_ANALYSIS.md](./TECH_DEBT_ANALYSIS.md) for details.
+## Bundle Size ⚡ (Phase 5)
+
+The production bundle has been reduced from 377 KiB to **145 KiB** (62% reduction) by externalizing React and ReactDOM.
+
+> **⚠️ Runtime Requirement:** `react` and `react-dom` are **not bundled** — the host environment must provide them before loading `librarie.js`. In a browser/WebView2 context this means `window.React` and `window.ReactDOM` must be defined. In a CommonJS/AMD context the module loader must resolve `"react"` and `"react-dom"`.
+> If these globals are missing the bundle will throw `"React is not defined"` at load time.
 
 ## Set up
 Installing all dependencies
