@@ -36,8 +36,7 @@ jobs:
       - run: npm run production --if-present
       - run: npm test
         env:
-          # Set environment to production just in case
-          NODE_ENV: production
+          NODE_ENV: test
       - name: The final publish step within dist folder
         working-directory: dist
         # This will publish the package and set access to public as if you had run npm access public after publishing.
