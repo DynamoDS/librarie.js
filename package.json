@@ -1,6 +1,6 @@
 {
   "name": "@dynamods/librariejs",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "Project that contains all hosted contents of Dynamo Windows client",
   "main": "index.js",
   "scripts": {
