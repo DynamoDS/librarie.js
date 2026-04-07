@@ -955,7 +955,7 @@ libController.createLibraryByElementId("#libraryContainerPlaceholder");
 
 ### Change 3: Express Downgrade (Dev Server Only)
 
-The local development server dependency was downgraded from the release-candidate `express@^5.1.0` to the LTS `express@^4.21.2`.
+The local development server dependency was downgraded from the release-candidate `express@^5.1.0` to the LTS `express@^4.22.1`.
 
 **Why?** Express v5 was an RC (release candidate) at the time of writing. Using RC versions in a shared repository introduces risk. Express v4 is the current LTS and receives security patches.
 
