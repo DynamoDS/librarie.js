@@ -4,7 +4,7 @@
   "description": "Project that contains all hosted contents of Dynamo Windows client",
   "main": "index.js",
   "scripts": {
-    "test": "jest --coverage",
+    "test": "cross-env NODE_ENV=test jest --coverage",
     "utiltest": "mocha -r ts-node/register __tests__/mochatest/libraryUtilitiesTest.ts --reporter mocha-junit-reporter --reporter-options mochaFile=./TestResults/MochaReport.xml",
     "dev": "cross-env NODE_ENV=development webpack",
     "build": "cross-env NODE_ENV=production --mode=development webpack",
