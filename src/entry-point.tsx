@@ -152,6 +152,9 @@ export class LibraryController {
      * Mounts the library view into the DOM element identified by the given CSS selector or element ID.
      * Optionally pre-populates the library with type and layout data.
      *
+     * If called more than once, the existing React root is reused to avoid multiple roots on the
+     * same container, which would cause React warnings and undefined behaviour.
+     *
      * @param {string} htmlElementId A CSS selector (e.g. "#myDiv") or plain element ID used to locate
      *   the target DOM container. Uses querySelector first, then getElementById as fallback.
      * @param {any} [layoutSpecsJson] Optional layout specification JSON. When provided together with
@@ -160,15 +163,21 @@ export class LibraryController {
      *   layoutSpecsJson, the library will be populated immediately after mounting.
      * @throws {Error} Throws if the target element cannot be found in the DOM.
      */
-    createLibraryByElementId(htmlElementId: string, layoutSpecsJson: any = null, loadedTypesJson: any = null) {
-        let htmlElement: Element | null;
-        htmlElement = document.querySelector(htmlElementId) || document.getElementById(htmlElementId);
+    createLibraryByElementId(htmlElementId: string, layoutSpecsJson: any = null, loadedTypesJson: any = null): void {
+        const htmlElement: Element | null =
+            document.querySelector(htmlElementId) || document.getElementById(htmlElementId);
         if (!htmlElement) {
             throw new Error("Element " + htmlElementId + " is not defined");
         }
 
-        this.root = createRoot(htmlElement);
-        this.root.render(this.createLibraryContainer());
+        if (this.root) {
+            // Reuse the existing root to avoid React warnings from creating multiple roots
+            // on the same container element.
+            this.root.render(this.createLibraryContainer());
+        } else {
+            this.root = createRoot(htmlElement);
+            this.root.render(this.createLibraryContainer());
+        }
 
         if (loadedTypesJson && (layoutSpecsJson)) {
             let append = false; // Replace existing contents instead of appending.

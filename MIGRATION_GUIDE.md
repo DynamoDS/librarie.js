@@ -935,7 +935,7 @@ this.root = createRoot(htmlElement);
 this.root.render(this.createLibraryContainer());
 ```
 
-**Why?** `ReactDOM.render()` is not available in React 19. Using `createRoot()` is the standard API since React 18 and is required for React 19 compatibility. The return value was unused by callers so the signature change is non-breaking.
+**Why?** `ReactDOM.render()` is not available in React 19. Using `createRoot()` is the standard API since React 18 and is required for React 19 compatibility. The created `Root` is stored on the controller instance (`this.root`) and reused on subsequent calls to avoid multiple roots on the same container. Note: `createLibraryByElementId()` no longer returns a value — host code that relied on the return value should keep a reference to the `LibraryController` instance and use its public methods instead.
 
 ---
 

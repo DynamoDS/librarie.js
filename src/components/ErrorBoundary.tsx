@@ -36,9 +36,11 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
             return (
                 <div role="alert" style={{ padding: "16px", color: "#c00" }}>
                     <p>Something went wrong loading the library.</p>
-                    <details style={{ whiteSpace: "pre-wrap", fontSize: "0.85em" }}>
-                        {this.state.error?.message}
-                    </details>
+                    {process.env.NODE_ENV !== "production" && (
+                        <details style={{ whiteSpace: "pre-wrap", fontSize: "0.85em" }}>
+                            {this.state.error?.message}
+                        </details>
+                    )}
                 </div>
             );
         }
