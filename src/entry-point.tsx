@@ -164,20 +164,17 @@ export class LibraryController {
      * @throws {Error} Throws if the target element cannot be found in the DOM.
      */
     createLibraryByElementId(htmlElementId: string, layoutSpecsJson: any = null, loadedTypesJson: any = null): void {
-        const htmlElement: Element | null =
-            document.querySelector(htmlElementId) || document.getElementById(htmlElementId);
+        const htmlElement: Element | null = document.querySelector(htmlElementId) || document.getElementById(htmlElementId);
         if (!htmlElement) {
             throw new Error("Element " + htmlElementId + " is not defined");
         }
 
-        if (this.root) {
-            // Reuse the existing root to avoid React warnings from creating multiple roots
-            // on the same container element.
-            this.root.render(this.createLibraryContainer());
-        } else {
+        if (!this.root) {
             this.root = createRoot(htmlElement);
-            this.root.render(this.createLibraryContainer());
         }
+        // Reuse the existing root to avoid React warnings from creating multiple roots
+        // on the same container element.
+        this.root.render(this.createLibraryContainer());
 
         if (loadedTypesJson && (layoutSpecsJson)) {
             let append = false; // Replace existing contents instead of appending.
