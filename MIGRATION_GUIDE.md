@@ -901,4 +901,120 @@ Removed from `dependencies` in `package.json`:
 
 ---
 
+## Phase 6 Changes
+
+### Overview
+
+Phase 6 focused on React 19 readiness and code quality improvements.
+
+---
+
+### Change 1: ReactDOM.render → createRoot (React 19 Migration)
+
+`ReactDOM.render()` was removed in React 19. All rendering now uses `createRoot()` from `react-dom/client`.
+
+**entry-point.tsx — before:**
+```typescript
+import * as ReactDOM from "react-dom";
+
+// ...
+let libraryContainer = ReactDOM.render(this.createLibraryContainer(), htmlElement);
+return libraryContainer;
+```
+
+**entry-point.tsx — after:**
+```typescript
+import { createRoot } from "react-dom/client";
+import type { Root } from "react-dom/client";
+
+// ...
+private root: Root | null = null;
+
+// ...
+this.root = createRoot(htmlElement);
+this.root.render(this.createLibraryContainer());
+```
+
+**Why?** `ReactDOM.render()` is not available in React 19. Using `createRoot()` is the standard API since React 18 and is required for React 19 compatibility. The return value was unused by callers so the signature change is non-breaking.
+
+---
+
+### Change 2: ErrorBoundary Component
+
+A new `ErrorBoundary` component (`src/components/ErrorBoundary.tsx`) was added and wraps `LibraryContainer` in `createLibraryContainer()`. This prevents uncaught React errors from crashing the entire Dynamo UI.
+
+**Usage:**
+```typescript
+// The controller wraps the library in an ErrorBoundary automatically
+libController.createLibraryByElementId("#libraryContainerPlaceholder");
+```
+
+**Why?** Without an error boundary, any uncaught error inside the library tree will propagate to the host application's root, potentially crashing Dynamo. The boundary logs errors to the console and shows a safe fallback UI.
+
+---
+
+### Change 3: Express Downgrade (Dev Server Only)
+
+The local development server dependency was downgraded from the release-candidate `express@^5.1.0` to the LTS `express@^4.21.2`.
+
+**Why?** Express v5 was an RC (release candidate) at the time of writing. Using RC versions in a shared repository introduces risk. Express v4 is the current LTS and receives security patches.
+
+---
+
+### Change 4: peerDependencies Updated for React 19
+
+```json
+"peerDependencies": {
+  "react": "^18.3.1 || ^19",
+  "react-dom": "^18.3.1 || ^19"
+}
+```
+
+**Why?** librarie.js cannot upgrade React independently (it is a UMD bundle that receives React from the host). By declaring `^18 || ^19` compatibility, npm/yarn will not warn host applications when they upgrade to React 19.
+
+---
+
+### Change 5: ESLint and Prettier
+
+ESLint v9 (flat config format) was added with the following plugins:
+- `@typescript-eslint/eslint-plugin` — TypeScript-aware linting
+- `eslint-plugin-react` — React best-practice rules
+- `eslint-plugin-react-hooks` — **Enforces Rules of Hooks** (prevents incorrect hook calls)
+
+Prettier was added with a `.prettierrc.json` config matching the existing code style.
+
+**New scripts:**
+```bash
+npm run lint     # Run ESLint on all source files
+npm run format   # Format all source files with Prettier
+```
+
+---
+
+### Change 6: JSDoc on Public API
+
+All public methods in `entry-point.tsx` now have JSDoc documentation:
+- `CreateJsonDownloader()`
+- `CreateLibraryController()`
+- `LibraryController.on()`
+- `LibraryController.raiseEvent()`
+- `LibraryController.registerRequestHandler()`
+- `LibraryController.request()`
+- `LibraryController.createLibraryByElementId()`
+- `LibraryController.createLibraryContainer()`
+- `LibraryController.setLoadedTypesJson()`
+- `LibraryController.setLayoutSpecsJson()`
+- `LibraryController.refreshLibraryView()`
+- `LibraryController.setHostContext()`
+
+---
+
+### Guidance for Future Development
+
+- **React 19 full adoption:** When Dynamo upgrades to React 19, update `@types/react` and `@types/react-dom` to v19, then remove the `forwardRef` wrapper in `SearchResultItem.tsx` in favour of passing `ref` directly as a prop.
+- **Run `npm run lint` before committing** to catch React Hooks violations early.
+- **Run `npm run format`** to keep code style consistent.
+
+---
+
 ## Resources

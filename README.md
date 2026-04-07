@@ -4,15 +4,21 @@
 
 Reusable lightweight library component based on React.js
 
-## React 18 Upgrade ⚡
+## React 19 Ready ⚡
 
-librarie.js has been upgraded to React 18.3.1! See [MIGRATION_GUIDE.md](./MIGRATION_GUIDE.md) for details about the changes and [TECH_DEBT_ANALYSIS.md](./TECH_DEBT_ANALYSIS.md) for the complete technical debt inventory and modernization roadmap.
+librarie.js has completed all 6 phases of its modernization effort and is **React 19-ready**. See [MIGRATION_GUIDE.md](./MIGRATION_GUIDE.md) for details about the changes and [TECH_DEBT_ANALYSIS.md](./TECH_DEBT_ANALYSIS.md) for the complete technical debt inventory.
 
-**Key Changes:**
-- ✅ React 18.3.1 (from 16.14.0)
-- ✅ All deprecated UNSAFE_ lifecycle methods replaced
-- ✅ Modern TypeScript configuration (es2018 target)
-- ✅ 43% reduction in security vulnerabilities
+**Modernization Summary:**
+- ✅ React 18.3.1 (from 16.14.0) — Phase 1
+- ✅ All deprecated UNSAFE_ lifecycle methods replaced — Phase 1
+- ✅ All 6 class components migrated to functional components with hooks — Phase 2
+- ✅ All tests migrated from Enzyme to React Testing Library (73 tests) — Phase 3
+- ✅ TypeScript strict mode enabled — Phase 4
+- ✅ Bundle reduced from 377 KiB → **145 KiB** (62% reduction) — Phase 5
+- ✅ `ReactDOM.render()` → `createRoot()` (React 19 compatibility) — Phase 6
+- ✅ ESLint + React Hooks enforcement + Prettier — Phase 6
+- ✅ `ErrorBoundary` wrapping `LibraryContainer` — Phase 6
+- ✅ Peer dependencies: `"react": "^18.3.1 || ^19"` — Phase 6
 
 ## Bundle Size ⚡ (Phase 5)
 
@@ -60,6 +66,16 @@ Note: If you are having trouble running `npm install` and are outside the adsk n
     Test file is at `./__tests__/mochatest/libraryUtilitiesTest.ts`
 
     Run all tests command does run all the tests, but it does not output libraryUtilitiesTest.ts console messages. When any test fail, it is unclear which one does and why. When that happens, use the command above to run just the utility tests.
+
+## Lint and Format
+
+#### Run ESLint (React Hooks rules enforced)
+
+    `$ npm run lint`
+
+#### Format with Prettier
+
+    `$ npm run format`
 
 - Example test  
 
