@@ -1,15 +1,29 @@
 import * as React from "react";
-import * as ReactDOM from "react-dom";
+import { flushSync } from "react-dom";
+import { createRoot } from "react-dom/client";
+import type { Root } from "react-dom/client";
 
 import { LibraryContainer } from "./components/LibraryContainer";
-import { ItemData, JsonDownloader } from "./LibraryUtilities";
+import { ErrorBoundary } from "./components/ErrorBoundary";
+import { JsonDownloader } from "./LibraryUtilities";
 import { Reactor } from "./EventHandler";
 import { HostingContextType } from "./SharedTypes";
 
+/**
+ * Creates a new JsonDownloader instance to asynchronously load JSON data from one or more URLs.
+ * @param {string[]} jsonUrls An array of URLs from which JSON data is to be downloaded.
+ * @param {Function} callback Callback invoked for each URL with (url, jsonObject) arguments.
+ * @returns {JsonDownloader} A new JsonDownloader instance.
+ */
 export function CreateJsonDownloader(jsonUrls: string[], callback: Function) {
     return new JsonDownloader(jsonUrls, callback);
 }
 
+/**
+ * Creates and returns a new LibraryController instance.
+ * This is the primary factory function for host applications to obtain a library controller.
+ * @returns {LibraryController} A new LibraryController instance.
+ */
 export function CreateLibraryController() {
     return new LibraryController();
 }
@@ -49,6 +63,8 @@ export class LibraryController {
     // The search result will be in the same format as the first parameter for setLoadedTypesJsonHandler.
     searchLibraryItemsHandler: SearchLibraryItemsFunc | null = null;
 
+    private root: Root | null = null;
+
     constructor() {
         this.on = this.on.bind(this);
         this.raiseEvent = this.raiseEvent.bind(this);
@@ -64,10 +80,20 @@ export class LibraryController {
         this.reactor = new Reactor();
     }
 
+    /**
+     * Subscribes to a named library event.
+     * @param {string} eventName The event name (e.g. "itemClicked", "searchTextUpdated").
+     * @param {Function} callback The callback invoked when the event is raised.
+     */
     on(eventName: string, callback: Function) {
         this.reactor?.registerEvent(eventName, callback);
     }
 
+    /**
+     * Raises a named library event with optional parameters.
+     * @param {string} name The event name to raise.
+     * @param {any} [params] Optional parameters passed to the event subscribers.
+     */
     raiseEvent(name: string, params?: any | any[]) {
         this.reactor?.raiseEvent(name, params);
     }
@@ -123,14 +149,36 @@ export class LibraryController {
         }
     }
 
-    createLibraryByElementId(htmlElementId: string, layoutSpecsJson: any = null, loadedTypesJson: any = null) {
-        let htmlElement: any;
-        htmlElement = document.querySelector(htmlElementId) || document.getElementById(htmlElementId);
+    /**
+     * Mounts the library view into the DOM element identified by the given CSS selector or element ID.
+     * Optionally pre-populates the library with type and layout data.
+     *
+     * If called more than once, the existing React root is reused to avoid multiple roots on the
+     * same container, which would cause React warnings and undefined behaviour.
+     *
+     * @param {string} htmlElementId A CSS selector (e.g. "#myDiv") or plain element ID used to locate
+     *   the target DOM container. Uses querySelector first, then getElementById as fallback.
+     * @param {any} [layoutSpecsJson] Optional layout specification JSON. When provided together with
+     *   loadedTypesJson, the library will be populated immediately after mounting.
+     * @param {any} [loadedTypesJson] Optional loaded types JSON. When provided together with
+     *   layoutSpecsJson, the library will be populated immediately after mounting.
+     * @throws {Error} Throws if the target element cannot be found in the DOM.
+     */
+    createLibraryByElementId(htmlElementId: string, layoutSpecsJson: any = null, loadedTypesJson: any = null): void {
+        const htmlElement: Element | null = document.querySelector(htmlElementId) || document.getElementById(htmlElementId);
         if (!htmlElement) {
             throw new Error("Element " + htmlElementId + " is not defined");
         }
 
-        let libraryContainer = ReactDOM.render(this.createLibraryContainer(), htmlElement);
+        if (!this.root) {
+            this.root = createRoot(htmlElement);
+        }
+        // Use flushSync so the component mounts synchronously (registering its handlers)
+        // before we call setLoadedTypesJson / refreshLibraryView below. Without this,
+        // createRoot().render() is async and the handlers would still be null.
+        flushSync(() => {
+            this.root!.render(this.createLibraryContainer());
+        });
 
         if (loadedTypesJson && (layoutSpecsJson)) {
             let append = false; // Replace existing contents instead of appending.
@@ -138,29 +186,50 @@ export class LibraryController {
             this.setLayoutSpecsJson(layoutSpecsJson, append);
             this.refreshLibraryView();
         }
-
-        return libraryContainer;
     }
 
+    /**
+     * Creates the React element tree for the library container wrapped in an ErrorBoundary.
+     * This is typically used by host applications that manage their own React root
+     * and want to embed the library container inside an existing React tree.
+     * @returns {React.ReactElement} The LibraryContainer React element wrapped in an ErrorBoundary.
+     */
     createLibraryContainer() {
-        return (<LibraryContainer
-            libraryController={this}
-            defaultSectionString={this.DefaultSectionName}
-            miscSectionString={this.MiscSectionName} />);
+        return (
+            <ErrorBoundary>
+                <LibraryContainer
+                    libraryController={this}
+                    defaultSectionString={this.DefaultSectionName}
+                    miscSectionString={this.MiscSectionName} />
+            </ErrorBoundary>
+        );
     }
 
+    /**
+     * Passes the loaded types JSON to the library for rendering.
+     * @param {any} loadedTypesJson The loaded types data object.
+     * @param {boolean} append When true, appends to the existing types; when false, replaces them.
+     */
     setLoadedTypesJson(loadedTypesJson: any, append: boolean): void {
         if (this.setLoadedTypesJsonHandler) {
             this.setLoadedTypesJsonHandler(loadedTypesJson, append);
         }
     }
 
+    /**
+     * Passes the layout specification JSON to the library for rendering.
+     * @param {any} layoutSpecsJson The layout specification data object.
+     * @param {boolean} append When true, appends to the existing layout; when false, replaces it.
+     */
     setLayoutSpecsJson(layoutSpecsJson: any, append: boolean): void {
         if (this.setLayoutSpecsJsonHandler) {
             this.setLayoutSpecsJsonHandler(layoutSpecsJson, append);
         }
     }
 
+    /**
+     * Triggers a refresh of the library view, causing it to re-render with the current data.
+     */
     refreshLibraryView(): void {
         if (this.refreshLibraryViewHandler) {
             this.refreshLibraryViewHandler();
