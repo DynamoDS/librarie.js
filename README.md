@@ -16,10 +16,9 @@ librarie.js has been upgraded to React 18.3.1! See [MIGRATION_GUIDE.md](./MIGRAT
 
 ## Bundle Size ⚡ (Phase 5)
 
-The production bundle has been reduced from 377 KiB to **145 KiB** (62% reduction) by externalizing React and ReactDOM.
+The production bundle was optimized in Phase 5 by removing `underscore.js` and legacy `core-js` polyfill imports.
 
-> **⚠️ Runtime Requirement:** `react` and `react-dom` are **not bundled** — the host environment must provide them before loading `librarie.js`. In a browser/WebView2 context this means `window.React` and `window.ReactDOM` must be defined. In a CommonJS/AMD context the module loader must resolve `"react"` and `"react-dom"`.
-> If these globals are missing the bundle will throw `"React is not defined"` at load time.
+> **Note:** React and ReactDOM are **bundled** inside `librarie.js` / `librarie.min.js`. Dynamo's `LibraryViewExtensionWebView2` injects the bundle inline via `NavigateToString` and does not provide React as a global — the bundle must be self-contained.
 
 ## Set up
 Installing all dependencies
