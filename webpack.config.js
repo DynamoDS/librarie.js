@@ -32,14 +32,6 @@ module.exports = {
     mode:productionBuild? "production":"development",
     plugins: plugins,
 
-    // React and ReactDOM are provided by the host application (Dynamo).
-    // Declaring them as externals keeps them out of the bundle, which is the
-    // single biggest lever for reducing bundle size.
-    externals: {
-        "react":     { commonjs: "react",     commonjs2: "react",     amd: "React",    root: "React"    },
-        "react-dom": { commonjs: "react-dom", commonjs2: "react-dom", amd: "ReactDOM", root: "ReactDOM" }
-    },
-
     // Enable sourcemaps for debugging webpack's output.
     devtool: "source-map",
 

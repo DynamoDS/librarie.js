@@ -803,9 +803,9 @@ If you encounter issues not covered in this guide:
 
 ---
 
-**Document Version:** 1.4  
-**Last Updated:** 2026-04-05  
-**Applies To:** librarie.js v1.0.8+
+**Document Version:** 1.5  
+**Last Updated:** 2026-04-08  
+**Applies To:** librarie.js v1.0.9+
 
 ---
 
@@ -819,38 +819,11 @@ Reduce the production bundle from 377 KiB to < 250 KiB.
 
 ---
 
-### Change 1: React and ReactDOM as Externals
+### ~~Change 1: React and ReactDOM as Externals~~ (Reverted 2026-04-08)
 
-The single biggest lever: declaring `react` and `react-dom` as webpack `externals` so they are no longer bundled.
-
-**webpack.config.js — before:**
-```js
-module.exports = {
-    // ... no externals
-};
-```
-
-**webpack.config.js — after:**
-```js
-module.exports = {
-    externals: {
-        "react":     { commonjs: "react",     commonjs2: "react",     amd: "React",    root: "React"    },
-        "react-dom": { commonjs: "react-dom", commonjs2: "react-dom", amd: "ReactDOM", root: "ReactDOM" }
-    },
-    // ...
-};
-```
-
-**package.json — added peerDependencies:**
-```json
-"peerDependencies": {
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1"
-}
-```
-
-**Why?** Dynamo (the host application) already loads React. Bundling it again duplicates ~138 KiB in every release.  
-**Impact:** Host must provide `react` and `react-dom` via UMD globals or module system. This is standard practice for all React component libraries.
+> **Why reverted:** The initial implementation declared `react` and `react-dom` as webpack externals, expecting Dynamo to provide `window.React` / `window.ReactDOM` globals. Investigation of the Dynamo source (`src/LibraryViewExtensionWebView2/LibraryViewController.cs`) revealed that Dynamo injects the contents of `librarie.min.js` **inline** as a string replacement (`LIBPLACEHOLDER`) into `library.html` and calls `browser.NavigateToString(...)`. No React is loaded separately — the bundle must be fully self-contained.
+>
+> The externals config caused a blank library panel in both `npm run serve` and production Dynamo. The change was reverted: `externals` block removed from `webpack.config.js`, and `react`/`react-dom` restored to `dependencies` in `package.json`.
 
 ---
 
@@ -895,7 +868,7 @@ Removed from `dependencies` in `package.json`:
 
 ### Guidance for Future Development
 
-- **Externals are required at runtime.** Any environment loading `librarie.js` must provide `react` and `react-dom` — either as UMD globals (`window.React`, `window.ReactDOM`) or as CommonJS/AMD modules.
+- **React and ReactDOM are bundled.** The bundle is injected inline by Dynamo's `LibraryViewExtensionWebView2` with no separate React globals available. Do not externalize React/ReactDOM without first verifying that the host injects them before the bundle executes.
 - **Do not re-add underscore** — native `Array.prototype.find/includes/forEach` cover all the cases previously handled by underscore.
 - **Do not add new core-js imports** — the TypeScript/webpack toolchain already polyfills what is needed via the `target: "es2018"` setting.
 
