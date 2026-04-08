@@ -1,4 +1,5 @@
 import * as React from "react";
+import { flushSync } from "react-dom";
 import { createRoot } from "react-dom/client";
 import type { Root } from "react-dom/client";
 
@@ -172,9 +173,12 @@ export class LibraryController {
         if (!this.root) {
             this.root = createRoot(htmlElement);
         }
-        // Reuse the existing root to avoid React warnings from creating multiple roots
-        // on the same container element.
-        this.root.render(this.createLibraryContainer());
+        // Use flushSync so the component mounts synchronously (registering its handlers)
+        // before we call setLoadedTypesJson / refreshLibraryView below. Without this,
+        // createRoot().render() is async and the handlers would still be null.
+        flushSync(() => {
+            this.root!.render(this.createLibraryContainer());
+        });
 
         if (loadedTypesJson && (layoutSpecsJson)) {
             let append = false; // Replace existing contents instead of appending.
