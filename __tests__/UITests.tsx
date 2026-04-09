@@ -3,6 +3,7 @@ import '@testing-library/jest-dom';
 import { render, screen, fireEvent, act, waitFor } from '@testing-library/react';
 import * as LibraryEntryPoint from '../src/entry-point';
 import { LibraryItem } from '../src/components/LibraryItem';
+import { SearchBar } from '../src/components/SearchBar';
 import { ItemData } from "../src/LibraryUtilities";
 import { createLibraryItem } from "../src/utils";
 import { createMockHandle, loadedTypesJson, layoutSpecsJson } from './data/mock-data';
@@ -117,4 +118,116 @@ describe("LibraryContainer UI", function () {
     });
   });
 
+});
+
+// ── SearchBar ─────────────────────────────────────────────────────────────────
+
+describe("SearchBar", function () {
+
+  it("renders one checkbox per category in the filter panel", function () {
+    render(
+      <SearchBar
+        onTextChanged={() => {}}
+        onDetailedModeChanged={() => {}}
+        onCategoriesChanged={() => {}}
+        categories={["Math", "List", "String"]}
+      />
+    );
+
+    // The filter button is disabled until there is search text, so we cannot
+    // click it to open the panel. Verify the categories are wired up by
+    // checking the internal categoryData initialisation path indirectly:
+    // fire a change on the input to produce hasText=true, then open the panel.
+    const input = screen.getByRole('textbox');
+    fireEvent.change(input, { target: { value: 'x' } });
+
+    const filterBtn = document.querySelector('button[title="Filter results"]');
+    expect(filterBtn).not.toBeNull();
+    expect(filterBtn).not.toBeDisabled();
+    fireEvent.click(filterBtn!);
+
+    // Three checkboxes should now be visible (one per category)
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    expect(checkboxes).toHaveLength(3);
+  });
+
+  it("clear (×) button is absent when input is empty", function () {
+    render(
+      <SearchBar
+        onTextChanged={() => {}}
+        onDetailedModeChanged={() => {}}
+        onCategoriesChanged={() => {}}
+        categories={[]}
+      />
+    );
+
+    expect(document.querySelector('.CancelButton')).toBeNull();
+  });
+
+  it("clear (×) button appears after typing and resets the input when clicked", function () {
+    const onTextChanged = jest.fn();
+    render(
+      <SearchBar
+        onTextChanged={onTextChanged}
+        onDetailedModeChanged={() => {}}
+        onCategoriesChanged={() => {}}
+        categories={[]}
+      />
+    );
+
+    const input = screen.getByRole('textbox');
+    fireEvent.change(input, { target: { value: 'hello' } });
+
+    const cancelBtn = document.querySelector('.CancelButton');
+    expect(cancelBtn).not.toBeNull();
+
+    fireEvent.click(cancelBtn!);
+
+    expect((input as HTMLInputElement).value).toBe('');
+    // onTextChanged called at least once after clearing
+    expect(onTextChanged).toHaveBeenLastCalledWith('');
+  });
+});
+
+// ── SearchResultItem ──────────────────────────────────────────────────────────
+
+describe("SearchResultItem", function () {
+  let libController: LibraryEntryPoint.LibraryController;
+
+  beforeEach(function () {
+    libController = LibraryEntryPoint.CreateLibraryController();
+    render(libController.createLibraryContainer());
+    act(() => {
+      libController.setLoadedTypesJson(loadedTypesJson, false);
+      libController.setLayoutSpecsJson(layoutSpecsJson, false);
+      libController.refreshLibraryView();
+    });
+  });
+
+  it("search results include the parent category text as breadcrumb", async function () {
+    const input = screen.getByRole('textbox');
+    fireEvent.change(input, { target: { value: 'child' } });
+
+    await waitFor(() => {
+      const results = document.querySelectorAll('.SearchResultItemContainer');
+      expect(results.length).toBeGreaterThan(0);
+    }, { timeout: 1000 });
+
+    // The parent category "Parent" should appear somewhere in the result items
+    const parentLabels = document.querySelectorAll('.ItemParent');
+    expect(parentLabels.length).toBeGreaterThan(0);
+  });
+
+  it("clicking a search result does not throw", async function () {
+    const input = screen.getByRole('textbox');
+    fireEvent.change(input, { target: { value: 'child' } });
+
+    await waitFor(() => {
+      const results = document.querySelectorAll('.SearchResultItemContainer');
+      expect(results.length).toBeGreaterThan(0);
+    }, { timeout: 1000 });
+
+    const firstResult = document.querySelector('.SearchResultItemContainer');
+    expect(() => fireEvent.click(firstResult!)).not.toThrow();
+  });
 });
