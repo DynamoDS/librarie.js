@@ -139,7 +139,7 @@ describe("useStableWindowListener", function () {
 
         function TestComponent() {
             const [count, setCount] = React.useState(0);
-            useStableWindowListener("click", () => { void count; });
+            useStableWindowListener("click", () => count);
             return <button onClick={() => setCount(c => c + 1)}>click</button>;
         }
 
