@@ -94,6 +94,7 @@ describe("Event", function () {
     describe("error isolation", function () {
 
         it("a throwing callback does not prevent subsequent callbacks from running", function () {
+            const consoleSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
             const event = new Event("test");
             const throwing = jest.fn().mockImplementation(() => { throw new Error("boom"); });
             const safe = jest.fn();
@@ -102,6 +103,8 @@ describe("Event", function () {
 
             expect(() => event.executeCallback("go")).not.toThrow();
             expect(safe).toHaveBeenCalledTimes(1);
+            expect(consoleSpy).toHaveBeenCalledTimes(1);
+            consoleSpy.mockRestore();
         });
     });
 
@@ -163,5 +166,16 @@ describe("Reactor", function () {
 
         expect(fnA).toHaveBeenCalledTimes(1);
         expect(fnB).not.toHaveBeenCalled();
+    });
+
+    it("registering the same callback twice fires it twice per event (no deduplication)", function () {
+        const reactor = new Reactor();
+        const fn = jest.fn();
+        reactor.registerEvent("evt", fn);
+        reactor.registerEvent("evt", fn);
+
+        reactor.raiseEvent("evt", "ping");
+
+        expect(fn).toHaveBeenCalledTimes(2);
     });
 });

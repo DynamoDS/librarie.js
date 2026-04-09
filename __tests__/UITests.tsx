@@ -214,8 +214,11 @@ describe("SearchResultItem", function () {
     }, { timeout: 1000 });
 
     // The parent category "Parent" should appear somewhere in the result items
-    const parentLabels = document.querySelectorAll('.ItemParent');
+    const parentLabels = Array.from(document.querySelectorAll('.ItemParent'));
     expect(parentLabels.length).toBeGreaterThan(0);
+    expect(
+      parentLabels.some((label) => label.textContent?.includes('Parent'))
+    ).toBe(true);
   });
 
   it("clicking a search result does not throw", async function () {

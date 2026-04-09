@@ -125,8 +125,8 @@ describe("handleImageLoadFail", function () {
         handleImageLoadFail(syntheticEvent);
 
         expect((img as any).orgSrc).toBe("http://example.com/missing.png");
-        // The fallback src should reference the default icon (mocked as a string by fileMock)
-        expect(img.src).toBeDefined();
+        // The fallback src should reference the default icon (mocked as 'test-file-stub' by fileMock)
+        expect(img.src).toContain('test-file-stub');
     });
 });
 

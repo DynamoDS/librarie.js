@@ -33,22 +33,19 @@ def run():
         search_input = page.get_by_role("textbox")
         expect(search_input).to_be_visible()
         search_input.fill("a")  # broad term to guarantee hits
-        page.wait_for_timeout(600)  # debounce is 300 ms
 
         results = page.locator(".SearchResultItemContainer")
         expect(results.first).to_be_visible(timeout=3000)
         result_count = results.count()
-        assert result_count > 0, f"Expected search results, got {result_count}"
         print(f"PASS  search produced {result_count} result(s)")
 
         # ── 3. Clear button resets to browse mode ─────────────────────────────
         cancel_btn = page.locator(".CancelButton")
         expect(cancel_btn).to_be_visible()
         cancel_btn.click()
-        page.wait_for_timeout(300)
 
         # After clearing, search results should be gone
-        assert results.count() == 0, "Expected no results after clearing search"
+        expect(results).to_have_count(0, timeout=3000)
         print("PASS  clear button removes search results")
 
         # ── 4. Library sections are visible again after clear ─────────────────
