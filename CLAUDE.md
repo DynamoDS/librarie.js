@@ -15,7 +15,7 @@ npm run bundle       # Production webpack build (production/minified)
 npm run production   # Full production build: bundle + copy dist files
 
 # Tests
-npm run test         # Jest tests with coverage (all __tests__/*.tsx files)
+npm run test         # Jest tests with coverage (all __tests__/**/*.{ts,tsx} files)
 npm run utiltest     # Mocha tests for LibraryUtilities (__tests__/mochatest/)
 
 # Run a single Jest test file
@@ -69,11 +69,11 @@ Custom search can be injected via `registerRequestHandler("searchLibraryItemsHan
 
 ### Testing Setup
 
-- **Jest** with `ts-jest` for `.ts`/`.tsx` files; Enzyme (React 18 adapter) for component rendering
+- **Jest** with `ts-jest` for `.ts`/`.tsx` files; React Testing Library (`@testing-library/react`) for component rendering
 - **Mocha** (`npm run utiltest`) for `LibraryUtilities` unit tests only
 - Mocks: `__mocks__/fileMock.ts` (static assets), `__mocks__/styleMock.ts` (CSS)
 - Snapshots live in `__tests__/Snapshottest/`
 
 ### Tech Debt Context
 
-The codebase was recently upgraded from React 16 → React 18 (Phase 1 complete). All `UNSAFE_` lifecycle methods have been replaced. Future phases plan to migrate class components to functional components with hooks and replace Enzyme with React Testing Library. See `TECH_DEBT_ANALYSIS.md` and `MIGRATION_GUIDE.md` for details.
+All tech-debt phases (1–6) are complete: React 18 upgrade, `UNSAFE_` removal, class → functional components, Enzyme → React Testing Library, TypeScript strict mode, bundle optimization, and ESLint/ErrorBoundary/JSDoc additions. See `TECH_DEBT_ANALYSIS.md` and `MIGRATION_GUIDE.md` for details.
