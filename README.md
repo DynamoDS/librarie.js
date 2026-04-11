@@ -9,7 +9,7 @@ Reusable lightweight library component based on React.js
 librarie.js has completed all 6 phases of its modernization effort and is **React 19-ready**. See [MIGRATION_GUIDE.md](./MIGRATION_GUIDE.md) for details about the changes and [TECH_DEBT_ANALYSIS.md](./TECH_DEBT_ANALYSIS.md) for the complete technical debt inventory.
 
 **Modernization Summary:**
-- ✅ React 18.3.1 (from 16.14.0) — Phase 1
+- ✅ React 19.2.5 (from 16.14.0 → 18.3.1 → 19.2.5) — Phases 1 & 7
 - ✅ All deprecated UNSAFE_ lifecycle methods replaced — Phase 1
 - ✅ All 6 class components migrated to functional components with hooks — Phase 2
 - ✅ All tests migrated from Enzyme to React Testing Library (73 tests) — Phase 3
@@ -18,7 +18,7 @@ librarie.js has completed all 6 phases of its modernization effort and is **Reac
 - ✅ `ReactDOM.render()` → `createRoot()` (React 19 compatibility) — Phase 6
 - ✅ ESLint + React Hooks enforcement + Prettier — Phase 6
 - ✅ `ErrorBoundary` wrapping `LibraryContainer` — Phase 6
-- ✅ Peer dependencies: `"react": "^18.3.1 || ^19"` — Phase 6
+- ✅ React 19 fully adopted with matching `react-dom@19` — Phase 7
 
 ## Bundle Size ⚡ (Phase 5)
 

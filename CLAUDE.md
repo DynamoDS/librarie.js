@@ -76,4 +76,4 @@ Custom search can be injected via `registerRequestHandler("searchLibraryItemsHan
 
 ### Tech Debt Context
 
-All tech-debt phases (1–6) are complete: React 18 upgrade, `UNSAFE_` removal, class → functional components, Enzyme → React Testing Library, TypeScript strict mode, bundle optimization, and ESLint/ErrorBoundary/JSDoc additions. See `TECH_DEBT_ANALYSIS.md` and `MIGRATION_GUIDE.md` for details.
+All tech-debt phases (1–7) are complete: React 16→18→19 upgrade, `UNSAFE_` removal, class → functional components, Enzyme → React Testing Library, TypeScript strict mode, bundle optimization, ESLint/ErrorBoundary/JSDoc additions, and React 19 adoption. See `TECH_DEBT_ANALYSIS.md` and `MIGRATION_GUIDE.md` for details.
