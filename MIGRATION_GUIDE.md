@@ -1,13 +1,13 @@
-# React 18 Migration Guide
+# React 18 → 19 Migration Guide
 ## librarie.js Component Library
 
-This guide documents the changes made during the React 18 migration and provides guidance for future development.
+This guide documents the changes made during the React 18 migration (from React 16) and the subsequent React 19 upgrade, with guidance for future development.
 
 ---
 
 ## Overview
 
-The librarie.js library has been upgraded from React 16.14.0 to React 18.3.1. This document explains what changed, why, and how to work with the updated codebase.
+The librarie.js library was upgraded from React 16.14.0 to React 18.3.1 (Phases 1–6), and then to React 19.2.5 (Phase 7). This document explains what changed, why, and how to work with the updated codebase.
 
 ---
 
@@ -21,10 +21,16 @@ The librarie.js library has been upgraded from React 16.14.0 to React 18.3.1. Th
 "react-dom": "^16.14.0"
 ```
 
-**After:**
+**After (Phase 1):**
 ```json
 "react": "^18.3.1",
 "react-dom": "^18.3.1"
+```
+
+**After (Phase 7 — current):**
+```json
+"react": "^19.2.5",
+"react-dom": "^19.2.5"
 ```
 
 ---
@@ -215,13 +221,13 @@ All changes are backward compatible. The API remains the same from the consumer'
 
 ---
 
-## New React 18 Features Available
+## New React 18+ Features Available
 
-Now that we're on React 18, we can leverage:
+Now that we're on React 19 (upgraded via React 18), we can leverage:
 
 ### 1. Automatic Batching
 ```typescript
-// React 18 automatically batches these setState calls
+// React 18+ automatically batches these setState calls
 handleClick = () => {
     this.setState({ count: this.state.count + 1 });
     this.setState({ flag: true });
@@ -404,9 +410,9 @@ import Adapter from '@cfaester/enzyme-adapter-react-18';
 
 ---
 
-### Issue: Build warnings about React 18 in development
+### Issue: Build warnings about React 18/19 in development
 
-**Expected Behavior:** React 18 may show warnings about:
+**Expected Behavior:** React 18/19 may show warnings about:
 - Legacy context API usage
 - Deprecated features
 
@@ -416,9 +422,9 @@ import Adapter from '@cfaester/enzyme-adapter-react-18';
 
 ## Performance Considerations
 
-### React 18 is Faster
+### React 18/19 is Faster
 
-React 18's concurrent rendering and automatic batching mean better performance out of the box.
+React 18/19's concurrent rendering and automatic batching mean better performance out of the box.
 
 ### Monitor These Areas
 
@@ -785,11 +791,11 @@ if (item) { item.name; }
 ---
 
 - [React 18 Upgrade Guide](https://react.dev/blog/2022/03/08/react-18-upgrade-guide)
+- [React 19 Upgrade Guide](https://react.dev/blog/2024/04/25/react-19-upgrade-guide)
 - [React Testing Library Docs](https://testing-library.com/docs/react-testing-library/intro/)
 - [React Testing Library Cheatsheet](https://testing-library.com/docs/react-testing-library/cheatsheet)
 - [React Hooks Documentation](https://react.dev/reference/react)
 - [React Lifecycle Methods Diagram](https://projects.wojtekmaj.pl/react-lifecycle-methods-diagram/)
-- [React 18 Working Group Discussions](https://github.com/reactwg/react-18/discussions)
 
 ---
 
@@ -799,13 +805,13 @@ If you encounter issues not covered in this guide:
 
 1. Check the [TECH_DEBT_ANALYSIS.md](./TECH_DEBT_ANALYSIS.md) for detailed technical debt inventory
 2. Review the PR descriptions for implementation details (Phases 1, 2, 3)
-3. Consult the React 18 official documentation
+3. Consult the React 18/19 official documentation
 
 ---
 
-**Document Version:** 1.5  
-**Last Updated:** 2026-04-08  
-**Applies To:** librarie.js v1.0.9+
+**Document Version:** 1.6  
+**Last Updated:** 2026-04-11  
+**Applies To:** librarie.js v1.1.0+
 
 ---
 
@@ -971,9 +977,55 @@ All public methods in `entry-point.tsx` now have JSDoc documentation:
 
 ### Guidance for Future Development
 
-- **React 19 full adoption:** When Dynamo upgrades to React 19, update `@types/react` and `@types/react-dom` to v19, then remove the `forwardRef` wrapper in `SearchResultItem.tsx` in favour of passing `ref` directly as a prop.
+- **React 19 is now adopted.** The `forwardRef` wrapper in `SearchResultItem.tsx` is deprecated in React 19 (still works) and can be removed when convenient — pass `ref` directly as a prop instead.
 - **Run `npm run lint` before committing** to catch React Hooks violations early.
 - **Run `npm run format`** to keep code style consistent.
+
+---
+
+## Phase 7: React 19 Adoption
+
+### Overview
+
+Phase 7 upgraded the bundled React from v18 to v19. The codebase was already React 19-ready thanks to Phase 6 (`createRoot()`, no `defaultProps`/`propTypes`, functional components).
+
+### Changes
+
+| Change | Details |
+|--------|---------|
+| `react` | `^18.3.1` → `^19.2.5` |
+| `react-dom` | `^18.3.1` → `^19.2.5` |
+| `@types/react` | `^18.3.27` → `^19.2.14` |
+| `@types/react-dom` | `^18.3.0` → `^19.2.3` |
+| Removed `react-test-renderer` | Removed from React 19; not used (tests use `@testing-library/react`) |
+| Removed `@types/react-test-renderer` | No longer needed |
+
+### Why `react-dom` Must Match `react`
+
+React 19 restructured its internals — `ReactCurrentDispatcher` was removed from `__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED`. If `react-dom@18` is paired with `react@19`, `react-dom` crashes at import time:
+
+```
+TypeError: Cannot read properties of undefined (reading 'ReactCurrentDispatcher')
+```
+
+Both `react` and `react-dom` must always be on the same major version.
+
+### React 19 Breaking Changes (Not Applicable)
+
+The following React 19 breaking changes do **not** affect librarie.js:
+
+| Breaking Change | Status | Notes |
+|----------------|--------|-------|
+| `ReactDOM.render()` removed | ✅ Already migrated | `createRoot()` adopted in Phase 6 |
+| `defaultProps` for function components removed | ✅ N/A | No `defaultProps` usage in codebase |
+| `propTypes` removed | ✅ N/A | No `propTypes` usage in codebase |
+| `react-test-renderer` removed | ✅ N/A | Tests use `@testing-library/react` |
+| `forwardRef` deprecated (not removed) | ⚠️ Deferred | `SearchResultItem.tsx` still uses it; works in React 19 |
+
+### Remaining Optional React 19 Improvements
+
+- **Remove `forwardRef` in `SearchResultItem.tsx`**: React 19 passes `ref` as a regular prop. The `forwardRef` wrapper is deprecated but still functional.
+- **Use `<Context>` instead of `<Context.Provider>`**: React 19 allows rendering context directly. Low priority, quality-of-life only.
 
 ---
 
