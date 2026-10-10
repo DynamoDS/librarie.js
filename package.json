@@ -25,8 +25,8 @@
   "author": "Dynamo Team",
   "license": "MIT",
   "dependencies": {
-    "react": "^19.2.5",
-    "react-dom": "^19.2.5",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
     "react-tooltip": "^6.0.0"
   },
   "devDependencies": {
@@ -37,8 +37,8 @@
     "@types/chai": "^3.4.35",
     "@types/jest": "^29.5.4",
     "@types/node": "^7.0.5",
-    "@types/react": "^19.2.14",
-    "@types/react-dom": "^19.2.3",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
     "@typescript-eslint/eslint-plugin": "^6.21.0",
     "@typescript-eslint/parser": "^6.21.0",
     "babel-jest": "^29.6.4",
